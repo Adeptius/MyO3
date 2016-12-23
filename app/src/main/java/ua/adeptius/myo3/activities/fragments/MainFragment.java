@@ -1,6 +1,7 @@
 package ua.adeptius.myo3.activities.fragments;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
@@ -22,6 +24,7 @@ public class MainFragment extends Fragment {
     TextView textView;
     public static final Handler HANDLER = new Handler();
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_main,container,false);
         textView = (TextView) v.findViewById(R.id.textView2);
         textView.setText("before main");
+        v.setBackgroundColor(Color.BLUE);
 
         new Thread(() -> {
             try {
