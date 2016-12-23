@@ -35,7 +35,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Utilits.log("Не могу проверить сессию, что бы залогинится");
+            Utilits.networkLog("Не могу проверить сессию, что бы залогинится");
         }
     }
 

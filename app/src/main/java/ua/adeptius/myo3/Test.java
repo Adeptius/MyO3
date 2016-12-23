@@ -42,7 +42,7 @@ public class Test {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
-        Utilits.log("Получен Json: " + result);
+        Utilits.networkLog("Получен Json: " + result);
         return result;
     }
 

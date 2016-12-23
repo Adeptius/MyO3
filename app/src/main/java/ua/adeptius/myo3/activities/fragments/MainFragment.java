@@ -30,22 +30,14 @@ public class MainFragment extends Fragment {
         textView = (TextView) v.findViewById(R.id.textView2);
         textView.setText("before main");
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Settings.setSessionID(Web.getPhpSession("02514521", "5351301"));
-                    final Ip ip = GetInfo.getIP();
-                    final Person person = GetInfo.getPersonInfo();
-                    HANDLER.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            textView.setText(person.toString());
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(() -> {
+            try {
+                Settings.setSessionID(Web.getPhpSession("02514521", "5351301"));
+                final Ip ip = GetInfo.getIP();
+                final Person person = GetInfo.getPersonInfo();
+                HANDLER.post(() -> textView.setText(person.toString()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
 

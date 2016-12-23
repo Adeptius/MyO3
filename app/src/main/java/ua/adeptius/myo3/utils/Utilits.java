@@ -5,8 +5,15 @@ import android.util.Log;
 
 public class Utilits {
 
-    public static void log(String message){
-        Log.d("***O3 Logger***", message);
+    private static boolean networkLogEnable = true;
+    private static boolean miscLogEnable = true;
+
+    public static void networkLog(String message){
+        if (networkLogEnable) Log.d("***O3 Logger***", message);
+    }
+
+    public static void miscLog(String message){
+        if (miscLogEnable) Log.d("***O3 Logger***", message);
     }
 
     public static String[] splitJson(String json){
