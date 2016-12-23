@@ -1,5 +1,6 @@
 package ua.adeptius.myo3.activities;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +26,7 @@ import ua.adeptius.myo3.model.Settings;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+LinearLayout layout;
     public TextView titleTextView, descriptionTextView;
 
     @Override
@@ -61,6 +63,15 @@ public class MainActivity extends AppCompatActivity
 
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
+
+//
+//        layout = (LinearLayout) findViewById(R.id.main_scroll_view);
+//
+//        for (int i = 0; i < 100; i++) {
+//            TextView textView = new TextView(this);
+//            textView.setText("" + i);
+//            layout.addView(textView);
+//        }
 
 
 
@@ -132,6 +143,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+
             fm.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
             titleTextView.setText("Основная информация");
             descriptionTextView.setText("Здесь можно увидеть всю основную информацию касательно договора");
