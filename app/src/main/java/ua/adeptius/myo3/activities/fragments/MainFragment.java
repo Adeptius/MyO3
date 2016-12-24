@@ -13,12 +13,15 @@ import ua.adeptius.myo3.model.persons.Person;
 
 public class MainFragment extends BaseFragment {
 
-    TextView pib, contractNumber;
+    TextView pib, contractNumber, adress, age, money;
 
     @Override
     void doWork() {
         pib = (TextView) baseView.findViewById(R.id.pib);
         contractNumber = (TextView) baseView.findViewById(R.id.contractNumber);
+        adress = (TextView) baseView.findViewById(R.id.adress);
+        age = (TextView) baseView.findViewById(R.id.age);
+        money = (TextView) baseView.findViewById(R.id.money);
 
         new Thread(() -> {
             try {
@@ -35,6 +38,20 @@ public class MainFragment extends BaseFragment {
         HANDLER.post(() -> {
             pib.setText(person.getLastname() + " " + person.getName() + " " + person.getSurname());
             contractNumber.setText(person.getCard());
+            String addre = person.getAddress().getCityNameUa() + " " +
+                    person.getAddress().getStrNameUa() + " " +
+                    person.getAddress().gethName() + " кв. " +
+                    person.getAddress().getAddressFlatName();
+                    adress.setText(addre);
+            age.setText(person.getAge() + " місяців");
+            String many = String.valueOf(person.getCurrent());
+            many = many.length() > 4 ? many.substring(0,4) : many;
+            money.setText(many + " грн");
+
+
+
+
+
         });
     }
 

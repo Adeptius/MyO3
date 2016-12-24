@@ -41,6 +41,57 @@ public class Address {
     private String cityNameUa;
     private int postCode;
 
+    public String getAddressFlatName() {
+        return addressFlatName;
+    }
+
+    public String getStrName() {
+        return strName;
+    }
+
+    public String getStrNameUa() {
+        return strNameUa;
+    }
+
+    public int gethId() {
+        return hId;
+    }
+
+    public int getSegNo() {
+        return segNo;
+    }
+
+    public int getStrId() {
+        return strId;
+    }
+
+    public String gethName() {
+        return hName;
+    }
+
+    public String gethNote() {
+        return hNote;
+    }
+
+    public int getCscSegId() {
+        return cscSegId;
+    }
+
+    public int getPrivat() {
+        return privat;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public String getCityNameUa() {
+        return cityNameUa;
+    }
+
+    public int getPostCode() {
+        return postCode;
+    }
 
     @Override
     public String toString() {

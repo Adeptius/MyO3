@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="fill_parent"
@@ -23,7 +24,7 @@
                     android:layout_weight="1"
                     android:gravity="center_horizontal"
                     android:text="Ви увійшли як:"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -38,10 +39,11 @@
                     android:id="@+id/pib"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -54,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.36"
                     android:text="Номер угоди:"
+                    android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 
                 <TextView
@@ -61,7 +64,76 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.36"
+                    android:text="Адреса:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/adress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.36"
+                    android:text="Ви абонент:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.36"
+                    android:text="На рахунку:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
             </LinearLayout>
 
             <LinearLayout
