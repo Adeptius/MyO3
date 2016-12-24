@@ -8,7 +8,7 @@ import ua.adeptius.myo3.R;
 public class SecondFragment extends BaseFragment  {
 
     @Override
-    void doWork() {
+    void init() {
         TextView textView = new TextView(context);
         textView.setText("Second frame");
         layout.addView(textView);
@@ -17,6 +17,21 @@ public class SecondFragment extends BaseFragment  {
     @Override
     int setFragmentId() {
         return R.layout.fragment_second;
+    }
+
+    @Override
+    void doInBackground() throws Exception {
+
+    }
+
+    @Override
+    void processIfOk() {
+
+    }
+
+    @Override
+    void processIfFail() {
+
     }
 
     @Override

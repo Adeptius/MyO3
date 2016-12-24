@@ -8,11 +8,26 @@ import ua.adeptius.myo3.activities.MainActivity;
 public class NewsFragment extends BaseFragment {
 
     @Override
-    void doWork() {
+    void init() {
         String titleText = "";
         String descriptionText = "";
         MainActivity.titleTextView.setText(titleText);
         MainActivity.descriptionTextView.setText(descriptionText);
+
+    }
+
+    @Override
+    void doInBackground() throws Exception {
+
+    }
+
+    @Override
+    void processIfOk() {
+
+    }
+
+    @Override
+    void processIfFail() {
 
     }
 

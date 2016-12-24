@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,20 +21,17 @@ import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.SecondFragment;
+import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
+import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
+
+import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static TextView titleTextView, descriptionTextView;
-
-    public TextView getTitleTextView() {
-        return titleTextView;
-    }
-
-    public TextView getDescriptionTextView() {
-        return descriptionTextView;
-    }
+    public static String title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +66,19 @@ public class MainActivity extends AppCompatActivity
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
+        Settings.setCurrentLogin("02514521");
+        Settings.setCurrentPassword("5351301");
+        EXECUTOR.submit(() -> {
+            try {
+                Settings.setSessionID(Web.getPhpSession("02514521", "5351301"));
 
-        setDrawlerText("Володимир","Угода 0255555");
-        goTo(new MainFragment(), R.drawable.background_main);
+            } catch (CantGetSessionIdException e) {
+                e.printStackTrace();
+            }
+        });
+        setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
+        goTo(new MainFragment(), R.drawable.background_main1);
+
     }
 
     private void setDrawlerText(String title, String description){
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
+                    collapsingToolbar.setTitle(title);
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbar.setTitle(" ");
@@ -130,9 +136,11 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
         Glide.with(this).load(imageId).into((ImageView) findViewById(R.id.backdrop));
+
+
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -140,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_news) {
 
         } else if (id == R.id.nav_main_info) {
-            goTo(new MainFragment(), R.drawable.background_main);
+            goTo(new MainFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_balance) {
 
         } else if (id == R.id.nav_add_balance) {

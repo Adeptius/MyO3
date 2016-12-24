@@ -5,11 +5,15 @@ import com.gistlabs.mechanize.Resource;
 import com.gistlabs.mechanize.document.Document;
 import com.gistlabs.mechanize.document.html.form.Form;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
@@ -37,7 +41,6 @@ public class Web {
         form.get("_username").set(login);
         form.get("_password").set(password);
         Resource response = form.submit();
-        System.out.println("response.getTitle() " + response.getTitle());
         if ("Redirecting to https://my.o3.ua/".equals(response.getTitle()) ||
                 "Особистий кабінет".equals(response.getTitle())) {
             return agent.cookies().getAll().get(0).getValue();
@@ -56,5 +59,25 @@ public class Web {
         return false;
     }
 
+    public static String sendPost(String url, HashMap<String, String> jSonQuery) throws Exception{
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("User-Agent", "Mozilla");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+        con.setRequestProperty("Cookie", "PHPSESSID=" + Settings.getSessionID());
+        String urlParameters = new JSONObject(jSonQuery).toString();
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        Utilits.networkLog("Передаю параметры: " + urlParameters);
+        wr.writeBytes(urlParameters);
+        wr.flush(); wr.close();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String result = in.readLine();
+        result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
+        Utilits.networkLog("Ответ: " + result);
+        return result;
+    }
 
 }

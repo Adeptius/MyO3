@@ -1,9 +1,16 @@
 package ua.adeptius.myo3.utils;
 
 
+import android.os.Handler;
 import android.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Utilits {
+
+    public static final Handler HANDLER = new Handler();
+    public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
     private static boolean networkLogEnable = true;
     private static boolean miscLogEnable = true;
