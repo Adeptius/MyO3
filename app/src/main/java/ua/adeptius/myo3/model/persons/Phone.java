@@ -33,7 +33,44 @@ public class Phone {
     private String modifyDate;
     private int smsInform;
 
+    public int getId() {
+        return id;
+    }
+
+    public int getpId() {
+        return pId;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public int getLang() {
+        return lang;
+    }
+
+    public String getPhonems() {
+        return phonems;
+    }
+
+    public int getValid() {
+        return valid;
+    }
+
+    public String getModifyDate() {
+        return modifyDate;
+    }
+
+    public int getSmsInform() {
+        return smsInform;
+    }
+
     @Override
+
     public String toString() {
         return "Phone{" +
                 "id=" + id +

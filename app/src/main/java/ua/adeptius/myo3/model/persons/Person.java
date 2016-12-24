@@ -76,6 +76,7 @@ public class Person {
     private Address address;
 
 
+
     public int getId() {
         return id;
     }
@@ -86,6 +87,14 @@ public class Person {
 
     public String getName() {
         return name;
+    }
+
+    public String getUkrName() {
+        String ukrName = name;
+        ukrName = ukrName.replace("Владимир","Володимир");
+        ukrName = ukrName.replace("Игорь","Ігор");
+
+        return ukrName;
     }
 
     public String getLastname() {

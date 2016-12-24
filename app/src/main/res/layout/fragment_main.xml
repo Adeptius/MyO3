@@ -52,16 +52,17 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.36"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
                     android:text="Номер угоди:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/contractNumber"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/punkt_menu" />
@@ -75,16 +76,17 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.36"
-                    android:text="Адреса:"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="Місто:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/adress"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/punkt_menu" />
@@ -98,16 +100,90 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.36"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="Вулиця:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/street"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="Будинок:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/house"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="Квартира:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/room"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
                     android:text="Ви абонент:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/age"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/punkt_menu" />
@@ -121,19 +197,144 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.36"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
                     android:text="На рахунку:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/money"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="@dimen/punkt_menu" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="SMS інформування:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/sms_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:width="@dimen/punkt_menu_widht"
+                    android:text="E-mail:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.36"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Пароль:"
+                    android:textSize="@dimen/punkt_menu"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/punkt_menu" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.43"
+                        android:text="Поштові розсилки:"
+                        android:textSize="@dimen/punkt_menu"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/checkBoxNews"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Новини" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxworks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Планові роботи" />
+
+                    <CheckBox
+                        android:id="@+id/checkBoxAction"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Акції" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

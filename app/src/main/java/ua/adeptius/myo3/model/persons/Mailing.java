@@ -17,6 +17,18 @@ public class Mailing {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isSubscribe() {
+        return subscribe;
+    }
+
     private int id;
     private String title;
     private boolean subscribe;

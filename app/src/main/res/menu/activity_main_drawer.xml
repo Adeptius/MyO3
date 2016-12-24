@@ -3,34 +3,95 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Main" />
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_news"
+            android:title="Новини та акції" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Second" />
+            android:id="@+id/nav_main_info"
+            android:icon="@drawable/ic_main_info"
+            android:title="Основна інформація" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_balance"
+            android:icon="@drawable/ic_balance"
+            android:title="Баланс" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_add_balance"
+            android:icon="@drawable/ic_add_money"
+            android:title="Поповнення рахунку" />
+        <item
+            android:id="@+id/nav_tarif_plans"
+            android:icon="@drawable/ic_tarif"
+            android:title="Тарифні плани" />
+
+        <item
+            android:id="@+id/nav_free_day"
+            android:icon="@drawable/ic_free_day"
+            android:title="Free день" />
+        <item
+            android:id="@+id/nav_turbo_day"
+            android:icon="@drawable/ic_free_day"
+            android:title="Турбо день" />
+        <item
+            android:id="@+id/nav_dovira"
+            android:icon="@drawable/ic_dovira"
+            android:title="Кредит довіри" />
+        <item
+            android:id="@+id/nav_garant_service"
+            android:icon="@drawable/ic_garant_service2"
+            android:title="Гарантований сервіс" />
+        <item
+            android:id="@+id/nav_vkl_internet"
+            android:icon="@drawable/ic_vkl_internet2"
+            android:title="Вмикання/вимикання Інтернету" />
+        <item
+            android:id="@+id/nav_dr_web"
+            android:icon="@drawable/ic_dr_web2"
+            android:title="Антивірус Dr.WEB" />
+        <item
+            android:id="@+id/nav_megogo"
+            android:icon="@drawable/ic_tv2"
+            android:title="MEGOGO. Кіно та ТБ" />
+        <item
+            android:id="@+id/nav_divan_tv"
+            android:icon="@drawable/ic_tv2"
+            android:title="Divan.tv" />
+        <item
+            android:id="@+id/nav_oll_tv"
+            android:icon="@drawable/ic_tv2"
+            android:title="Oll.tv" />
+
+        <item
+            android:id="@+id/nav_friend"
+            android:icon="@drawable/ic_friend"
+            android:title="Приведи друга" />
+
+        <item
+            android:id="@+id/nav_bonus"
+            android:icon="@drawable/ic_bonus"
+            android:title="Бонуси" />
+
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_support"
+            android:title="Підтримка" />
+        <item
+            android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Налагодження" />
+
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+    <!--<menu>-->
+    <!--<item-->
+    <!--android:id="@+id/nav_share"-->
+    <!--android:icon="@drawable/ic_menu_share"-->
+    <!--android:title="Share" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_send"-->
+    <!--android:icon="@drawable/ic_menu_send"-->
+    <!--android:title="Send" />-->
+    <!--</menu>-->
+    <!--</item>-->
 
 </menu>

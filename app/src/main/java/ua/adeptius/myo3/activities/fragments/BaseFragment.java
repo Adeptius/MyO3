@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
@@ -28,6 +30,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         doWork();
         return baseView;
     }
+
+    protected TextView getTextView(int id){
+        return (TextView) baseView.findViewById(id);
+    }
+
+    protected CheckBox getCheckBox(int id){
+        return (CheckBox) baseView.findViewById(id);
+    }
+
 
     abstract void doWork();
 

@@ -10,13 +10,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.SecondFragment;
 import ua.adeptius.myo3.model.Settings;
@@ -24,7 +27,15 @@ import ua.adeptius.myo3.model.Settings;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public TextView titleTextView, descriptionTextView;
+    public static TextView titleTextView, descriptionTextView;
+
+    public TextView getTitleTextView() {
+        return titleTextView;
+    }
+
+    public TextView getDescriptionTextView() {
+        return descriptionTextView;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +70,18 @@ public class MainActivity extends AppCompatActivity
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
-        fm.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
-        titleTextView.setText("Основная информация");
-        descriptionTextView.setText("Здесь можно увидеть всю основную информацию касательно договора");
-        Glide.with(this).load(R.drawable.background_main).into((ImageView) findViewById(R.id.backdrop));
+
+        setDrawlerText("Володимир","Угода 0255555");
+        goTo(new MainFragment(), R.drawable.background_main);
+    }
+
+    private void setDrawlerText(String title, String description){
+        NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);
+        LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigation);
+        TextView drawlerTitle = (TextView) findViewById(R.id.drawler_title);
+        TextView drawlerDescription = (TextView) findViewById(R.id.drawler_description);
+        drawlerTitle.setText(title);
+        drawlerDescription.setText(description);
     }
 
     /**
@@ -107,31 +126,52 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void goTo(BaseFragment fragment,int imageId){
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        Glide.with(this).load(imageId).into((ImageView) findViewById(R.id.backdrop));
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_news) {
 
-            fm.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
-            titleTextView.setText("Основная информация");
-            descriptionTextView.setText("Здесь можно увидеть всю основную информацию касательно договора");
-            Glide.with(this).load(R.drawable.background_main).into((ImageView) findViewById(R.id.backdrop));
-        } else if (id == R.id.nav_gallery) {
-            fm.beginTransaction().replace(R.id.content_frame, new SecondFragment()).commit();
-            titleTextView.setText("Другая информация");
-            descriptionTextView.setText("А здесь что-то другое");
-            Glide.with(this).load(R.drawable.background_second).into((ImageView) findViewById(R.id.backdrop));
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_main_info) {
+            goTo(new MainFragment(), R.drawable.background_main);
+        } else if (id == R.id.nav_balance) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_add_balance) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_tarif_plans) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_free_day) {
+
+        } else if (id == R.id.nav_turbo_day) {
+
+        } else if (id == R.id.nav_dovira) {
+
+        } else if (id == R.id.nav_garant_service) {
+
+        } else if (id == R.id.nav_vkl_internet) {
+
+        } else if (id == R.id.nav_dr_web) {
+
+        } else if (id == R.id.nav_megogo) {
+
+        } else if (id == R.id.nav_divan_tv) {
+
+        } else if (id == R.id.nav_oll_tv) {
+
+        } else if (id == R.id.nav_friend) {
+
+        } else if (id == R.id.nav_bonus) {
+
+        } else if (id == R.id.nav_support) {
+
+        } else if (id == R.id.nav_settings) {
 
         }
 
