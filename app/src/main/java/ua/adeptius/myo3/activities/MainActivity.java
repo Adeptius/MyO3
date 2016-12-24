@@ -1,5 +1,6 @@
 package ua.adeptius.myo3.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,12 +29,16 @@ import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
 
 import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
+import static ua.adeptius.myo3.utils.Utilits.HANDLER;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static TextView titleTextView, descriptionTextView;
     public static String title = "";
+    public static Window window;
+    public static volatile boolean needToHideKeyBoard;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,7 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
+
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
@@ -78,6 +86,8 @@ public class MainActivity extends AppCompatActivity
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new MainFragment(), R.drawable.background_main1);
+
+        window = getWindow();
 
     }
 

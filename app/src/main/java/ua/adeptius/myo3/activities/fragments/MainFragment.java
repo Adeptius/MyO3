@@ -144,41 +144,81 @@ public class MainFragment extends BaseFragment {
         } else if (view.equals(editPass)) {
 
         } else if (view.equals(editSms)) {
-
+            changeSmsNumber(view);
         } else if (view.equals(editEmail)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            EditText text = new EditText(context);
-            text.setCursorVisible(true);
-            text.hasFocus();
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            builder.setMessage("Введіть новий email:");
-            builder.setCancelable(true);
-            builder.setView(text);
-            builder.setPositiveButton("Змінити", (dialog, which) -> {
-                EXECUTOR.submit(() -> {
-                    try {
-                        if (SendInfo.changeEmail(text.getText().toString()))
-                            makeSimpleSnackBar("Email змінено");
-                        else
-                            makeSimpleSnackBar("Помилка. Email невірний.");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        makeSimpleSnackBar("Помилка. Нема з'єднання.");
-                    }
-                    dialog.dismiss();
-                });
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
+            changeEmail(view);
         } else if (view.equals(password)) {
             password.setText(Settings.getCurrentPassword());
         }
     }
 
-    public void makeSimpleSnackBar(String message){
+    public void makeSimpleSnackBar(String message, View text){
         HANDLER.post(() -> Snackbar
-                .make(MainActivity.titleTextView, message, Snackbar.LENGTH_LONG).show());
+                .make(text, message, Snackbar.LENGTH_LONG).show());
+    }
+
+    private void changeSmsNumber(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        EditText text = new EditText(context);
+        text.setCursorVisible(true);
+        text.hasFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        builder.setCancelable(true);
+        builder.setView(text);
+        builder.setMessage("Введіть новий номер телефону:");
+        builder.setPositiveButton("Змінити", (dialog, which) -> {
+            imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Phone phone = null;
+                        for (Phone phone1 : person.getPhones()) {
+                            if (phone1.getSmsInform()==1) phone = phone1;
+                        }
+                        if (SendInfo.changeSmsNumber(text.getText().toString(), phone)) {
+                            makeSimpleSnackBar("Номер змінено", view);
+                        }else
+                            makeSimpleSnackBar("Помилка. Номер невірний.", view);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        makeSimpleSnackBar("Помилка. Нема з'єднання.", view);
+                    }
+                    dialog.dismiss();
+                }
+            }).start();
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void changeEmail(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        EditText text = new EditText(context);
+        text.setCursorVisible(true);
+        text.hasFocus();
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        builder.setCancelable(true);
+        builder.setView(text);
+        builder.setMessage("Введіть новий email:");
+        builder.setPositiveButton("Змінити", (dialog, which) -> {
+            imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+            EXECUTOR.submit(() -> {
+                try {
+                    if (SendInfo.changeEmail(text.getText().toString())) {
+                        makeSimpleSnackBar("Email змінено", view);
+                    }else
+                        makeSimpleSnackBar("Помилка. Email невірний.", view);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    makeSimpleSnackBar("Помилка. Нема з'єднання.", view);
+                }
+                dialog.dismiss();
+            });
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

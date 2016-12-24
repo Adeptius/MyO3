@@ -44,19 +44,43 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
 
     protected void startBackgroundTask(){
-        EXECUTOR.submit(() -> {
-            try{
-                setTitle(titleText, descriptionText);
-                doInBackground();
-                HANDLER.post(() -> processIfOk());
-            }catch (Exception e){
-                e.printStackTrace();
-                HANDLER.post(() -> {
-                    showError();
-                    processIfFail();
-                });
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    setTitle(titleText, descriptionText);
+                    doInBackground();
+                    HANDLER.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            processIfOk();
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                    HANDLER.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            showError();
+                            processIfFail();
+                        }
+                    });
+                }
             }
         });
+//        EXECUTOR.submit(() -> {
+//            try{
+//                setTitle(titleText, descriptionText);
+//                doInBackground();
+//                HANDLER.post(() -> processIfOk());
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                HANDLER.post(() -> {
+//                    showError();
+//                    processIfFail();
+//                });
+//            }
+//        });
     }
 
     abstract void doInBackground() throws Exception;

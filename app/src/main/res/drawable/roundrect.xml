@@ -22,6 +22,6 @@
 
 
     <!--<solid android:color="@color/cardview_light_background" />-->
-    <solid android:color="@color/backgroungMy" />
+    <solid android:color="@color/white" />
 
 </shape>

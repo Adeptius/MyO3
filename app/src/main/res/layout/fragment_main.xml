@@ -60,7 +60,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Номер угоди:"
                     android:textSize="@dimen/punkt_menu"
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Місто:"
                     android:textSize="@dimen/punkt_menu"
@@ -106,9 +106,10 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Вулиця:"
                     android:textSize="@dimen/punkt_menu"
@@ -133,7 +134,7 @@
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Будинок:"
                     android:textSize="@dimen/punkt_menu"
@@ -157,7 +158,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Квартира:"
                     android:textSize="@dimen/punkt_menu"
@@ -181,7 +182,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Ви абонент:"
                     android:textSize="@dimen/punkt_menu"
@@ -205,7 +206,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="На рахунку:"
                     android:textSize="@dimen/punkt_menu"
@@ -229,7 +230,7 @@
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:text="Пароль:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
@@ -294,7 +295,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="E-mail:"
                     android:textSize="@dimen/punkt_menu"
@@ -333,7 +334,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="SMS:"
                     android:textSize="@dimen/punkt_menu"
@@ -372,14 +373,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.43"
+                        android:layout_weight="1.5"
                         android:text="Пошта:"
                         android:textSize="@dimen/punkt_menu"
                         android:textStyle="bold" />
@@ -451,7 +452,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="IP:"
                     android:textSize="@dimen/punkt_menu"
@@ -475,7 +476,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Маска:"
                     android:textSize="@dimen/punkt_menu"
@@ -499,7 +500,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="Шлюз:"
                     android:textSize="@dimen/punkt_menu"
@@ -523,7 +524,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="DNS-1"
                     android:textSize="@dimen/punkt_menu"
@@ -547,7 +548,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
                     android:text="DNS-2"
                     android:textSize="@dimen/punkt_menu"
