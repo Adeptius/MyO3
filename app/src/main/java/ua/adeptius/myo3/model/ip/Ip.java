@@ -12,9 +12,7 @@ public class Ip {
 
     public Ip(String json) {
         try {
-            JSONObject jobject = new JSONObject(json.trim());
-            String ips = jobject.get("ips").toString();
-            jobject = new JSONObject(ips.substring(1, ips.length() - 1).trim());
+            JSONObject jobject = new JSONObject(json);
             this.setIp(jobject.get("ip").toString());
             this.setMask(jobject.get("mask").toString());
             this.setGateway(jobject.get("gateway").toString());

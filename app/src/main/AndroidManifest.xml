@@ -11,13 +11,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".activities.SplashScreenActivity" />
-
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login" />
-
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
@@ -28,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".activities.WebActivity"></activity>
     </application>
+
 </manifest>

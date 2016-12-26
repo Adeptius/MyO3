@@ -30,6 +30,28 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected String descriptionText;
 //    int mCurCheckPosition;
 
+    public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
+            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+            , ViewGroup.LayoutParams.MATCH_PARENT);
+    public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
+            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+            , ViewGroup.LayoutParams.WRAP_CONTENT);
+    public static final ViewGroup.LayoutParams MATCH_WRAP = new ViewGroup
+            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+            , ViewGroup.LayoutParams.WRAP_CONTENT);
+    public static final ViewGroup.LayoutParams MATCH_MATCH = new ViewGroup
+            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+            , ViewGroup.LayoutParams.MATCH_PARENT);
+    public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT1 = new LinearLayout
+            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+    public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT036 = new LinearLayout
+            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 0.36);
+    public static final LinearLayout.LayoutParams MATCH_WRAP_WEIGHT150 = new LinearLayout
+            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1.5);
+    public static final LinearLayout.LayoutParams MATCH_WRAP_WEIGHT1 = new LinearLayout
+            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1);
+
+
 
     @Nullable
     @Override
@@ -106,10 +128,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return (ImageView) baseView.findViewById(id);
     }
 
-    protected void setTitle(String titleText, String descriptionText){
-        MainActivity.titleTextView.setText(titleText);
-        MainActivity.title = titleText;
-        MainActivity.descriptionTextView.setText(descriptionText);
+    protected void setTitle(final String titleText, final String descriptionText){
+       HANDLER.post(new Runnable() {
+           @Override
+           public void run() {
+               MainActivity.titleTextView.setText(titleText);
+               MainActivity.title = titleText;
+               MainActivity.descriptionTextView.setText(descriptionText);
+           }
+       });
     }
 
     abstract void init();

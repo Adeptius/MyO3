@@ -1,6 +1,5 @@
 package ua.adeptius.myo3.activities;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -14,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,13 +21,12 @@ import com.bumptech.glide.Glide;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
-import ua.adeptius.myo3.activities.fragments.SecondFragment;
+import ua.adeptius.myo3.activities.fragments.NewsFragment;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
 
 import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
-import static ua.adeptius.myo3.utils.Utilits.HANDLER;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,8 +56,7 @@ public class MainActivity extends AppCompatActivity
 
 
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new SecondFragment()).commit();
+
 
 
         // Задание фона колапс тулбара
@@ -71,21 +67,30 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
+
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
         Settings.setCurrentLogin("02514521");
         Settings.setCurrentPassword("5351301");
-        EXECUTOR.submit(() -> {
-            try {
-                Settings.setSessionID(Web.getPhpSession("02514521", "5351301"));
+//        Settings.setCurrentLogin("441202171");
+//        Settings.setCurrentPassword("Zx1234567");
 
-            } catch (CantGetSessionIdException e) {
-                e.printStackTrace();
+
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Settings.setSessionID(Web.getPhpSession(Settings.getCurrentLogin(),
+                            Settings.getCurrentPassword()));
+                } catch (CantGetSessionIdException e) {
+                    e.printStackTrace();
+                }
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new MainFragment(), R.drawable.background_main1);
+        goTo(new NewsFragment(), R.drawable.o3_logo);
 
         window = getWindow();
 
@@ -146,8 +151,6 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
         Glide.with(this).load(imageId).into((ImageView) findViewById(R.id.backdrop));
-
-
     }
 
 
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_news) {
-
+            goTo(new NewsFragment(), R.drawable.o3_logo);
         } else if (id == R.id.nav_main_info) {
             goTo(new MainFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_balance) {

@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
@@ -31,7 +33,21 @@ public class Web {
         String result = in.readLine();
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
         Utilits.networkLog("Получен Json: " + result);
+        if (result.equals("<!DOCTYPE html>")){
+            try {
+                refreshSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            String response = getJsonFromUrl(url);
+            if (!response.equals("<!DOCTYPE html>"))
+                return response;
+        }
         return result;
+    }
+
+    public static void refreshSession()throws Exception{
+        getPhpSession(Settings.getCurrentLogin(), Settings.getCurrentPassword());
     }
 
     public static String getPhpSession(String login, String password) throws CantGetSessionIdException {
@@ -59,15 +75,25 @@ public class Web {
         return false;
     }
 
-    public static String sendPost(String url, HashMap<String, String> jSonQuery) throws Exception{
+    public static String sendPost(String url, HashMap<String, String> jSonQuery, boolean itsJson) throws Exception{
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("User-Agent", "Mozilla");
-        con.setRequestProperty("Content-Type", "application/json");
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
         con.setRequestProperty("Cookie", "PHPSESSID=" + Settings.getSessionID());
-        String urlParameters = new JSONObject(jSonQuery).toString();
+        String urlParameters = "";
+        if (itsJson){
+            con.setRequestProperty("Content-Type", "application/json");
+            urlParameters = new JSONObject(jSonQuery).toString();
+        } else {
+            Object[] keys = jSonQuery.keySet().toArray();
+            for (int i = 0; i < keys.length; i++) {
+                String key = (String) keys[i];
+                urlParameters += key + "=" + jSonQuery.get(key);
+                if (!(i==keys.length)) urlParameters += "&";
+            }
+        }
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         Utilits.networkLog("Передаю параметры: " + urlParameters);
@@ -79,5 +105,9 @@ public class Web {
         Utilits.networkLog("Ответ: " + result);
         return result;
     }
+
+
+
+
 
 }
