@@ -12,13 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity
 
     public static TextView titleTextView, descriptionTextView;
     public static String title = "";
-    public static Window window;
-    public static volatile boolean needToHideKeyBoard;
 
 
     @Override
@@ -72,10 +70,10 @@ public class MainActivity extends AppCompatActivity
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
-        Settings.setCurrentLogin("02514521");
-        Settings.setCurrentPassword("5351301");
-//        Settings.setCurrentLogin("441202171");
-//        Settings.setCurrentPassword("Zx1234567");
+//        Settings.setCurrentLogin("02514521");
+//        Settings.setCurrentPassword("5351301");
+        Settings.setCurrentLogin("561100728");
+        Settings.setCurrentPassword("5276229");
 
 
         EXECUTOR.submit(new Runnable() {
@@ -90,9 +88,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new NewsFragment(), R.drawable.o3_logo);
+        goTo(new NewsFragment(), R.drawable.background_main1);
 
-        window = getWindow();
 
     }
 
@@ -159,11 +156,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_news) {
-            goTo(new NewsFragment(), R.drawable.o3_logo);
+            goTo(new NewsFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_main_info) {
             goTo(new MainFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_balance) {
-
+            goTo(new BalanceFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_add_balance) {
 
         } else if (id == R.id.nav_tarif_plans) {

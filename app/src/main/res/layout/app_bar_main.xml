@@ -11,7 +11,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -52,9 +52,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:gravity="center_horizontal"
-                        android:text="LOVE MUSIC"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="30dp" />
 
@@ -65,7 +65,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="This season top 20 albums"
+                        android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="18dp" />
 

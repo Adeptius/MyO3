@@ -46,7 +46,7 @@ public class NewsFragment extends BaseFragment {
     private void showNews(List<News> newses) {
         LinearLayout.LayoutParams layoutParamsMargin10 = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsMargin10.setMargins(15, 15, 15, 15);
+        layoutParamsMargin10.setMargins(15, 20, 15, 20);
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
             LinearLayout layoutWithNews = createNewsLayout(news);

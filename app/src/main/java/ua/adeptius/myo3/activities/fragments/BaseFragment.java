@@ -90,19 +90,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
         });
-//        EXECUTOR.submit(() -> {
-//            try{
-//                setTitle(titleText, descriptionText);
-//                doInBackground();
-//                HANDLER.post(() -> processIfOk());
-//            }catch (Exception e){
-//                e.printStackTrace();
-//                HANDLER.post(() -> {
-//                    showError();
-//                    processIfFail();
-//                });
-//            }
-//        });
     }
 
     abstract void doInBackground() throws Exception;
@@ -145,24 +132,4 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     abstract int setLayoutId();
 
-//    @Override
-//    public void onResume() {
-//        processIfOk();
-//        super.onResume();
-//    }
-
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if (savedInstanceState != null) {
-//            // Restore last state for checked position.
-//            mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-//        }
-//    }
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt("curChoice", mCurCheckPosition);
-//    }
 }
