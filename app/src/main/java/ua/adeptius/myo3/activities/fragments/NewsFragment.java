@@ -4,9 +4,8 @@ package ua.adeptius.myo3.activities.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +18,8 @@ import org.jsoup.select.Elements;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
@@ -26,13 +27,13 @@ import ua.adeptius.myo3.dao.News;
 
 public class NewsFragment extends BaseFragment {
 
-    List<News> newses;
-    List<ImageView> imageViews = new ArrayList<>();
-    LinearLayout mainLayout;
+    private List<News> newses;
+    private List<ImageView> imageViews = new ArrayList<>();
+    private LinearLayout mainLayout;
 
     @Override
     void init() {
-        titleText = "Акції";
+        titleText = "Новини та акції";
         descriptionText = "";
         mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
         startBackgroundTask();
@@ -43,15 +44,34 @@ public class NewsFragment extends BaseFragment {
         newses = getAllNews();
     }
 
+    @Override
+    void processIfOk() {
+        showNews(newses);
+        loadAllImages();
+    }
+
+    @Override
+    void processIfFail() {
+
+    }
+
     private void showNews(List<News> newses) {
-        LinearLayout.LayoutParams layoutParamsMargin10 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParamsMargin10.setMargins(15, 20, 15, 20);
+        sortByDate(newses);
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
-            LinearLayout layoutWithNews = createNewsLayout(news);
-            mainLayout.addView(layoutWithNews, layoutParamsMargin10);
-            layoutWithNews.setOnClickListener(new View.OnClickListener() {
+
+            View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_news_item, null);
+            mainLayout.addView(itemView);
+
+            ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
+            TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
+            TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
+
+            imageViews.add(imageView);
+            newsTitle.setText(news.getTitle());
+            comentText.setText(news.getComment());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -63,43 +83,7 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
-    private LinearLayout createNewsLayout(final News news){
-
-        LinearLayout layoutForNews = new LinearLayout(context);
-        layoutForNews.setOrientation(LinearLayout.VERTICAL);
-        layoutForNews.setBackgroundResource(R.drawable.roundrect_for_news);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            layoutForNews.setElevation(8);
-        }
-
-        final LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        final ImageView imageView = new ImageView(context);
-        imageViews.add(imageView);
-        layoutForNews.addView(imageView, imageParams);
-
-
-        TextView title = new TextView(context);
-        title.setText(news.getTitle());
-        title.setTextSize(18);
-        title.setTypeface(null, Typeface.BOLD);
-        layoutForNews.addView(title);
-
-        TextView textView = new TextView(context);
-        textView.setText(news.getComment());
-        layoutForNews.addView(textView);
-
-        return layoutForNews;
-    }
-
-    @Override
-    void processIfOk() {
-        showNews(newses);
-        addAllImages();
-    }
-
-    private void addAllImages() {
-
+    private void loadAllImages() {
         for (int i = 0; i <imageViews.size(); i++) {
             final ImageView imageView = imageViews.get(i);
             final News news = newses.get(i);
@@ -109,32 +93,34 @@ public class NewsFragment extends BaseFragment {
                 public void run() {
                     try {
                         String url = getHiResImg(news.getUrl());
+                        if (url==null) {
+                            url = news.getImgUrl();
+                        }
+                            URL newurl = new URL(url);
+                            final Bitmap loadedBitMap = BitmapFactory
+                                    .decodeStream(newurl.openConnection().getInputStream());
+                            HANDLER.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    double y = loadedBitMap.getHeight();
+                                    double x = loadedBitMap.getWidth();
 
+                                    int currentX = imageView.getWidth();
+                                    double ratio = y/x;
+                                    int needY = (int) (currentX * ratio);
 
-                        URL newurl = new URL(url);
-                        final Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream());
-                        HANDLER.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.getLayoutParams().height = 500;
-                                imageView.setImageBitmap(mIcon_val);
-                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
-                        });
+                                    imageView.getLayoutParams().height = needY;
+                                    imageView.setImageBitmap(loadedBitMap);
+                                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                }
+                            });
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
-
-
-
         }
-    }
-
-    @Override
-    void processIfFail() {
-
     }
 
     @Override
@@ -153,7 +139,6 @@ public class NewsFragment extends BaseFragment {
     }
 
     private String getHiResImg(String url)throws Exception{
-        System.out.println(url);
         Document doc2 = Jsoup.connect(url).get();
         Elements images = doc2.getElementsByTag("img");
         for (Element image : images) {
@@ -169,7 +154,7 @@ public class NewsFragment extends BaseFragment {
         Document doc = Jsoup.connect(url).get();
         Elements post = doc.body().getElementsByClass("post");
 
-        List<News> newss = new ArrayList<>();
+        List<News> newses = new ArrayList<>();
         for (Element element : post) {
             String href = element.getElementsByTag("figure").first()
                     .getElementsByTag("a").first()
@@ -183,21 +168,48 @@ public class NewsFragment extends BaseFragment {
             String title2 = element.getElementsByTag("div").first()
                     .getElementsByTag("h3").first()
                     .getElementsByTag("a").first().html();
-            String text = element.getElementsByTag("div").first()
-                    .getElementsByTag("p").first().html();
+            String text;
+            try{
+                text = element.getElementsByTag("div").first()
+                        .getElementsByTag("p").first().html();
+            }catch (NullPointerException e){
+                text = "";
+            }
 
+            News news = new News();
+            news.setComment(text);
+            news.setTitle(title2);
+            news.setDate(date);
+            news.setImgUrl(imageUrl);
+            news.setNumberedDate(convertDateToNumbers(date));
+            news.setUrl(href);
+            newses.add(news);
+        }
 
-//            System.out.println(href);
-//            try{
-//                Document doc2 = Jsoup.connect(href).get();
-//                imageUrl = doc2.body()
-//                        .getElementsByClass("text-wrap").first()
-//                        .getElementsByTag("h3").first()
-//                        .getElementsByTag("img").first()
-//                        .attributes().get("src");
-//            }catch (Exception e){
-//
-//            }
+        url = "http://o3.ua/ua/about/news/";
+        doc = Jsoup.connect(url).get();
+        post = doc.body().getElementsByClass("post");
+
+        for (Element element : post) {
+            String href = element.getElementsByTag("figure").first()
+                    .getElementsByTag("a").first()
+                    .attributes().get("href");
+            String imageUrl = element.getElementsByTag("figure").first()
+                    .getElementsByTag("a").first()
+                    .getElementsByTag("img").first()
+                    .attributes().get("src");
+            String date = element.getElementsByTag("div").first()
+                    .getElementsByTag("time").first().html();
+            String title2 = element.getElementsByTag("div").first()
+                    .getElementsByTag("h3").first()
+                    .getElementsByTag("a").first().html();
+            String text;
+            try{
+                text = element.getElementsByTag("div").first()
+                        .getElementsByTag("p").first().html();
+            }catch (NullPointerException e){
+                text = "";
+            }
 
             News news = new News();
             news.setComment(text);
@@ -205,9 +217,56 @@ public class NewsFragment extends BaseFragment {
             news.setDate(date);
             news.setImgUrl(imageUrl);
             news.setUrl(href);
-            newss.add(news);
+            news.setNumberedDate(convertDateToNumbers(date));
+            newses.add(news);
         }
-        return newss;
+        return newses;
     }
+
+    private static void sortByDate(List<News> newses) {
+        Collections.sort(newses, new Comparator<News>() {
+            @Override
+            public int compare(News o1, News o2) {
+                return o2.getNumberedDate().compareTo(o1.getNumberedDate());
+            }
+        });
+    }
+
+    private static String convertDateToNumbers(String date){
+        date = date.toLowerCase();
+        String day = date.substring(0,2);
+        String year = date.substring(
+                date.indexOf(" 20")+1,
+                date.indexOf(" 20")+5
+        );
+        String month = "";
+        if (date.contains("січня")) month = "01";
+        if (date.contains("лютого")) month = "02";
+        if (date.contains("березня")) month = "03";
+        if (date.contains("квітня")) month = "04";
+        if (date.contains("травня")) month = "05";
+        if (date.contains("червня")) month = "06";
+        if (date.contains("липня")) month = "07";
+        if (date.contains("серпня")) month = "08";
+        if (date.contains("вересня")) month = "09";
+        if (date.contains("жовтня")) month = "10";
+        if (date.contains("листопада")) month = "11";
+        if (date.contains("грудня")) month = "12";
+
+        if (date.contains("января")) month = "01";
+        if (date.contains("февраля")) month = "02";
+        if (date.contains("марта")) month = "03";
+        if (date.contains("апреля")) month = "04";
+        if (date.contains("мая")) month = "05";
+        if (date.contains("июня")) month = "06";
+        if (date.contains("июля")) month = "07";
+        if (date.contains("августа")) month = "08";
+        if (date.contains("сентября")) month = "09";
+        if (date.contains("октября")) month = "10";
+        if (date.contains("ноября")) month = "11";
+        if (date.contains("декабря")) month = "12";
+        return year + month + day;
+    }
+
 }
 

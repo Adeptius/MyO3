@@ -3,9 +3,9 @@ package ua.adeptius.myo3.model.persons;
 
 import org.json.JSONObject;
 
-public class Service {
+public class ServiceHZ {
 
-    public Service(String json) {
+    public ServiceHZ(String json) {
         try{
             JSONObject allInfo = new JSONObject(json.trim());
             this.date = allInfo.get("date").toString();
@@ -30,4 +30,51 @@ public class Service {
     private int p_id;
 
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public boolean isBonus() {
+        return bonus;
+    }
+
+    public void setBonus(boolean bonus) {
+        this.bonus = bonus;
+    }
+
+    public int getS_id() {
+        return s_id;
+    }
+
+    public void setS_id(int s_id) {
+        this.s_id = s_id;
+    }
+
+    public int getP_id() {
+        return p_id;
+    }
+
+    public void setP_id(int p_id) {
+        this.p_id = p_id;
+    }
 }

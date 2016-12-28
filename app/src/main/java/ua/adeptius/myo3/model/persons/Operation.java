@@ -99,4 +99,12 @@ public class Operation {
                 ", saldo=" + saldo +
                 '}';
     }
+
+    public String getMyNote() {
+        String note = getNote();
+        if (note.startsWith("20")){
+            note = note.substring(note.indexOf(" ")+1);
+        }
+        return note;
+    }
 }

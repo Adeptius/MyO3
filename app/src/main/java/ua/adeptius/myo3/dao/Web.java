@@ -14,8 +14,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
@@ -65,7 +63,7 @@ public class Web {
         }
     }
 
-    public static boolean isLoggedNow(String sessionId) throws Exception {
+    public static boolean isLoggedNow() throws Exception {
         String result = getJsonFromUrl("https://my.o3.ua/ajax/persons");
         if (result.equals("<!DOCTYPE html>")) {
             return false;
@@ -105,9 +103,4 @@ public class Web {
         Utilits.networkLog("Ответ: " + result);
         return result;
     }
-
-
-
-
-
 }

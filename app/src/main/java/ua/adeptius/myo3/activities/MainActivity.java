@@ -22,6 +22,7 @@ import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
+import ua.adeptius.myo3.activities.fragments.TarifFragment;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
@@ -72,8 +73,15 @@ public class MainActivity extends AppCompatActivity
 
 //        Settings.setCurrentLogin("02514521");
 //        Settings.setCurrentPassword("5351301");
-        Settings.setCurrentLogin("561100728");
-        Settings.setCurrentPassword("5276229");
+
+
+//        Settings.setCurrentLogin("561100728");
+//        Settings.setCurrentPassword("5276229");
+
+        Settings.setCurrentLogin("561600377");
+        Settings.setCurrentPassword("1217229");
+
+
 
 
         EXECUTOR.submit(new Runnable() {
@@ -88,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new NewsFragment(), R.drawable.background_main1);
+        goTo(new TarifFragment(), R.drawable.background_main1);
 
 
     }
@@ -156,7 +164,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_news) {
-            goTo(new NewsFragment(), R.drawable.background_main1);
+            goTo(new NewsFragment(), R.drawable.background_news4);
         } else if (id == R.id.nav_main_info) {
             goTo(new MainFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_balance) {
@@ -164,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_add_balance) {
 
         } else if (id == R.id.nav_tarif_plans) {
-
+            goTo(new TarifFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_free_day) {
 
         } else if (id == R.id.nav_turbo_day) {

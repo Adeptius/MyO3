@@ -79,7 +79,7 @@ public class BalanceFragment extends BaseFragment {
 
             String date = operation.getDate().replaceAll("00:00:00", "");
 
-            String note = operation.getNote();
+            String note = operation.getMyNote();
 
             String money;
             if (operation.getMoney() > 0) {

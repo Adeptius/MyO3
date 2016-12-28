@@ -28,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
         try {
-            if (Web.isLoggedNow(currentSessionId)){
+            if (Web.isLoggedNow()){
                 goToMain();
             }else {
                 goToLogin();

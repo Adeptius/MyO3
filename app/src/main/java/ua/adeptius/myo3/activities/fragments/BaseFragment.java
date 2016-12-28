@@ -121,6 +121,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
            public void run() {
                MainActivity.titleTextView.setText(titleText);
                MainActivity.title = titleText;
+               if ("".equals(descriptionText)){
+                   MainActivity.descriptionTextView.setVisibility(View.GONE);
+               }else {
+                   MainActivity.descriptionTextView.setVisibility(View.VISIBLE);
+               }
                MainActivity.descriptionTextView.setText(descriptionText);
            }
        });

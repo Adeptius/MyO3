@@ -7,6 +7,15 @@ public class News {
     private String comment;
     private String url;
     private String imgUrl;
+    private String NumberedDate;
+
+    public String getNumberedDate() {
+        return NumberedDate;
+    }
+
+    public void setNumberedDate(String numberedDate) {
+        NumberedDate = numberedDate;
+    }
 
     public String getDate() {
         return date;
