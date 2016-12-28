@@ -3,9 +3,11 @@ package ua.adeptius.myo3.activities.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected String titleText;
     protected String descriptionText;
     protected LinearLayout mainLayout;
+    protected final int COLOR_BLUE = Color.parseColor("#1976D2");
 //    int mCurCheckPosition;
 
     public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
@@ -65,6 +68,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return baseView;
     }
 
+    public void makeSimpleSnackBar(final String message, final View text) {
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                Snackbar.make(text, message, Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
 
     protected void startBackgroundTask(){
         EXECUTOR.submit(new Runnable() {

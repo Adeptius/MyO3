@@ -258,15 +258,6 @@ public class MainFragment extends BaseFragment {
         dns2Layout.addView(dns2Value, MATCH_WRAP_WEIGHT1);
     }
 
-    public void makeSimpleSnackBar(final String message, final View text) {
-        HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                Snackbar.make(text, message, Snackbar.LENGTH_LONG).show();
-            }
-        });
-    }
-
     private void changeSmsNumber(final View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LinearLayout linearLayout = new LinearLayout(context);

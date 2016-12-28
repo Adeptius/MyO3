@@ -1,6 +1,7 @@
 package ua.adeptius.myo3.activities;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -9,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -79,8 +81,13 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentLogin("561100728");
 //        Settings.setCurrentPassword("5276229");
 
-        Settings.setCurrentLogin("561600377");
-        Settings.setCurrentPassword("1217229");
+//        Settings.setCurrentLogin("561600377");
+//        Settings.setCurrentPassword("1217229");
+
+
+//        реал айпи
+        Settings.setCurrentLogin("441135231");
+        Settings.setCurrentPassword("5145026");
 
 
 

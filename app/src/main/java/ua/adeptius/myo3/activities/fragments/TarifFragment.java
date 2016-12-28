@@ -1,15 +1,26 @@
 package ua.adeptius.myo3.activities.fragments;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.graphics.Typeface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.persons.Servise;
 
 
@@ -28,33 +39,211 @@ public class TarifFragment extends BaseFragment {
     }
 
     private void drawAllServises(List<Servise> services) {
-        for (Servise service : services) {
+        for (final Servise service : services) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item, null);
             mainLayout.addView(itemView);
+
+            TextView serviceTypeName = (TextView) itemView.findViewById(R.id.service_type);
+            serviceTypeName.setText(service.getMyTypeName());
+            serviceTypeName.setTextColor(COLOR_BLUE);
 
             TextView serviceName = (TextView) itemView.findViewById(R.id.service_name);
             serviceName.setText(service.getMyServiceName());
 
+
+            TextView serviceComent = (TextView) itemView.findViewById(R.id.service_coment);
+            if ("".equals(service.getComent())) {
+                serviceComent.setVisibility(View.GONE);
+            } else {
+                serviceComent.setText(service.getComent());
+            }
             TextView serviceCost = (TextView) itemView.findViewById(R.id.service_cost);
             serviceCost.setText(String.valueOf(service.getMonth()));
 
             Button changeButton = (Button) itemView.findViewById(R.id.service_change_button);
-            if (!service.is_allow_change()){
+            if (!service.is_allow_change()) {
                 changeButton.setVisibility(View.GONE);
+            } else {
+
             }
 
             Button stopButton = (Button) itemView.findViewById(R.id.service_stop_button);
-            if (!service.is_allow_suspend()){
+            if (!service.is_allow_suspend()) {
                 stopButton.setVisibility(View.GONE);
+            } else {
+                stopButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        stopTheService();
+                    }
+                });
             }
-
-            TextView serviceTypeName = (TextView) itemView.findViewById(R.id.service_type);
-            serviceTypeName.setText(service.getMyTypeName());
-
-
-
-
         }
+    }
+
+
+    private void stopTheService() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+
+        TextView titleView = new TextView(context);
+        titleView.setText("Умови");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("1. Поки послуга призупинена - абонентська плата за неї не знімається.\n");
+        sb.append("2. Призупиняти можно 6 разів на рік.\n");
+        sb.append("3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n");
+        sb.append("4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n");
+
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText(sb.toString());
+        builder.setView(textLayout);
+
+        builder.setCustomTitle(titleView);
+        builder.setPositiveButton("Зрозуміло", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                askStartDate();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void askStartDate() {
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
+        builder.setCancelable(true);
+        builder.setView(datePicker);
+
+        TextView titleText = new TextView(context);
+        titleText.setText("Призупинити з:");
+        titleText.setGravity(Gravity.CENTER);
+        titleText.setTextSize(24);
+        titleText.setTypeface(null, Typeface.BOLD);
+        titleText.setTextColor(COLOR_BLUE);
+
+        builder.setCustomTitle(titleText);
+        builder.setView(datePicker);
+        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                if (!isRightChoice(datePicker)) {
+                    makeSimpleSnackBar("Сьогодні або вчора вибрати не можливо", mainLayout);
+                } else {
+                    askEndDate(getStringedDate(datePicker));
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void askEndDate(final String startDate) {
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
+        builder.setCancelable(true);
+        builder.setView(datePicker);
+
+        TextView textView = new TextView(context);
+        textView.setText("Призупинити до:");
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(24);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setTextColor(COLOR_BLUE);
+
+        builder.setCustomTitle(textView);
+        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                confirmDate(startDate, getStringedDate(datePicker));
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void confirmDate(final String startDate, final String endDate) {
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
+        builder.setCancelable(true);
+        builder.setView(datePicker);
+
+        TextView titleView = new TextView(context);
+        titleView.setText("Все вірно?");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Послуга призупиняється\n");
+        sb.append("з: " + startDate);
+        sb.append("\nпо: " + endDate);
+
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText(sb.toString());
+        builder.setView(textLayout);
+
+        builder.setCustomTitle(titleView);
+        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+               EXECUTOR.submit(new Runnable() {
+                   @Override
+                   public void run() {
+                       if (SendInfo.stopService(startDate, endDate)){
+                           makeSimpleSnackBar("Успішно", mainLayout);
+                       }else {
+                           makeSimpleSnackBar("Невдало", mainLayout);
+                       }
+                   }
+               });
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private boolean isRightChoice(DatePicker datePicker) {
+        Calendar calendar = new GregorianCalendar();
+        int year = datePicker.getYear();
+        int month = datePicker.getMonth();
+        int day = datePicker.getDayOfMonth();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        boolean y = currentYear >= year;
+        boolean m = currentMonth >= month;
+        boolean d = currentDay >= day;
+
+        if (y && m && d) {
+            return false;
+        }
+        return true;
+    }
+
+    private String getStringedDate(DatePicker datePicker) {
+        String year = String.valueOf(datePicker.getYear());
+        String month = String.valueOf(datePicker.getMonth() + 1);
+        String day = String.valueOf(datePicker.getDayOfMonth());
+        month = month.length() == 1 ? "0" + month : month;
+        day = day.length() == 1 ? "0" + day : day;
+        return year + "-" + month + "-" + day;
     }
 
     @Override

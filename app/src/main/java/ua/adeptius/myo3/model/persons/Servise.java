@@ -135,7 +135,7 @@ public class Servise {
         this.discounts = discounts;
     }
 
-    public Servise(String json){
+    public Servise(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             this.id = Integer.parseInt(allInfo.get("id").toString());
@@ -154,47 +154,115 @@ public class Servise {
             this.is_allow_change = Boolean.parseBoolean(allInfo.get("is_allow_change").toString());
             this.is_allow_suspend = Boolean.parseBoolean(allInfo.get("is_allow_suspend").toString());
             this.discounts = allInfo.get("discounts").toString();
-        }catch (Exception e){
+
+            try {
+                String s = allInfo.get("chprices").toString();
+                s = s.substring(1, s.length() - 1);
+                JSONObject details = new JSONObject(s.trim());
+                this.newName = details.get("newName").toString();
+                this.dateWillChange = details.get("dchange").toString();
+            } catch (Exception ignored) {
+                this.newName = "";
+                this.dateWillChange = "";
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private int id;
-           private int old;
-           private int sid;
-           private int type;
-           private double money;
-           private String start_date;
-           private int month;
-           private int pay_type;
-           private String pay_type_name;
-           private String login;
-           private String domen;
-           private String end_date;
-           private String chprices;
-           private boolean is_allow_change;
-           private boolean is_allow_suspend;
-           private String discounts;
+    private int old;
+    private int sid;
+    private int type;
+    private double money;
+    private String start_date;
+    private int month;
+    private int pay_type;
+    private String pay_type_name;
+    private String login;
+    private String domen;
+    private String end_date;
+    private String chprices;
+    private boolean is_allow_change;
+    private boolean is_allow_suspend;
+    private String discounts;
+    private String newName;
+    private String dateWillChange;
 
 
     public String getMyServiceName() {
         String name = getPay_type_name();
-        if (name.contains("грн.")){
-            name = name.substring(0,name.indexOf("-"));
+        if (name.contains("грн.")) {
+            name = name.substring(0, name.lastIndexOf("-"));
         }
-        if (name.contains("грн")){
-            name = name.substring(0,name.indexOf("-"));
+        if (name.contains("грн")) {
+            name = name.substring(0, name.lastIndexOf("-"));
         }
-        name = name.replaceAll("Мбит","Мбіт");
-        name = name.replaceAll("Реальный","Реальний");
+        if (name.startsWith("20")) {
+            name = name.substring(name.indexOf(" ") + 1);
+        }
+
+        name = name.replaceAll("Мбит", "Мбіт");
+        name = name.replaceAll("Безлимитный", "Безліміт");
+        name = name.replaceAll("Реальный", "Реальний");
+        name = name.replaceAll("Телевидение MEGOGO.NET \\(", "Тариф ");
+        name = name.replaceAll("оптимальный\\)", "оптимальний");
         return name;
     }
 
     public String getMyTypeName() {
         if (getType() == 5) return "Доступ до інтернету";
         if (getType() == 7) return "Надання адреси";
+        if (getType() == 15) return "Телебачення MEGOGO";
         return typeName;
     }
+
+    public String getComent() {
+        String coment = "";
+
+        String date = "";
+        try {
+            date = dateWillChange.substring(0, dateWillChange.indexOf(" ")) + " ";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(dateWillChange);
+        System.out.println(newName);
+
+        if ("!-Удалить услугу".equals(newName)){
+            coment += "Послугу буде видалено " + date;
+        }
+
+        if ("!-Приостановлен".equals(newName)){
+            coment += "Послугу буде призупинено " + date;
+        }
+        return coment;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getNewName() {
+        return newName;
+    }
+
+    public void setNewName(String newName) {
+        this.newName = newName;
+    }
+
+    public String getDateWillChange() {
+        return dateWillChange;
+    }
+
+    public void setDateWillChange(String dateWillChange) {
+        this.dateWillChange = dateWillChange;
+    }
+
+
 }

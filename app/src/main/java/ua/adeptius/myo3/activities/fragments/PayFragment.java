@@ -6,14 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +25,7 @@ import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.persons.Person;
+import ua.adeptius.myo3.utils.Utilits;
 
 public class PayFragment extends BaseFragment {
 
@@ -138,14 +142,31 @@ public class PayFragment extends BaseFragment {
 
     public void askHowMuch(final String system) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView before = new TextView(context);
+        before.setText("Поповнити рахунок на");
+        before.setTypeface(null, Typeface.BOLD);
+        before.setTextSize(18);
+
+        TextView after = new TextView(context);
+        after.setText("грн");
+        after.setTypeface(null, Typeface.BOLD);
+        after.setTextSize(18);
+
         final EditText text = new EditText(context);
+        text.setWidth((int) Utilits.dpToPixel(50,context));
         text.setCursorVisible(true);
         text.hasFocus();
+
+        layout.addView(before);
+        layout.addView(text);
+        layout.addView(after);
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         builder.setCancelable(true);
-        builder.setView(text);
-        builder.setMessage("Введіть сумму поповнення:");
+        builder.setView(layout);
         builder.setPositiveButton("Поповнити", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {

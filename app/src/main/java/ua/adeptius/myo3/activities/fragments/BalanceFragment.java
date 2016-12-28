@@ -47,7 +47,9 @@ public class BalanceFragment extends BaseFragment {
     void processIfOk() {
         sortByDate(operations);
         configureSaldo(person);
-        titleText = "Баланс: " + String.valueOf(person.getCurrent()).substring(0, 4) + " грн";
+        String balance = String.valueOf(person.getCurrent());
+        balance = balance.substring(0, balance.indexOf("."));
+        titleText = "Баланс: " + balance + " грн";
         descriptionText = "Кожного першого числа знімається абонентська " +
                 "плата наперед у розмірі " + abonPlata + " грн";
         setTitle(titleText, descriptionText);

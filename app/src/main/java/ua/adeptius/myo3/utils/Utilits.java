@@ -1,7 +1,10 @@
 package ua.adeptius.myo3.utils;
 
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.concurrent.ExecutorService;
@@ -37,6 +40,13 @@ public class Utilits {
             splittedJson[0] = json;
         }
         return splittedJson;
+    }
+
+    public static float dpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
     }
 
 }
