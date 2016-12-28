@@ -15,10 +15,7 @@ import ua.adeptius.myo3.model.persons.Servise;
 
 public class TarifFragment extends BaseFragment {
 
-    private LinearLayout mainLayout;
     private List<Servise> services;
-
-
 
     @Override
     void doInBackground() throws Exception {

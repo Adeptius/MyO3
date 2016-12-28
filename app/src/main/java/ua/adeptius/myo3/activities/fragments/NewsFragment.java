@@ -29,7 +29,6 @@ public class NewsFragment extends BaseFragment {
 
     private List<News> newses;
     private List<ImageView> imageViews = new ArrayList<>();
-    private LinearLayout mainLayout;
 
     @Override
     void init() {

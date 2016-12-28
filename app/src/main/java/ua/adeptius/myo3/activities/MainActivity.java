@@ -22,6 +22,7 @@ import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
+import ua.adeptius.myo3.activities.fragments.PayFragment;
 import ua.adeptius.myo3.activities.fragments.TarifFragment;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
@@ -97,8 +98,6 @@ public class MainActivity extends AppCompatActivity
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new TarifFragment(), R.drawable.background_main1);
-
-
     }
 
     private void setDrawlerText(String title, String description){
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_balance) {
             goTo(new BalanceFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_add_balance) {
-
+            goTo(new PayFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_tarif_plans) {
             goTo(new TarifFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_free_day) {

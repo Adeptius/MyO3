@@ -22,7 +22,6 @@ import ua.adeptius.myo3.model.persons.Person;
 
 public class BalanceFragment extends BaseFragment {
 
-    LinearLayout mainLayout;
     List<Operation> operations;
     private Person person;
     String abonPlata;

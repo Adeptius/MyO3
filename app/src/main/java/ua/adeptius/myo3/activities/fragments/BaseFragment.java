@@ -28,6 +28,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected Context context;
     protected String titleText;
     protected String descriptionText;
+    protected LinearLayout mainLayout;
 //    int mCurCheckPosition;
 
     public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
