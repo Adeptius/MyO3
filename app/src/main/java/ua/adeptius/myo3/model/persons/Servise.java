@@ -185,12 +185,7 @@ public class Servise {
                 long timeEnable = date.getTime();
                 long timeCurrent = new Date().getTime();
                 int minutesToEnable = (int) (timeEnable-timeCurrent)/1000/60;
-                System.out.println("timeEnable "+timeEnable);
-                System.out.println("timeCurrent "+timeCurrent);
-                System.out.println("minutesToEnable "+minutesToEnable);
 
-                System.out.println(pay_type_name);
-                System.out.println("условие" + "!-Приостановлен".equals(pay_type_name));
                 if ("Призупинено".equals(pay_type_name) && minutesToEnable < 3 && minutesToEnable > -58 ) {
                     isActivatingNow = true;
                     System.out.println(isActivatingNow);
@@ -240,6 +235,18 @@ public class Servise {
 
     public String getMyServiceName() {
         String name = getPay_type_name();
+        if (name.contains("Телевидение OLL.TV")){
+            name = name.replaceAll("Телевидение OLL.TV \\(","Тариф ");
+            if (name.contains("грн.")) {
+                name = name.substring(0, name.lastIndexOf("-")-2);
+            }
+        }
+        if (name.contains("Телевидение DIVAN.TV")){
+            name = name.replaceAll("Телевидение DIVAN.TV \\(","Тариф ");
+            if (name.contains("грн.")) {
+                name = name.substring(0, name.lastIndexOf(")")-1);
+            }
+        }
         if (name.contains("грн.")) {
             name = name.substring(0, name.lastIndexOf("-"));
         }
@@ -255,6 +262,10 @@ public class Servise {
         name = name.replaceAll("Реальный", "Реальний");
         name = name.replaceAll("Телевидение MEGOGO.NET \\(", "Тариф ");
         name = name.replaceAll("оптимальный\\)", "оптимальний");
+        name = name.replaceAll("Оптимальный\\)", "оптимальний");
+        name = name.replaceAll("\\(Промо 1-аренда stb\\)", "Медіаплеєр MAG");
+        name = name.replaceAll("Детский\\)", "Дитячий");
+        name = name.replaceAll("звезды", "зірки");
         return name;
     }
 
@@ -262,11 +273,19 @@ public class Servise {
         if (getType() == 5) return "Доступ до інтернету";
         if (getType() == 7) return "Надання адреси";
         if (getType() == 15) return "Телебачення MEGOGO";
+        if (getType() == 13 && pay_type_name.contains("аренды")) return "Оренда обладнання";
+        if (getType() == 13) return "Телебачення OLL.TV";
+        if (getType() == 14) return "Телебачення Divan.TV";
         return typeName;
     }
 
     public String getComent() {
         String coment = "";
+
+        String newNameWithOutDate = "";
+        if (newName.startsWith("20")) {
+            newNameWithOutDate = newName.substring(newName.indexOf(" ") + 1);
+        }
 
         String date = "";
         if (!"".equals(dateWillChange)) {
@@ -283,7 +302,8 @@ public class Servise {
         }else if(isStopped && !"".equals(newName)){
             coment += "Послуга буде відновлена " + date;
         }else if (!"".equals(newName)){
-            coment += "Послугу буде змінено на " + newName;
+            coment += "Послугу буде змінено " + date +" на "
+                    + (!"".equals(newNameWithOutDate)? newNameWithOutDate : newName);
         }
         return coment;
     }

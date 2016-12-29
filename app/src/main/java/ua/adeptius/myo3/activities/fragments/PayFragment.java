@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -221,7 +220,7 @@ public class PayFragment extends BaseFragment {
 
     @Override
     int setFragmentId() {
-        return R.layout.fragment_balance;
+        return R.layout.fragment_base_scrolling;
     }
 
     @Override

@@ -78,16 +78,32 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("5351301");
 
 
-//        Settings.setCurrentLogin("561100728");
-//        Settings.setCurrentPassword("5276229");
+        Settings.setCurrentLogin("561100728");
+        Settings.setCurrentPassword("5276229");
 
 //        Settings.setCurrentLogin("561600377");
 //        Settings.setCurrentPassword("1217229");
 
 
-//        реал айпи
-        Settings.setCurrentLogin("441135231");
-        Settings.setCurrentPassword("5145026");
+//        Тест Бандлтест
+//        Settings.setCurrentLogin("441135231");
+//        Settings.setCurrentPassword("5145026");
+
+//        абон с оллтв
+//        Settings.setCurrentLogin("561700845");
+//        Settings.setCurrentPassword("7897107");
+
+//        абон с диванТВ
+//        Settings.setCurrentLogin("441120767");
+//        Settings.setCurrentPassword("3147698");
+
+            // АБОН!!!!!!
+//        Settings.setCurrentLogin("561000369");
+//        Settings.setCurrentPassword("0849788");
+
+            // приостановка
+//        Settings.setCurrentLogin("6191300086");
+//        Settings.setCurrentPassword("6909125");
 
 
 

@@ -63,7 +63,6 @@ public class Utilits {
 
         String[] cutted = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            System.out.println("list: " + list.get(i));
             cutted[i] = list.get(i);
         }
         return cutted;

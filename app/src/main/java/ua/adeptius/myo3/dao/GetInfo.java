@@ -4,9 +4,11 @@ package ua.adeptius.myo3.dao;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ua.adeptius.myo3.model.ip.Ip;
+import ua.adeptius.myo3.model.persons.AvailableTarif;
 import ua.adeptius.myo3.model.persons.Operation;
 import ua.adeptius.myo3.model.persons.Person;
 import ua.adeptius.myo3.model.persons.Servise;
@@ -17,12 +19,26 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+
+    public static List<AvailableTarif> getAvailableTarifs(String serviceId) throws Exception {
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/new_pt?service_id="+serviceId);
+        s = s.substring(1, s.length() - 1);
+        List<AvailableTarif> availableTarifList = new ArrayList<>();
+        String[] splitted = Utilits.splitJsonAltAlhoritm(s);
+        for (String s1 : splitted) {
+            if (!s1.contains("Аренда приставок"))
+                availableTarifList.add(new AvailableTarif(s1));
+        }
+        return availableTarifList;
+    }
+
     public static List<Servise> getServises() throws Exception {
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services");
         s = s.substring(1, s.length() - 1);
         List<Servise> servises = new ArrayList<>();
         String[] splitted = Utilits.splitJsonAltAlhoritm(s);
         for (String s1 : splitted) {
+            if (!s1.contains("Аренда приставок"))
             servises.add(new Servise(s1));
         }
         return servises;

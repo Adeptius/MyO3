@@ -1,9 +1,6 @@
 package ua.adeptius.myo3.activities.fragments;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -163,7 +160,7 @@ public class BalanceFragment extends BaseFragment {
 
     @Override
     int setFragmentId() {
-        return R.layout.fragment_balance;
+        return R.layout.fragment_base_scrolling;
     }
 
     @Override
