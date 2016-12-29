@@ -3,6 +3,10 @@ package ua.adeptius.myo3.model.persons;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Servise {
 
     private String typeName;
@@ -147,6 +151,10 @@ public class Servise {
             this.month = Integer.parseInt(allInfo.get("month").toString());
             this.pay_type = Integer.parseInt(allInfo.get("pay_type").toString());
             this.pay_type_name = allInfo.get("pay_type_name").toString();
+            if ("!-Приостановлен".equals(pay_type_name)) {
+                isStopped = true;
+                this.pay_type_name = "Призупинено";
+            }
             this.login = allInfo.get("login").toString();
             this.domen = allInfo.get("domen").toString();
             this.end_date = allInfo.get("end_date").toString();
@@ -165,9 +173,40 @@ public class Servise {
                 this.newName = "";
                 this.dateWillChange = "";
             }
+
+            if (!"".equals(dateWillChange)){
+                int year = Integer.parseInt(dateWillChange.substring(0,4));
+                int month = Integer.parseInt(dateWillChange.substring(5,7));
+                int day = Integer.parseInt(dateWillChange.substring(8,10));
+                int hour = Integer.parseInt(dateWillChange.substring(11,13));
+                int minute = Integer.parseInt(dateWillChange.substring(14,16));
+                Date date = new Date(year-1900,month-1,day,hour,minute);
+                System.out.println(date);
+                long timeEnable = date.getTime();
+                long timeCurrent = new Date().getTime();
+                int minutesToEnable = (int) (timeEnable-timeCurrent)/1000/60;
+                System.out.println("timeEnable "+timeEnable);
+                System.out.println("timeCurrent "+timeCurrent);
+                System.out.println("minutesToEnable "+minutesToEnable);
+
+                System.out.println(pay_type_name);
+                System.out.println("условие" + "!-Приостановлен".equals(pay_type_name));
+                if ("Призупинено".equals(pay_type_name) && minutesToEnable < 3 && minutesToEnable > -58 ) {
+                    isActivatingNow = true;
+                    System.out.println(isActivatingNow);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isActivatingNow() {
+        return isActivatingNow;
+    }
+
+    public void setActivatingNow(boolean activatingNow) {
+        isActivatingNow = activatingNow;
     }
 
     private int id;
@@ -188,7 +227,16 @@ public class Servise {
     private String discounts;
     private String newName;
     private String dateWillChange;
+    private boolean isStopped;
+    private boolean isActivatingNow;
 
+    public boolean isStopped() {
+        return isStopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        isStopped = stopped;
+    }
 
     public String getMyServiceName() {
         String name = getPay_type_name();
@@ -221,21 +269,21 @@ public class Servise {
         String coment = "";
 
         String date = "";
-        try {
-            date = dateWillChange.substring(0, dateWillChange.indexOf(" ")) + " ";
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!"".equals(dateWillChange)) {
+            try {
+                date = dateWillChange.substring(0, dateWillChange.indexOf(" ")) + " ";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        System.out.println(dateWillChange);
-        System.out.println(newName);
-
         if ("!-Удалить услугу".equals(newName)){
             coment += "Послугу буде видалено " + date;
-        }
-
-        if ("!-Приостановлен".equals(newName)){
+        }else if ("!-Приостановлен".equals(newName)){
             coment += "Послугу буде призупинено " + date;
+        }else if(isStopped && !"".equals(newName)){
+            coment += "Послуга буде відновлена " + date;
+        }else if (!"".equals(newName)){
+            coment += "Послугу буде змінено на " + newName;
         }
         return coment;
     }

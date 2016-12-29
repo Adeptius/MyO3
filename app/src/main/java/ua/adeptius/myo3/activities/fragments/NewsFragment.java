@@ -266,6 +266,5 @@ public class NewsFragment extends BaseFragment {
         if (date.contains("декабря")) month = "12";
         return year + month + day;
     }
-
 }
 

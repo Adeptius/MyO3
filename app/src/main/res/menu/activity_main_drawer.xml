@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_tarif_plans"
             android:icon="@drawable/ic_tarif"
-            android:title="Тарифні плани" />
+            android:title="Мої послуги" />
 
         <item
             android:id="@+id/nav_free_day"
@@ -42,7 +42,7 @@
         <item
             android:id="@+id/nav_vkl_internet"
             android:icon="@drawable/ic_vkl_internet2"
-            android:title="Вмикання/вимикання Інтернету" />
+            android:title="Вимикання Інтернету" />
         <item
             android:id="@+id/nav_dr_web"
             android:icon="@drawable/ic_dr_web2"

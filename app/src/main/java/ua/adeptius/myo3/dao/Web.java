@@ -89,7 +89,7 @@ public class Web {
             for (int i = 0; i < keys.length; i++) {
                 String key = (String) keys[i];
                 urlParameters += key + "=" + jSonQuery.get(key);
-                if (!(i==keys.length)) urlParameters += "&";
+                if (!(i==keys.length-1)) urlParameters += "&";
             }
         }
         con.setDoOutput(true);

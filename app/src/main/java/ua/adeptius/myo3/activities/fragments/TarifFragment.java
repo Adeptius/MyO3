@@ -1,7 +1,6 @@
 package ua.adeptius.myo3.activities.fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.view.Gravity;
@@ -10,15 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.persons.Servise;
@@ -57,6 +55,7 @@ public class TarifFragment extends BaseFragment {
             } else {
                 serviceComent.setText(service.getComent());
             }
+
             TextView serviceCost = (TextView) itemView.findViewById(R.id.service_cost);
             serviceCost.setText(String.valueOf(service.getMonth()));
 
@@ -77,6 +76,28 @@ public class TarifFragment extends BaseFragment {
                         stopTheService();
                     }
                 });
+            }
+
+            Button startButton = (Button) itemView.findViewById(R.id.service_renew_button);
+            if (service.isStopped()) {
+                startButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startTheService();
+                    }
+                });
+            } else {
+                startButton.setVisibility(View.GONE);
+            }
+
+            ProgressBar progressBar = (ProgressBar) itemView.findViewById(R.id.service_progress_bar);
+            if (service.isActivatingNow()){
+                progressBar.setVisibility(View.VISIBLE);
+                serviceComent.setVisibility(View.VISIBLE);
+                startButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.GONE);
+                changeButton.setVisibility(View.GONE);
+                serviceComent.setText("Триває активація");
             }
         }
     }
@@ -100,7 +121,7 @@ public class TarifFragment extends BaseFragment {
         sb.append("3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n");
         sb.append("4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n");
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_message_stop, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);
@@ -191,7 +212,7 @@ public class TarifFragment extends BaseFragment {
         sb.append("з: " + startDate);
         sb.append("\nпо: " + endDate);
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_message_stop, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);
@@ -200,16 +221,16 @@ public class TarifFragment extends BaseFragment {
         builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-               EXECUTOR.submit(new Runnable() {
-                   @Override
-                   public void run() {
-                       if (SendInfo.stopService(startDate, endDate)){
-                           makeSimpleSnackBar("Успішно", mainLayout);
-                       }else {
-                           makeSimpleSnackBar("Невдало", mainLayout);
-                       }
-                   }
-               });
+                EXECUTOR.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (SendInfo.stopService(startDate, endDate)) {
+                            makeSimpleSnackBar("Успішно", mainLayout);
+                        } else {
+                            makeSimpleSnackBar("Невдало", mainLayout);
+                        }
+                    }
+                });
 
             }
         });
@@ -217,6 +238,62 @@ public class TarifFragment extends BaseFragment {
         dialog.show();
     }
 
+
+    private void startTheService() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+
+        TextView titleView = new TextView(context);
+        titleView.setText("Відновити зараз?");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_message_stop, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Це займе від пари хвилин до години.");
+        builder.setView(textLayout);
+
+        builder.setCustomTitle(titleView);
+        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                Calendar calendar = new GregorianCalendar();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH)+1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE)+3;
+                if (minute>59){
+                    hour++;
+                    minute = minute-60;
+                }
+                final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day) + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
+                System.out.println(query);
+
+                EXECUTOR.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (SendInfo.startService(query)){
+                            makeSimpleSnackBar("Послуга відновлена. Зачекайте.", mainLayout);
+                        }else {
+                            makeSimpleSnackBar("Невдалось. Спробуйте ще раз.", mainLayout);
+                        }
+                    }
+                });
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private String doTwoSymb(int i){
+        String s = String.valueOf(i);
+        if (s.length()==1) s = "0" + s;
+        return s;
+    }
 
     private boolean isRightChoice(DatePicker datePicker) {
         Calendar calendar = new GregorianCalendar();

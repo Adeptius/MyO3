@@ -20,7 +20,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
@@ -47,6 +47,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
+                <ProgressBar
+                    android:id="@+id/service_progress_bar"
+                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -57,6 +65,7 @@
 
                 <Button
                     android:id="@+id/service_stop_button"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -64,10 +73,19 @@
 
                 <Button
                     android:id="@+id/service_change_button"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Змінити" />
+
+                <Button
+                    android:id="@+id/service_renew_button"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Відновити зараз" />
             </LinearLayout>
 
         </LinearLayout>

@@ -8,6 +8,18 @@ import ua.adeptius.myo3.model.persons.Phone;
 
 public class SendInfo {
 
+    public static boolean startService(String startDate) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("r_date", startDate);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/renew", map, false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean stopService(String startDate, String endDate) {
         HashMap<String, String> map = new HashMap<>();
         map.put("s_date", startDate);
