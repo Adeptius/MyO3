@@ -31,7 +31,6 @@ public class News {
 
     public void setTitle(String title) {
         title = title.replaceAll("&nbsp;","\"");
-
         this.title = title;
     }
 

@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new TarifFragment(), R.drawable.background_main1);
+        goTo(new FreeDayFragment(), R.drawable.background_main1);
     }
 
     private void setDrawlerText(String title, String description){

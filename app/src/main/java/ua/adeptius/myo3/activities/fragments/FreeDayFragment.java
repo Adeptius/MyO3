@@ -13,7 +13,7 @@ import ua.adeptius.myo3.model.persons.Person;
 
 public class FreeDayFragment extends BaseFragment{
 
-    private TextView firstText = getTextView(R.id.first_text);
+    private TextView firstText;
     private Person person;
     private int numberOfFreeDays;
     private int availableFreeDays;
@@ -22,15 +22,16 @@ public class FreeDayFragment extends BaseFragment{
     void init() {
         titleText = "Вільний день";
         descriptionText = "Безкоштовна послуга збільшення швидкості до 100мбіт";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_day);
+        firstText = getTextView(R.id.first_text);
     }
 
     @Override
     void doInBackground() throws Exception {
         person = GetInfo.getPersonInfo();
-        Map<String, Integer> map = GetInfo.getFreeDayInfo();
-        numberOfFreeDays = map.get("daysTotal");
-        availableFreeDays = map.get("daysLeft");
+//        Map<String, Integer> map = GetInfo.getFreeDayInfo();
+//        numberOfFreeDays = map.get("daysTotal");
+//        availableFreeDays = map.get("daysLeft");
         drawScreen();
     }
 
@@ -42,23 +43,30 @@ public class FreeDayFragment extends BaseFragment{
         StringBuilder sb = new StringBuilder();
         sb.append("Ви з нами ");
         if (availableFreeDays ==0){
-            sb.append("менше року, тому поки що послуга вам не доступна.");
+            sb.append("менше року, нажаль, поки що, послуга вам не доступна.");
         }else if (availableFreeDays ==1){
-            sb.append("один рік, вам д.");
+            sb.append("один рік. Вам надається один день у місяць без обмежень");
         }else if (availableFreeDays ==2){
-            sb.append("два роки, тому поки послуга вам не доступна.");
+            sb.append("два роки. Вам надається два дні у місяць без обмежень");
         }else if (availableFreeDays ==3){
-            sb.append("три роки, тому поки послуга вам не доступна.");
+            sb.append("три роки. Вам надається три дня у місяць без обмежень");
         }else if (availableFreeDays ==4){
-            sb.append("чотири роки, тому поки послуга вам не доступна.");
+            sb.append("чотири роки. Вам надається чотири дні у місяць без обмежень");
         }else if (availableFreeDays ==5){
-            sb.append("більше п'яти років, тому поки послуга вам не доступна.");
+            sb.append("більше п'яти років. Вам надається п'ять днів у місяць без обмежень");
         }
 
+        if (!(availableFreeDays == 0)){
+            sb.append(" швидкості.");
 
 
 
 
+
+
+        }
+
+        firstText.setText(sb.toString());
     }
 
 
@@ -76,12 +84,12 @@ public class FreeDayFragment extends BaseFragment{
 
     @Override
     int setFragmentId() {
-        return R.id.main_for_free_day;
+        return R.layout.fragment_free_day;
     }
 
     @Override
     int setLayoutId() {
-        return R.layout.fragment_free_day;
+        return R.id.main_for_free_day;
     }
 
     @Override
