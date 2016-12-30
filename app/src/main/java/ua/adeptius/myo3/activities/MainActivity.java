@@ -27,6 +27,7 @@ import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
 import ua.adeptius.myo3.activities.fragments.PayFragment;
 import ua.adeptius.myo3.activities.fragments.TarifFragment;
+import ua.adeptius.myo3.activities.fragments.TurboDayFragment;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
@@ -91,8 +92,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("5145026");
 
 //        абон с оллтв
-        Settings.setCurrentLogin("561700845");
-        Settings.setCurrentPassword("7897107");
+//        Settings.setCurrentLogin("561700845");
+//        Settings.setCurrentPassword("7897107");
 
 //        абон с диванТВ
 //        Settings.setCurrentLogin("441120767");
@@ -117,9 +118,8 @@ public class MainActivity extends AppCompatActivity
 
 
              //Сюй Шенцай тест
-//        Settings.setCurrentLogin("6391");
-//        Settings.setCurrentPassword("ahmatovoj");
-
+        Settings.setCurrentLogin("6391");
+        Settings.setCurrentPassword("ahmatovoj");
 
 
         EXECUTOR.submit(new Runnable() {
@@ -134,9 +134,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new FreeDayFragment(), R.drawable.background_main1);
+        goTo(new TurboDayFragment(), R.drawable.background_main1);
     }
-
 
 
     private void setDrawlerText(String title, String description){
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_free_day) {
             goTo(new FreeDayFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_turbo_day) {
-
+            goTo(new TurboDayFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_dovira) {
 
         } else if (id == R.id.nav_garant_service) {

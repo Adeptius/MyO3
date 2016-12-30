@@ -8,6 +8,21 @@ import ua.adeptius.myo3.model.persons.Phone;
 
 public class SendInfo {
 
+
+
+    public static boolean activateTurboDay(String startDate, String endDate) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("s_date", startDate);
+        map.put("e_date", endDate);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/activate_turbo_day", map, false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean activateFreeDay(HashMap<String, String> map) {
         try {
             String s = Web.sendPost("https://my.o3.ua/ajax/activate_free_day", map, false);
