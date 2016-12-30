@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -87,5 +88,18 @@ public class Utilits {
         int month = Integer.parseInt(sDate.substring(3,5));
         int currentMonth = new GregorianCalendar().get(Calendar.MONTH)+1;
         return month==currentMonth;
+    }
+
+    public static Date getDate(String date){
+        // string in format yyyy-mm-dd hh-mm-ss
+        int year = Integer.parseInt(date.substring(0,4));
+        int month = Integer.parseInt(date.substring(5,7));
+        int day = Integer.parseInt(date.substring(8,10));
+        int hour = Integer.parseInt(date.substring(11,13));
+        int minute = Integer.parseInt(date.substring(14,16));
+        int seconds = Integer.parseInt(date.substring(17,19));
+        @SuppressWarnings("deprecation")
+        Date date2 = new Date(year-1900,month-1,day,hour,minute,seconds);
+        return date2;
     }
 }

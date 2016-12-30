@@ -9,6 +9,16 @@ import ua.adeptius.myo3.model.persons.Phone;
 public class SendInfo {
 
 
+    public static boolean activateCredit() {
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/activate_credit_trust",
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public static boolean activateTurboDay(String startDate, String endDate) {
         HashMap<String, String> map = new HashMap<>();
@@ -116,6 +126,7 @@ public class SendInfo {
         if (response.contains("Номер успішно збережений!")) return true;
         return false;
     }
+
 
 
 }

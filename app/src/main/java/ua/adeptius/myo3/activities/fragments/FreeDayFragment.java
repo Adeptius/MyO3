@@ -22,7 +22,7 @@ import java.util.Map;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
-import ua.adeptius.myo3.model.persons.Person;
+import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
@@ -36,7 +36,7 @@ public class FreeDayFragment extends BaseFragment {
     void init() {
         titleText = "Вільний день";
         descriptionText = "Безкоштовна послуга збільшення швидкості до 100мбіт";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_day);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
     }
 
     @Override
@@ -53,8 +53,10 @@ public class FreeDayFragment extends BaseFragment {
     }
 
     private void drawScreen() {
-        Button activateButton = getButton(R.id.button_activate_free_day);
+        Button activateButton = getButton(R.id.button_activate_free_and_turbo_day);
+
         TextView firstText = getTextView(R.id.first_text);
+        TextView activeText = getTextView(R.id.active_text);
         TextView textDaysLeft = getTextView(R.id.days_left);
         TextView textStatisticsTitle = getTextView(R.id.text_statistics_title);
         LinearLayout layout = (LinearLayout) mainLayout.findViewById(R.id.layout_for_statistics);
@@ -122,12 +124,35 @@ public class FreeDayFragment extends BaseFragment {
             if (isFreeDayIsActive(statistic)){
                 activateButton.setClickable(false);
                 activateButton.setText("Послуга вже активована");
+                try{
+                    Date date = getDate(statistic + ":00");
+                    long timeEnable = date.getTime();
+                    long timeCurrent = new Date().getTime();
+                    int hoursLeft = (int) (timeEnable-timeCurrent)/1000/60/60;
+                    activeText.setText("Залишилось " + hoursLeft + " годин");
+                    activeText.setVisibility(View.VISIBLE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }
+    }
 
+    public static Date getDate(String date){
+        // string in format dd-mm-yyyy hh-mm-ss
+        int year = Integer.parseInt(date.substring(6,10));
+        int month = Integer.parseInt(date.substring(3,5));
+        int day = Integer.parseInt(date.substring(0,2));
+        int hour = Integer.parseInt(date.substring(11,13));
+        int minute = Integer.parseInt(date.substring(14,16));
+        int seconds = Integer.parseInt(date.substring(17,19));
+        @SuppressWarnings("deprecation")
+        Date date2 = new Date(year-1900,month-1,day,hour,minute,seconds);
+        return date2;
     }
 
     public boolean isFreeDayIsActive(String date){
+        System.out.println(date);
         int year = Integer.parseInt(date.substring(6,10));
         int month = Integer.parseInt(date.substring(3,5));
         int day = Integer.parseInt(date.substring(0,2));
@@ -192,7 +217,6 @@ public class FreeDayFragment extends BaseFragment {
                 }
             }
         });
-
     }
 
     @Override
@@ -202,12 +226,12 @@ public class FreeDayFragment extends BaseFragment {
 
     @Override
     int setFragmentId() {
-        return R.layout.fragment_free_day;
+        return R.layout.fragment_free_and_turbo_day;
     }
 
     @Override
     int setLayoutId() {
-        return R.id.main_for_free_day;
+        return R.id.main_for_free_and_turbo_day;
     }
 
     @Override

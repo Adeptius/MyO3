@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/scroll_view_balance"
+        android:id="@+id/base_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">

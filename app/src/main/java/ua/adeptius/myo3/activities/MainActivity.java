@@ -14,7 +14,9 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +24,7 @@ import com.bumptech.glide.Glide;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
+import ua.adeptius.myo3.activities.fragments.CreditFragment;
 import ua.adeptius.myo3.activities.fragments.FreeDayFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     public static TextView titleTextView, descriptionTextView;
     public static String title = "";
+    public static ProgressBar progressBar;
 
 
     @Override
@@ -62,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
 
+        progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
 
         // Задание фона колапс тулбара
         try {
@@ -134,7 +139,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new TurboDayFragment(), R.drawable.background_main1);
+        goTo(new CreditFragment(), R.drawable.background_main1);
     }
 
 
@@ -215,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_turbo_day) {
             goTo(new TurboDayFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_dovira) {
-
+            goTo(new CreditFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_garant_service) {
 
         } else if (id == R.id.nav_vkl_internet) {

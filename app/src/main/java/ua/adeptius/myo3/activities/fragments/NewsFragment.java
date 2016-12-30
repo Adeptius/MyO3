@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -35,12 +36,17 @@ public class NewsFragment extends BaseFragment {
         titleText = "Новини та акції";
         descriptionText = "";
         mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
+
     }
 
     @Override
     void doInBackground() throws Exception {
         newses = getAllNews();
+        sortByDate(newses);
+        newses = subList(newses, 8);
     }
+
+
 
     @Override
     void processIfOk() {
@@ -54,7 +60,6 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void showNews(List<News> newses) {
-        sortByDate(newses);
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
 
@@ -218,7 +223,17 @@ public class NewsFragment extends BaseFragment {
             news.setNumberedDate(convertDateToNumbers(date));
             newses.add(news);
         }
+
         return newses;
+    }
+
+    private List<News> subList(List<News> newses, int i) {
+        List<News> newNews = new ArrayList<>();
+        for (News newse : newses) {
+            newNews.add(newse);
+            if (newNews.size()==i) return newNews;
+        }
+        return newNews;
     }
 
     private static void sortByDate(List<News> newses) {

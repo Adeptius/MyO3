@@ -19,6 +19,18 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static HashMap<String, String> getCreditStatus() throws Exception {
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_credit");
+        JSONObject json = new JSONObject(s);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("pending_enable", json.getString("pending_enable"));
+
+        if(json.has("active")) map.put("active", json.getString("active"));
+        if(json.has("allow")) map.put("allow", json.getString("allow"));
+        if(json.has("pending_restore")) map.put("pending_restore", json.getString("pending_restore"));
+        return map;
+    }
+
     public static List<String> getTurboDayStatistics() throws Exception {
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
         List<String> statistics = new ArrayList<>();

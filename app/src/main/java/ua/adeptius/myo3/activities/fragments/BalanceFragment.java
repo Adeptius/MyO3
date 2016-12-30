@@ -27,7 +27,7 @@ public class BalanceFragment extends BaseFragment {
     void init() {
         titleText = "Баланс";
         descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class BalanceFragment extends BaseFragment {
 
     @Override
     int setLayoutId() {
-        return R.id.scroll_view_balance;
+        return R.id.base_scroll_view;
     }
 
 }

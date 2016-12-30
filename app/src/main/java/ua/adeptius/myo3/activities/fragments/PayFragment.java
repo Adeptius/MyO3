@@ -35,7 +35,7 @@ public class PayFragment extends BaseFragment {
     void init() {
         titleText = "Оплата послуг";
         descriptionText = "";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
         drawAll();
     }
 
@@ -224,7 +224,7 @@ public class PayFragment extends BaseFragment {
 
     @Override
     int setLayoutId() {
-        return R.id.scroll_view_balance;
+        return R.id.base_scroll_view;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class TurboDayFragment extends BaseFragment {
     void init() {
         titleText = "Турбо день";
         descriptionText = "Платна послуга збільшення швидкості до 100мбіт";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_day);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class TurboDayFragment extends BaseFragment {
     }
 
     private void drawScreen() {
-        Button activateButton = getButton(R.id.button_activate_free_day);
+        Button activateButton = getButton(R.id.button_activate_free_and_turbo_day);
         TextView firstText = getTextView(R.id.first_text);
         TextView textStatisticsTitle = getTextView(R.id.text_statistics_title);
         LinearLayout layout = (LinearLayout) mainLayout.findViewById(R.id.layout_for_statistics);
@@ -52,6 +52,7 @@ public class TurboDayFragment extends BaseFragment {
         firstText.setText("Послуга діє з 09:00 до 17:00 години обраного дня та коштує 2,4 грн за день.");
 
         activateButton.setText("Обрати дату активації");
+
         activateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -243,12 +244,12 @@ public class TurboDayFragment extends BaseFragment {
 
     @Override
     int setFragmentId() {
-        return R.layout.fragment_free_day;
+        return R.layout.fragment_free_and_turbo_day;
     }
 
     @Override
     int setLayoutId() {
-        return R.id.main_for_free_day;
+        return R.id.main_for_free_and_turbo_day;
     }
 
     @Override

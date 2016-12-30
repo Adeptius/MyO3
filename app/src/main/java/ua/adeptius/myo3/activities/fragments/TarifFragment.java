@@ -24,7 +24,6 @@ import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.persons.AvailableTarif;
 import ua.adeptius.myo3.model.persons.Servise;
-import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
@@ -37,7 +36,7 @@ public class TarifFragment extends BaseFragment {
     void init() {
         titleText = "Підключені послуги";
         descriptionText = "Керуйте вашими послугами звідси.";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
@@ -476,7 +475,7 @@ public class TarifFragment extends BaseFragment {
 
     @Override
     int setLayoutId() {
-        return R.id.scroll_view_balance;
+        return R.id.base_scroll_view;
     }
 
     @Override
