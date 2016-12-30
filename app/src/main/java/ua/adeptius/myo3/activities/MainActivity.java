@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("5145026");
 
 //        абон с оллтв
-//        Settings.setCurrentLogin("561700845");
-//        Settings.setCurrentPassword("7897107");
+        Settings.setCurrentLogin("561700845");
+        Settings.setCurrentPassword("7897107");
 
 //        абон с диванТВ
 //        Settings.setCurrentLogin("441120767");
@@ -103,14 +103,22 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("0849788");
 
             // АБОН!!!!!!
-        Settings.setCurrentLogin("6191300086");
-        Settings.setCurrentPassword("6909125");
+//        Settings.setCurrentLogin("6191300086");
+//        Settings.setCurrentPassword("6909125");
 
 
             // Згоревший кредит доверия
 //        Settings.setCurrentLogin("7231");
 //        Settings.setCurrentPassword("3786492");
 
+             //МНОГАДЕНЕГ не входит
+//        Settings.setCurrentLogin("dhcp_test");
+//        Settings.setCurrentPassword("12345678");
+
+
+             //Сюй Шенцай тест
+//        Settings.setCurrentLogin("6391");
+//        Settings.setCurrentPassword("ahmatovoj");
 
 
 
@@ -128,6 +136,8 @@ public class MainActivity extends AppCompatActivity
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new FreeDayFragment(), R.drawable.background_main1);
     }
+
+
 
     private void setDrawlerText(String title, String description){
         NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);

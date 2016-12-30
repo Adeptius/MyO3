@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -127,6 +128,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected ImageView getImageView(int id) {
         return (ImageView) baseView.findViewById(id);
+    }
+
+    protected Button getButton(int id) {
+        return (Button) baseView.findViewById(id);
     }
 
     protected void setTitle(final String titleText, final String descriptionText){

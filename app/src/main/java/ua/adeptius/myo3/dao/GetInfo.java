@@ -19,6 +19,28 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static List<String> getFreeDayStatistics() throws Exception {
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
+        List<String> statistics = new ArrayList<>();
+        if (s.equals("[]")) return new ArrayList<>();
+        s = s.substring(1, s.length() - 1);
+        String[] splitted = Utilits.splitJson(s);
+        for (String s1 : splitted) {
+            JSONObject json = new JSONObject(s1);
+            if (json.get("payTypeName").equals("FreeDay")){
+                String sDate = json.getString("sDate");
+                String eDate = json.getString("eDate");
+                if(Utilits.isDateIsCurrentMonth(sDate)){
+                    sDate = sDate.substring(0, sDate.lastIndexOf(":"));
+                    eDate = eDate.substring(0, eDate.lastIndexOf(":"));
+                    statistics.add("Від " + sDate + " до " + eDate);
+                }
+
+            }
+        }
+        return statistics;
+    }
+
     public static HashMap<String, Integer> getFreeDayInfo() throws Exception {
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/free_days");
         HashMap<String, Integer> map = new HashMap<>();

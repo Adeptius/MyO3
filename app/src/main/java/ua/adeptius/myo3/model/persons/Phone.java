@@ -69,19 +69,4 @@ public class Phone {
         return smsInform;
     }
 
-    @Override
-
-    public String toString() {
-        return "Phone{" +
-                "id=" + id +
-                ", pId=" + pId +
-                ", phone='" + phone + '\'' +
-                ", comment='" + comment + '\'' +
-                ", lang=" + lang +
-                ", phonems='" + phonems + '\'' +
-                ", valid=" + valid +
-                ", modifyDate='" + modifyDate + '\'' +
-                ", smsInform=" + smsInform +
-                '}';
-    }
 }

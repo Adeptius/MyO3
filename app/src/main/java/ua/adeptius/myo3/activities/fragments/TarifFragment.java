@@ -24,6 +24,9 @@ import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.persons.AvailableTarif;
 import ua.adeptius.myo3.model.persons.Servise;
+import ua.adeptius.myo3.utils.Utilits;
+
+import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
 
 public class TarifFragment extends BaseFragment {
@@ -268,7 +271,6 @@ public class TarifFragment extends BaseFragment {
         text.setText(sb.toString());
         builder.setView(textLayout);
 
-        builder.setCustomTitle(titleView);
         builder.setPositiveButton("Зрозуміло", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
@@ -412,8 +414,8 @@ public class TarifFragment extends BaseFragment {
                     hour++;
                     minute = minute - 60;
                 }
-                final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day) + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
-                System.out.println(query);
+                final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day)
+                        + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
 
                 EXECUTOR.submit(new Runnable() {
                     @Override
@@ -431,11 +433,6 @@ public class TarifFragment extends BaseFragment {
         dialog.show();
     }
 
-    private String doTwoSymb(int i) {
-        String s = String.valueOf(i);
-        if (s.length() == 1) s = "0" + s;
-        return s;
-    }
 
     private boolean isRightChoice(DatePicker datePicker) {
         Calendar calendar = new GregorianCalendar();

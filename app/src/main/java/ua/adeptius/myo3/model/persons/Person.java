@@ -9,6 +9,22 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class Person {
 
+//    private boolean vip;
+//    private String currency;
+//    private double stopsum;
+//    private boolean yur;
+    private int id;
+    private String surname;
+    private String name;
+    private String lastname;
+    private String card;
+    private double current;
+    private String email;
+    private int age;
+    private ArrayList<Phone> phones = new ArrayList<>();
+    private ArrayList<Mailing> mailing = new ArrayList<>();
+    private Address address;
+
     public Person(String json) {
         try {
             //Preparing json because it shit
@@ -27,19 +43,17 @@ public class Person {
             lastname = allInfo.get("lastname").toString();
             card = allInfo.get("card").toString();
             current = Double.parseDouble(allInfo.get("current").toString());
-            currency = allInfo.get("currency").toString();
             email = allInfo.get("email").toString();
-            stopsum = Double.parseDouble(allInfo.get("stopsum").toString());
             age = Integer.parseInt(allInfo.get("age").toString());
-            yur = allInfo.get("yur").toString().equals("1");
-            vip = allInfo.get("vip").toString().equals("1");
 
             //Phones
             String phonesJson = allInfo.get("phones").toString();
             phonesJson = phonesJson.substring(1, phonesJson.length()-1);
             String[] splitted = Utilits.splitJson(phonesJson);
             for (String s : splitted) {
-                phones.add(new Phone(s));
+                if (!s.equals("")) {
+                    phones.add(new Phone(s));
+                }
             }
 
             // Address
@@ -54,28 +68,14 @@ public class Person {
                 mailing.add(new Mailing(s));
             }
 
+//            currency = allInfo.get("currency").toString();
+//            yur = allInfo.get("yur").toString().equals("1");
+//            stopsum = Double.parseDouble(allInfo.get("stopsum").toString());
+//            vip = allInfo.get("vip").toString().equals("1");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
-    private int id;
-    private String surname;
-    private String name;
-    private String lastname;
-    private String card;
-    private double current;
-    private String currency;
-    private String email;
-    private double stopsum;
-    private int age;
-    private boolean yur;
-    private boolean vip;
-    private ArrayList<Phone> phones = new ArrayList<>();
-    private ArrayList<Mailing> mailing = new ArrayList<>();
-    private Address address;
-
-
 
     public int getId() {
         return id;
@@ -97,6 +97,10 @@ public class Person {
         return ukrName;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     public String getLastname() {
         return lastname;
     }
@@ -105,32 +109,16 @@ public class Person {
         return card;
     }
 
-    public double getCurrent() {
-        return current;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public double getStopsum() {
-        return stopsum;
+    public double getCurrent() {
+        return current;
     }
 
     public int getAge() {
         return age;
-    }
-
-    public boolean isYur() {
-        return yur;
-    }
-
-    public boolean isVip() {
-        return vip;
     }
 
     public ArrayList<Phone> getPhones() {
@@ -141,29 +129,20 @@ public class Person {
         return mailing;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-
-    @Override
-    public String toString() {
-        return "NewPerson{" +
-                "id=" + id +
-                ", surname='" + surname + '\'' +
-                ", name='" + name + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", card='" + card + '\'' +
-                ", current=" + current +
-                ", currency='" + currency + '\'' +
-                ", email='" + email + '\'' +
-                ", stopsum=" + stopsum +
-                ", age=" + age +
-                ", yur=" + yur +
-                ", vip=" + vip +
-                ", phones=" + phones +
-                ", mailing=" + mailing +
-                ", address=" + address +
-                '}';
-    }
+//    public String getCurrency() {
+//        return currency;
+//    }
+//
+//    public double getStopsum() {
+//        return stopsum;
+//    }
+//
+//    public boolean isYur() {
+//        return yur;
+//    }
+//
+//    public boolean isVip() {
+//        return vip;
+//    }
+//
 }

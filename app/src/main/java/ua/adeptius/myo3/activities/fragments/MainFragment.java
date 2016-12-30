@@ -247,7 +247,7 @@ public class MainFragment extends BaseFragment {
         TextView dns1Value = new TextView(context);
         TextView dns2Value = new TextView(context);
         dns1Value.setText(ips.get(0).getDns1());
-        dns2Value.setText(ips.get(0).getDns1());
+        dns2Value.setText(ips.get(0).getDns2());
         dns1Value.setTextSize(18);
         dns2Value.setTextSize(18);
 

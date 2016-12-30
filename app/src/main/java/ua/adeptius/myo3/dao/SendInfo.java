@@ -8,8 +8,17 @@ import ua.adeptius.myo3.model.persons.Phone;
 
 public class SendInfo {
 
-    public static boolean changeTarif(HashMap<String, String> map) {
+    public static boolean activateFreeDay(HashMap<String, String> map) {
+        try {
+            String s = Web.sendPost("https://my.o3.ua/ajax/activate_free_day", map, false);
+            if (s.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    public static boolean changeTarif(HashMap<String, String> map) {
         try {
             String s = Web.sendPost("https://my.o3.ua/ajax/set_chprice",map, false);
             if (s.contains("\"success\":true")) return true;
@@ -92,4 +101,6 @@ public class SendInfo {
         if (response.contains("Номер успішно збережений!")) return true;
         return false;
     }
+
+
 }

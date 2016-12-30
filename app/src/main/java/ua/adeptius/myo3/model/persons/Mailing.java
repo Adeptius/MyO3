@@ -33,12 +33,4 @@ public class Mailing {
     private String title;
     private boolean subscribe;
 
-    @Override
-    public String toString() {
-        return "Mailing{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", subscribe=" + subscribe +
-                '}';
-    }
 }

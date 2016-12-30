@@ -6,54 +6,46 @@ import java.util.Date;
 
 public class Servise {
 
+//    private int old;
+//    private int sid;
+//    private double money;
+//    private String start_date;
+//    private int pay_type;
+//    private String login;
+//    private String domen;
+//    private String end_date;
+//    private String chprices;
+//    private String discounts;
+//    private String typeName;
     private int id;
-    private int old;
-    private int sid;
     private int type;
-    private double money;
-    private String start_date;
     private int month;
-    private int pay_type;
     private String pay_type_name;
-    private String login;
-    private String domen;
-    private String end_date;
-    private String chprices;
     private boolean is_allow_change;
     private boolean is_allow_suspend;
-    private String discounts;
     private String newName;
     private String dateWillChange;
     private boolean isStopped;
     private boolean isActivatingNow;
     private boolean haveDiscount;
     private int discount;
-    private String discountTo;
 
+
+    private String discountTo;
 
     public Servise(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             this.id = Integer.parseInt(allInfo.get("id").toString());
-            this.old = Integer.parseInt(allInfo.get("old").toString());
-            this.sid = Integer.parseInt(allInfo.get("sid").toString());
             this.type = Integer.parseInt(allInfo.get("type").toString());
-            this.money = Double.parseDouble(allInfo.get("money").toString());
-            this.start_date = allInfo.get("start_date").toString();
             this.month = Integer.parseInt(allInfo.get("month").toString());
-            this.pay_type = Integer.parseInt(allInfo.get("pay_type").toString());
             this.pay_type_name = allInfo.get("pay_type_name").toString();
             if ("!-Приостановлен".equals(pay_type_name)) {
                 isStopped = true;
                 this.pay_type_name = "Призупинено";
             }
-            this.login = allInfo.get("login").toString();
-            this.domen = allInfo.get("domen").toString();
-            this.end_date = allInfo.get("end_date").toString();
-            this.chprices = allInfo.get("chprices").toString();
             this.is_allow_change = Boolean.parseBoolean(allInfo.get("is_allow_change").toString());
             this.is_allow_suspend = Boolean.parseBoolean(allInfo.get("is_allow_suspend").toString());
-            this.discounts = allInfo.get("discounts").toString();
 
             try{
                 String s = allInfo.get("discounts").toString();
@@ -65,9 +57,7 @@ public class Servise {
                 this.discount = discount;
                 this.haveDiscount = true;
                 this.discountTo = date;
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            }catch (Exception ignored){}
 
             try {
                 String s = allInfo.get("chprices").toString();
@@ -88,7 +78,6 @@ public class Servise {
                 int minute = Integer.parseInt(dateWillChange.substring(14,16));
                 @SuppressWarnings("deprecation")
                 Date date = new Date(year-1900,month-1,day,hour,minute);
-                System.out.println(date);
                 long timeEnable = date.getTime();
                 long timeCurrent = new Date().getTime();
                 int minutesToEnable = (int) (timeEnable-timeCurrent)/1000/60;
@@ -100,6 +89,16 @@ public class Servise {
         } catch (Exception e) {
             e.printStackTrace();
         }
+//            this.old = Integer.parseInt(allInfo.get("old").toString());
+//            this.sid = Integer.parseInt(allInfo.get("sid").toString());
+//            this.money = Double.parseDouble(allInfo.get("money").toString());
+//            this.start_date = allInfo.get("start_date").toString();
+//            this.pay_type = Integer.parseInt(allInfo.get("pay_type").toString());
+//            this.login = allInfo.get("login").toString();
+//            this.domen = allInfo.get("domen").toString();
+//            this.end_date = allInfo.get("end_date").toString();
+//            this.chprices = allInfo.get("chprices").toString();
+//            this.discounts = allInfo.get("discounts").toString();
     }
 
     public String getMyServiceName() {
@@ -145,7 +144,7 @@ public class Servise {
         if (getType() == 13 && pay_type_name.contains("аренды")) return "Оренда обладнання";
         if (getType() == 13) return "Телебачення OLL.TV";
         if (getType() == 14) return "Телебачення Divan.TV";
-        return typeName;
+        return "";
     }
 
     public String getComent() {
@@ -197,7 +196,7 @@ public class Servise {
         this.id = id;
     }
 
-    public int getType() {
+    private int getType() {
         return type;
     }
 
@@ -213,178 +212,15 @@ public class Servise {
         return is_allow_suspend;
     }
 
-    public void setActivatingNow(boolean activatingNow) {
-        isActivatingNow = activatingNow;
-    }
-
     public boolean isHaveDiscount() {
         return haveDiscount;
-    }
-
-    public void setHaveDiscount(boolean haveDiscount) {
-        this.haveDiscount = haveDiscount;
     }
 
     public int getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
     public String getDiscountTo() {
         return discountTo;
     }
-
-    public void setDiscountTo(String discountTo) {
-        this.discountTo = discountTo;
-    }
-
-
-
-    public void setStopped(boolean stopped) {
-        isStopped = stopped;
-    }
-
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public String getNewName() {
-        return newName;
-    }
-
-    public void setNewName(String newName) {
-        this.newName = newName;
-    }
-
-    public String getDateWillChange() {
-        return dateWillChange;
-    }
-
-    public void setDateWillChange(String dateWillChange) {
-        this.dateWillChange = dateWillChange;
-    }
-
-    private String typeName;
-
-
-
-    public int getOld() {
-        return old;
-    }
-
-    public void setOld(int old) {
-        this.old = old;
-    }
-
-    public int getSid() {
-        return sid;
-    }
-
-    public void setSid(int sid) {
-        this.sid = sid;
-    }
-
-
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getStart_date() {
-        return start_date;
-    }
-
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
-    }
-
-
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getPay_type() {
-        return pay_type;
-    }
-
-    public void setPay_type(int pay_type) {
-        this.pay_type = pay_type;
-    }
-
-
-
-    public void setPay_type_name(String pay_type_name) {
-        this.pay_type_name = pay_type_name;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getDomen() {
-        return domen;
-    }
-
-    public void setDomen(String domen) {
-        this.domen = domen;
-    }
-
-    public String getEnd_date() {
-        return end_date;
-    }
-
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
-    }
-
-    public String getChprices() {
-        return chprices;
-    }
-
-    public void setChprices(String chprices) {
-        this.chprices = chprices;
-    }
-
-
-
-    public void setIs_allow_change(boolean is_allow_change) {
-        this.is_allow_change = is_allow_change;
-    }
-
-
-
-    public void setIs_allow_suspend(boolean is_allow_suspend) {
-        this.is_allow_suspend = is_allow_suspend;
-    }
-
-    public String getDiscounts() {
-        return discounts;
-    }
-
-    public void setDiscounts(String discounts) {
-        this.discounts = discounts;
-    }
-
-
-
 }

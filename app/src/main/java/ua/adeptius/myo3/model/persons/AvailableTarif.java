@@ -5,23 +5,22 @@ import org.json.JSONObject;
 
 public class AvailableTarif {
 
+    private String id;
+    private String name;
+//    private String month;
+//    private String bundle;
 
     public AvailableTarif(String json) {
         try {
             JSONObject jobject = new JSONObject(json);
-            this.id = jobject.get("id").toString();
-            this.name = jobject.get("name").toString();
-            this.month = jobject.get("month").toString();
-            this.bundle = jobject.get("bundle").toString();
+            this.id = jobject.getString("id");
+            this.name = jobject.getString("name");
+//            this.month = jobject.get("month").toString();
+//            this.bundle = jobject.get("bundle").toString();
         } catch (Exception e) {
 
         }
     }
-
-    private String id;
-    private String name;
-    private String month;
-    private String bundle;
 
     public String getId() {
         return id;
@@ -39,29 +38,19 @@ public class AvailableTarif {
         this.name = name;
     }
 
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public String getBundle() {
-        return bundle;
-    }
-
-    public void setBundle(String bundle) {
-        this.bundle = bundle;
-    }
-
-    @Override
-    public String toString() {
-        return "AvailableTarif{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", month='" + month + '\'' +
-                ", bundle='" + bundle + '\'' +
-                '}';
-    }
+//    public String getMonth() {
+//        return month;
+//    }
+//
+//    public void setMonth(String month) {
+//        this.month = month;
+//    }
+//
+//    public String getBundle() {
+//        return bundle;
+//    }
+//
+//    public void setBundle(String bundle) {
+//        this.bundle = bundle;
+//    }
 }

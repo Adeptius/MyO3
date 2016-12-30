@@ -24,17 +24,6 @@ public class Ip {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Ip{" +
-                "ip='" + ip + '\'' +
-                ", gateway='" + gateway + '\'' +
-                ", mask='" + mask + '\'' +
-                ", dns1='" + dns1 + '\'' +
-                ", dns2='" + dns2 + '\'' +
-                '}';
-    }
-
     public void setIp(String ip) {
         this.ip = ip;
     }

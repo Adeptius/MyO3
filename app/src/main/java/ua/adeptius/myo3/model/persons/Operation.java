@@ -5,12 +5,17 @@ import org.json.JSONObject;
 
 public class Operation {
 
+    //    private boolean bonus;
+    private String note;
+    private String date;
+    private double money;
+    private double saldo;
 
     public Operation(String json) {
         try {
             JSONObject jobject = new JSONObject(json);
             this.date = jobject.get("date").toString();
-            this.bonus = Boolean.parseBoolean(jobject.get("bonus").toString());
+//            this.bonus = Boolean.parseBoolean(jobject.get("bonus").toString());
             this.note = jobject.get("note").toString();
             this.money = Double.parseDouble(jobject.get("money").toString());
         } catch (Exception e) {
@@ -19,11 +24,7 @@ public class Operation {
 
     }
 
-    private String date;
-    private boolean bonus;
-    private String note;
-    private double money;
-    private double saldo;
+
 
     public String getTextSaldo() {
         String result = String.valueOf(saldo);
@@ -49,8 +50,20 @@ public class Operation {
         return result;
     }
 
-    public double getSaldo() {
-        return saldo;
+    public String getMyNote() {
+        String note = getNote();
+        if (note.startsWith("20")){
+            note = note.substring(note.indexOf(" ")+1);
+        }
+        return note;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setSaldo(double saldo) {
@@ -61,50 +74,29 @@ public class Operation {
         return money;
     }
 
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-
-    public boolean isBonus() {
-        return bonus;
-    }
-
-    public void setBonus(boolean bonus) {
-        this.bonus = bonus;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    @Override
-    public String toString() {
-        return "Operation{" +
-                "date='" + date + '\'' +
-                ", note='" + note + '\'' +
-                ", money=" + money +
-                ", saldo=" + saldo +
-                '}';
-    }
-
-    public String getMyNote() {
-        String note = getNote();
-        if (note.startsWith("20")){
-            note = note.substring(note.indexOf(" ")+1);
-        }
-        return note;
-    }
+//    public double getSaldo() {
+//        return saldo;
+//    }
+//
+//    public void setMoney(double money) {
+//        this.money = money;
+//    }
+//
+//
+//    public void setDate(String date) {
+//        this.date = date;
+//    }
+//
+//    public boolean isBonus() {
+//        return bonus;
+//    }
+//
+//    public void setBonus(boolean bonus) {
+//        this.bonus = bonus;
+//    }
+//
+//    public void setNote(String note) {
+//        this.note = note;
+//    }
+//
 }

@@ -8,6 +8,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -75,4 +77,15 @@ public class Utilits {
         return px;
     }
 
+    public static String doTwoSymb(int i) {
+        String s = String.valueOf(i);
+        if (s.length() == 1) s = "0" + s;
+        return s;
+    }
+
+    public static boolean isDateIsCurrentMonth(String sDate) {
+        int month = Integer.parseInt(sDate.substring(3,5));
+        int currentMonth = new GregorianCalendar().get(Calendar.MONTH)+1;
+        return month==currentMonth;
+    }
 }
