@@ -67,7 +67,6 @@ public class MainFragment extends BaseFragment {
         worksCheckBox.setOnClickListener(this);
         akciiCheckBox.setOnClickListener(this);
         password.setOnClickListener(this);
-        startBackgroundTask();
     }
 
     @Override

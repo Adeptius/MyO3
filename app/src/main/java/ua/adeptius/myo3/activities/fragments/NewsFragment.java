@@ -35,7 +35,6 @@ public class NewsFragment extends BaseFragment {
         titleText = "Новини та акції";
         descriptionText = "";
         mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
-        startBackgroundTask();
     }
 
     @Override

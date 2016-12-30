@@ -21,7 +21,7 @@
         <item
             android:id="@+id/nav_tarif_plans"
             android:icon="@drawable/ic_tarif"
-            android:title="Мої послуги" />
+            android:title="Підключені послуги" />
 
         <item
             android:id="@+id/nav_free_day"

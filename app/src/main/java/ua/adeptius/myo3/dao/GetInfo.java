@@ -19,6 +19,14 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static HashMap<String, Integer> getFreeDayInfo() throws Exception {
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/free_days");
+        HashMap<String, Integer> map = new HashMap<>();
+        JSONObject jsonObject = new JSONObject(s);
+        map.put("daysLeft", Integer.parseInt(jsonObject.get("daysLeft").toString()));
+        map.put("daysTotal", Integer.parseInt(jsonObject.get("daysTotal").toString()));
+        return map;
+    }
 
     public static List<AvailableTarif> getAvailableTarifs(String serviceId) throws Exception {
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/new_pt?service_id="+serviceId);

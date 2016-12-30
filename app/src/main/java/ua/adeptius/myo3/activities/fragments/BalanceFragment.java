@@ -19,17 +19,15 @@ import ua.adeptius.myo3.model.persons.Person;
 
 public class BalanceFragment extends BaseFragment {
 
-    List<Operation> operations;
+    private List<Operation> operations;
     private Person person;
-    String abonPlata;
+    private String abonPlata;
 
     @Override
     void init() {
         titleText = "Баланс";
         descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
         mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
-        startBackgroundTask();
-
     }
 
     @Override
@@ -86,7 +84,7 @@ public class BalanceFragment extends BaseFragment {
                 money = "Cписання: " + operation.getTextMoney() + " грн";
             }
             if (operation.getMoney() > 0) {
-                textOperationMoney.setTextColor(Color.parseColor("#388E3C"));
+                textOperationMoney.setTextColor(COLOR_GREEN);
             } else {
                 textOperationMoney.setTextColor(Color.RED);
             }
@@ -97,7 +95,7 @@ public class BalanceFragment extends BaseFragment {
                 textOperationSaldo.setTextColor(Color.RED);
             } else {
                 saldo = " " + operation.getTextSaldo();
-                textOperationSaldo.setTextColor(Color.parseColor("#388E3C"));
+                textOperationSaldo.setTextColor(COLOR_GREEN);
             }
 
             textOperationDate.setText(date);

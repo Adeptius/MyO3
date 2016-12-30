@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
+import ua.adeptius.myo3.activities.fragments.FreeDayFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
 import ua.adeptius.myo3.activities.fragments.PayFragment;
@@ -77,9 +78,9 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentLogin("02514521");
 //        Settings.setCurrentPassword("5351301");
 
-
-        Settings.setCurrentLogin("561100728");
-        Settings.setCurrentPassword("5276229");
+// Абон
+//        Settings.setCurrentLogin("561100728");
+//        Settings.setCurrentPassword("5276229");
 
 //        Settings.setCurrentLogin("561600377");
 //        Settings.setCurrentPassword("1217229");
@@ -101,9 +102,14 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentLogin("561000369");
 //        Settings.setCurrentPassword("0849788");
 
-            // приостановка
-//        Settings.setCurrentLogin("6191300086");
-//        Settings.setCurrentPassword("6909125");
+            // АБОН!!!!!!
+        Settings.setCurrentLogin("6191300086");
+        Settings.setCurrentPassword("6909125");
+
+
+            // Згоревший кредит доверия
+//        Settings.setCurrentLogin("7231");
+//        Settings.setCurrentPassword("3786492");
 
 
 
@@ -196,7 +202,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_tarif_plans) {
             goTo(new TarifFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_free_day) {
-
+            goTo(new FreeDayFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_turbo_day) {
 
         } else if (id == R.id.nav_dovira) {

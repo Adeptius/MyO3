@@ -31,6 +31,13 @@ public class TarifFragment extends BaseFragment {
     private List<Servise> services;
 
     @Override
+    void init() {
+        titleText = "Підключені послуги";
+        descriptionText = "Керуйте вашими послугами звідси.";
+        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
+    }
+
+    @Override
     void doInBackground() throws Exception {
         services = GetInfo.getServises();
     }
@@ -107,6 +114,12 @@ public class TarifFragment extends BaseFragment {
                 stopButton.setVisibility(View.GONE);
                 changeButton.setVisibility(View.GONE);
                 serviceComent.setText("Триває активація");
+            }
+
+            TextView discountView = (TextView) itemView.findViewById(R.id.discount_text);
+            if (service.isHaveDiscount()) {
+                discountView.setVisibility(View.VISIBLE);
+                discountView.setText("Знижка " + service.getDiscount() + "% до " + service.getDiscountTo());
             }
         }
     }
@@ -457,13 +470,7 @@ public class TarifFragment extends BaseFragment {
 
     }
 
-    @Override
-    void init() {
-        titleText = "Тарифи";
-        descriptionText = "Ваші підключені тарифи та послуги";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
-        startBackgroundTask();
-    }
+
 
     @Override
     int setFragmentId() {

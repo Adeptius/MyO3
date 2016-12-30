@@ -37,7 +37,6 @@ public class PayFragment extends BaseFragment {
         descriptionText = "";
         mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_balance);
         drawAll();
-        startBackgroundTask();
     }
 
     @Override

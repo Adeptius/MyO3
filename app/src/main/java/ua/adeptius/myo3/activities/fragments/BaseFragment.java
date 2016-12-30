@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected String descriptionText;
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
+    protected final int COLOR_GREEN = Color.parseColor("#388E3C");
 //    int mCurCheckPosition;
 
     public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
@@ -65,6 +66,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         context = layout.getContext();
         setTitle(titleText, descriptionText);
         init();
+        startBackgroundTask();
         return baseView;
     }
 

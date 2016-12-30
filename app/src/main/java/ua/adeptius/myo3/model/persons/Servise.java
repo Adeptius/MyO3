@@ -2,142 +2,34 @@ package ua.adeptius.myo3.model.persons;
 
 
 import org.json.JSONObject;
-
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class Servise {
 
-    private String typeName;
+    private int id;
+    private int old;
+    private int sid;
+    private int type;
+    private double money;
+    private String start_date;
+    private int month;
+    private int pay_type;
+    private String pay_type_name;
+    private String login;
+    private String domen;
+    private String end_date;
+    private String chprices;
+    private boolean is_allow_change;
+    private boolean is_allow_suspend;
+    private String discounts;
+    private String newName;
+    private String dateWillChange;
+    private boolean isStopped;
+    private boolean isActivatingNow;
+    private boolean haveDiscount;
+    private int discount;
+    private String discountTo;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getOld() {
-        return old;
-    }
-
-    public void setOld(int old) {
-        this.old = old;
-    }
-
-    public int getSid() {
-        return sid;
-    }
-
-    public void setSid(int sid) {
-        this.sid = sid;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getStart_date() {
-        return start_date;
-    }
-
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getPay_type() {
-        return pay_type;
-    }
-
-    public void setPay_type(int pay_type) {
-        this.pay_type = pay_type;
-    }
-
-    public String getPay_type_name() {
-        return pay_type_name;
-    }
-
-    public void setPay_type_name(String pay_type_name) {
-        this.pay_type_name = pay_type_name;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getDomen() {
-        return domen;
-    }
-
-    public void setDomen(String domen) {
-        this.domen = domen;
-    }
-
-    public String getEnd_date() {
-        return end_date;
-    }
-
-    public void setEnd_date(String end_date) {
-        this.end_date = end_date;
-    }
-
-    public String getChprices() {
-        return chprices;
-    }
-
-    public void setChprices(String chprices) {
-        this.chprices = chprices;
-    }
-
-    public boolean is_allow_change() {
-        return is_allow_change;
-    }
-
-    public void setIs_allow_change(boolean is_allow_change) {
-        this.is_allow_change = is_allow_change;
-    }
-
-    public boolean is_allow_suspend() {
-        return is_allow_suspend;
-    }
-
-    public void setIs_allow_suspend(boolean is_allow_suspend) {
-        this.is_allow_suspend = is_allow_suspend;
-    }
-
-    public String getDiscounts() {
-        return discounts;
-    }
-
-    public void setDiscounts(String discounts) {
-        this.discounts = discounts;
-    }
 
     public Servise(String json) {
         try {
@@ -163,6 +55,20 @@ public class Servise {
             this.is_allow_suspend = Boolean.parseBoolean(allInfo.get("is_allow_suspend").toString());
             this.discounts = allInfo.get("discounts").toString();
 
+            try{
+                String s = allInfo.get("discounts").toString();
+                s = s.substring(1, s.length()-1);
+                JSONObject disc = new JSONObject(s);
+                int discount = Integer.parseInt(disc.get("amount").toString());
+                String date = disc.get("eDate").toString();
+                date = date.substring(0, date.indexOf(" "));
+                this.discount = discount;
+                this.haveDiscount = true;
+                this.discountTo = date;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             try {
                 String s = allInfo.get("chprices").toString();
                 s = s.substring(1, s.length() - 1);
@@ -180,6 +86,7 @@ public class Servise {
                 int day = Integer.parseInt(dateWillChange.substring(8,10));
                 int hour = Integer.parseInt(dateWillChange.substring(11,13));
                 int minute = Integer.parseInt(dateWillChange.substring(14,16));
+                @SuppressWarnings("deprecation")
                 Date date = new Date(year-1900,month-1,day,hour,minute);
                 System.out.println(date);
                 long timeEnable = date.getTime();
@@ -188,49 +95,11 @@ public class Servise {
 
                 if ("Призупинено".equals(pay_type_name) && minutesToEnable < 3 && minutesToEnable > -58 ) {
                     isActivatingNow = true;
-                    System.out.println(isActivatingNow);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isActivatingNow() {
-        return isActivatingNow;
-    }
-
-    public void setActivatingNow(boolean activatingNow) {
-        isActivatingNow = activatingNow;
-    }
-
-    private int id;
-    private int old;
-    private int sid;
-    private int type;
-    private double money;
-    private String start_date;
-    private int month;
-    private int pay_type;
-    private String pay_type_name;
-    private String login;
-    private String domen;
-    private String end_date;
-    private String chprices;
-    private boolean is_allow_change;
-    private boolean is_allow_suspend;
-    private String discounts;
-    private String newName;
-    private String dateWillChange;
-    private boolean isStopped;
-    private boolean isActivatingNow;
-
-    public boolean isStopped() {
-        return isStopped;
-    }
-
-    public void setStopped(boolean stopped) {
-        isStopped = stopped;
     }
 
     public String getMyServiceName() {
@@ -308,6 +177,76 @@ public class Servise {
         return coment;
     }
 
+    public boolean isStopped() {
+        return isStopped;
+    }
+
+    public boolean is_allow_change() {
+        return is_allow_change;
+    }
+
+    public boolean isActivatingNow() {
+        return isActivatingNow;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public String getPay_type_name() {
+        return pay_type_name;
+    }
+
+    public boolean is_allow_suspend() {
+        return is_allow_suspend;
+    }
+
+    public void setActivatingNow(boolean activatingNow) {
+        isActivatingNow = activatingNow;
+    }
+
+    public boolean isHaveDiscount() {
+        return haveDiscount;
+    }
+
+    public void setHaveDiscount(boolean haveDiscount) {
+        this.haveDiscount = haveDiscount;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public String getDiscountTo() {
+        return discountTo;
+    }
+
+    public void setDiscountTo(String discountTo) {
+        this.discountTo = discountTo;
+    }
+
+
+
+    public void setStopped(boolean stopped) {
+        isStopped = stopped;
+    }
+
     public String getTypeName() {
         return typeName;
     }
@@ -331,6 +270,121 @@ public class Servise {
     public void setDateWillChange(String dateWillChange) {
         this.dateWillChange = dateWillChange;
     }
+
+    private String typeName;
+
+
+
+    public int getOld() {
+        return old;
+    }
+
+    public void setOld(int old) {
+        this.old = old;
+    }
+
+    public int getSid() {
+        return sid;
+    }
+
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
+
+
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+
+
+
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getPay_type() {
+        return pay_type;
+    }
+
+    public void setPay_type(int pay_type) {
+        this.pay_type = pay_type;
+    }
+
+
+
+    public void setPay_type_name(String pay_type_name) {
+        this.pay_type_name = pay_type_name;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getDomen() {
+        return domen;
+    }
+
+    public void setDomen(String domen) {
+        this.domen = domen;
+    }
+
+    public String getEnd_date() {
+        return end_date;
+    }
+
+    public void setEnd_date(String end_date) {
+        this.end_date = end_date;
+    }
+
+    public String getChprices() {
+        return chprices;
+    }
+
+    public void setChprices(String chprices) {
+        this.chprices = chprices;
+    }
+
+
+
+    public void setIs_allow_change(boolean is_allow_change) {
+        this.is_allow_change = is_allow_change;
+    }
+
+
+
+    public void setIs_allow_suspend(boolean is_allow_suspend) {
+        this.is_allow_suspend = is_allow_suspend;
+    }
+
+    public String getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(String discounts) {
+        this.discounts = discounts;
+    }
+
 
 
 }
