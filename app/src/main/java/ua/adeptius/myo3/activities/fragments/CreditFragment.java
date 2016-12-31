@@ -28,10 +28,8 @@ public class CreditFragment extends BaseFragment {
     void init() {
         titleText = "Кредит довіри";
         descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.credit_main_layout);
         activateButton = getButton(R.id.activate_button);
         activateButton.setVisibility(View.GONE);
-
         hideAllViewsInMainScreen();
     }
 
@@ -125,6 +123,7 @@ public class CreditFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateCredit()) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
+                    reloadFragment();
                 } else {
                     makeSimpleSnackBar("Трапилась помилка", mainLayout);
                 }

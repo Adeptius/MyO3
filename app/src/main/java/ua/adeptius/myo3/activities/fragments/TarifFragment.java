@@ -200,7 +200,7 @@ public class TarifFragment extends BaseFragment {
                 willcost = "Ви бажаєте перейти на більш дешевий тариф. " +
                         "З вашого рахунку, зараз, буде одноразово знято 10 грн.";
             }
-        }catch (Exception e){}
+        }catch (Exception ignored){}
 
         TextView titleView = new TextView(context);
         titleView.setText("Ви обрали:");
@@ -236,6 +236,7 @@ public class TarifFragment extends BaseFragment {
 
                         if (SendInfo.changeTarif(map)) {
                             makeSimpleSnackBar("Тариф змінено", mainLayout);
+                            reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
                         }
@@ -370,6 +371,7 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.stopService(startDate, endDate)) {
                             makeSimpleSnackBar("Успішно", mainLayout);
+                            reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдало", mainLayout);
                         }
@@ -422,6 +424,7 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.startService(query)) {
                             makeSimpleSnackBar("Послуга відновлена. Зачекайте.", mainLayout);
+                            reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдалось. Спробуйте ще раз.", mainLayout);
                         }

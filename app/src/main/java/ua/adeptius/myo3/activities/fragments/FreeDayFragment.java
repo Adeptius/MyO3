@@ -213,6 +213,7 @@ public class FreeDayFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateFreeDay(map)) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
+                    reloadFragment();
                 } else {
                     makeSimpleSnackBar("Послуга вже активна.", mainLayout);
                 }

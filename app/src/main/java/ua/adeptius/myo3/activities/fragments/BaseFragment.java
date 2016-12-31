@@ -95,7 +95,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    protected void refreshFragment(){
+    protected void reloadFragment(){
         FragmentManager fm = getFragmentManager();
         try {
             fm.beginTransaction().replace(R.id.content_frame, this.getClass().newInstance()).commit();

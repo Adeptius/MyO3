@@ -155,8 +155,8 @@ public class TurboDayFragment extends BaseFragment {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Послуга замовляється на період\n");
-        sb.append("з: " + startDate);
-        sb.append("\nпо: " + endDate);
+        sb.append("з: ").append(startDate);
+        sb.append("\nпо: ").append(endDate);
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
@@ -172,6 +172,7 @@ public class TurboDayFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.activateTurboDay(startDate, endDate)) {
                             makeSimpleSnackBar("Послуга активована.", mainLayout);
+                            reloadFragment();
                         } else {
                             makeSimpleSnackBar("Неправильний термін", mainLayout);
                         }
@@ -183,65 +184,8 @@ public class TurboDayFragment extends BaseFragment {
         dialog.show();
     }
 
-
-//    public void activating(){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setCancelable(true);
-//        TextView titleView = new TextView(context);
-//        titleView.setText("Активувати?");
-//        titleView.setGravity(Gravity.CENTER);
-//        titleView.setTextSize(24);
-//        titleView.setTypeface(null, Typeface.BOLD);
-//        titleView.setTextColor(COLOR_BLUE);
-//        builder.setCustomTitle(titleView);
-//        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
-//        TextView text = (TextView) textLayout.findViewById(R.id.text);
-//        text.setText("Послуга активується до 10 хвилин.");
-//        builder.setView(textLayout);
-//        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(final DialogInterface dialog, int which) {
-//                activateNow();
-//            }
-//        });
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//    }
-
-//    public void activateNow(){
-//        Calendar calendar = new GregorianCalendar();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH) + 1;
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//        int minute = calendar.get(Calendar.MINUTE) + 3;
-//        if (minute > 59) {
-//            hour++;
-//            minute = minute - 60;
-//        }
-//        final String date = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day)
-//                + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
-//
-//        final HashMap<String, String> map = new HashMap<>();
-//        map.put("date", date);
-//        map.put("days", "1");
-//
-//        EXECUTOR.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (SendInfo.activateFreeDay(map)) {
-//                    makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-//                } else {
-//                    makeSimpleSnackBar("Послуга вже активна.", mainLayout);
-//                }
-//            }
-//        });
-//
-//    }
-
     @Override
     void processIfFail() {
-
     }
 
     @Override

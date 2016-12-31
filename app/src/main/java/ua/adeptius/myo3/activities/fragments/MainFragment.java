@@ -140,8 +140,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(2);
-                    startBackgroundTask();
-//                    refreshFragment();//TODO другую перезагрузку
+                    reloadFragment();
                 }
             });
         } else if (view.equals(worksCheckBox)) {
@@ -149,7 +148,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(5);
-                    startBackgroundTask();
+                    reloadFragment();
                 }
             });
         } else if (view.equals(akciiCheckBox)) {
@@ -157,7 +156,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(6);
-                    startBackgroundTask();
+                    reloadFragment();
                 }
             });
         } else if (view.equals(editPass)) {
@@ -289,7 +288,7 @@ public class MainFragment extends BaseFragment {
                             }
                             if (SendInfo.changeSmsNumber("+380" + text.getText(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
-                                startBackgroundTask();
+                                reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Номер невірний.", view);
                         } catch (Exception e) {
@@ -325,7 +324,7 @@ public class MainFragment extends BaseFragment {
                         try {
                             if (SendInfo.changeEmail(text.getText().toString())) {
                                 makeSimpleSnackBar("Email змінено", view);
-                                startBackgroundTask();
+                                reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Email невірний.", view);
                         } catch (Exception e) {
@@ -361,8 +360,8 @@ public class MainFragment extends BaseFragment {
                         try {
                             if (SendInfo.changePassword(text.getText().toString())) {
                                 makeSimpleSnackBar("Пароль змінено", view);
-                                startBackgroundTask();
                                 Settings.setCurrentPassword(text.getText().toString());
+                                reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Пароль невірний.", view);
                         } catch (Exception e) {
