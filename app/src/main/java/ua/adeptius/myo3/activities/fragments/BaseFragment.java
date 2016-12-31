@@ -2,6 +2,7 @@ package ua.adeptius.myo3.activities.fragments;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -39,6 +41,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
+//    protected List<View> viewsToShow;  DEPRECATED
 //    int mCurCheckPosition;
 
     public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
@@ -86,34 +89,77 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         });
     }
 
+    protected void hideAllViewsInMainScreen(){
+        for (int i = 0; i < mainLayout.getChildCount(); i++) {
+            mainLayout.getChildAt(i).setVisibility(View.GONE);
+        }
+    }
 
-    protected void addViewsToMainLayout(final List<View> views){
-        final LinearLayout mainLayoutCopy = mainLayout;
+    protected void refreshFragment(){
+        FragmentManager fm = getFragmentManager();
+        try {
+            fm.beginTransaction().replace(R.id.content_frame, this.getClass().newInstance()).commit();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
+    protected void animateScreen(){
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
-                try{
-                    for (final View view : views) {
+                for (int i = 0; i < mainLayout.getChildCount(); i++) {
+                    final int a = i;
+                    try {
                         Thread.sleep(250);
-                        HANDLER.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mainLayoutCopy.addView(view);
-                                view.startAnimation(AnimationUtils.loadAnimation(context,
-                                        R.anim.main_screen_trans));
-                            }
-                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    //TODO make ignored
+                    HANDLER.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainLayout.getChildAt(a).setVisibility(View.VISIBLE);
+                            mainLayout.getChildAt(a).startAnimation(AnimationUtils.loadAnimation(context,
+                                    R.anim.main_screen_trans));
+                        }
+                    });
                 }
             }
         });
     }
 
+    // DEPRECATED
+//    protected void addAndAnimateViews(){
+//
+//        final LinearLayout mainLayoutCopy = mainLayout;
+//
+//        EXECUTOR.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                try{
+//                    for (final View view : viewsToShow) {
+//                        Thread.sleep(250);
+//                        HANDLER.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mainLayoutCopy.addView(view);
+//                                view.startAnimation(AnimationUtils.loadAnimation(context,
+//                                        R.anim.main_screen_trans));
+//                            }
+//                        });
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                    //TODO make ignored
+//                }
+//            }
+//        });
+//    }
+
     protected void startBackgroundTask(){
+//        viewsToShow = new ArrayList<>();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -163,6 +209,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected ImageView getImageView(int id) {
         return (ImageView) baseView.findViewById(id);
+    }
+
+    protected LinearLayout getLayout(int id) {
+        return (LinearLayout) baseView.findViewById(id);
     }
 
     protected Button getButton(int id) {

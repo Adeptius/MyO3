@@ -3,10 +3,8 @@ package ua.adeptius.myo3.activities.fragments;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,7 +26,6 @@ public class BalanceFragment extends BaseFragment {
     void init() {
         titleText = "Баланс";
         descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
@@ -36,7 +33,6 @@ public class BalanceFragment extends BaseFragment {
         operations = getOperations(5);
         person = GetInfo.getPersonInfo();
         abonPlata = GetInfo.getMountlyFee();
-
     }
 
     @Override
@@ -49,7 +45,9 @@ public class BalanceFragment extends BaseFragment {
         descriptionText = "Кожного першого числа знімається абонентська " +
                 "плата наперед у розмірі " + abonPlata + " грн";
         setTitle(titleText, descriptionText);
-        drawAllOperations(operations);
+        prepareAllOperations(operations);
+        hideAllViewsInMainScreen();
+        animateScreen();
     }
 
     @Override
@@ -63,12 +61,10 @@ public class BalanceFragment extends BaseFragment {
 
     }
 
-    private void drawAllOperations(List<Operation> operations) {
-        List<View> viewsToShow = new ArrayList<>();
+    private void prepareAllOperations(List<Operation> operations) {
         for (Operation operation : operations) {
-
             View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_balance_item_operation, null);
-            viewsToShow.add(itemView);
+            mainLayout.addView(itemView);
 
             TextView textOperationDate = (TextView) itemView.findViewById(R.id.operation_date);
             TextView textOperationComent = (TextView) itemView.findViewById(R.id.operation_coment);
@@ -105,7 +101,6 @@ public class BalanceFragment extends BaseFragment {
             textOperationMoney.setText(money);
             textOperationSaldo.setText(saldo);
         }
-        addViewsToMainLayout(viewsToShow);
     }
 
     private void sortByDate(List<Operation> operations) {
@@ -115,7 +110,6 @@ public class BalanceFragment extends BaseFragment {
                 return o2.getDate().compareTo(o1.getDate());
             }
         });
-
     }
 
     private void configureSaldo(Person person) {
@@ -168,5 +162,4 @@ public class BalanceFragment extends BaseFragment {
     int setLayoutId() {
         return R.id.base_scroll_view;
     }
-
 }

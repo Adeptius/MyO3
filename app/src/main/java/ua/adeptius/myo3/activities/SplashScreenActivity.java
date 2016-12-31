@@ -26,6 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         currentSessionId = Settings.getSessionID();
 
+        //TODO сообщить что нет инета
 
         try {
             if (Web.isLoggedNow()){

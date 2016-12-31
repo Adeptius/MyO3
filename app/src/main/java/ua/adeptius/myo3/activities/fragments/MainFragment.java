@@ -3,10 +3,8 @@ package ua.adeptius.myo3.activities.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -14,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
@@ -27,7 +24,7 @@ import ua.adeptius.myo3.model.persons.Mailing;
 import ua.adeptius.myo3.model.persons.Person;
 import ua.adeptius.myo3.model.persons.Phone;
 
-
+//TODO поле имэйл не влазит полностью
 public class MainFragment extends BaseFragment {
 
     private TextView pib, contractNumber, city, street, house, room, age, money, smsInfo,
@@ -67,6 +64,7 @@ public class MainFragment extends BaseFragment {
         worksCheckBox.setOnClickListener(this);
         akciiCheckBox.setOnClickListener(this);
         password.setOnClickListener(this);
+        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -79,6 +77,7 @@ public class MainFragment extends BaseFragment {
     @Override
     void processIfOk() {
         setPersonData(person, ips, mountlyFee);
+        animateScreen();
     }
 
     @Override
@@ -103,7 +102,7 @@ public class MainFragment extends BaseFragment {
 
         String phoneNumber = "";
         for (Phone phone : person.getPhones()) {
-            if (phone.getSmsInform() == 1){
+            if (phone.getSmsInform() == 1) {
                 phoneNumber = phone.getPhone();
                 phoneNumber = phoneNumber.replaceAll("\\+38", "");
             }
@@ -142,6 +141,7 @@ public class MainFragment extends BaseFragment {
                 public void run() {
                     SendInfo.changeMailings(2);
                     startBackgroundTask();
+//                    refreshFragment();//TODO другую перезагрузку
                 }
             });
         } else if (view.equals(worksCheckBox)) {
@@ -171,16 +171,16 @@ public class MainFragment extends BaseFragment {
         }
     }
 
-    public void showIps(List<Ip> ips){
-        LinearLayout layout = (LinearLayout) baseView.findViewById(R.id.network_settings);
+    public void showIps(List<Ip> ips) {
+        LinearLayout layout = (LinearLayout) baseView.findViewById(R.id.network_settings); // getting lay from array that not include in main lay
         int count = layout.getChildCount();
-        for (int i = count-1; i > 0; i--) {
+        for (int i = count - 1; i > 0; i--) {
             layout.removeViewAt(i);
         }
 
         for (int i = 0; i < ips.size(); i++) {
             Ip ip = ips.get(i);
-            String number = i==0? "" : " " + (i+1);
+            String number = i == 0 ? "" : " " + (i + 1);
 
             LinearLayout ipLayout = new LinearLayout(context);
             LinearLayout maskLayout = new LinearLayout(context);
@@ -228,7 +228,7 @@ public class MainFragment extends BaseFragment {
             layout.addView(separator, MATCH_WRAP);
             TextView separatorText = new TextView(context);
             separatorText.setText("");
-            separator.addView(separatorText );
+            separator.addView(separatorText);
         }
         LinearLayout dns1Layout = new LinearLayout(context);
         LinearLayout dns2Layout = new LinearLayout(context);
@@ -287,7 +287,7 @@ public class MainFragment extends BaseFragment {
                             for (Phone phone1 : person.getPhones()) {
                                 if (phone1.getSmsInform() == 1) phone = phone1;
                             }
-                            if (SendInfo.changeSmsNumber("+380"+text.getText(), phone)) {
+                            if (SendInfo.changeSmsNumber("+380" + text.getText(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
                                 startBackgroundTask();
                             } else

@@ -7,9 +7,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -36,22 +35,21 @@ public class NewsFragment extends BaseFragment {
         titleText = "Новини та акції";
         descriptionText = "";
 //        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
-
     }
 
     @Override
     void doInBackground() throws Exception {
         newses = getAllNews();
         sortByDate(newses);
-        newses = subList(newses, 8);
+        newses = subList(newses, 7);
+        prepareNews(newses);
     }
-
 
 
     @Override
     void processIfOk() {
-        showNews(newses);
-        loadAllImages();
+        hideAllViewsInMainScreen();
+        animateScreen();
     }
 
     @Override
@@ -59,18 +57,17 @@ public class NewsFragment extends BaseFragment {
 
     }
 
-    private void showNews(List<News> newses) {
+    private void prepareNews(List<News> newses) {
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
 
-            View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_news_item, null);
-            mainLayout.addView(itemView);
+            final View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_news_item, null);
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
             TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
             TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
 
-            imageViews.add(imageView);
+            loadImageForNews(news, imageView);
             newsTitle.setText(news.getTitle());
             comentText.setText(news.getComment());
 
@@ -83,47 +80,39 @@ public class NewsFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
-        }
-
-    }
-
-    private void loadAllImages() {
-        for (int i = 0; i <imageViews.size(); i++) {
-            final ImageView imageView = imageViews.get(i);
-            final News news = newses.get(i);
-
-            EXECUTOR.submit(new Runnable() {
+            HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        String url = getHiResImg(news.getUrl());
-                        if (url==null) {
-                            url = news.getImgUrl();
-                        }
-                            URL newurl = new URL(url);
-                            final Bitmap loadedBitMap = BitmapFactory
-                                    .decodeStream(newurl.openConnection().getInputStream());
-                            HANDLER.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    double y = loadedBitMap.getHeight();
-                                    double x = loadedBitMap.getWidth();
-
-                                    int currentX = imageView.getWidth();
-                                    double ratio = y/x;
-                                    int needY = (int) (currentX * ratio);
-
-                                    imageView.getLayoutParams().height = needY;
-                                    imageView.setImageBitmap(loadedBitMap);
-                                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                }
-                            });
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    mainLayout.addView(itemView);
+                    itemView.startAnimation(AnimationUtils.loadAnimation(context,
+                            R.anim.main_screen_trans));
                 }
             });
+        }
+    }
+
+    private void loadImageForNews(News news, ImageView imageView) {
+        try {
+            String url = getHiResImg(news.getUrl());
+            if (url == null) {
+                url = news.getImgUrl();
+            } // если по ссылке не найден hi-res image - берём low-res
+            URL newurl = new URL(url);
+            final Bitmap loadedBitMap = BitmapFactory
+                    .decodeStream(newurl.openConnection().getInputStream());
+
+            double y = loadedBitMap.getHeight();
+            double x = loadedBitMap.getWidth();
+
+            int currentX = (int) (mainLayout.getWidth() * 0.9D);
+            double ratio = y / x;
+            int needY = (int) (currentX * ratio);
+
+            imageView.getLayoutParams().height = needY;
+            imageView.setImageBitmap(loadedBitMap);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -142,11 +131,11 @@ public class NewsFragment extends BaseFragment {
 
     }
 
-    private String getHiResImg(String url)throws Exception{
+    private String getHiResImg(String url) throws Exception {
         Document doc2 = Jsoup.connect(url).get();
         Elements images = doc2.getElementsByTag("img");
         for (Element image : images) {
-            if (image.toString().contains("/content/images/")){
+            if (image.toString().contains("/content/images/")) {
                 return "http://o3.ua" + image.attributes().get("src");
             }
         }
@@ -173,10 +162,10 @@ public class NewsFragment extends BaseFragment {
                     .getElementsByTag("h3").first()
                     .getElementsByTag("a").first().html();
             String text;
-            try{
+            try {
                 text = element.getElementsByTag("div").first()
                         .getElementsByTag("p").first().html();
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 text = "";
             }
 
@@ -208,10 +197,10 @@ public class NewsFragment extends BaseFragment {
                     .getElementsByTag("h3").first()
                     .getElementsByTag("a").first().html();
             String text;
-            try{
+            try {
                 text = element.getElementsByTag("div").first()
                         .getElementsByTag("p").first().html();
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 text = "";
             }
 
@@ -232,7 +221,7 @@ public class NewsFragment extends BaseFragment {
         List<News> newNews = new ArrayList<>();
         for (News newse : newses) {
             newNews.add(newse);
-            if (newNews.size()==i) return newNews;
+            if (newNews.size() == i) return newNews;
         }
         return newNews;
     }
@@ -246,12 +235,12 @@ public class NewsFragment extends BaseFragment {
         });
     }
 
-    private static String convertDateToNumbers(String date){
+    private static String convertDateToNumbers(String date) {
         date = date.toLowerCase();
-        String day = date.substring(0,2);
+        String day = date.substring(0, 2);
         String year = date.substring(
-                date.indexOf(" 20")+1,
-                date.indexOf(" 20")+5
+                date.indexOf(" 20") + 1,
+                date.indexOf(" 20") + 5
         );
         String month = "";
         if (date.contains("січня")) month = "01";

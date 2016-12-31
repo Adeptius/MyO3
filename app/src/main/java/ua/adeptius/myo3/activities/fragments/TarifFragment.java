@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,20 +35,22 @@ public class TarifFragment extends BaseFragment {
     void init() {
         titleText = "Підключені послуги";
         descriptionText = "Керуйте вашими послугами звідси.";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
     void doInBackground() throws Exception {
         services = GetInfo.getServises();
+
     }
 
     @Override
     void processIfOk() {
-        drawAllServises(services);
+        prepareServises(services);
+        hideAllViewsInMainScreen();
+        animateScreen();
     }
 
-    private void drawAllServises(List<Servise> services) {
+    private void prepareServises(List<Servise> services) {
         for (final Servise service : services) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item, null);
             mainLayout.addView(itemView);

@@ -31,6 +31,7 @@ public class TurboDayFragment extends BaseFragment {
         titleText = "Турбо день";
         descriptionText = "Платна послуга збільшення швидкості до 100мбіт";
 //        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
+        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -41,6 +42,7 @@ public class TurboDayFragment extends BaseFragment {
     @Override
     void processIfOk() {
         drawScreen();
+        animateScreen();
     }
 
     private void drawScreen() {

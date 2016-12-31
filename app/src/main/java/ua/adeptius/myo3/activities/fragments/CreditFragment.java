@@ -6,8 +6,8 @@ import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -31,6 +31,8 @@ public class CreditFragment extends BaseFragment {
 //        mainLayout = (LinearLayout) baseView.findViewById(R.id.credit_main_layout);
         activateButton = getButton(R.id.activate_button);
         activateButton.setVisibility(View.GONE);
+
+        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -41,6 +43,7 @@ public class CreditFragment extends BaseFragment {
     @Override
     void processIfOk() {
         draw();
+        animateScreen();
     }
 
     private void draw() {
@@ -60,21 +63,21 @@ public class CreditFragment extends BaseFragment {
         TextView activeText = getTextView(R.id.active_left);
 
         activateButton.setVisibility(View.VISIBLE);
-        if(map.get("active").startsWith("20")){
+        if (map.get("active").startsWith("20")) {
             activateButton.setText("Послуга вже активна");
             activateButton.setClickable(false);
-            try{
+            try {
                 Date date = Utilits.getDate(map.get("active"));
                 long timeEnable = date.getTime();
                 long timeCurrent = new Date().getTime();
-                int hoursLeft = (int) (timeEnable-timeCurrent)/1000/60/60 % 24;
-                int daysLeft = (int) (timeEnable-timeCurrent)/1000/60/60/24;
-                activeText.setText("Залишилось " + daysLeft + " дні, " + hoursLeft + " годин" );
+                int hoursLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60 % 24;
+                int daysLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60 / 24;
+                activeText.setText("Залишилось " + daysLeft + " дні, " + hoursLeft + " годин");
                 activeText.setVisibility(View.VISIBLE);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             activateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,18 +86,16 @@ public class CreditFragment extends BaseFragment {
             });
         }
 
-        if (map.get("allow").equals("false")){
+        if (map.get("allow").equals("false")) {
             activateButton.setText("не доступно");
             activateButton.setClickable(false);
+            //TODO добавить кнопку восстановления кредита
 
         }
-
-
     }
 
 
-
-    private void activate(){
+    private void activate() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         TextView titleView = new TextView(context);
@@ -136,7 +137,6 @@ public class CreditFragment extends BaseFragment {
     void processIfFail() {
 
     }
-
 
 
     @Override

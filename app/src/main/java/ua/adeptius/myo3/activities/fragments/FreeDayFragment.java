@@ -22,7 +22,6 @@ import java.util.Map;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
-import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
@@ -37,6 +36,7 @@ public class FreeDayFragment extends BaseFragment {
         titleText = "Вільний день";
         descriptionText = "Безкоштовна послуга збільшення швидкості до 100мбіт";
 //        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
+        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -50,6 +50,7 @@ public class FreeDayFragment extends BaseFragment {
     @Override
     void processIfOk() {
         drawScreen();
+        animateScreen();
     }
 
     private void drawScreen() {

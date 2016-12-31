@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
@@ -28,7 +28,6 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class PayFragment extends BaseFragment {
 
-    HashMap<ImageView, Integer> viewsAndImgId = new HashMap<>();
     private Person person;
 
     @Override
@@ -36,17 +35,19 @@ public class PayFragment extends BaseFragment {
         titleText = "Оплата послуг";
         descriptionText = "";
 //        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
-        drawAll();
+
     }
 
     @Override
     void doInBackground() throws Exception {
         person = GetInfo.getPersonInfo();
+        prepareAll();
     }
 
     @Override
     void processIfOk() {
-        drawIcons();
+        hideAllViewsInMainScreen();
+        animateScreen();
     }
 
     @Override
@@ -54,46 +55,42 @@ public class PayFragment extends BaseFragment {
 
     }
 
-    private void drawAll() {
-
-        View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+    private void prepareAll() {
+        final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView iPayView = (ImageView) iPayViewContainer.findViewById(R.id.pay_image_view);
-        viewsAndImgId.put(iPayView, R.drawable.i_pay_3);
+        addIcon(iPayView, R.drawable.i_pay_3);
         iPayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("iPayView");
             }
         });
-        mainLayout.addView(iPayViewContainer);
 
-        View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView eCommerceConnect = (ImageView) eCommerceConnectContainer.findViewById(R.id.pay_image_view);
-        viewsAndImgId.put(eCommerceConnect, R.drawable.e_commerce3);
+        addIcon(eCommerceConnect, R.drawable.e_commerce3);
         eCommerceConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("eCommerceConnect");
             }
         });
-        mainLayout.addView(eCommerceConnectContainer);
 
 
-        View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView payMaster = (ImageView) payMasterContainer.findViewById(R.id.pay_image_view);
-        viewsAndImgId.put(payMaster, R.drawable.pay_master2);
+        addIcon(payMaster,  R.drawable.pay_master2);
         payMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("payMaster");
             }
         });
-        mainLayout.addView(payMasterContainer);
 
 
-        View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView privatBank = (ImageView) privatBankContainer.findViewById(R.id.pay_image_view);
-        viewsAndImgId.put(privatBank, R.drawable.privat_bank4);
+        addIcon(privatBank,  R.drawable.privat_bank4);
         privatBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,40 +99,44 @@ public class PayFragment extends BaseFragment {
                 startActivity(i);
             }
         });
-        mainLayout.addView(privatBankContainer);
 
-
-        View platonContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View platonContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView platon = (ImageView) platonContainer.findViewById(R.id.pay_image_view);
-        viewsAndImgId.put(platon, R.drawable.platon2);
+        addIcon(platon,  R.drawable.platon2);
         platon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("platon");
             }
         });
-        mainLayout.addView(platonContainer);
-
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                mainLayout.addView(iPayViewContainer);
+                mainLayout.addView(eCommerceConnectContainer);
+                mainLayout.addView(payMasterContainer);
+                mainLayout.addView(privatBankContainer);
+                mainLayout.addView(platonContainer);
+            }
+        });
 
     }
 
-    private void drawIcons() {
-        for (Map.Entry<ImageView, Integer> entry : viewsAndImgId.entrySet()) {
-            final ImageView view = entry.getKey();
+
+    private void addIcon(ImageView view, int image) {
             final Bitmap loadedBitMap = BitmapFactory
-                    .decodeResource(getResources(), entry.getValue());
+                    .decodeResource(getResources(), image);
 
             double y = loadedBitMap.getHeight();
             double x = loadedBitMap.getWidth();
 
-            int currentX = view.getWidth();
+            int currentX = (int) (mainLayout.getWidth() * 0.9);
             double ratio = y / x;
             int needY = (int) (currentX * ratio);
 
             view.getLayoutParams().height = needY;
             view.setImageBitmap(loadedBitMap);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }
     }
 
     public void askHowMuch(final String system) {
