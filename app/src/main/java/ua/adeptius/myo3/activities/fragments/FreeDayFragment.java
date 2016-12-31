@@ -36,7 +36,7 @@ public class FreeDayFragment extends BaseFragment {
     void init() {
         titleText = "Вільний день";
         descriptionText = "Безкоштовна послуга збільшення швидкості до 100мбіт";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
+//        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
     }
 
     @Override

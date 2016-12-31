@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatRatingBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -20,8 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
+import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.utils.Utilits;
 
@@ -29,7 +32,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected Handler HANDLER = Utilits.HANDLER;
     protected ExecutorService EXECUTOR = Utilits.EXECUTOR;
-    protected LinearLayout layout;
     protected View baseView;
     protected Context context;
     protected String titleText;
@@ -66,8 +68,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         baseView = inflater.inflate(setFragmentId(), container, false);
-        layout = (LinearLayout) baseView.findViewById(setLayoutId());
-        context = layout.getContext();
+        mainLayout = (LinearLayout) baseView.findViewById(setLayoutId());
+        context = mainLayout.getContext();
         setTitle(titleText, descriptionText);
         MainActivity.progressBar.setVisibility(View.VISIBLE);
         init();
@@ -80,6 +82,33 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             @Override
             public void run() {
                 Snackbar.make(text, message, Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    protected void addViewsToMainLayout(final List<View> views){
+        final LinearLayout mainLayoutCopy = mainLayout;
+
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    for (final View view : views) {
+                        Thread.sleep(250);
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainLayoutCopy.addView(view);
+                                view.startAnimation(AnimationUtils.loadAnimation(context,
+                                        R.anim.main_screen_trans));
+                            }
+                        });
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    //TODO make ignored
+                }
             }
         });
     }

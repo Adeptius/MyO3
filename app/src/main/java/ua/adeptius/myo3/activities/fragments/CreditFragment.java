@@ -28,7 +28,7 @@ public class CreditFragment extends BaseFragment {
     void init() {
         titleText = "Кредит довіри";
         descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.credit_main_layout);
+//        mainLayout = (LinearLayout) baseView.findViewById(R.id.credit_main_layout);
         activateButton = getButton(R.id.activate_button);
         activateButton.setVisibility(View.GONE);
     }
@@ -59,11 +59,6 @@ public class CreditFragment extends BaseFragment {
 
         TextView activeText = getTextView(R.id.active_left);
 
-
-
-
-
-
         activateButton.setVisibility(View.VISIBLE);
         if(map.get("active").startsWith("20")){
             activateButton.setText("Послуга вже активна");
@@ -87,6 +82,14 @@ public class CreditFragment extends BaseFragment {
                 }
             });
         }
+
+        if (map.get("allow").equals("false")){
+            activateButton.setText("не доступно");
+            activateButton.setClickable(false);
+
+        }
+
+
     }
 
 

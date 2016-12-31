@@ -35,7 +35,7 @@ public class NewsFragment extends BaseFragment {
     void init() {
         titleText = "Новини та акції";
         descriptionText = "";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
+//        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
 
     }
 
@@ -84,6 +84,7 @@ public class NewsFragment extends BaseFragment {
                 }
             });
         }
+
     }
 
     private void loadAllImages() {

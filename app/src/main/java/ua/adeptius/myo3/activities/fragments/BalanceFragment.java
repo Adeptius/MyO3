@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +28,7 @@ public class BalanceFragment extends BaseFragment {
     void init() {
         titleText = "Баланс";
         descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
+//        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
@@ -63,10 +64,11 @@ public class BalanceFragment extends BaseFragment {
     }
 
     private void drawAllOperations(List<Operation> operations) {
+        List<View> viewsToShow = new ArrayList<>();
         for (Operation operation : operations) {
 
             View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_balance_item_operation, null);
-            mainLayout.addView(itemView);
+            viewsToShow.add(itemView);
 
             TextView textOperationDate = (TextView) itemView.findViewById(R.id.operation_date);
             TextView textOperationComent = (TextView) itemView.findViewById(R.id.operation_coment);
@@ -103,6 +105,7 @@ public class BalanceFragment extends BaseFragment {
             textOperationMoney.setText(money);
             textOperationSaldo.setText(saldo);
         }
+        addViewsToMainLayout(viewsToShow);
     }
 
     private void sortByDate(List<Operation> operations) {

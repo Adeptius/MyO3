@@ -81,20 +81,17 @@ public class MainActivity extends AppCompatActivity
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
+        //мой договор
 //        Settings.setCurrentLogin("02514521");
 //        Settings.setCurrentPassword("5351301");
 
-// Абон
+//      Абон
 //        Settings.setCurrentLogin("561100728");
 //        Settings.setCurrentPassword("5276229");
 
 //        Settings.setCurrentLogin("561600377");
 //        Settings.setCurrentPassword("1217229");
 
-
-//        Тест Бандлтест
-//        Settings.setCurrentLogin("441135231");
-//        Settings.setCurrentPassword("5145026");
 
 //        абон с оллтв
 //        Settings.setCurrentLogin("561700845");
@@ -113,18 +110,19 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("6909125");
 
 
-            // Згоревший кредит доверия
-//        Settings.setCurrentLogin("7231");
-//        Settings.setCurrentPassword("3786492");
-
-             //МНОГАДЕНЕГ не входит
-//        Settings.setCurrentLogin("dhcp_test");
-//        Settings.setCurrentPassword("12345678");
+            // Згоревший кредит доверия. абон
+        Settings.setCurrentLogin("7231");
+        Settings.setCurrentPassword("3786492");
 
 
              //Сюй Шенцай тест
-        Settings.setCurrentLogin("6391");
-        Settings.setCurrentPassword("ahmatovoj");
+//        Settings.setCurrentLogin("6391");
+//        Settings.setCurrentPassword("ahmatovoj");
+
+        // гарантированый сервис подключен!
+//        Тест Бандлтест
+//        Settings.setCurrentLogin("441135231");
+//        Settings.setCurrentPassword("5145026");
 
 
         EXECUTOR.submit(new Runnable() {

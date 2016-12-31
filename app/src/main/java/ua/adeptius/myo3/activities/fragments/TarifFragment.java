@@ -36,7 +36,7 @@ public class TarifFragment extends BaseFragment {
     void init() {
         titleText = "Підключені послуги";
         descriptionText = "Керуйте вашими послугами звідси.";
-        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
+//        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
     }
 
     @Override
