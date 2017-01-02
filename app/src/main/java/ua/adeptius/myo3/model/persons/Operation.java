@@ -5,25 +5,24 @@ import org.json.JSONObject;
 
 public class Operation {
 
-    //    private boolean bonus;
-    private String note;
     private String date;
     private double money;
+    private String note;
     private double saldo;
+    //    private boolean bonus;
+
 
     public Operation(String json) {
         try {
             JSONObject jobject = new JSONObject(json);
-            this.date = jobject.get("date").toString();
-//            this.bonus = Boolean.parseBoolean(jobject.get("bonus").toString());
-            this.note = jobject.get("note").toString();
-            this.money = Double.parseDouble(jobject.get("money").toString());
+            this.date = jobject.getString("date");
+            this.note = jobject.getString("note");
+            this.money = jobject.getDouble("money");
+//            this.bonus = jobject.getBoolean("bonus");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 
 
     public String getTextSaldo() {
@@ -74,29 +73,4 @@ public class Operation {
         return money;
     }
 
-//    public double getSaldo() {
-//        return saldo;
-//    }
-//
-//    public void setMoney(double money) {
-//        this.money = money;
-//    }
-//
-//
-//    public void setDate(String date) {
-//        this.date = date;
-//    }
-//
-//    public boolean isBonus() {
-//        return bonus;
-//    }
-//
-//    public void setBonus(boolean bonus) {
-//        this.bonus = bonus;
-//    }
-//
-//    public void setNote(String note) {
-//        this.note = note;
-//    }
-//
 }

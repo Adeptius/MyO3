@@ -15,6 +15,7 @@ import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.persons.Operation;
 import ua.adeptius.myo3.model.persons.Person;
+import ua.adeptius.myo3.utils.Utilits;
 
 public class BalanceFragment extends BaseFragment {
 
@@ -49,12 +50,6 @@ public class BalanceFragment extends BaseFragment {
         hideAllViewsInMainScreen();
         animateScreen();
     }
-
-    @Override
-    void processIfFail() {
-
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -128,7 +123,7 @@ public class BalanceFragment extends BaseFragment {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        String date = year + "-" + month;
+        String date = year + "-" + Utilits.doTwoSymb(month);
         List<Operation> operationOneMonth = GetInfo.getWildraws(date);
         for (int i = 0; i < count; i++) {
             date = oneMounthAgo(date);

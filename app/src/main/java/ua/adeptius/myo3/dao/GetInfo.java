@@ -19,6 +19,16 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static String isGarantedServiceEnabled()throws Exception{
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/guaranteed_service");
+        if (s.contains("e_date")) return s.substring(s.indexOf("e_date")+9, s.lastIndexOf(" "));
+        if (s.contains("pay_type")) return "enabled";
+        if (s.equals("[]")) return "disabled";
+        if (s.contains("\"pending_enable\": true")) return "enabling";
+        if (s.contains("\"pending_disable\":true")) return "disabling";
+        return "disabled";
+    }
+
     public static HashMap<String, String> getCreditStatus() throws Exception {
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_credit");
         JSONObject json = new JSONObject(s);

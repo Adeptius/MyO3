@@ -26,6 +26,7 @@ import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.CreditFragment;
 import ua.adeptius.myo3.activities.fragments.FreeDayFragment;
+import ua.adeptius.myo3.activities.fragments.GarantServiceFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
 import ua.adeptius.myo3.activities.fragments.PayFragment;
@@ -37,6 +38,7 @@ import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
 
 import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
 
+// TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -62,21 +64,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        //TODO переместить это в сплэш скрин
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
-
-
         progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
 
-        // Задание фона колапс тулбара
         try {
             Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
 
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         descriptionTextView = (TextView) findViewById(R.id.description_text_view);
@@ -102,8 +98,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("3147698");
 
             // АБОН!!!!!!
-//        Settings.setCurrentLogin("561000369");
-//        Settings.setCurrentPassword("0849788");
+        Settings.setCurrentLogin("561000369");
+        Settings.setCurrentPassword("0849788");
 
             // АБОН!!!!!!
 //        Settings.setCurrentLogin("6191300086");
@@ -111,8 +107,8 @@ public class MainActivity extends AppCompatActivity
 
 
             // Згоревший кредит доверия. абон
-        Settings.setCurrentLogin("7231");
-        Settings.setCurrentPassword("3786492");
+//        Settings.setCurrentLogin("7231");
+//        Settings.setCurrentPassword("3786492");
 
 
              //Сюй Шенцай тест
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new CreditFragment(), R.drawable.background_main1);
+        goTo(new GarantServiceFragment(), R.drawable.background_main1);
     }
 
 
@@ -220,7 +216,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_dovira) {
             goTo(new CreditFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_garant_service) {
-
+            goTo(new GarantServiceFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_vkl_internet) {
 
         } else if (id == R.id.nav_dr_web) {

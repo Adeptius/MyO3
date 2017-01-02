@@ -1,9 +1,12 @@
 package ua.adeptius.myo3.activities.fragments;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -34,6 +37,7 @@ public class MainFragment extends BaseFragment {
     private List<Ip> ips;
     private Person person;
     private String mountlyFee;
+    private boolean creditEnabled;
 
     @Override
     void init() {
@@ -72,17 +76,13 @@ public class MainFragment extends BaseFragment {
         ips = GetInfo.getIP();
         person = GetInfo.getPersonInfo();
         mountlyFee = GetInfo.getMountlyFee();
+        creditEnabled = GetInfo.getCreditStatus().get("active").startsWith("20");
     }
 
     @Override
     void processIfOk() {
         setPersonData(person, ips, mountlyFee);
         animateScreen();
-    }
-
-    @Override
-    void processIfFail() {
-
     }
 
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
@@ -119,6 +119,47 @@ public class MainFragment extends BaseFragment {
                 akciiCheckBox.setChecked(mailing.isSubscribe());
         }
         showIps(ips);
+        showWarningIfInternetInactive();
+    }
+
+    private void showWarningIfInternetInactive() {
+        if (person.getStopsum()>person.getCurrent() && !creditEnabled){
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+            builder.setCancelable(true);
+            TextView titleView = new TextView(context);
+            titleView.setText("Інтернет не активний");
+            titleView.setGravity(Gravity.CENTER);
+            titleView.setTextSize(24);
+            titleView.setTypeface(null, Typeface.BOLD);
+            titleView.setTextColor(COLOR_BLUE);
+            builder.setCustomTitle(titleView);
+            View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+            TextView text = (TextView) textLayout.findViewById(R.id.text);
+            StringBuilder sb = new StringBuilder();
+            sb.append("На вашому рахунку недостатньо коштів.\n");
+            sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
+            String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
+            if (notAnoth.contains(".")) notAnoth = notAnoth.substring(0, notAnoth.indexOf(".")+2);
+            sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
+            sb.append("Перейти до перегляду історії проплат?");
+            text.setText(sb.toString());
+            builder.setView(textLayout);
+            builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(final DialogInterface dialog, int which) {
+                    FragmentManager fm = getFragmentManager();
+                    try {
+                        fm.beginTransaction().replace(R.id.content_frame, BalanceFragment.class.newInstance()).commit();
+                    } catch (java.lang.InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            android.app.AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     @Override

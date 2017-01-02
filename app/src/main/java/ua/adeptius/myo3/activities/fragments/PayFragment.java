@@ -50,11 +50,6 @@ public class PayFragment extends BaseFragment {
         animateScreen();
     }
 
-    @Override
-    void processIfFail() {
-
-    }
-
     private void prepareAll() {
         final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView iPayView = (ImageView) iPayViewContainer.findViewById(R.id.pay_image_view);

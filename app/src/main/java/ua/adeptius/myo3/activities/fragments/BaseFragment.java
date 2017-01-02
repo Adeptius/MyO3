@@ -41,21 +41,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
-//    protected List<View> viewsToShow;  DEPRECATED
-//    int mCurCheckPosition;
 
-    public static final ViewGroup.LayoutParams WRAP_MACH = new ViewGroup
-            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
-            , ViewGroup.LayoutParams.MATCH_PARENT);
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
             , ViewGroup.LayoutParams.WRAP_CONTENT);
     public static final ViewGroup.LayoutParams MATCH_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
             , ViewGroup.LayoutParams.WRAP_CONTENT);
-    public static final ViewGroup.LayoutParams MATCH_MATCH = new ViewGroup
-            .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-            , ViewGroup.LayoutParams.MATCH_PARENT);
     public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT1 = new LinearLayout
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
     public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT036 = new LinearLayout
@@ -130,36 +122,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    // DEPRECATED
-//    protected void addAndAnimateViews(){
-//
-//        final LinearLayout mainLayoutCopy = mainLayout;
-//
-//        EXECUTOR.submit(new Runnable() {
-//            @Override
-//            public void run() {
-//                try{
-//                    for (final View view : viewsToShow) {
-//                        Thread.sleep(250);
-//                        HANDLER.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mainLayoutCopy.addView(view);
-//                                view.startAnimation(AnimationUtils.loadAnimation(context,
-//                                        R.anim.main_screen_trans));
-//                            }
-//                        });
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                    //TODO make ignored
-//                }
-//            }
-//        });
-//    }
-
     protected void startBackgroundTask(){
-//        viewsToShow = new ArrayList<>();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -192,8 +155,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     abstract void processIfOk();
 
-    abstract void processIfFail();
-
+    private void processIfFail(){
+        //TODO Добавлять вью на мэйн экран с предложением повторно загрузить инфу
+    }
 
     protected void showError(){
         setTitle("Помилка", "Не вдалось завантажити дані");

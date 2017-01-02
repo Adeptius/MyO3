@@ -466,13 +466,6 @@ public class TarifFragment extends BaseFragment {
     }
 
     @Override
-    void processIfFail() {
-
-    }
-
-
-
-    @Override
     int setFragmentId() {
         return R.layout.fragment_base_scrolling;
     }

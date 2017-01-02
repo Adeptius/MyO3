@@ -222,11 +222,6 @@ public class FreeDayFragment extends BaseFragment {
     }
 
     @Override
-    void processIfFail() {
-
-    }
-
-    @Override
     int setFragmentId() {
         return R.layout.fragment_free_and_turbo_day;
     }

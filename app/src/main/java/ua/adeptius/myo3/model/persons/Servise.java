@@ -4,6 +4,8 @@ package ua.adeptius.myo3.model.persons;
 import org.json.JSONObject;
 import java.util.Date;
 
+import static java.lang.Integer.*;
+
 public class Servise {
 
 //    private int old;
@@ -36,23 +38,23 @@ public class Servise {
     public Servise(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
-            this.id = Integer.parseInt(allInfo.get("id").toString());
-            this.type = Integer.parseInt(allInfo.get("type").toString());
-            this.month = Integer.parseInt(allInfo.get("month").toString());
-            this.pay_type_name = allInfo.get("pay_type_name").toString();
+            this.id = allInfo.getInt("id");
+            this.type = allInfo.getInt("type");
+            this.month = allInfo.getInt("month");
+            this.pay_type_name = allInfo.getString("pay_type_name");
             if ("!-Приостановлен".equals(pay_type_name)) {
                 isStopped = true;
                 this.pay_type_name = "Призупинено";
             }
-            this.is_allow_change = Boolean.parseBoolean(allInfo.get("is_allow_change").toString());
-            this.is_allow_suspend = Boolean.parseBoolean(allInfo.get("is_allow_suspend").toString());
+            this.is_allow_change = allInfo.getBoolean("is_allow_change");
+            this.is_allow_suspend = allInfo.getBoolean("is_allow_suspend");
 
             try{
-                String s = allInfo.get("discounts").toString();
+                String s = allInfo.getString("discounts");
                 s = s.substring(1, s.length()-1);
                 JSONObject disc = new JSONObject(s);
-                int discount = Integer.parseInt(disc.get("amount").toString());
-                String date = disc.get("eDate").toString();
+                int discount = disc.getInt("amount");
+                String date = disc.getString("eDate");
                 date = date.substring(0, date.indexOf(" "));
                 this.discount = discount;
                 this.haveDiscount = true;
@@ -60,22 +62,22 @@ public class Servise {
             }catch (Exception ignored){}
 
             try {
-                String s = allInfo.get("chprices").toString();
+                String s = allInfo.getString("chprices");
                 s = s.substring(1, s.length() - 1);
                 JSONObject details = new JSONObject(s.trim());
-                this.newName = details.get("newName").toString();
-                this.dateWillChange = details.get("dchange").toString();
+                this.newName = details.getString("newName");
+                this.dateWillChange = details.getString("dchange");
             } catch (Exception ignored) {
                 this.newName = "";
                 this.dateWillChange = "";
             }
 
             if (!"".equals(dateWillChange)){
-                int year = Integer.parseInt(dateWillChange.substring(0,4));
-                int month = Integer.parseInt(dateWillChange.substring(5,7));
-                int day = Integer.parseInt(dateWillChange.substring(8,10));
-                int hour = Integer.parseInt(dateWillChange.substring(11,13));
-                int minute = Integer.parseInt(dateWillChange.substring(14,16));
+                int year = parseInt(dateWillChange.substring(0,4));
+                int month = parseInt(dateWillChange.substring(5,7));
+                int day = parseInt(dateWillChange.substring(8,10));
+                int hour = parseInt(dateWillChange.substring(11,13));
+                int minute = parseInt(dateWillChange.substring(14,16));
                 @SuppressWarnings("deprecation")
                 Date date = new Date(year-1900,month-1,day,hour,minute);
                 long timeEnable = date.getTime();
@@ -134,11 +136,13 @@ public class Servise {
         name = name.replaceAll("\\(Промо 1-аренда stb\\)", "Медіаплеєр MAG");
         name = name.replaceAll("Детский\\)", "Дитячий");
         name = name.replaceAll("звезды", "зірки");
+        name = name.replaceAll("Гарантированный сервис", "Гарантований сервіс");
         return name;
     }
 
     public String getMyTypeName() {
         if (getType() == 5) return "Доступ до інтернету";
+        if (getType() == 7 && getMyServiceName().contains("Гарантований")) return "Сервісні послуги";
         if (getType() == 7) return "Надання адреси";
         if (getType() == 15) return "Телебачення MEGOGO";
         if (getType() == 13 && pay_type_name.contains("аренды")) return "Оренда обладнання";

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">My O3</string>
     <string name="title_activity_login">Увійти</string>
+    <string name="title_activity_main">My O3</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -11,16 +12,24 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="title_activity_main">My O3</string>
-
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+    <!--КРЕДИТ ДОВЕРИЯ-->
+    <string name="credit_details">*Якщо кредит довіри недоступний - ви можете його відновити оплативши одноразово 30 грн.
+        \n*При підключенні послуги "Гарантований сервіс" - строк послуги збільшується до 10 днів</string>
+
+    <!--ГАРАНТИРОВАННЫЙ СЕРВИС-->
+    <string name="garant_servise_else_info">*Скористатися послугою «Гарантований сервіс» абонент може лише один раз на місяць.
+\n*Абонент може відключити послугу, кошти за послугу будуть перераховані при умові, що абонент не користувався послугою в поточному місяці.
+\n*Якщо абонент скористався послугою та має намір відключити послугу, кошти за поточний місяць не перераховуються.
+\n*Послугою «Гарантований сервіс» не можуть скористатись VIP-абоненти та юридичні особи.
+\n*Послугою заміни медіа-конвертора або ONU абонент може скористатися лише один раз на рік.
+    </string>
+
 </resources>

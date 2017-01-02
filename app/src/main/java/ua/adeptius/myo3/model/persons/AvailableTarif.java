@@ -37,20 +37,4 @@ public class AvailableTarif {
     public void setName(String name) {
         this.name = name;
     }
-
-//    public String getMonth() {
-//        return month;
-//    }
-//
-//    public void setMonth(String month) {
-//        this.month = month;
-//    }
-//
-//    public String getBundle() {
-//        return bundle;
-//    }
-//
-//    public void setBundle(String bundle) {
-//        this.bundle = bundle;
-//    }
 }

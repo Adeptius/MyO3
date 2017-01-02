@@ -9,9 +9,9 @@ public class Mailing {
     public Mailing(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
-            id = Integer.parseInt(allInfo.get("id").toString());
-            title = allInfo.get("title").toString();
-            subscribe = Boolean.parseBoolean(allInfo.get("subscribe").toString());
+            id = allInfo.getInt("id");
+            title = allInfo.getString("title");
+            subscribe = allInfo.getBoolean("subscribe");
         } catch (JSONException e) {
             e.printStackTrace();
         }

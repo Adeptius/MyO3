@@ -9,15 +9,15 @@ public class Phone {
     public Phone(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
-            id = Integer.parseInt(allInfo.get("id").toString());
-            pId = Integer.parseInt(allInfo.get("pId").toString());
-            phone = allInfo.get("phone").toString();
-            comment = allInfo.get("comment").toString();
-            lang = Integer.parseInt(allInfo.get("lang").toString());
-            phonems = allInfo.get("phonems").toString();
-            valid = Integer.parseInt(allInfo.get("valid").toString());
-            modifyDate = allInfo.get("modifyDate").toString();
-            smsInform = Integer.parseInt(allInfo.get("smsInform").toString());
+            id = allInfo.getInt("id");
+            pId = allInfo.getInt("pId");
+            phone = allInfo.getString("phone");
+            comment = allInfo.getString("comment");
+            lang = allInfo.getInt("lang");
+            phonems = allInfo.getString("phonems");
+            valid = allInfo.getInt("valid");
+            modifyDate = allInfo.getString("modifyDate");
+            smsInform = allInfo.getInt("smsInform");
         } catch (JSONException e) {
             e.printStackTrace();
         }

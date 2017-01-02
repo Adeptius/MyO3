@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,11 +22,11 @@ public class CreditFragment extends BaseFragment {
 
     private HashMap<String, String> map;
     Button activateButton;
+    private boolean garantServiceEnabled;
 
     @Override
     void init() {
         titleText = "Кредит довіри";
-        descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
         activateButton = getButton(R.id.activate_button);
         activateButton.setVisibility(View.GONE);
         hideAllViewsInMainScreen();
@@ -36,10 +35,17 @@ public class CreditFragment extends BaseFragment {
     @Override
     void doInBackground() throws Exception {
         map = GetInfo.getCreditStatus();
+        garantServiceEnabled = GetInfo.isGarantedServiceEnabled().equals("enabled");
     }
 
     @Override
     void processIfOk() {
+        if (garantServiceEnabled){
+            descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 10 діб";
+        }else {
+            descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
+        }
+        setTitle(titleText, descriptionText);
         draw();
         animateScreen();
     }
@@ -47,16 +53,18 @@ public class CreditFragment extends BaseFragment {
     private void draw() {
         TextView textView = getTextView(R.id.text_title);
         StringBuilder sb = new StringBuilder();
-        sb.append("Будь-ласка, погасіть заборгованість у строк п'яти діб, щоб мати змогу і надалі");
-        sb.append(" користуватися цією послугою.");
-        textView.setText(sb.toString());
+        sb.append("Будь-ласка, погасіть заборгованість у строк ");
+        if (garantServiceEnabled){
+            sb.append("десяти");
+        }else {
+            sb.append("п'яти");
+        }
+        sb.append(" діб, щоб мати змогу і надалі користуватися цією послугою.");
+
+        textView.setText(sb);
 
         TextView textDetails = getTextView(R.id.text_view_for_details);
-        sb = new StringBuilder();
-        sb.append("Якщо кредит довіри недоступний - ви можете його відновити оплативши одноразово 30 грн");
-        sb.append("\n\nПри підключенні послуги \"Гарантований сервіс\" - " +
-                "строк послуги збільшується до 10 днів");
-        textDetails.setText(sb.toString());
+        textDetails.setText(getString(R.string.credit_details));
 
         TextView activeText = getTextView(R.id.active_left);
 
@@ -88,7 +96,6 @@ public class CreditFragment extends BaseFragment {
             activateButton.setText("не доступно");
             activateButton.setClickable(false);
             //TODO добавить кнопку восстановления кредита
-
         }
     }
 
@@ -130,13 +137,6 @@ public class CreditFragment extends BaseFragment {
             }
         });
     }
-
-
-    @Override
-    void processIfFail() {
-
-    }
-
 
     @Override
     int setFragmentId() {

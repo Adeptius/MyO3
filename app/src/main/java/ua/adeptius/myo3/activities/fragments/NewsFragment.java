@@ -28,33 +28,24 @@ import ua.adeptius.myo3.dao.News;
 public class NewsFragment extends BaseFragment {
 
     private List<News> newses;
-    private List<ImageView> imageViews = new ArrayList<>();
 
     @Override
     void init() {
         titleText = "Новини та акції";
         descriptionText = "";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.scroll_view_news);
     }
 
     @Override
     void doInBackground() throws Exception {
         newses = getAllNews();
         sortByDate(newses);
-        newses = subList(newses, 7);
+        newses = subList(newses, 10);
         prepareNews(newses);
     }
 
 
     @Override
     void processIfOk() {
-        hideAllViewsInMainScreen();
-        animateScreen();
-    }
-
-    @Override
-    void processIfFail() {
-
     }
 
     private void prepareNews(List<News> newses) {
@@ -213,7 +204,6 @@ public class NewsFragment extends BaseFragment {
             news.setNumberedDate(convertDateToNumbers(date));
             newses.add(news);
         }
-
         return newses;
     }
 

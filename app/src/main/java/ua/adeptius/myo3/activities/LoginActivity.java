@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import ua.adeptius.myo3.R;
 
-
+// TODO сделать логин
 public class LoginActivity extends AppCompatActivity{
 
     @Override

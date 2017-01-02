@@ -9,6 +9,28 @@ import ua.adeptius.myo3.model.persons.Phone;
 public class SendInfo {
 
 
+    public static boolean deActivateGarantedService() {
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/guaranteed_service/disable",
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean activateGarantedService() {
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/guaranteed_service/enable",
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean activateCredit() {
         try {
             String response = Web.sendPost("https://my.o3.ua/ajax/activate_credit_trust",
