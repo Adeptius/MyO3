@@ -199,6 +199,9 @@ public class TarifFragment extends BaseFragment {
             if (currentMoney > willBeMoney){
                 willcost = "Ви бажаєте перейти на більш дешевий тариф. " +
                         "З вашого рахунку, зараз, буде одноразово знято 10 грн.";
+            }else if(currentMoney < willBeMoney){
+                willcost = "Ви бажаєте перейти на більш дорогий тариф. " +
+                        "Вам буде надана знижка 20% на 2 місяці.";
             }
         }catch (Exception ignored){}
 

@@ -4,6 +4,8 @@ package ua.adeptius.myo3.dao;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,7 +21,8 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
-    public static String isGarantedServiceEnabled()throws Exception{
+    public static String isGarantedServiceEnabled() throws Exception{
+        Utilits.networkLog("Запрос состояние гарантированного сервиса");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/guaranteed_service");
         if (s.contains("e_date")) return s.substring(s.indexOf("e_date")+9, s.lastIndexOf(" "));
         if (s.contains("pay_type")) return "enabled";
@@ -29,19 +32,19 @@ public class GetInfo {
         return "disabled";
     }
 
-    public static HashMap<String, String> getCreditStatus() throws Exception {
+    public static String getCreditStatus() throws Exception {
+        Utilits.networkLog("Запрос состояния кредита доверия");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_credit");
         JSONObject json = new JSONObject(s);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("pending_enable", json.getString("pending_enable"));
 
-        if(json.has("active")) map.put("active", json.getString("active"));
-        if(json.has("allow")) map.put("allow", json.getString("allow"));
-        if(json.has("pending_restore")) map.put("pending_restore", json.getString("pending_restore"));
-        return map;
+        if (s.contains("\"pending_enable\":true")) return "enabling";
+        if (s.contains("\"pending_restore\":true")) return "restoring";
+        if (s.contains("\"allow\":false")) return "disabled";
+        return json.getString("active");
     }
 
     public static List<String> getTurboDayStatistics() throws Exception {
+        Utilits.networkLog("Запрос статистики по турбо дню");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
         List<String> statistics = new ArrayList<>();
         if (s.equals("[]")) return new ArrayList<>();
@@ -61,6 +64,7 @@ public class GetInfo {
     }
 
     public static List<String> getFreeDayStatistics() throws Exception {
+        Utilits.networkLog("Запрос статистики по свободному дню");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
         List<String> statistics = new ArrayList<>();
         if (s.equals("[]")) return new ArrayList<>();
@@ -76,13 +80,13 @@ public class GetInfo {
                     eDate = eDate.substring(0, eDate.lastIndexOf(":"));
                     statistics.add("Від " + sDate + " до " + eDate);
                 }
-
             }
         }
         return statistics;
     }
 
     public static HashMap<String, Integer> getFreeDayInfo() throws Exception {
+        Utilits.networkLog("Запрос доступных дней по фридею");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/free_days");
         HashMap<String, Integer> map = new HashMap<>();
         JSONObject jsonObject = new JSONObject(s);
@@ -92,6 +96,7 @@ public class GetInfo {
     }
 
     public static List<AvailableTarif> getAvailableTarifs(String serviceId) throws Exception {
+        Utilits.networkLog("Запрос доступных тарифов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/new_pt?service_id=" + serviceId);
         s = s.substring(1, s.length() - 1);
         List<AvailableTarif> availableTarifList = new ArrayList<>();
@@ -104,6 +109,7 @@ public class GetInfo {
     }
 
     public static List<Servise> getServises() throws Exception {
+        Utilits.networkLog("Запрос подключенных сервисов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services");
         s = s.substring(1, s.length() - 1);
         List<Servise> servises = new ArrayList<>();
@@ -115,7 +121,24 @@ public class GetInfo {
         return servises;
     }
 
+    public static List<Operation> getWildrowsByFewMonth(int count) throws Exception {
+        Calendar calendar = new GregorianCalendar();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        String date = year + "-" + Utilits.doTwoSymb(month);
+        List<Operation> operationOneMonth = GetInfo.getWildraws(date);
+        for (int i = 0; i < count; i++) {
+            date = Utilits.oneMounthAgo(date);
+            List<Operation> next = GetInfo.getWildraws(date);
+            for (Operation operation : next) {
+                operationOneMonth.add(operation);
+            }
+        }
+        return operationOneMonth;
+    }
+
     public static List<Operation> getWildraws(String date) throws Exception {
+        Utilits.networkLog("Запрос платежей и списаний");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/balance/" + date);
         s = s.replaceAll("\"Повторная активация услуги \"Кредит доверия\"\"",
                 "\"Повторная активация услуги Кредит доверия\"");
@@ -129,16 +152,19 @@ public class GetInfo {
     }
 
     public static Person getPersonInfo() throws Exception {
+        Utilits.networkLog("Запрос информации о пользователе");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/persons");
         return new Person(json);
     }
 
-    public static String getMountlyFee() throws Exception {
+    public static String getMountlyFeefromLK() throws Exception {
+        Utilits.networkLog("Запрос абонентской платы");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/monthly_fee");
         return new JSONObject(json).getString("total");
     }
 
     public static List<Ip> getIP() throws Exception {
+        Utilits.networkLog("Запрос айпишек");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/network_settings");
         JSONObject jobject = new JSONObject(json.trim());
         json = jobject.get("ips").toString();

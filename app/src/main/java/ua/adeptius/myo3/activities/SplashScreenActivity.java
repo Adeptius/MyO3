@@ -24,12 +24,16 @@ public class SplashScreenActivity extends AppCompatActivity {
         //Preparing Shared Preferences
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
-        currentSessionId = Settings.getSessionID();
+        try {
+            currentSessionId = Web.getSessionId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //TODO сообщить что нет инета
 
         try {
-            if (Web.isLoggedNow()){
+            if (true){ //TODO условие, если залогинен
                 goToMain();
             }else {
                 goToLogin();

@@ -36,14 +36,14 @@ public class Settings {
     }
 
     //SessionID
-    public static void setSessionID(String session) {
-        settingsEditor.putString("session", session);
-        settingsEditor.commit();
-    }
+//    public static void setSessionID(String session) {
+//        settingsEditor.putString("session", session);
+//        settingsEditor.commit();
+//    }
 
-    public static String getSessionID() {
-        return sPref.getString("session", "");
-    }
+//    public static String getSessionID() {
+//        return sPref.getString("session", "");
+//    }
 
 
 

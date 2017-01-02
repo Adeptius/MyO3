@@ -156,7 +156,15 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     abstract void processIfOk();
 
     private void processIfFail(){
-        //TODO Добавлять вью на мэйн экран с предложением повторно загрузить инфу
+        final View itemView = LayoutInflater.from(context).inflate(R.layout.page_load_error_try_again, null);
+        Button reloadButton = (Button) itemView.findViewById(R.id.reload_button);
+        mainLayout.addView(itemView);
+        reloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reloadFragment();
+            }
+        });
     }
 
     protected void showError(){

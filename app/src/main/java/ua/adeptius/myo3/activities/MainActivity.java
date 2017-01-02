@@ -35,9 +35,12 @@ import ua.adeptius.myo3.activities.fragments.TurboDayFragment;
 import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
 import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
+import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
 
+
+// TODO что-то грузит цпу 0.5% в фоне
 // TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -98,8 +101,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("3147698");
 
             // АБОН!!!!!!
-        Settings.setCurrentLogin("561000369");
-        Settings.setCurrentPassword("0849788");
+//        Settings.setCurrentLogin("561000369");
+//        Settings.setCurrentPassword("0849788");
 
             // АБОН!!!!!!
 //        Settings.setCurrentLogin("6191300086");
@@ -111,27 +114,43 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("3786492");
 
 
-             //Сюй Шенцай тест
-//        Settings.setCurrentLogin("6391");
-//        Settings.setCurrentPassword("ahmatovoj");
+            // для теста восстановления кредита
+        Settings.setCurrentLogin("02519238");
+        Settings.setCurrentPassword("9332428");
+
+
+//        ТЕСТОВЫЕ ДОГОВОРА
 
         // гарантированый сервис подключен!
-//        Тест Бандлтест
+//        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
 //        Settings.setCurrentLogin("441135231");
 //        Settings.setCurrentPassword("5145026");
 
+//        Тест Имя Отчество 	!-Новый абонент
+//        Settings.setCurrentLogin("441132990");
+//        Settings.setCurrentPassword("2208123");
 
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Settings.setSessionID(Web.getPhpSession(Settings.getCurrentLogin(),
-                            Settings.getCurrentPassword()));
-                } catch (CantGetSessionIdException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        	Тест Тест Тест 		!-Бесплатный 5Мбит/с
+//        Settings.setCurrentLogin("442401931");
+//        Settings.setCurrentPassword("0263949");
+
+//        тест тест тест			!-Новый абонент
+//        Settings.setCurrentLogin("61311100905");
+//        Settings.setCurrentPassword("7846791");
+
+//        test 1 ТЕСТ 1 ТЕСТ 1	Безлимитный 20 Мбит/с + МЕГОГО - 85 грн.
+//        Settings.setCurrentLogin("dhcp_test");
+//        Settings.setCurrentPassword("12345678");
+
+//        Сюй Шенцай тест
+//        Settings.setCurrentLogin("6391");
+//        Settings.setCurrentPassword("ahmatovoj");
+
+
+
+
+
+
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new GarantServiceFragment(), R.drawable.background_main1);
     }

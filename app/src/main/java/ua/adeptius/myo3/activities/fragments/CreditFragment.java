@@ -20,7 +20,7 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class CreditFragment extends BaseFragment {
 
-    private HashMap<String, String> map;
+    private String creditStatus;
     Button activateButton;
     private boolean garantServiceEnabled;
 
@@ -28,21 +28,21 @@ public class CreditFragment extends BaseFragment {
     void init() {
         titleText = "Кредит довіри";
         activateButton = getButton(R.id.activate_button);
-        activateButton.setVisibility(View.GONE);
+//        activateButton.setVisibility(View.GONE);
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        map = GetInfo.getCreditStatus();
+        creditStatus = GetInfo.getCreditStatus();
         garantServiceEnabled = GetInfo.isGarantedServiceEnabled().equals("enabled");
     }
 
     @Override
     void processIfOk() {
-        if (garantServiceEnabled){
+        if (garantServiceEnabled) {
             descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 10 діб";
-        }else {
+        } else {
             descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
         }
         setTitle(titleText, descriptionText);
@@ -54,9 +54,9 @@ public class CreditFragment extends BaseFragment {
         TextView textView = getTextView(R.id.text_title);
         StringBuilder sb = new StringBuilder();
         sb.append("Будь-ласка, погасіть заборгованість у строк ");
-        if (garantServiceEnabled){
+        if (garantServiceEnabled) {
             sb.append("десяти");
-        }else {
+        } else {
             sb.append("п'яти");
         }
         sb.append(" діб, щоб мати змогу і надалі користуватися цією послугою.");
@@ -69,11 +69,11 @@ public class CreditFragment extends BaseFragment {
         TextView activeText = getTextView(R.id.active_left);
 
         activateButton.setVisibility(View.VISIBLE);
-        if (map.get("active").startsWith("20")) {
+        if (creditStatus.startsWith("20")) {
             activateButton.setText("Послуга вже активна");
             activateButton.setClickable(false);
             try {
-                Date date = Utilits.getDate(map.get("active"));
+                Date date = Utilits.getDate(creditStatus);
                 long timeEnable = date.getTime();
                 long timeCurrent = new Date().getTime();
                 int hoursLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60 % 24;
@@ -83,6 +83,22 @@ public class CreditFragment extends BaseFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if ("restoring".equals(creditStatus)) {
+            activateButton.setVisibility(View.VISIBLE);
+            activateButton.setClickable(false);
+            activateButton.setText("Відновення...");
+        } else if ("disabled".equals(creditStatus)) {
+            TextView ifCreditLoss = getTextView(R.id.if_credit_loss);
+            activateButton.setText("Відновити кредит довіри");
+            ifCreditLoss.setVisibility(View.VISIBLE);
+            ifCreditLoss.setText("Нажаль, кредит довіри недоступний. Можливо ви раніше не оплатили " +
+                    "своєчасно. Проте ви можете його відновити.");
+            activateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showReActivateMessage();
+                }
+            });
         } else {
             activateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,14 +107,32 @@ public class CreditFragment extends BaseFragment {
                 }
             });
         }
-
-        if (map.get("allow").equals("false")) {
-            activateButton.setText("не доступно");
-            activateButton.setClickable(false);
-            //TODO добавить кнопку восстановления кредита
-        }
     }
 
+
+    private void showReActivateMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView titleView = new TextView(context);
+        titleView.setText("Відновити?");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Вартість відновлення кредиту довіри - 30 грн. Кошти мають бути на рахунку.");
+        builder.setView(textLayout);
+        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                reActivateNow();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private void activate() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -122,6 +156,21 @@ public class CreditFragment extends BaseFragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    private void reActivateNow() {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (SendInfo.reActivateCredit()) {
+                    makeSimpleSnackBar("Зачекайте, послуга відновлюється", mainLayout);
+                    reloadFragment();
+                } else {
+                    makeSimpleSnackBar("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
+                }
+            }
+        });
     }
 
     private void activateNow() {

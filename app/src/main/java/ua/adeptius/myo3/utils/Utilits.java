@@ -102,4 +102,17 @@ public class Utilits {
         Date date2 = new Date(year-1900,month-1,day,hour,minute,seconds);
         return date2;
     }
+
+    public static String oneMounthAgo(String currentDate) {
+        int year = Integer.parseInt(currentDate.substring(0, 4));
+        int mouth = Integer.parseInt(currentDate.substring(5, 7));
+        if (mouth > 1) {
+            mouth--;
+        } else {
+            mouth = 12;
+            year--;
+        }
+        String m = mouth < 10 ? "0" + mouth : mouth + "";
+        return "" + year + "-" + m;
+    }
 }

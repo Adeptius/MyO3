@@ -4,24 +4,20 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.persons.Operation;
 import ua.adeptius.myo3.model.persons.Person;
-import ua.adeptius.myo3.utils.Utilits;
 
 public class BalanceFragment extends BaseFragment {
 
     private List<Operation> operations;
     private Person person;
-    private String abonPlata;
+    private String mountlyFee;
 
     @Override
     void init() {
@@ -31,9 +27,9 @@ public class BalanceFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        operations = getOperations(5);
+        operations = GetInfo.getWildrowsByFewMonth(5);
         person = GetInfo.getPersonInfo();
-        abonPlata = GetInfo.getMountlyFee();
+        mountlyFee = GetInfo.getMountlyFeefromLK();
     }
 
     @Override
@@ -44,7 +40,7 @@ public class BalanceFragment extends BaseFragment {
         balance = balance.substring(0, balance.indexOf("."));
         titleText = "Баланс: " + balance + " грн";
         descriptionText = "Кожного першого числа знімається абонентська " +
-                "плата наперед у розмірі " + abonPlata + " грн";
+                "плата наперед у розмірі " + mountlyFee + " грн";
         setTitle(titleText, descriptionText);
         prepareAllOperations(operations);
         hideAllViewsInMainScreen();
@@ -119,34 +115,9 @@ public class BalanceFragment extends BaseFragment {
         }
     }
 
-    private List<Operation> getOperations(int count) throws Exception {
-        Calendar calendar = new GregorianCalendar();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
-        String date = year + "-" + Utilits.doTwoSymb(month);
-        List<Operation> operationOneMonth = GetInfo.getWildraws(date);
-        for (int i = 0; i < count; i++) {
-            date = oneMounthAgo(date);
-            List<Operation> next = GetInfo.getWildraws(date);
-            for (Operation operation : next) {
-                operationOneMonth.add(operation);
-            }
-        }
-        return operationOneMonth;
-    }
 
-    private static String oneMounthAgo(String currentDate) {
-        int year = Integer.parseInt(currentDate.substring(0, 4));
-        int mouth = Integer.parseInt(currentDate.substring(5, 7));
-        if (mouth > 1) {
-            mouth--;
-        } else {
-            mouth = 12;
-            year--;
-        }
-        String m = mouth < 10 ? "0" + mouth : mouth + "";
-        return "" + year + "-" + m;
-    }
+
+
 
     @Override
     int setFragmentId() {
