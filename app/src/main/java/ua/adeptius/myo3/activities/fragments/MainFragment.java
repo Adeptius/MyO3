@@ -15,11 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.Settings;
@@ -27,8 +25,6 @@ import ua.adeptius.myo3.model.ip.Ip;
 import ua.adeptius.myo3.model.persons.Mailing;
 import ua.adeptius.myo3.model.persons.Person;
 import ua.adeptius.myo3.model.persons.Phone;
-
-import static ua.adeptius.myo3.dao.DbCache.*;
 
 
 public class MainFragment extends BaseFragment {
@@ -91,7 +87,6 @@ public class MainFragment extends BaseFragment {
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
         setTitle(titleText, person.getUkrName() +
                 ", тут відображається основна інформація по вашій угоді");
-
         pib.setText(person.getLastname() + " " + person.getName() + " " + person.getSurname());
         contractNumber.setText(person.getCard());
         city.setText(person.getAddress().getCityNameUa());
@@ -185,7 +180,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(2);
-//                    reLoadPersonNoException();
+                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                     reloadFragment();
                 }
             });
@@ -194,7 +189,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(5);
-//                    reLoadPersonNoException();
+                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                     reloadFragment();
                 }
             });
@@ -203,7 +198,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(6);
-//                    reLoadPersonNoException();
+                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                     reloadFragment();
                 }
             });
@@ -336,7 +331,7 @@ public class MainFragment extends BaseFragment {
                             }
                             if (SendInfo.changeSmsNumber("+380" + text.getText(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
-//                                reLoadPersonNoException();
+                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Номер невірний.", view);
@@ -373,7 +368,7 @@ public class MainFragment extends BaseFragment {
                         try {
                             if (SendInfo.changeEmail(text.getText().toString())) {
                                 makeSimpleSnackBar("Email змінено", view);
-//                                reLoadPersonNoException();
+                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Email невірний.", view);
@@ -411,7 +406,7 @@ public class MainFragment extends BaseFragment {
                             if (SendInfo.changePassword(text.getText().toString())) {
                                 makeSimpleSnackBar("Пароль змінено", view);
                                 Settings.setCurrentPassword(text.getText().toString());
-//                                reLoadPersonNoException();
+                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Пароль невірний.", view);

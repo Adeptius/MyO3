@@ -124,6 +124,7 @@ public class GarantServiceFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.deActivateGarantedService()) {
                             makeSimpleSnackBar("Послуга відключається", mainLayout);
+                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -154,6 +155,7 @@ public class GarantServiceFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.activateGarantedService()) {
                             makeSimpleSnackBar("Послуга підключається", mainLayout);
+                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);

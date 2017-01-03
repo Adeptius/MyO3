@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Date;
-import java.util.HashMap;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
@@ -67,6 +66,7 @@ public class CreditFragment extends BaseFragment {
         textDetails.setText(getString(R.string.credit_details));
 
         TextView activeText = getTextView(R.id.active_left);
+        TextView ifCreditLoss = getTextView(R.id.if_credit_loss);
 
         activateButton.setVisibility(View.VISIBLE);
         if (creditStatus.startsWith("20")) {
@@ -80,6 +80,13 @@ public class CreditFragment extends BaseFragment {
                 int daysLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60 / 24;
                 activeText.setText("Залишилось " + daysLeft + " дні, " + hoursLeft + " годин");
                 activeText.setVisibility(View.VISIBLE);
+                if (garantServiceEnabled){
+                    if (daysLeft==9 && hoursLeft > 22)
+                        ifCreditLoss.setText("Якщо доступ не з'явився через 10 хвилин - перезавантажте роутер");
+                }else {
+                    if (daysLeft==4 && hoursLeft > 22)
+                        ifCreditLoss.setText("Якщо доступ не з'явився через 10 хвилин - перезавантажте роутер");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -88,7 +95,7 @@ public class CreditFragment extends BaseFragment {
             activateButton.setClickable(false);
             activateButton.setText("Відновення...");
         } else if ("disabled".equals(creditStatus)) {
-            TextView ifCreditLoss = getTextView(R.id.if_credit_loss);
+
             activateButton.setText("Відновити кредит довіри");
             ifCreditLoss.setVisibility(View.VISIBLE);
             ifCreditLoss.setText("Нажаль, кредит довіри недоступний. Можливо ви раніше не оплатили " +
@@ -165,6 +172,7 @@ public class CreditFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.reActivateCredit()) {
                     makeSimpleSnackBar("Зачекайте, послуга відновлюється", mainLayout);
+                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                     reloadFragment();
                 } else {
                     makeSimpleSnackBar("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
@@ -179,6 +187,7 @@ public class CreditFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateCredit()) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
+                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                     reloadFragment();
                 } else {
                     makeSimpleSnackBar("Трапилась помилка", mainLayout);

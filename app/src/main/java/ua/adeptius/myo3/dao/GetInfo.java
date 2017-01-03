@@ -11,6 +11,7 @@ import java.util.List;
 
 import ua.adeptius.myo3.model.ip.Ip;
 import ua.adeptius.myo3.model.persons.AvailableTarif;
+import ua.adeptius.myo3.model.persons.DrWebSubscribe;
 import ua.adeptius.myo3.model.persons.Operation;
 import ua.adeptius.myo3.model.persons.Person;
 import ua.adeptius.myo3.model.persons.Servise;
@@ -20,6 +21,30 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 
 public class GetInfo {
+
+    public static List<DrWebSubscribe> getDrWebServices() throws Exception{
+        Utilits.networkLog("Запрос сервисов DrWeb");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services/dr_web");
+        s = s.substring(1, s.length()-1);
+        List<DrWebSubscribe> subscribes = new ArrayList<>();
+        if (s.equals("")) return subscribes;
+        String[] splitted = Utilits.splitJson(s);
+        for (String s1 : splitted) {
+            subscribes.add(new DrWebSubscribe(s1));
+        }
+        return subscribes;
+    }
+
+    public static Boolean[] getInternetSwitches() throws Exception{
+        Utilits.networkLog("Запрос состояние вкл/выкл инета");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/internet/status");
+        JSONObject jsonObject = new JSONObject(s);
+        Boolean[] status = new Boolean[]{
+                jsonObject.getBoolean("all"),
+                jsonObject.getBoolean("world")
+        };
+        return status;
+    }
 
     public static String isGarantedServiceEnabled() throws Exception{
         Utilits.networkLog("Запрос состояние гарантированного сервиса");

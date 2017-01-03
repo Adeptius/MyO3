@@ -115,10 +115,6 @@ public class BalanceFragment extends BaseFragment {
         }
     }
 
-
-
-
-
     @Override
     int setFragmentId() {
         return R.layout.fragment_base_scrolling;

@@ -17,9 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.Settings;
@@ -34,8 +31,6 @@ public class PayFragment extends BaseFragment {
     void init() {
         titleText = "Оплата послуг";
         descriptionText = "";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.base_scroll_view);
-
     }
 
     @Override
@@ -53,7 +48,7 @@ public class PayFragment extends BaseFragment {
     private void prepareAll() {
         final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView iPayView = (ImageView) iPayViewContainer.findViewById(R.id.pay_image_view);
-        addIcon(iPayView, R.drawable.i_pay_3);
+        addImageToViewFromResources(iPayView, R.drawable.i_pay_3);
         iPayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,7 +58,7 @@ public class PayFragment extends BaseFragment {
 
         final View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView eCommerceConnect = (ImageView) eCommerceConnectContainer.findViewById(R.id.pay_image_view);
-        addIcon(eCommerceConnect, R.drawable.e_commerce3);
+        addImageToViewFromResources(eCommerceConnect, R.drawable.e_commerce3);
         eCommerceConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +69,7 @@ public class PayFragment extends BaseFragment {
 
         final View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView payMaster = (ImageView) payMasterContainer.findViewById(R.id.pay_image_view);
-        addIcon(payMaster,  R.drawable.pay_master2);
+        addImageToViewFromResources(payMaster,  R.drawable.pay_master2);
         payMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +80,7 @@ public class PayFragment extends BaseFragment {
 
         final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView privatBank = (ImageView) privatBankContainer.findViewById(R.id.pay_image_view);
-        addIcon(privatBank,  R.drawable.privat_bank4);
+        addImageToViewFromResources(privatBank,  R.drawable.privat_bank4);
         privatBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +92,7 @@ public class PayFragment extends BaseFragment {
 
         final View platonContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
         ImageView platon = (ImageView) platonContainer.findViewById(R.id.pay_image_view);
-        addIcon(platon,  R.drawable.platon2);
+        addImageToViewFromResources(platon,  R.drawable.platon2);
         platon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +113,7 @@ public class PayFragment extends BaseFragment {
     }
 
 
-    private void addIcon(ImageView view, int image) {
+    private void addImageToViewFromResources(ImageView view, int image) {
             final Bitmap loadedBitMap = BitmapFactory
                     .decodeResource(getResources(), image);
 

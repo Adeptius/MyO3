@@ -239,6 +239,7 @@ public class TarifFragment extends BaseFragment {
 
                         if (SendInfo.changeTarif(map)) {
                             makeSimpleSnackBar("Тариф змінено", mainLayout);
+                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -374,6 +375,7 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.stopService(startDate, endDate)) {
                             makeSimpleSnackBar("Успішно", mainLayout);
+                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдало", mainLayout);
@@ -427,6 +429,7 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.startService(query)) {
                             makeSimpleSnackBar("Послуга відновлена. Зачекайте.", mainLayout);
+                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдалось. Спробуйте ще раз.", mainLayout);

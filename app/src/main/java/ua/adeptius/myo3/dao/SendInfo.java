@@ -9,6 +9,61 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
 
+    public static boolean deactivateDrWeb(String id) {
+        Utilits.networkLog("Запрос отключения drweb " + id);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/dr_web/unsubscribe/" + id,
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static boolean activateDrWeb(String version) {
+        Utilits.networkLog("Запрос подключения DrWeb подписки " + version);
+        String url = "https://my.o3.ua/ajax/dr_web/subscribe/";
+        if (version.equals("classic"))url += "AV";
+        else if (version.equals("standart"))url += "AVS";
+        else if (version.equals("premium"))url += "AVSPC";
+        else if (version.equals("mobile"))url += "MOBILE";
+        else return false;
+        try {
+            String response = Web.sendPost(url, new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static boolean internetSwitchWorld() {
+        Utilits.networkLog("Запрос отключения зарубежа");
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/internet/switch/world",
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean internetSwitchAll() {
+        Utilits.networkLog("Запрос отключения всего интернета");
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/internet/switch/all",
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public static boolean deActivateGarantedService() {
         Utilits.networkLog("Запрос отключения гарантированного сервиса");

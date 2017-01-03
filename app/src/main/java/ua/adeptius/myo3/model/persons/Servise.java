@@ -3,6 +3,8 @@ package ua.adeptius.myo3.model.persons;
 
 import org.json.JSONObject;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Integer.*;
 
@@ -120,12 +122,22 @@ public class Servise {
         if (name.contains("грн.")) {
             name = name.substring(0, name.lastIndexOf("-"));
         }
-        if (name.contains("грн")) {
+        if (name.contains("-") && name.contains("грн")) {
             name = name.substring(0, name.lastIndexOf("-"));
         }
         if (name.startsWith("20")) {
             name = name.substring(name.indexOf(" ") + 1);
         }
+
+        try{
+            Matcher regexMatcher = Pattern.compile("\\d{1,3}грн").matcher(name);
+            regexMatcher.find();
+            String s = regexMatcher.group();
+            name = name.replaceAll(s,"");
+        }catch (Exception e){
+
+        }
+
 
         name = name.replaceAll("Мбит", "Мбіт");
         name = name.replaceAll("Безлимитный", "Безліміт");
@@ -148,6 +160,7 @@ public class Servise {
         if (getType() == 13 && pay_type_name.contains("аренды")) return "Оренда обладнання";
         if (getType() == 13) return "Телебачення OLL.TV";
         if (getType() == 14) return "Телебачення Divan.TV";
+        if (getType() == 9) return "Антивірус";
         return "";
     }
 

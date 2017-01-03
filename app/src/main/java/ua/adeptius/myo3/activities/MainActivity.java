@@ -1,7 +1,6 @@
 package ua.adeptius.myo3.activities;
 
 import android.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,11 +9,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,21 +22,19 @@ import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BalanceFragment;
 import ua.adeptius.myo3.activities.fragments.BaseFragment;
 import ua.adeptius.myo3.activities.fragments.CreditFragment;
+import ua.adeptius.myo3.activities.fragments.DrWebFragment;
 import ua.adeptius.myo3.activities.fragments.FreeDayFragment;
 import ua.adeptius.myo3.activities.fragments.GarantServiceFragment;
 import ua.adeptius.myo3.activities.fragments.MainFragment;
 import ua.adeptius.myo3.activities.fragments.NewsFragment;
+import ua.adeptius.myo3.activities.fragments.OnOffInternet;
 import ua.adeptius.myo3.activities.fragments.PayFragment;
 import ua.adeptius.myo3.activities.fragments.TarifFragment;
 import ua.adeptius.myo3.activities.fragments.TurboDayFragment;
-import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Settings;
-import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
-import ua.adeptius.myo3.utils.Utilits;
-
-import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
 
 
+// TODO подключить аналитику
 // TODO что-то грузит цпу 0.5% в фоне
 // TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
@@ -115,16 +110,16 @@ public class MainActivity extends AppCompatActivity
 
 
             // для теста восстановления кредита
-        Settings.setCurrentLogin("02519238");
-        Settings.setCurrentPassword("9332428");
+//        Settings.setCurrentLogin("02519238");
+//        Settings.setCurrentPassword("9332428");
 
 
 //        ТЕСТОВЫЕ ДОГОВОРА
 
         // гарантированый сервис подключен!
 //        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
-//        Settings.setCurrentLogin("441135231");
-//        Settings.setCurrentPassword("5145026");
+        Settings.setCurrentLogin("441135231");
+        Settings.setCurrentPassword("5145026");
 
 //        Тест Имя Отчество 	!-Новый абонент
 //        Settings.setCurrentLogin("441132990");
@@ -152,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new GarantServiceFragment(), R.drawable.background_main1);
+        goTo(new DrWebFragment(), R.drawable.background_main1);
     }
 
 
@@ -237,9 +232,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_garant_service) {
             goTo(new GarantServiceFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_vkl_internet) {
-
+            goTo(new OnOffInternet(), R.drawable.background_main1);
         } else if (id == R.id.nav_dr_web) {
-
+            goTo(new DrWebFragment(), R.drawable.background_main1);
         } else if (id == R.id.nav_megogo) {
 
         } else if (id == R.id.nav_divan_tv) {
