@@ -46,7 +46,7 @@ public class PayFragment extends BaseFragment {
     }
 
     private void prepareAll() {
-        final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView iPayView = (ImageView) iPayViewContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(iPayView, R.drawable.i_pay_3);
         iPayView.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +56,7 @@ public class PayFragment extends BaseFragment {
             }
         });
 
-        final View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView eCommerceConnect = (ImageView) eCommerceConnectContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(eCommerceConnect, R.drawable.e_commerce3);
         eCommerceConnect.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +67,7 @@ public class PayFragment extends BaseFragment {
         });
 
 
-        final View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView payMaster = (ImageView) payMasterContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(payMaster,  R.drawable.pay_master2);
         payMaster.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class PayFragment extends BaseFragment {
         });
 
 
-        final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView privatBank = (ImageView) privatBankContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(privatBank,  R.drawable.privat_bank4);
         privatBank.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +90,7 @@ public class PayFragment extends BaseFragment {
             }
         });
 
-        final View platonContainer = LayoutInflater.from(context).inflate(R.layout.fragment_pay_item, null);
+        final View platonContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView platon = (ImageView) platonContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(platon,  R.drawable.platon2);
         platon.setOnClickListener(new View.OnClickListener() {

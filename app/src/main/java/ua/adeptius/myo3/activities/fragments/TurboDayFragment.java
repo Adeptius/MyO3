@@ -77,7 +77,7 @@ public class TurboDayFragment extends BaseFragment {
 
 
     private void askStartDate() {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -103,7 +103,7 @@ public class TurboDayFragment extends BaseFragment {
     }
 
     private void askEndDate(final DatePicker start) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -129,7 +129,7 @@ public class TurboDayFragment extends BaseFragment {
 
 
     private void confirmDate(final DatePicker start, final DatePicker end) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -157,7 +157,7 @@ public class TurboDayFragment extends BaseFragment {
         sb.append("з: ").append(startDate);
         sb.append("\nпо: ").append(endDate);
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);

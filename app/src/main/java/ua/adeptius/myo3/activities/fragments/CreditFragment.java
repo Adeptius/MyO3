@@ -127,7 +127,7 @@ public class CreditFragment extends BaseFragment {
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setTextColor(COLOR_BLUE);
         builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText("Вартість відновлення кредиту довіри - 30 грн. Кошти мають бути на рахунку.");
         builder.setView(textLayout);
@@ -151,7 +151,7 @@ public class CreditFragment extends BaseFragment {
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setTextColor(COLOR_BLUE);
         builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText("Послуга активується до 10 хвилин.");
         builder.setView(textLayout);

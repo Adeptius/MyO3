@@ -52,7 +52,7 @@ public class TarifFragment extends BaseFragment {
 
     private void prepareServises(List<Servise> services) {
         for (final Servise service : services) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_item, null);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.item_tarif, null);
             mainLayout.addView(itemView);
 
             TextView serviceTypeName = (TextView) itemView.findViewById(R.id.service_type);
@@ -221,7 +221,7 @@ public class TarifFragment extends BaseFragment {
             sb.append(willcost);
         }
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);
@@ -271,7 +271,7 @@ public class TarifFragment extends BaseFragment {
         sb.append("3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n");
         sb.append("4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n");
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);
@@ -288,7 +288,7 @@ public class TarifFragment extends BaseFragment {
 
 
     private void askStartDate() {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -318,7 +318,7 @@ public class TarifFragment extends BaseFragment {
     }
 
     private void askEndDate(final String startDate) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -343,7 +343,7 @@ public class TarifFragment extends BaseFragment {
     }
 
     private void confirmDate(final String startDate, final String endDate) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.fragment_tarif_datepicker, null);
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         builder.setCancelable(true);
@@ -361,7 +361,7 @@ public class TarifFragment extends BaseFragment {
         sb.append("з: " + startDate);
         sb.append("\nпо: " + endDate);
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText(sb.toString());
         builder.setView(textLayout);
@@ -402,7 +402,7 @@ public class TarifFragment extends BaseFragment {
         titleView.setTextColor(COLOR_BLUE);
         builder.setCustomTitle(titleView);
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText("Це займе від пари хвилин до години.");
         builder.setView(textLayout);

@@ -52,7 +52,7 @@ public class NewsFragment extends BaseFragment {
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
 
-            final View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_news_item, null);
+            final View itemView = LayoutInflater.from(context).inflate(R.layout.item_piece_of_news, null);
 
             ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
             TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);

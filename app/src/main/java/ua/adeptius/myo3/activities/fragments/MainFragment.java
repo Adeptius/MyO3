@@ -132,7 +132,7 @@ public class MainFragment extends BaseFragment {
             titleView.setTypeface(null, Typeface.BOLD);
             titleView.setTextColor(COLOR_BLUE);
             builder.setCustomTitle(titleView);
-            View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+            View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
             TextView text = (TextView) textLayout.findViewById(R.id.text);
             StringBuilder sb = new StringBuilder();
             sb.append("На вашому рахунку недостатньо коштів.\n");

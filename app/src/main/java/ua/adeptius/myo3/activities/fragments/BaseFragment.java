@@ -150,7 +150,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     abstract void processIfOk();
 
     private void processIfFail(){
-        final View itemView = LayoutInflater.from(context).inflate(R.layout.page_load_error_try_again, null);
+        final View itemView = LayoutInflater.from(context).inflate(R.layout.item_page_load_error, null);
         Button reloadButton = (Button) itemView.findViewById(R.id.reload_button);
         mainLayout.addView(itemView);
         reloadButton.setOnClickListener(new View.OnClickListener() {

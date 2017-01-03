@@ -54,7 +54,7 @@ public class BalanceFragment extends BaseFragment {
 
     private void prepareAllOperations(List<Operation> operations) {
         for (Operation operation : operations) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.fragment_balance_item_operation, null);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.item_balance_operation, null);
             mainLayout.addView(itemView);
 
             TextView textOperationDate = (TextView) itemView.findViewById(R.id.operation_date);

@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class DrWebFragment extends BaseFragment {
 
     @Override
     void init() {
-        titleText = "Антивірус DrWeb";
         hideAllViewsInMainScreen();
     }
 
@@ -58,7 +56,7 @@ public class DrWebFragment extends BaseFragment {
 
         if (subscribes != null) {
             for (final DrWebSubscribe subscribe : subscribes) {
-                View drWebLayout = LayoutInflater.from(context).inflate(R.layout.fragment_drweb_item, null);
+                View drWebLayout = LayoutInflater.from(context).inflate(R.layout.item_drweb, null);
 
 
                 TextView cost = (TextView) drWebLayout.findViewById(R.id.dr_web_cost);
@@ -129,7 +127,7 @@ public class DrWebFragment extends BaseFragment {
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setTextColor(COLOR_BLUE);
         builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.alert_builder_message, null);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText("Послуга буде вимкнена в останній день місяця.");
         builder.setView(textLayout);
@@ -170,7 +168,7 @@ public class DrWebFragment extends BaseFragment {
         titleView.setBackgroundColor(Color.WHITE);
         builder.setCustomTitle(titleView);
 
-        View layout = LayoutInflater.from(context).inflate(R.layout.dr_web_choise_item, null);
+        View layout = LayoutInflater.from(context).inflate(R.layout.item_dr_web_choise, null);
         ImageView classic = (ImageView) layout.findViewById(R.id.activate_classic);
         ImageView standart = (ImageView) layout.findViewById(R.id.activate_standart);
         ImageView premium = (ImageView) layout.findViewById(R.id.activate_premium);
