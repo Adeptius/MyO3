@@ -8,19 +8,41 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import ua.adeptius.myo3.model.ip.Ip;
-import ua.adeptius.myo3.model.persons.AvailableTarif;
-import ua.adeptius.myo3.model.persons.DrWebSubscribe;
-import ua.adeptius.myo3.model.persons.Operation;
-import ua.adeptius.myo3.model.persons.Person;
-import ua.adeptius.myo3.model.persons.Servise;
+import ua.adeptius.myo3.model.Ip;
+import ua.adeptius.myo3.model.AvailableTarif;
+import ua.adeptius.myo3.model.DrWebSubscribe;
+import ua.adeptius.myo3.model.MegogoPts;
+import ua.adeptius.myo3.model.Operation;
+import ua.adeptius.myo3.model.Person;
+import ua.adeptius.myo3.model.Servise;
 import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 
 public class GetInfo {
+
+    public static List<MegogoPts> getMegogoPts() throws Exception{
+        Utilits.networkLog("Запрос какой-то хрени мегого птс");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo");
+        List<MegogoPts> pts = new ArrayList<>();
+        s = new JSONObject(s).getString("megogoPts");
+        s = s.substring(1, s.length()-1);
+        Matcher regexMatcher = Pattern.compile("\"\\d{1,5}\":").matcher(s);
+        while(regexMatcher.find()){
+            String math = regexMatcher.group();
+            s = s.replaceAll(math, "");
+        }
+        if (s.equals("")) return pts;
+        String[] splitted = Utilits.splitJson(s);
+        for (String s1 : splitted) {
+            pts.add(new MegogoPts(s1));
+        }
+        return pts;
+    }
 
     public static List<DrWebSubscribe> getDrWebServices() throws Exception{
         Utilits.networkLog("Запрос сервисов DrWeb");

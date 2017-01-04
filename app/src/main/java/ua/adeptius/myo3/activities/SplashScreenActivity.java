@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.Web;
-import ua.adeptius.myo3.model.Settings;
+import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
 public class SplashScreenActivity extends AppCompatActivity {

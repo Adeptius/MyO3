@@ -9,15 +9,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import ua.adeptius.myo3.model.Settings;
-import ua.adeptius.myo3.model.exceptions.CantGetSessionIdException;
+import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
 public class Web {
@@ -47,7 +45,7 @@ public class Web {
         sessionCreatedTime = new GregorianCalendar().getTimeInMillis();
     }
 
-    private static String getPhpSession() throws CantGetSessionIdException {
+    private static String getPhpSession() throws Exception {
         MechanizeAgent agent = new MechanizeAgent();
         Document page = agent.get("https://my.o3.ua/login");
         Form form = page.form("login_form");
@@ -63,7 +61,7 @@ public class Web {
             form = null;
             return session;
         } else {
-            throw new CantGetSessionIdException();
+            throw new Exception();
         }
     }
 

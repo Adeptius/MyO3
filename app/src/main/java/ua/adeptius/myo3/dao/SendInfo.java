@@ -3,8 +3,8 @@ package ua.adeptius.myo3.dao;
 
 import java.util.HashMap;
 
-import ua.adeptius.myo3.model.Settings;
-import ua.adeptius.myo3.model.persons.Phone;
+import ua.adeptius.myo3.utils.Settings;
+import ua.adeptius.myo3.model.Phone;
 import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {

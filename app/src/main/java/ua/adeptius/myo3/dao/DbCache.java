@@ -1,12 +1,6 @@
 package ua.adeptius.myo3.dao;
 
 
-import java.util.List;
-
-import ua.adeptius.myo3.model.ip.Ip;
-import ua.adeptius.myo3.model.persons.Operation;
-import ua.adeptius.myo3.model.persons.Person;
-
 public class DbCache {
 //
 //

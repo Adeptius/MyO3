@@ -14,40 +14,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
 import com.bumptech.glide.load.resource.gif.GifResourceEncoder;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResourceEncoder;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.signature.MediaStoreSignature;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.activities.fragments.BalanceFragment;
-import ua.adeptius.myo3.activities.fragments.BaseFragment;
-import ua.adeptius.myo3.activities.fragments.BonusFragment;
-import ua.adeptius.myo3.activities.fragments.CreditFragment;
-import ua.adeptius.myo3.activities.fragments.DivanTvFragment;
-import ua.adeptius.myo3.activities.fragments.DrWebFragment;
-import ua.adeptius.myo3.activities.fragments.FreeDayFragment;
-import ua.adeptius.myo3.activities.fragments.FriendFragment;
-import ua.adeptius.myo3.activities.fragments.GarantServiceFragment;
-import ua.adeptius.myo3.activities.fragments.MainFragment;
-import ua.adeptius.myo3.activities.fragments.MegogoFragment;
-import ua.adeptius.myo3.activities.fragments.NewsFragment;
-import ua.adeptius.myo3.activities.fragments.OllTvFragment;
-import ua.adeptius.myo3.activities.fragments.OnOffInternet;
-import ua.adeptius.myo3.activities.fragments.PayFragment;
-import ua.adeptius.myo3.activities.fragments.SettingsFragment;
-import ua.adeptius.myo3.activities.fragments.SupportFragment;
-import ua.adeptius.myo3.activities.fragments.TarifFragment;
-import ua.adeptius.myo3.activities.fragments.TurboDayFragment;
-import ua.adeptius.myo3.model.Settings;
+import ua.adeptius.myo3.fragments.BalanceFragment;
+import ua.adeptius.myo3.fragments.BaseFragment;
+import ua.adeptius.myo3.fragments.BonusFragment;
+import ua.adeptius.myo3.fragments.CreditFragment;
+import ua.adeptius.myo3.fragments.DivanTvFragment;
+import ua.adeptius.myo3.fragments.DrWebFragment;
+import ua.adeptius.myo3.fragments.FreeDayFragment;
+import ua.adeptius.myo3.fragments.FriendFragment;
+import ua.adeptius.myo3.fragments.GarantServiceFragment;
+import ua.adeptius.myo3.fragments.MainFragment;
+import ua.adeptius.myo3.fragments.MegogoFragment;
+import ua.adeptius.myo3.fragments.NewsFragment;
+import ua.adeptius.myo3.fragments.OllTvFragment;
+import ua.adeptius.myo3.fragments.OnOffInternet;
+import ua.adeptius.myo3.fragments.PayFragment;
+import ua.adeptius.myo3.fragments.SettingsFragment;
+import ua.adeptius.myo3.fragments.SupportFragment;
+import ua.adeptius.myo3.fragments.TarifFragment;
+import ua.adeptius.myo3.fragments.TurboDayFragment;
+import ua.adeptius.myo3.utils.Settings;
 
 
 
@@ -80,6 +74,7 @@ public class MainActivity extends AppCompatActivity
 
         //TODO переместить это в сплэш скрин
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
+
 
 
 //        try {
@@ -155,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new DrWebFragment());
+        goTo(new MegogoFragment());
     }
 
 
