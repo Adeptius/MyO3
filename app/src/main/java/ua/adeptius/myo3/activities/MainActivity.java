@@ -2,6 +2,7 @@ package ua.adeptius.myo3.activities;
 
 import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -18,6 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
+import com.bumptech.glide.load.resource.gif.GifResourceEncoder;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResourceEncoder;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.MediaStoreSignature;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.fragments.BalanceFragment;
@@ -42,15 +50,14 @@ import ua.adeptius.myo3.activities.fragments.TurboDayFragment;
 import ua.adeptius.myo3.model.Settings;
 
 
+
 // TODO подключить аналитику
 // TODO что-то грузит цпу 0.5% в фоне
 // TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static TextView titleTextView, descriptionTextView;
     public static String title = "";
-    public static ProgressBar progressBar;
 
 
     @Override
@@ -73,16 +80,13 @@ public class MainActivity extends AppCompatActivity
 
         //TODO переместить это в сплэш скрин
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
-        progressBar = (ProgressBar) findViewById(R.id.main_progress_bar);
+
 
 //        try {
 //            Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-
-        titleTextView = (TextView) findViewById(R.id.title_text_view);
-        descriptionTextView = (TextView) findViewById(R.id.description_text_view);
 
         //мой договор
 //        Settings.setCurrentLogin("02514521");
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new MegogoFragment(), R.drawable.background_megogo4);
+        goTo(new DrWebFragment());
     }
 
 
@@ -206,10 +210,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void goTo(BaseFragment fragment,int imageId){
+    private void goTo(BaseFragment fragment){
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
-        Glide.with(this).load(imageId).dontTransform().into((ImageView) findViewById(R.id.backdrop));
+        GifBitmapWrapperResourceEncoder mEncoder = new GifBitmapWrapperResourceEncoder(new BitmapEncoder(Bitmap.CompressFormat.PNG, 100), new GifResourceEncoder(Glide.get(this).getBitmapPool()));
+//        Glide.with(this)
+//                .load(imageId)
+//                .encoder(mEncoder)
+//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                .centerCrop()
+//                .into((ImageView) findViewById(R.id.backdrop));
+
+
     }
 
 
@@ -218,41 +230,41 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_news) {
-            goTo(new NewsFragment(), R.drawable.background_news6);
+            goTo(new NewsFragment());
         } else if (id == R.id.nav_main_info) {
-            goTo(new MainFragment(), R.drawable.background_main1);//TODO image
+            goTo(new MainFragment());//TODO image
         } else if (id == R.id.nav_balance) {
-            goTo(new BalanceFragment(), R.drawable.background_balance2);
+            goTo(new BalanceFragment());
         } else if (id == R.id.nav_add_balance) {
-            goTo(new PayFragment(), R.drawable.background_main1);//TODO image
+            goTo(new PayFragment());//TODO image
         } else if (id == R.id.nav_tarif_plans) {
-            goTo(new TarifFragment(), R.drawable.background_tarifs);//TODO image
+            goTo(new TarifFragment());//TODO image
         } else if (id == R.id.nav_free_day) {
-            goTo(new FreeDayFragment(), R.drawable.background_speed2);
+            goTo(new FreeDayFragment());
         } else if (id == R.id.nav_turbo_day) {
-            goTo(new TurboDayFragment(), R.drawable.background_speed2);
+            goTo(new TurboDayFragment());
         } else if (id == R.id.nav_dovira) {
-            goTo(new CreditFragment(), R.drawable.background_main1);//TODO image
+            goTo(new CreditFragment());//TODO image
         } else if (id == R.id.nav_garant_service) {
-            goTo(new GarantServiceFragment(), R.drawable.background_main1);//TODO image
+            goTo(new GarantServiceFragment());//TODO image
         } else if (id == R.id.nav_vkl_internet) {
-            goTo(new OnOffInternet(), R.drawable.background_main1);//TODO image
+            goTo(new OnOffInternet());//TODO image
         } else if (id == R.id.nav_dr_web) {
-            goTo(new DrWebFragment(), R.drawable.background_drweb2);
+            goTo(new DrWebFragment());
         } else if (id == R.id.nav_megogo) {
-            goTo(new MegogoFragment(), R.drawable.background_megogo4);
+            goTo(new MegogoFragment());
         } else if (id == R.id.nav_divan_tv) {
-            goTo(new DivanTvFragment(), R.drawable.divantv_logo2);
+            goTo(new DivanTvFragment());
         } else if (id == R.id.nav_oll_tv) {
-            goTo(new OllTvFragment(), R.drawable.background_oll_tv);
+            goTo(new OllTvFragment());
         } else if (id == R.id.nav_friend) {
-            goTo(new FriendFragment(), R.drawable.background_main1);//TODO image
+            goTo(new FriendFragment());//TODO image
         } else if (id == R.id.nav_bonus) {
-            goTo(new BonusFragment(), R.drawable.background_main1);//TODO image
+            goTo(new BonusFragment());//TODO image
         } else if (id == R.id.nav_support) {
-            goTo(new SupportFragment(), R.drawable.background_main1);//TODO image
+            goTo(new SupportFragment());//TODO image
         } else if (id == R.id.nav_settings) {
-            goTo(new SettingsFragment(), R.drawable.background_main1);//TODO image
+            goTo(new SettingsFragment());//TODO image
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

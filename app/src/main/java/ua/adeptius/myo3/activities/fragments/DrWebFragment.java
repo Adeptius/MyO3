@@ -28,7 +28,17 @@ public class DrWebFragment extends BaseFragment {
     List<DrWebSubscribe> subscribes;
 
     @Override
+    void setAllSettings() {
+        titleText = "";
+        descriptionText = "";
+        fragmentId = R.layout.fragment_dr_web;
+        titleImage = R.drawable.background_drweb2;
+        layoutId = R.id.main_dr_web;
+    }
+
+    @Override
     void init() {
+
         hideAllViewsInMainScreen();
     }
 
@@ -245,16 +255,6 @@ public class DrWebFragment extends BaseFragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_dr_web;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.main_dr_web;
     }
 
     @Override

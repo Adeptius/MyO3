@@ -27,11 +27,21 @@ public class TurboDayFragment extends BaseFragment {
     private List<String> statistics;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Турбо день";
         descriptionText = "Платна послуга збільшення швидкості до 100мбіт";
+        fragmentId = R.layout.fragment_free_and_turbo_day;
+        titleImage = R.drawable.background_speed2;
+        layoutId = R.id.main_for_free_and_turbo_day;
+    }
+
+    @Override
+    void init() {
+
+
         hideAllViewsInMainScreen();
     }
+
 
     @Override
     void doInBackground() throws Exception {
@@ -181,16 +191,6 @@ public class TurboDayFragment extends BaseFragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_free_and_turbo_day;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.main_for_free_and_turbo_day;
     }
 
     @Override

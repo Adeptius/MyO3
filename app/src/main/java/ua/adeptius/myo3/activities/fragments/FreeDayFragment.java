@@ -32,10 +32,19 @@ public class FreeDayFragment extends BaseFragment {
     private List<String> statistics;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Вільний день";
         descriptionText = "Безкоштовна послуга збільшення швидкості до 100мбіт";
-//        mainLayout = (LinearLayout) baseView.findViewById(R.id.main_for_free_and_turbo_day);
+        fragmentId = R.layout.fragment_free_and_turbo_day;
+        titleImage = R.drawable.background_speed2;
+        layoutId = R.id.main_for_free_and_turbo_day;
+    }
+
+
+    @Override
+    void init() {
+
+
         hideAllViewsInMainScreen();
     }
 
@@ -220,16 +229,6 @@ public class FreeDayFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_free_and_turbo_day;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.main_for_free_and_turbo_day;
     }
 
     @Override

@@ -24,8 +24,19 @@ public class GarantServiceFragment extends BaseFragment {
     private boolean privatHouse;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Гарантований сервіс";
+        descriptionText = "";
+        fragmentId = R.layout.fragment_garant_service;
+        titleImage = R.drawable.background_main1;
+        layoutId = R.id.main_content_garant_service;
+    }
+
+
+    @Override
+    void init() {
+
+
         hideAllViewsInMainScreen();
     }
 
@@ -89,7 +100,7 @@ public class GarantServiceFragment extends BaseFragment {
         }else {
             descriptionText = "Послуга вартістю 10 грн/міс, яка гарантує вам якісний та дешевий сервіс";
         }
-        setTitle(titleText, descriptionText);
+        updateTitle();
 
         animateScreen();
     }
@@ -166,16 +177,6 @@ public class GarantServiceFragment extends BaseFragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_garant_service;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.main_content_garant_service;
     }
 
     @Override

@@ -39,9 +39,19 @@ public class MainFragment extends BaseFragment {
     private String mountlyFee;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Головна";
         descriptionText = "Тут відображається основна інформація по вашій угоді";
+        fragmentId = R.layout.fragment_main;
+        titleImage = R.drawable.background_main1;
+        layoutId = R.id.scroll_view_main;
+    }
+
+
+    @Override
+    void init() {
+
+
         pib = getTextView(R.id.pib);
         contractNumber = getTextView(R.id.contractNumber);
         city = getTextView(R.id.city);
@@ -85,8 +95,9 @@ public class MainFragment extends BaseFragment {
     }
 
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
-        setTitle(titleText, person.getUkrName() +
-                ", тут відображається основна інформація по вашій угоді");
+        descriptionText = person.getUkrName() +
+                ", тут відображається основна інформація по вашій угоді";
+        updateTitle();
         pib.setText(person.getLastname() + " " + person.getName() + " " + person.getSurname());
         contractNumber.setText(person.getCard());
         city.setText(person.getAddress().getCityNameUa());
@@ -161,15 +172,6 @@ public class MainFragment extends BaseFragment {
         }
     }
 
-    @Override
-    protected int setFragmentId() {
-        return R.layout.fragment_main;
-    }
-
-    @Override
-    protected int setLayoutId() {
-        return R.id.scroll_view_main;
-    }
 
     @Override
     public void onClick(View view) {

@@ -30,9 +30,18 @@ public class NewsFragment extends BaseFragment {
     private List<News> newses;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Новини та акції";
         descriptionText = "";
+        fragmentId = R.layout.fragment_news;
+        titleImage = R.drawable.background_news6;
+        layoutId = R.id.scroll_view_news;
+    }
+
+    @Override
+    void init() {
+
+
     }
 
     @Override
@@ -105,16 +114,6 @@ public class NewsFragment extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_news;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.scroll_view_news;
     }
 
     @Override

@@ -32,15 +32,22 @@ public class TarifFragment extends BaseFragment {
     private List<Servise> services;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Підключені послуги";
-        descriptionText = "Керуйте вашими послугами звідси.";
+        descriptionText = "Керуйте вашими послугами звідси";
+        fragmentId = R.layout.fragment_base_scrolling;
+        titleImage = R.drawable.background_tarifs;
+        layoutId = R.id.base_scroll_view;
+    }
+
+    @Override
+    void init() {
+
     }
 
     @Override
     void doInBackground() throws Exception {
         services = GetInfo.getServises();
-
     }
 
     @Override
@@ -469,16 +476,6 @@ public class TarifFragment extends BaseFragment {
         month = month.length() == 1 ? "0" + month : month;
         day = day.length() == 1 ? "0" + day : day;
         return year + "-" + month + "-" + day;
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_base_scrolling;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.base_scroll_view;
     }
 
     @Override

@@ -9,7 +9,18 @@ import ua.adeptius.myo3.R;
 public class MegogoFragment extends BaseFragment {
 
     @Override
+    void setAllSettings() {
+        titleText = "";
+        descriptionText = "";
+        fragmentId = R.layout.fragment_base_scrolling;
+        titleImage = R.drawable.background_megogo11;
+        layoutId = R.id.base_scroll_view;
+    }
+
+    @Override
     void init() {
+
+
         hideAllViewsInMainScreen();
     }
 
@@ -27,16 +38,6 @@ public class MegogoFragment extends BaseFragment {
     @Override
     void processIfOk() {
 
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_base_scrolling;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.base_scroll_view;
     }
 
     @Override

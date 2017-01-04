@@ -24,10 +24,19 @@ public class CreditFragment extends BaseFragment {
     private boolean garantServiceEnabled;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Кредит довіри";
+        descriptionText = "";
+        fragmentId = R.layout.fragment_credit;
+        titleImage = R.drawable.background_main1;
+        layoutId = R.id.credit_main_layout;
+    }
+
+    @Override
+    void init() {
+
+
         activateButton = getButton(R.id.activate_button);
-//        activateButton.setVisibility(View.GONE);
         hideAllViewsInMainScreen();
     }
 
@@ -44,7 +53,7 @@ public class CreditFragment extends BaseFragment {
         } else {
             descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
         }
-        setTitle(titleText, descriptionText);
+        updateTitle();
         draw();
         animateScreen();
     }
@@ -194,16 +203,6 @@ public class CreditFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_credit;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.credit_main_layout;
     }
 
     @Override

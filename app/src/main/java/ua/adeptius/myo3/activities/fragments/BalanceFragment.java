@@ -20,9 +20,17 @@ public class BalanceFragment extends BaseFragment {
     private String mountlyFee;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Баланс";
         descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
+        fragmentId = R.layout.fragment_base_scrolling;
+        layoutId = R.id.base_scroll_view;
+        titleImage = R.drawable.background_balance2;
+    }
+
+    @Override
+    void init() {
+
     }
 
     @Override
@@ -41,7 +49,7 @@ public class BalanceFragment extends BaseFragment {
         titleText = "Баланс: " + balance + " грн";
         descriptionText = "Кожного першого числа знімається абонентська " +
                 "плата наперед у розмірі " + mountlyFee + " грн";
-        setTitle(titleText, descriptionText);
+        updateTitle();
         prepareAllOperations(operations);
         hideAllViewsInMainScreen();
         animateScreen();
@@ -113,15 +121,5 @@ public class BalanceFragment extends BaseFragment {
                 current = current + Math.abs(operation.getMoney());
             }
         }
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_base_scrolling;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.base_scroll_view;
     }
 }

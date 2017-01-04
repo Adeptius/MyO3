@@ -4,6 +4,8 @@ package ua.adeptius.myo3.activities.fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.concurrent.ExecutorService;
 
@@ -30,11 +33,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected ExecutorService EXECUTOR = Utilits.EXECUTOR;
     protected View baseView;
     protected Context context;
-    protected String titleText;
-    protected String descriptionText;
+
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
+    ProgressBar progressBar;
 
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
@@ -52,18 +55,30 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1);
 
 
+    protected String titleText;
+    protected String descriptionText;
+    protected int fragmentId;
+    protected int titleImage;
+    protected int layoutId;
+
+
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        baseView = inflater.inflate(setFragmentId(), container, false);
-        mainLayout = (LinearLayout) baseView.findViewById(setLayoutId());
-        context = mainLayout.getContext();
-        setTitle(titleText, descriptionText);
-        MainActivity.progressBar.setVisibility(View.VISIBLE);
+        setAllSettings();
+        baseView = inflater.inflate(fragmentId, container, false);
+        mainLayout = (LinearLayout) baseView.findViewById(layoutId);
+        context = getActivity().getApplicationContext();
+        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
+        updateTitle();
+        showImageInTop();
         init();
         startBackgroundTask();
         return baseView;
+        //TODO добавить сюда хайд
     }
 
     public void makeSimpleSnackBar(final String message, final View text) {
@@ -79,6 +94,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         for (int i = 0; i < mainLayout.getChildCount(); i++) {
             mainLayout.getChildAt(i).setVisibility(View.GONE);
         }
+    }
+
+    protected void showImageInTop(){
+        final Bitmap loadedBitMap = BitmapFactory
+                .decodeResource(getResources(), titleImage);
+        ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
+        view.setImageBitmap(loadedBitMap);
+        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
     protected void reloadFragment(){
@@ -121,7 +144,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             @Override
             public void run() {
                 try{
-                    setTitle(titleText, descriptionText);
+                    updateTitle();
                     doInBackground();
                     HANDLER.post(new Runnable() {
                         @Override
@@ -139,7 +162,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                         }
                     });
                 }finally {
-                    MainActivity.progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -162,7 +185,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
     protected void showError(){
-        setTitle("Помилка", "Не вдалось завантажити дані");
+        titleText = "Помилка";
+        descriptionText = "Не вдалось завантажити дані";
+        updateTitle();
     }
 
     protected TextView getTextView(int id) {
@@ -185,26 +210,28 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return (Button) baseView.findViewById(id);
     }
 
-    protected void setTitle(final String titleText, final String descriptionText){
+    protected void updateTitle(){
        HANDLER.post(new Runnable() {
            @Override
            public void run() {
-               MainActivity.titleTextView.setText(titleText);
+
+               TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
+               titleTextView.setText(titleText);
+
+               TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
+               // TODO исправить отображение титла
                MainActivity.title = titleText;
                if ("".equals(descriptionText)){
-                   MainActivity.descriptionTextView.setVisibility(View.GONE);
+                   descriptionTextView.setVisibility(View.GONE);
                }else {
-                   MainActivity.descriptionTextView.setVisibility(View.VISIBLE);
+                   descriptionTextView.setVisibility(View.VISIBLE);
                }
-               MainActivity.descriptionTextView.setText(descriptionText);
+               descriptionTextView.setText(descriptionText);
            }
        });
     }
 
     abstract void init();
 
-    abstract int setFragmentId();
-
-    abstract int setLayoutId();
-
+    abstract void setAllSettings();
 }

@@ -28,9 +28,18 @@ public class PayFragment extends BaseFragment {
     private Person person;
 
     @Override
-    void init() {
+    void setAllSettings() {
         titleText = "Оплата послуг";
         descriptionText = "";
+        fragmentId = R.layout.fragment_base_scrolling;
+        titleImage = R.drawable.background_main1;
+        layoutId = R.id.base_scroll_view;
+    }
+
+    @Override
+    void init() {
+
+
     }
 
     @Override
@@ -206,16 +215,6 @@ public class PayFragment extends BaseFragment {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_base_scrolling;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.base_scroll_view;
     }
 
     @Override

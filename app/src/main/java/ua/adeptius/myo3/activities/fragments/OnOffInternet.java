@@ -13,10 +13,19 @@ public class OnOffInternet extends BaseFragment {
     private boolean internetIsActive;
     private boolean worldIsActive;
 
+    @Override
+    void setAllSettings() {
+        titleText = "Вимикання інтернету";
+        descriptionText = "";
+        fragmentId = R.layout.fragment_on_off_internet;
+        titleImage = R.drawable.background_main1;
+        layoutId = R.id.main_on_off;
+    }
 
     @Override
     void init() {
-        titleText = "Вимикання інтернету";
+
+
         hideAllViewsInMainScreen();
     }
 
@@ -85,17 +94,6 @@ public class OnOffInternet extends BaseFragment {
         });
 
 
-    }
-
-
-    @Override
-    int setFragmentId() {
-        return R.layout.fragment_on_off_internet;
-    }
-
-    @Override
-    int setLayoutId() {
-        return R.id.main_on_off;
     }
 
     @Override
