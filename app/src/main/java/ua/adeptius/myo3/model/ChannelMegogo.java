@@ -2,15 +2,15 @@ package ua.adeptius.myo3.model;
 
 import org.json.JSONObject;
 
-public class Channel {
+public class ChannelMegogo {
 
-    public Channel(String json, String iconUrl, String category) {
+    public ChannelMegogo(String json, String iconUrl, String category) {
         try{
             JSONObject jsonObject = new JSONObject(json);
             this.genre = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("genre"));
             this.title = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("title"));
             this.description = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("description"));
-            this.iconUrl = iconUrl.substring(25, iconUrl.length()-2);
+            this.iconUrl = "http://" + iconUrl.substring(25, iconUrl.length()-2);
             this.category = category;
 
             String available = "";

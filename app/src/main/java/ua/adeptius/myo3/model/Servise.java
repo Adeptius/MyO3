@@ -149,6 +149,11 @@ public class Servise {
         name = name.replaceAll("Детский\\)", "Дитячий");
         name = name.replaceAll("звезды", "зірки");
         name = name.replaceAll("Гарантированный сервис", "Гарантований сервіс");
+        name = name.replaceAll("MEGOGO Легкая", "Підписка легка");
+        name = name.replaceAll("MEGOGO Оптимальная", "Підписка оптимальна");
+        name = name.replaceAll("MEGOGO Максимальная", "Підписка максимальна");
+        name = name.replaceAll("MEGOGO Viasat Premium", "Пакет Viasat Premium");
+        name = name.replaceAll("MEGOGO FilmBox", "Пакет FilmBox");
         return name;
     }
 

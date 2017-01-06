@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new MegogoFragment());
+        goTo(new DivanTvFragment());
     }
 
 
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     private void goTo(BaseFragment fragment){
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
-        GifBitmapWrapperResourceEncoder mEncoder = new GifBitmapWrapperResourceEncoder(new BitmapEncoder(Bitmap.CompressFormat.PNG, 100), new GifResourceEncoder(Glide.get(this).getBitmapPool()));
+//        GifBitmapWrapperResourceEncoder mEncoder = new GifBitmapWrapperResourceEncoder(new BitmapEncoder(Bitmap.CompressFormat.PNG, 100), new GifResourceEncoder(Glide.get(this).getBitmapPool()));
 //        Glide.with(this)
 //                .load(imageId)
 //                .encoder(mEncoder)

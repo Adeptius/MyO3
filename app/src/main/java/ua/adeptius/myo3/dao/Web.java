@@ -6,15 +6,21 @@ import com.gistlabs.mechanize.document.Document;
 import com.gistlabs.mechanize.document.html.form.Form;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
+import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
@@ -76,6 +82,8 @@ public class Web {
 //    }
 
 
+
+
     public static String getJsonFromUrl(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -120,5 +128,27 @@ public class Web {
         Utilits.networkLog("Ответ: " + result);
         in.close();
         return result;
+    }
+
+    public static List<ChannelMegogo> getMegogoChannels(String url) throws Exception {
+        org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
+        Elements divs = doc.body().getElementsByClass("videos-inner");
+        List<ChannelMegogo> channelMegogos = new ArrayList<>();
+        for (Element div : divs) {
+            String category = "";
+            try {
+                category = div.getElementsByTag("h3").first().html();
+            } catch (Exception e) {}
+            Element ul = div.getElementsByClass("videos-mask").first()
+                    .getElementsByTag("ul").first();
+            Elements listOfLi = ul.getElementsByTag("li");
+            for (Element li : listOfLi) {
+                Element li2 = li;
+                String description = li.attr("data-description");
+                String iconUrl = li.getElementsByClass("voi__poster").first().attr("style");
+                channelMegogos.add(new ChannelMegogo(description, iconUrl, category));
+            }
+        }
+        return channelMegogos;
     }
 }

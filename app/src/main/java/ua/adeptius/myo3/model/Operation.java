@@ -44,7 +44,16 @@ public class Operation {
         }catch (Exception ignored){}
 
         if (result.contains(".0")) {
-            result = result.replaceAll("\\.0","");
+            result = result.substring(0, result.indexOf(".0"));
+        }
+        if (result.contains(".")){
+            int a = result.indexOf(".");
+            if (result.length()>a+2){
+                result = result.substring(0, a+2);
+            }
+        }
+        if (result.equals("-0")){
+            result = "0";
         }
         return result;
     }

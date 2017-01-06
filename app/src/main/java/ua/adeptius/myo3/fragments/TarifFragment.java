@@ -80,6 +80,27 @@ public class TarifFragment extends BaseFragment {
             TextView serviceCost = (TextView) itemView.findViewById(R.id.service_cost);
             serviceCost.setText(String.valueOf(service.getMonth()));
 
+            Button goToButton = (Button) itemView.findViewById(R.id.button_go_to);
+            goToButton.setVisibility(View.GONE);
+            if (service.getMyTypeName().contains("MEGOGO")) {
+                goToButton.setVisibility(View.VISIBLE);
+                goToButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       goTo(new MegogoFragment());
+                    }
+                });
+            }else if (service.getMyTypeName().contains("Антивірус")){
+                goToButton.setVisibility(View.VISIBLE);
+                goToButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        goTo(new DrWebFragment());
+                    }
+                });
+            }
+
+
             Button changeButton = (Button) itemView.findViewById(R.id.service_change_button);
             if (!service.is_allow_change()) {
                 changeButton.setVisibility(View.GONE);

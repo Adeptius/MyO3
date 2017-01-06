@@ -1,18 +1,43 @@
 package ua.adeptius.myo3.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.dao.SendInfo;
+import ua.adeptius.myo3.dao.Web;
+import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.MegogoPts;
 
 public class MegogoFragment extends BaseFragment {
+
+    List<ChannelMegogo> allChannelMegogos = new ArrayList<>();
+    List<ChannelMegogo> light = new ArrayList<>();
+    List<ChannelMegogo> optimal = new ArrayList<>();
+    List<ChannelMegogo> maximum = new ArrayList<>();
+    List<ChannelMegogo> filmBox = new ArrayList<>();
+    List<ChannelMegogo> viasat = new ArrayList<>();
+    String activeSubscribe = "";
+    String activationLink = "";
 
     private List<MegogoPts> megogoPts;
 
@@ -32,113 +57,361 @@ public class MegogoFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        megogoPts = GetInfo.getMegogoPts();
-        for (MegogoPts megogoPt : megogoPts) {
-            System.out.println(megogoPt);
+        try {
+            allChannelMegogos = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/8701-light-tv-online");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        try {
+            filmBox = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/2691-filmbox-tv-online");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            viasat = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/2701-tv1000premium-tv-online");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        megogoPts = GetInfo.getMegogoPts();
+        for (int i = megogoPts.size() - 1; i >= 0; i--) {
+            if (megogoPts.get(i).isSubscribe())
+                activeSubscribe = megogoPts.get(i).getName();
+        }
+
+        if (!"".equals(activeSubscribe)) {
+            activationLink = GetInfo.getMegogoActivationLink();
+        }
+        sortChannels();
     }
 
     @Override
     void processIfOk() {
+
         draw();
         animateScreen();
     }
 
+    private void sortChannels() {
+        for (ChannelMegogo channelMegogo : allChannelMegogos) {
+            if (channelMegogo.getAvailableIn().equals("Легка")) {
+                light.add(channelMegogo);
+            } else if (channelMegogo.getAvailableIn().equals("Оптимальна")) {
+                optimal.add(channelMegogo);
+            } else if (channelMegogo.getAvailableIn().equals("Максимальна")) {
+                maximum.add(channelMegogo);
+            }
+        }
+    }
+
     private void draw() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Національні телеканали");
-        sb.append("\nІнтерактивні канали MEGOGO");
-        sb.append("\nВідключення всієї реклами на MEGOGO");
 
-        Button lightButton = addMegogoLayoutAndreturnItsButton(
-                "Підписка легка", sb.toString(), null, 37);
-        lightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (!"".equals(activeSubscribe)) {
+            View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
+            mainLayoutMegogo.setVisibility(View.GONE);
+            TextView nameField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_name);
+            nameField.setText("Підключена послуга");
+            TextView listField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_list);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Якщо ви ще не зареєструвались на MEGOGO - зробіть це.");
+            sb.append("Також можете встановити додаток на свій пристрій");
+            listField.setText(sb.toString());
+            Button activateButton = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
+            activateButton.setText("Реєстрація");
+            activateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showMessageGoToMegogoSite();
+                }
+            });
+            Button showButton = (Button) mainLayoutMegogo.findViewById(R.id.show_button);
+            showButton.setText("Додаток");
+            showButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String appPackageName = "com.megogo.application"; // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    }
+                }
+            });
+            mainLayoutMegogo.setPadding(0,0,0,50);
 
+            mainLayout.addView(mainLayoutMegogo);
+        }
+
+        for (final MegogoPts megogoPt : megogoPts) {
+            if (megogoPt.getName().equals("Телевидение MEGOGO.NET (оптимальный за 0грн БАНДЛ) - 0 грн."))
+                continue;
+
+            String id = megogoPt.getId();
+            final String name = megogoPt.getName();
+            String cost = megogoPt.getMonth();
+            String description = megogoPt.getDescription();
+            boolean subscribed = megogoPt.isSubscribe();
+
+            View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
+            mainLayoutMegogo.setVisibility(View.GONE);
+            TextView nameField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_name);
+            TextView listField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_list);
+            Button activateButton = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
+            final Button showButton = (Button) mainLayoutMegogo.findViewById(R.id.show_button);
+            final LinearLayout channelList = (LinearLayout) mainLayoutMegogo.findViewById(R.id.list_of_chanels);
+
+            nameField.setText(name + " (" + cost + "грн/міс)");
+
+            listField.setText(description);
+
+            if (subscribed) {
+                nameField.setTextColor(COLOR_GREEN);
+                nameField.setText(name + " (підключено)");
+                activateButton.setText("Відключити");
+                activateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        askDeActivate(megogoPt);
+                    }
+                });
+            } else {
+                if ("".equals(activeSubscribe)) {
+                    activateButton.setText("Підключити");
+                } else {
+                    activateButton.setText("Перейти");
+                    if (megogoPt.getName().contains("пакет")) {
+                        activateButton.setText("Підключити");
+                    }
+                }
+
+                activateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        askActivate(megogoPt);
+                    }
+                });
             }
-        });
-
-        sb.append("\n+Колекція кращих фільмів та мультфільмів М");
-        Button optimalButton = addMegogoLayoutAndreturnItsButton(
-                "Підписка оптимальна", sb.toString(), "Безкоштовно перші 30 днів*", 77);
-        optimalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
-        sb.append("\n++Закордонні телеканали");
-        Button maximumButton = addMegogoLayoutAndreturnItsButton(
-                "Підписка максимальна", sb.toString(), null, 147);
-        maximumButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        String viasat = "В пакет входять 2 телеканали TV1000 Premium HD и TV1000 Megahit HD с " +
-                "гарячими хітами кінопрокату від найкрупніших голлівудських кіностудій.";
-        Button viasatButton = addMegogoLayoutAndreturnItsButton(
-                "Додатковий пакет Viasat Premium", viasat, null, 57);
-        viasatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        String filmBox = "Тематичні канали: кіно та серіали, мода, музика, бойові мистецтва та " +
-                "познавальні передачі (7 каналів, з них 3 - в якості HD).";
-        Button filmBoxButton = addMegogoLayoutAndreturnItsButton(
-                "Додатковий пакет FilmBox", filmBox, null, 39);
-        filmBoxButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-
-
-
-
-
-
+            showButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (channelList.getChildCount() > 0) {
+                        channelList.removeAllViews();
+                        showButton.setText("Канали");
+                    } else {
+                        showButton.setText("Сховати");
+                        if (name.equals("Підписка легка")) {
+                            showChannels(channelList, light);
+                        } else if (name.equals("Підписка оптимальна")) {
+                            showChannels(channelList, optimal);
+                        } else if (name.equals("Підписка максимальна")) {
+                            showChannels(channelList, maximum);
+                        } else if (name.equals("Додатковий пакет FilmBox")) {
+                            showChannels(channelList, filmBox);
+                        } else if (name.equals("Додатковий пакет Viasat Premium")) {
+                            showChannels(channelList, viasat);
+                        }
+                    }
+                }
+            });
+            mainLayout.addView(mainLayoutMegogo);
+        }
         addAdditionalText();
     }
 
+    private void showMessageGoToMegogoSite() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView titleView = new TextView(context);
+        titleView.setText("Реєстрація");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Зараз ви перейдете на сайт MEGOGO. Натисніть там \"Регистрация нового аккаунта\" " +
+                "та створіть собі обліковий запис");
+        builder.setView(textLayout);
+        builder.setPositiveButton("Перейти", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(activationLink));
+                startActivity(i);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
-    private void addAdditionalText(){
+
+    private void showChannels(LinearLayout container, List<ChannelMegogo> chanels) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int dpi = metrics.densityDpi;
+
+        int column = 3;
+        if (dpi > 600) {
+            column = 3;
+        } else if (dpi > 450) {
+            column = 4;
+        } else if (dpi > 300) {
+            column = 5;
+        } else if (dpi > 150) {
+            column = 6;
+        }
+
+        LinearLayout layout = null;
+
+        for (final ChannelMegogo channelMegogo : chanels) {
+            if (layout == null || layout.getChildCount() == column) {
+                layout = new LinearLayout(context);
+                container.addView(layout, MATCH_WRAP);
+            }
+            ImageView imageView = new ImageView(context);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    moreInfo(channelMegogo);
+                }
+            });
+            layout.addView(imageView, WRAP_WRAP);
+
+            int widht = container.getWidth();
+
+            int dim = widht / column;
+
+            Glide.with(this)
+                    .load(channelMegogo.getIconUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .fitCenter()
+                    .override(dim, dim)
+                    .into(imageView);
+
+        }
+    }
+
+    private void moreInfo(ChannelMegogo channelMegogo) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView textView = new TextView(context);
+        textView.setText(channelMegogo.getTitle());
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(24);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(textView);
+        builder.setMessage(channelMegogo.getDescription());
+        builder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void addAdditionalText() {
         TextView textView = new TextView(context);
         textView.setText(R.string.megogo_additional);
-        textView.setPadding(40,30,40,40);
+        textView.setPadding(40, 30, 40, 40);
         textView.setVisibility(View.GONE);
         mainLayout.addView(textView);
     }
 
-    private Button addMegogoLayoutAndreturnItsButton(String name, String list, String coment, int cost){
-        View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
-        TextView nameField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_name);
-        nameField.setText(name);
-        TextView listField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_list);
-        listField.setText(list);
-        TextView comentField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_coment);
-        if (coment != null){
-            comentField.setText(coment);
-            comentField.setVisibility(View.VISIBLE);
+
+    private void askActivate(final MegogoPts megogoPt) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView titleView = new TextView(context);
+        titleView.setText("Активувати?");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        String textMessage = "";
+        if (!"".equals(activeSubscribe) && !megogoPt.getName().contains("пакет")) {
+            textMessage = "У вас вже активовано: " + activeSubscribe + "\nПослугу буде змінено на " + megogoPt.getName();
+        } else {
+            textMessage = megogoPt.getName() + " буде активовано. \nВартість: " + megogoPt.getMonth() + "грн/міс";
         }
-        Button button = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
-        button.setText("Активувати - " + cost + " грн/міс");
-        mainLayoutMegogo.setVisibility(View.GONE);
-        mainLayout.addView(mainLayoutMegogo);
-        return button;
+        text.setText(textMessage);
+        builder.setView(textLayout);
+        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                activate(megogoPt);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
+    private void activate(final MegogoPts megogoPt) {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (SendInfo.activateMegogo(megogoPt.getId())) {
+                    makeSimpleSnackBar("10 хвилин активація..", mainLayout);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+                    goTo(new TarifFragment());
+                } else {
+                    makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                }
+            }
+        });
+    }
+
+    private void askDeActivate(final MegogoPts megogoPt) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView titleView = new TextView(context);
+        titleView.setText("Відключити?");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText(megogoPt.getName() + " буде відключено.");
+        builder.setView(textLayout);
+        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                deActivate(megogoPt);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deActivate(final MegogoPts megogoPt) {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (SendInfo.deActivateMegogo(megogoPt.getId())) {
+                    makeSimpleSnackBar("Відключення..", mainLayout);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ignored) {
+                    }
+                    goTo(new TarifFragment());
+                } else {
+                    makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {

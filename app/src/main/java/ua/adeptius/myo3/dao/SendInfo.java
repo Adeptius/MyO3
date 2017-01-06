@@ -9,6 +9,30 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
 
+
+    public static boolean deActivateMegogo(String id) {
+        Utilits.networkLog("Запрос деактивации megogo " + id);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/megogo/unsubscribe/" + id,
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean activateMegogo(String id) {
+        Utilits.networkLog("Запрос активации megogo " + id);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/megogo/subscribe/" + id,
+                    new HashMap<String, String>(), false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static boolean deactivateDrWeb(String id) {
         Utilits.networkLog("Запрос отключения drweb " + id);
         try {

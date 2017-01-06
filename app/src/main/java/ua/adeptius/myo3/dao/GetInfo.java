@@ -25,11 +25,19 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static String getMegogoActivationLink() throws Exception{
+        Utilits.networkLog("Запрос ссылки на активацию мегого");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo_auth_link");
+        s = new JSONObject(s).getString("authLink");
+        return s;
+    }
     public static List<MegogoPts> getMegogoPts() throws Exception{
         Utilits.networkLog("Запрос какой-то хрени мегого птс");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo");
         List<MegogoPts> pts = new ArrayList<>();
-        s = new JSONObject(s).getString("megogoPts");
+
+//        s = new JSONObject(s).getString("megogoPts");
+        s = s.substring(s.indexOf("\"megogoPts\":{")+12, s.length()-1 );
         s = s.substring(1, s.length()-1);
         Matcher regexMatcher = Pattern.compile("\"\\d{1,5}\":").matcher(s);
         while(regexMatcher.find()){

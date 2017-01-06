@@ -23,11 +23,11 @@ public class Utilits {
     private static boolean miscLogEnable = true;
 
     public static void networkLog(String message){
-        if (networkLogEnable) Log.d("***O3 Logger***", message);
+        if (networkLogEnable) Log.d("---O3 Logger---", message);
     }
 
-    public static void miscLog(String message){
-        if (miscLogEnable) Log.d("***O3 Logger***", message);
+    public static void log(String message){
+        if (miscLogEnable) Log.d("---O3 Logger---", message);
     }
 
     public static String[] splitJson(String json){
@@ -115,4 +115,5 @@ public class Utilits {
         String m = mouth < 10 ? "0" + mouth : mouth + "";
         return "" + year + "-" + m;
     }
+
 }

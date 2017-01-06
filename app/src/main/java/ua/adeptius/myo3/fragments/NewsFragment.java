@@ -11,6 +11,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.dao.News;
+import ua.adeptius.myo3.model.News;
 
 public class NewsFragment extends BaseFragment {
 
@@ -63,7 +68,7 @@ public class NewsFragment extends BaseFragment {
 
             final View itemView = LayoutInflater.from(context).inflate(R.layout.item_piece_of_news, null);
 
-            ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
+            final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
             TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
             TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
 
@@ -80,18 +85,23 @@ public class NewsFragment extends BaseFragment {
                     startActivity(i);
                 }
             });
+
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
+                    mainLayout.removeView(progressBar);
                     mainLayout.addView(itemView);
                     itemView.startAnimation(AnimationUtils.loadAnimation(context,
                             R.anim.main_screen_trans));
+
                 }
             });
         }
     }
 
     private void loadImageForNews(News news, ImageView imageView) {
+
+
         try {
             String url = getHiResImg(news.getUrl());
             if (url == null) {
@@ -115,6 +125,7 @@ public class NewsFragment extends BaseFragment {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void onClick(View view) {

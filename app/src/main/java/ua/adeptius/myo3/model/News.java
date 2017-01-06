@@ -1,4 +1,4 @@
-package ua.adeptius.myo3.dao;
+package ua.adeptius.myo3.model;
 
 
 public class News {
@@ -17,9 +17,6 @@ public class News {
         NumberedDate = numberedDate;
     }
 
-    public String getDate() {
-        return date;
-    }
 
     public void setDate(String date) {
         this.date = date;
@@ -56,17 +53,5 @@ public class News {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = "http://o3.ua" + imgUrl;
-    }
-
-
-    @Override
-    public String toString() {
-        return "News{" +
-                "date='" + date + '\'' +
-                ", title='" + title + '\'' +
-                ", comment='" + comment + '\'' +
-                ", url='" + url + '\'' +
-                ", imgUrl='" + imgUrl + '\'' +
-                '}';
     }
 }

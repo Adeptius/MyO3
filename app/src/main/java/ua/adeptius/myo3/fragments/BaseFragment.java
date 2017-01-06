@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import java.util.concurrent.ExecutorService;
 
 import ua.adeptius.myo3.R;
@@ -37,7 +38,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
-    ProgressBar progressBar;
+    protected ProgressBar progressBar;
 
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
@@ -60,6 +61,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected int fragmentId;
     protected int titleImage;
     protected int layoutId;
+    protected int SCREEN_WIDTH;
 
     @Nullable
     @Override
@@ -68,14 +70,24 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         baseView = inflater.inflate(fragmentId, container, false);
         mainLayout = (LinearLayout) baseView.findViewById(layoutId);
         context = getActivity();
-        progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
-        progressBar.setVisibility(View.VISIBLE);
+        SCREEN_WIDTH = getResources().getDisplayMetrics().widthPixels;
+
         updateTitle();
         showImageInTop();
         init();
         startBackgroundTask();
+
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleLarge);
+            mainLayout.addView(progressBar);
+        } else {
+            progressBar = (ProgressBar) getActivity().findViewById(R.id.main_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         return baseView;
-        //TODO добавить сюда хайд
+
     }
 
     public void makeSimpleSnackBar(final String message, final View text) {
@@ -87,13 +99,13 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    protected void hideAllViewsInMainScreen(){
+    protected void hideAllViewsInMainScreen() {
         for (int i = 0; i < mainLayout.getChildCount(); i++) {
             mainLayout.getChildAt(i).setVisibility(View.GONE);
         }
     }
 
-    protected void showImageInTop(){
+    protected void showImageInTop() {
         final Bitmap loadedBitMap = BitmapFactory
                 .decodeResource(getResources(), titleImage);
         ImageView view = (ImageView) getActivity().findViewById(R.id.backdrop);
@@ -101,7 +113,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
-    protected void reloadFragment(){
+    protected void reloadFragment() {
         FragmentManager fm = getFragmentManager();
         try {
             fm.beginTransaction().replace(R.id.content_frame, this.getClass().newInstance()).commit();
@@ -112,7 +124,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    protected void animateScreen(){
+    protected void animateScreen() {
+        mainLayout.removeView(progressBar);
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -120,9 +133,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     final int a = i;
                     try {
                         Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (InterruptedException ignored) {}
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
@@ -134,13 +145,16 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
         });
+
     }
 
-    protected void startBackgroundTask(){
+
+
+    protected void startBackgroundTask() {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
-                try{
+                try {
                     updateTitle();
                     doInBackground();
                     HANDLER.post(new Runnable() {
@@ -149,7 +163,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                             processIfOk();
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     HANDLER.post(new Runnable() {
                         @Override
@@ -158,18 +172,23 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                             processIfFail();
                         }
                     });
-                }finally {
+                } finally {
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
     }
 
+    protected void goTo(BaseFragment fragment) {
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    }
+
     abstract void doInBackground() throws Exception;
 
     abstract void processIfOk();
 
-    private void processIfFail(){
+    private void processIfFail() {
         final View itemView = LayoutInflater.from(context).inflate(R.layout.item_page_load_error, null);
         Button reloadButton = (Button) itemView.findViewById(R.id.reload_button);
         mainLayout.addView(itemView);
@@ -207,25 +226,25 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         return (Button) baseView.findViewById(id);
     }
 
-    protected void updateTitle(){
-       HANDLER.post(new Runnable() {
-           @Override
-           public void run() {
+    protected void updateTitle() {
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
 
-               TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
-               titleTextView.setText(titleText);
+                TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
+                titleTextView.setText(titleText);
 
-               TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
-               // TODO исправить отображение титла
-               MainActivity.title = titleText;
-               if ("".equals(descriptionText)){
-                   descriptionTextView.setVisibility(View.GONE);
-               }else {
-                   descriptionTextView.setVisibility(View.VISIBLE);
-               }
-               descriptionTextView.setText(descriptionText);
-           }
-       });
+                TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
+                // TODO исправить отображение титла
+                MainActivity.title = titleText;
+                if ("".equals(descriptionText)) {
+                    descriptionTextView.setVisibility(View.GONE);
+                } else {
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                }
+                descriptionTextView.setText(descriptionText);
+            }
+        });
     }
 
     abstract void init();
