@@ -130,25 +130,5 @@ public class Web {
         return result;
     }
 
-    public static List<ChannelMegogo> getMegogoChannels(String url) throws Exception {
-        org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
-        Elements divs = doc.body().getElementsByClass("videos-inner");
-        List<ChannelMegogo> channelMegogos = new ArrayList<>();
-        for (Element div : divs) {
-            String category = "";
-            try {
-                category = div.getElementsByTag("h3").first().html();
-            } catch (Exception e) {}
-            Element ul = div.getElementsByClass("videos-mask").first()
-                    .getElementsByTag("ul").first();
-            Elements listOfLi = ul.getElementsByTag("li");
-            for (Element li : listOfLi) {
-                Element li2 = li;
-                String description = li.attr("data-description");
-                String iconUrl = li.getElementsByClass("voi__poster").first().attr("style");
-                channelMegogos.add(new ChannelMegogo(description, iconUrl, category));
-            }
-        }
-        return channelMegogos;
-    }
+
 }

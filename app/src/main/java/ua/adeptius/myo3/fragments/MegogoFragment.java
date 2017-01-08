@@ -58,17 +58,17 @@ public class MegogoFragment extends BaseFragment {
     @Override
     void doInBackground() throws Exception {
         try {
-            allChannelMegogos = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/8701-light-tv-online");
+            allChannelMegogos = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/8701-light-tv-online");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            filmBox = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/2691-filmbox-tv-online");
+            filmBox = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2691-filmbox-tv-online");
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            viasat = Web.getMegogoChannels("http://megogo.net/ru/tv/channels/2701-tv1000premium-tv-online");
+            viasat = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2701-tv1000premium-tv-online");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -156,9 +156,19 @@ public class MegogoFragment extends BaseFragment {
             mainLayoutMegogo.setVisibility(View.GONE);
             TextView nameField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_name);
             TextView listField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_list);
+
             Button activateButton = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
+
             final Button showButton = (Button) mainLayoutMegogo.findViewById(R.id.show_button);
+//            if (name.equals("Підписка оптимальна")) {
+//                showButton.setText("Колекція фільмів");
+//                TextView free = (TextView) mainLayoutMegogo.findViewById(R.id.text_free_first_month);
+//                free.setVisibility(View.VISIBLE);
+//            } else if (name.equals("Підписка максимальна")) {
+//                showButton.setText("Закордонні канали");
+//            }
             final LinearLayout channelList = (LinearLayout) mainLayoutMegogo.findViewById(R.id.list_of_chanels);
+
 
             nameField.setText(name + " (" + cost + "грн/міс)");
 
@@ -198,7 +208,17 @@ public class MegogoFragment extends BaseFragment {
                 public void onClick(View v) {
                     if (channelList.getChildCount() > 0) {
                         channelList.removeAllViews();
-                        showButton.setText("Канали");
+                        if (name.equals("Підписка легка")) {
+                            showButton.setText("Канали");
+                        } else if (name.equals("Підписка оптимальна")) {
+                            showButton.setText("Канали");
+                        } else if (name.equals("Підписка максимальна")) {
+                            showButton.setText("Канали");
+                        } else if (name.equals("Додатковий пакет FilmBox")) {
+                            showButton.setText("Канали");
+                        } else if (name.equals("Додатковий пакет Viasat Premium")) {
+                            showButton.setText("Канали");
+                        }
                     } else {
                         showButton.setText("Сховати");
                         if (name.equals("Підписка легка")) {
@@ -220,35 +240,20 @@ public class MegogoFragment extends BaseFragment {
         addAdditionalText();
     }
 
-    private void showMessageGoToMegogoSite() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Реєстрація");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Зараз ви перейдете на сайт MEGOGO. Натисніть там \"Регистрация нового аккаунта\" " +
-                "та створіть собі обліковий запис");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Перейти", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(activationLink));
-                startActivity(i);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-
     private void showChannels(LinearLayout container, List<ChannelMegogo> chanels) {
+
+        TextView coment = new TextView(context);
+        coment.setTextColor(COLOR_GREEN);
+        coment.setTextSize(16);
+        coment.setTypeface(null, Typeface.BOLD);
+        if (chanels.equals(optimal)){
+            coment.setText("Всі канали з легкої підписки та плюс наступні:");
+            container.addView(coment);
+        }else if (chanels.equals(maximum)){
+            coment.setText("Всі канали з оптимальної підписки та плюс наступні:");
+            container.addView(coment);
+        }
+
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         int dpi = metrics.densityDpi;
 
@@ -292,6 +297,36 @@ public class MegogoFragment extends BaseFragment {
 
         }
     }
+
+    private void showMessageGoToMegogoSite() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        TextView titleView = new TextView(context);
+        titleView.setText("Реєстрація");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        builder.setCustomTitle(titleView);
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Зараз ви перейдете на сайт MEGOGO. Натисніть там \"Регистрация нового аккаунта\" " +
+                "та створіть собі обліковий запис");
+        builder.setView(textLayout);
+        builder.setPositiveButton("Перейти", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(activationLink));
+                startActivity(i);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+
 
     private void moreInfo(ChannelMegogo channelMegogo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

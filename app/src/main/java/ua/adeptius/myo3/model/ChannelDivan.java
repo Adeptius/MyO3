@@ -6,6 +6,7 @@ public class ChannelDivan {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
+        System.out.println(this);
     }
 
     private String id;

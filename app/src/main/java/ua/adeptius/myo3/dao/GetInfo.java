@@ -2,7 +2,13 @@ package ua.adeptius.myo3.dao;
 
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -11,6 +17,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ua.adeptius.myo3.model.ChannelDivan;
+import ua.adeptius.myo3.model.ChannelDivanDetails;
+import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.Ip;
 import ua.adeptius.myo3.model.AvailableTarif;
 import ua.adeptius.myo3.model.DrWebSubscribe;
@@ -20,10 +29,84 @@ import ua.adeptius.myo3.model.Person;
 import ua.adeptius.myo3.model.Servise;
 import ua.adeptius.myo3.utils.Utilits;
 
+import static ua.adeptius.myo3.utils.Utilits.log;
 import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 
 public class GetInfo {
+
+    public static ChannelDivanDetails getDivanDetails(String chanelId) throws Exception{
+        String url = "https://divan.tv/tv/channelInfo/" + chanelId;
+        log("Запрос инфы о канале: " + chanelId);
+        Document doc = Jsoup.connect(url).get();
+
+        String image = doc.getElementsByClass("image").first().getElementsByTag("img").first().attr("src");
+        String name = doc.getElementsByClass("tci-info").first().getElementsByTag("h1").first().html();
+        String description = doc.getElementsByClass("presentation mt20").first().getElementsByTag("p").first().html();
+        if ("".equals(description)){
+            description = doc.getElementsByClass("presentation mt20").first().getElementsByTag("p").get(1).html();
+        }
+        Elements availableOn = doc.getElementsByClass("tci-watch-block").first().getElementsByTag("a");
+        String listAvailableOn = availableOn.get(0).html();
+        for (int i = 1; i < availableOn.size(); i++) {
+            listAvailableOn += "\n" + availableOn.get(i).html();
+        }
+
+
+        Elements availableIn = doc.getElementsByClass("presentation mt20").first()
+                .getElementsByTag("p").last()
+                .getElementsByTag("a");
+
+        String listAvailableIn = availableIn.get(0).html();
+        for (int i = 1; i < availableIn.size(); i++) {
+            listAvailableIn += "\n" + availableIn.get(i).html();
+        }
+
+        return new ChannelDivanDetails(image, name,description,listAvailableIn,listAvailableOn);
+    }
+
+    public static List<ChannelDivan> getDivanChanels(String url) throws Exception {
+        String subscription = URLDecoder.decode(url, "UTF-8");
+        log("Запрос каналов в подписке: " + subscription.substring(subscription.indexOf("name=")+5));
+        Document doc = Jsoup.connect(url).get();
+        Element ul = doc.getElementsByClass("ci-channels").first();
+        Elements lis = ul.getElementsByTag("li");
+        List<ChannelDivan> channels = new ArrayList<>();
+        for (Element li : lis) {
+            Element firstDiv = li.getElementsByTag("div").first();
+            String id = firstDiv.attr("data-id");
+            Element secondDiv = firstDiv.getElementsByClass("image").first();
+            Element img = secondDiv.getElementsByTag("img").first();
+            String name = img.attr("alt");
+            String imageUrl = img.attr("src");
+            ChannelDivan channel = new ChannelDivan(id, name, imageUrl);
+            channels.add(channel);
+        }
+        log("Получено " + channels.size() + " каналов");
+        return channels;
+    }
+
+    public static List<ChannelMegogo> getMegogoChannels(String url) throws Exception {
+        org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
+        Elements divs = doc.body().getElementsByClass("videos-inner");
+        List<ChannelMegogo> channelMegogos = new ArrayList<>();
+        for (Element div : divs) {
+            String category = "";
+            try {
+                category = div.getElementsByTag("h3").first().html();
+            } catch (Exception e) {}
+            Element ul = div.getElementsByClass("videos-mask").first()
+                    .getElementsByTag("ul").first();
+            Elements listOfLi = ul.getElementsByTag("li");
+            for (Element li : listOfLi) {
+                Element li2 = li;
+                String description = li.attr("data-description");
+                String iconUrl = li.getElementsByClass("voi__poster").first().attr("style");
+                channelMegogos.add(new ChannelMegogo(description, iconUrl, category));
+            }
+        }
+        return channelMegogos;
+    }
 
     public static String getMegogoActivationLink() throws Exception{
         Utilits.networkLog("Запрос ссылки на активацию мегого");
@@ -231,4 +314,6 @@ public class GetInfo {
         }
         return ips;
     }
+
+
 }

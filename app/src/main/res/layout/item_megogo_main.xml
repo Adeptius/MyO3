@@ -28,16 +28,25 @@
             android:layout_height="wrap_content"
             android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/text_free_first_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Безкоштовно перші 30 днів"
+            android:textColor="@color/darkGreen"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/megogo_activate_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Підключити" />
 
@@ -45,7 +54,7 @@
                 android:id="@+id/show_button"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Канали" />
 
@@ -55,7 +64,9 @@
             android:id="@+id/list_of_chanels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
     </LinearLayout>
 
