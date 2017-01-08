@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -33,6 +35,7 @@ import ua.adeptius.myo3.model.ChannelMegogo;
 import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
 
+//TODO як замовити послугу
 public class DivanTvFragment extends BaseFragment {
 
     Button buttonStart;
@@ -190,7 +193,7 @@ public class DivanTvFragment extends BaseFragment {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showInfoAboutChanel(channel.getId());
+                    showInfoAboutChanel(channel);
                 }
             });
             layout.addView(imageView, WRAP_WRAP);
@@ -208,55 +211,89 @@ public class DivanTvFragment extends BaseFragment {
         }
     }
 
-    private void showInfoAboutChanel(final String id) {
+    private void showInfoAboutChanel(final ChannelDivan channelDivan) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
         final TextView titleView = new TextView(context);
-        titleView.setText("Завантаження...");
+        titleView.setText(channelDivan.getName());
         titleView.setGravity(Gravity.CENTER);
         titleView.setTextSize(24);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setTextColor(COLOR_BLUE);
+        titleView.setBackgroundColor(Color.WHITE);
         builder.setCustomTitle(titleView);
 
-//        ProgressBar progressBar = new ProgressBar(context);
-//        builder.setView(progressBar);
-        View layout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        final View layout = LayoutInflater.from(context).inflate(R.layout.item_divan_chanel_detail, null);
+        final ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
+        final TextView description = (TextView) layout.findViewById(R.id.text_description);
+        final TextView packets = (TextView) layout.findViewById(R.id.text_packets);
+        final TextView showOn = (TextView) layout.findViewById(R.id.text_show_on);
+        final TextView error = (TextView) layout.findViewById(R.id.text_error);
+        final LinearLayout lin = (LinearLayout) layout.findViewById(R.id.lin);
+        final LinearLayout loading = (LinearLayout) layout.findViewById(R.id.loading_layout);
+
+
+
         builder.setView(layout);
 
         builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Добре", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-               dialog.dismiss();
-            }
-        });
+
         AlertDialog dialog = builder.create();
         dialog.show();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    ChannelDivanDetails details = GetInfo.getDivanDetails(id);
+                    final ChannelDivanDetails details = GetInfo.getDivanDetails(channelDivan.getId());
+                    try {
+                        String url = details.getImage();
+                        URL newurl = new URL(url);
+                        final Bitmap loadedBitMap = BitmapFactory
+                                .decodeStream(newurl.openConnection().getInputStream());
+
+                        double y = loadedBitMap.getHeight();
+                        double x = loadedBitMap.getWidth();
+
+                        int currentX = ((LinearLayout)imageView.getParent()).getWidth();
+                        double ratio = y / x;
+                        final int needY = (int) (currentX * ratio);
+
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setVisibility(View.GONE);
+                                lin.setVisibility(View.VISIBLE);
+                                imageView.getLayoutParams().height = needY;
+                                imageView.setImageBitmap(loadedBitMap);
+                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-
+                            description.setText(details.getDescription());
+                            packets.setText(details.getAvailableIn());
+                            showOn.setText(details.getAvailableOn());
                         }
                     });
                 } catch (Exception e) {
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-
+                            error.setVisibility(View.VISIBLE);
                         }
                     });
                 } finally {
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-
+                            loading.setVisibility(View.GONE);
                         }
                     });
                 }

@@ -29,15 +29,26 @@ public class ChannelDivanDetails {
     }
 
     public String getDescription() {
+        String description = this.description;
+        description = description.replaceAll("<strong>","");
+        description = description.replaceAll("</strong>","");
         return description;
     }
 
     public String getAvailableIn() {
-        return availableIn;
+        String available = this.availableIn;
+        available = available.replaceAll("Детский","Дитячий");
+        available = available.replaceAll("Престижный","Престижний");
+        available = available.replaceAll("Стартовый","Стартовий");
+        return available;
     }
 
     public String getAvailableOn() {
-        return availableOn;
+        String available = this.availableOn;
+        available = available.replaceAll("телевизоре","телевізорі");
+        available = available.replaceAll("сайте","сайті");
+        available = available.replaceAll("планшете / смартфоне","мобільних пристроях");
+        return available;
     }
 
 }

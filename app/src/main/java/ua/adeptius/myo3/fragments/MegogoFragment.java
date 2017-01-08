@@ -4,6 +4,9 @@ package ua.adeptius.myo3.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.DisplayMetrics;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -328,7 +332,7 @@ public class MegogoFragment extends BaseFragment {
 
 
 
-    private void moreInfo(ChannelMegogo channelMegogo) {
+    private void moreInfo(final ChannelMegogo channelMegogo) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         TextView textView = new TextView(context);
@@ -337,14 +341,47 @@ public class MegogoFragment extends BaseFragment {
         textView.setTextSize(24);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(textView);
-        builder.setMessage(channelMegogo.getDescription());
-        builder.setPositiveButton("ОК", new DialogInterface.OnClickListener() {
+        textView.setBackgroundColor(Color.WHITE);
+
+        final View layout = LayoutInflater.from(context).inflate(R.layout.item_megogo_details, null);
+        final ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
+        final TextView description = (TextView) layout.findViewById(R.id.text_description);
+
+        description.setText(channelMegogo.getDescription());
+        EXECUTOR.submit(new Runnable() {
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void run() {
+                try {
+                    String url = channelMegogo.getIconUrl();
+                    URL newurl = new URL(url);
+                    final Bitmap loadedBitMap = BitmapFactory
+                            .decodeStream(newurl.openConnection().getInputStream());
+
+                    double y = loadedBitMap.getHeight();
+                    double x = loadedBitMap.getWidth();
+
+            int currentX = ((LinearLayout) imageView.getParent()).getWidth();
+//                    int currentX = 500;
+                    double ratio = y / x;
+                    final int needY = (int) (currentX * ratio);
+                    HANDLER.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            imageView.getLayoutParams().height = needY;
+                            imageView.setImageBitmap(loadedBitMap);
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         });
+
+
+
+        builder.setCustomTitle(textView);
+        builder.setView(layout);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
