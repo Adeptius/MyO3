@@ -43,6 +43,7 @@ public class MegogoFragment extends BaseFragment {
     private String activeSubscribe = "";
     private String activationLink = "";
     private List<MegogoPts> megogoPts;
+    private boolean hardwareIsHidden = true;
 
     @Override
     void setAllSettings() {
@@ -110,6 +111,18 @@ public class MegogoFragment extends BaseFragment {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_megogo_perevagy, null);
         perevagyLayout.setVisibility(View.GONE);
         mainLayout.addView(perevagyLayout);
+
+        final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
+        final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
+        hideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAndShowHardware(hardware, hideButton);
+            }
+        });
+
+        hardware.setVisibility(View.GONE);
+        mainLayout.addView(hardware);
 
         if (!"".equals(activeSubscribe)) {
             View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
@@ -236,6 +249,37 @@ public class MegogoFragment extends BaseFragment {
             mainLayout.addView(mainLayoutMegogo);
         }
         addAdditionalText();
+    }
+
+    private void hideAndShowHardware(View hardware, Button hideButton) {
+        LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
+        LinearLayout site = (LinearLayout) hardware.findViewById(R.id.site);
+        LinearLayout smart = (LinearLayout) hardware.findViewById(R.id.smart);
+        LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
+        LinearLayout mobile = (LinearLayout) hardware.findViewById(R.id.mobile);
+        Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String appPackageName = "com.megogo.application"; // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+        stb.setVisibility(View.GONE);
+
+        if (hardwareIsHidden){
+            hideLayout.setVisibility(View.VISIBLE);
+            hideButton.setText("Сховати");
+            hardwareIsHidden = false;
+        }else {
+            hardwareIsHidden = true;
+            hideButton.setText("Необхідне обладнання");
+            hideLayout.setVisibility(View.GONE);
+        }
     }
 
     private void showChannels(LinearLayout container, List<ChannelMegogo> chanels) {

@@ -1,10 +1,12 @@
 package ua.adeptius.myo3.fragments;
 
-import android.app.AlertDialog;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ public class OllTvFragment  extends BaseFragment {
     private List<ChannelOllTv> start;
     private List<ChannelOllTv> optimal;
     private List<ChannelOllTv> premium;
+    private boolean hardwareIsHidden = true;
 
     @Override
     void setAllSettings() {
@@ -75,6 +78,7 @@ public class OllTvFragment  extends BaseFragment {
     @Override
     void processIfOk() {
         draw();
+        hideAllViewsInMainScreen();
         animateScreen();
     }
 
@@ -84,9 +88,21 @@ public class OllTvFragment  extends BaseFragment {
         addImageToViewFromResources(image, R.drawable.oll_tv_perevagy);
         mainLayout.addView(perevagyLayout);
 
+        final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
+        final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
+        hideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAndShowHardware(hardware, hideButton);
+            }
+        });
+        mainLayout.addView(hardware);
+
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_olltv_tarif, null);
-        allChanels.setVisibility(View.GONE);
         mainLayout.addView(allChanels);
+
+        View allPackets = LayoutInflater.from(context).inflate(R.layout.item_olltv_packets, null);
+        mainLayout.addView(allPackets);
 
         buttonStart = (Button) allChanels.findViewById(R.id.olltv_button_start);
         buttonOptimal = (Button) allChanels.findViewById(R.id.olltv_button_optimal);
@@ -181,5 +197,35 @@ public class OllTvFragment  extends BaseFragment {
         view.getLayoutParams().height = needY;
         view.setImageBitmap(loadedBitMap);
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    }
+
+    private void hideAndShowHardware(View hardware, Button hideButton) {
+        LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
+        LinearLayout site = (LinearLayout) hardware.findViewById(R.id.site);
+        LinearLayout smart = (LinearLayout) hardware.findViewById(R.id.smart);
+        LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
+        LinearLayout mobile = (LinearLayout) hardware.findViewById(R.id.mobile);
+        Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String appPackageName = "tv.oll.app"; // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+
+        if (hardwareIsHidden){
+            hideLayout.setVisibility(View.VISIBLE);
+            hideButton.setText("Сховати");
+            hardwareIsHidden = false;
+        }else {
+            hardwareIsHidden = true;
+            hideButton.setText("Необхідне обладнання");
+            hideLayout.setVisibility(View.GONE);
+        }
     }
 }

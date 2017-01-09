@@ -2,10 +2,12 @@ package ua.adeptius.myo3.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,26 +41,27 @@ import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 //TODO як замовити послугу
 public class DivanTvFragment extends BaseFragment {
 
-    Button buttonStart;
-    Button buttonOptimal;
-    Button buttonPrestige;
-    Button buttonVip;
-    Button buttonFilm;
-    Button buttonEnglish;
-    Button buttonKid;
-    Button buttonTv1000;
-    Button buttonNight;
-    Button buttonViasat;
-    LinearLayout listStart;
-    LinearLayout listOptimal;
-    LinearLayout listPrestige;
-    LinearLayout listVip;
-    LinearLayout listFilm;
-    LinearLayout listEnglish;
-    LinearLayout listKid;
-    LinearLayout listTv1000;
-    LinearLayout listNight;
-    LinearLayout listViasat;
+    private Button buttonStart;
+    private Button buttonOptimal;
+    private Button buttonPrestige;
+    private Button buttonVip;
+    private Button buttonFilm;
+    private Button buttonEnglish;
+    private Button buttonKid;
+    private Button buttonTv1000;
+    private Button buttonNight;
+    private Button buttonViasat;
+    private LinearLayout listStart;
+    private LinearLayout listOptimal;
+    private LinearLayout listPrestige;
+    private LinearLayout listVip;
+    private LinearLayout listFilm;
+    private LinearLayout listEnglish;
+    private LinearLayout listKid;
+    private LinearLayout listTv1000;
+    private LinearLayout listNight;
+    private LinearLayout listViasat;
+    private boolean hardwareIsHidden = true;
 
     @Override
     void setAllSettings() {
@@ -106,6 +109,17 @@ public class DivanTvFragment extends BaseFragment {
         newsTitle3.setText("Шоу не роспочнеться без вас!");
         comentText3.setText("Ви самі обираєте що і коли дивитися.");
         mainLayout.addView(itemView);
+
+        final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
+        final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
+        hideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideAndShowHardware(hardware, hideButton);
+            }
+        });
+        hardware.setVisibility(View.GONE);
+        mainLayout.addView(hardware);
 
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_divantv_tarifs, null);
         mainLayout.addView(allChanels);
@@ -322,6 +336,36 @@ public class DivanTvFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void hideAndShowHardware(View hardware, Button hideButton) {
+        LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
+        LinearLayout site = (LinearLayout) hardware.findViewById(R.id.site);
+        LinearLayout smart = (LinearLayout) hardware.findViewById(R.id.smart);
+        LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
+        LinearLayout mobile = (LinearLayout) hardware.findViewById(R.id.mobile);
+        Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String appPackageName = "divan.tv.DivanTV"; // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+
+        if (hardwareIsHidden){
+            hideLayout.setVisibility(View.VISIBLE);
+            hideButton.setText("Сховати");
+            hardwareIsHidden = false;
+        }else {
+            hardwareIsHidden = true;
+            hideButton.setText("Необхідне обладнання");
+            hideLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

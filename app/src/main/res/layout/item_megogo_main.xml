@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textColor="@color/blue"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView

@@ -15,31 +15,32 @@
         android:orientation="vertical">
 
 
-        <Button
-            android:id="@+id/button_hide"
-            style="@style/Widget.AppCompat.Button.Colored"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Необхідне обладнання" />
+            android:gravity="center_horizontal"
+            android:text="Додаткові пакети"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/lay_hide"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/site"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/notebook" />
+                    app:srcCompat="@drawable/oll_tv_icon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,7 +59,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="На сайті"
+                            android:text="Футбол HD"
                             android:textColor="@color/blue"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -67,34 +68,63 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
-                                android:text="Дивіться телебачення зі свого компьютера без додаткового обладнання."
-                                android:textAlignment="textStart" />
+                                android:text='Канали "Футбол 1" та "Футбол 2" у якості HD' />
 
                         </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="49"
+                            android:textSize="36sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:text="грн/міс" />
 
                     </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
-                android:id="@+id/smart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/smarttv" />
+                    app:srcCompat="@drawable/oll_tv_icon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:text="Smart TV"
+                            android:text="Мегахіт"
                             android:textColor="@color/blue"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -122,141 +152,44 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
-                                android:text="Без додаткового обладнання. Перевірте чи встановленний у вас додаток на телевізорі, або встановіть його з магазину додатків."
-                                android:textAlignment="viewStart" />
+                                android:text='Канали "TV 1000 Megahit" та "TV 1000 Premium" у якості HD' />
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/stb"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/stb" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="Звичайний телевізор"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
+                            android:gravity="right"
+                            android:text="59"
+                            android:textSize="36sp"
                             android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="За допомогою мультимедіа приставки, яку ви можете арендувати приставку в компанії Фрінет всього за 29 грн/міс"
-                                android:textAlignment="textStart" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/mobile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/tablets" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:text="Мобільні пристрої"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="Дивіться телебачення зі свого планшету, або телефону."
-                                android:textAlignment="textStart" />
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/button_download"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Завантажити додаток"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Inverse" />
+                            android:gravity="right"
+                            android:text="грн/міс" />
 
                     </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
