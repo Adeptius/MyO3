@@ -46,7 +46,6 @@ import ua.adeptius.myo3.utils.Settings;
 
 
 // TODO подключить аналитику
-// TODO что-то грузит цпу 0.5% в фоне
 // TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new OllTvFragment());
+        goTo(new FriendFragment());
     }
 
 
@@ -174,7 +173,6 @@ public class MainActivity extends AppCompatActivity
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
 
-        // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -208,15 +206,6 @@ public class MainActivity extends AppCompatActivity
     private void goTo(BaseFragment fragment){
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
-//        GifBitmapWrapperResourceEncoder mEncoder = new GifBitmapWrapperResourceEncoder(new BitmapEncoder(Bitmap.CompressFormat.PNG, 100), new GifResourceEncoder(Glide.get(this).getBitmapPool()));
-//        Glide.with(this)
-//                .load(imageId)
-//                .encoder(mEncoder)
-//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                .centerCrop()
-//                .into((ImageView) findViewById(R.id.backdrop));
-
-
     }
 
 
@@ -227,23 +216,23 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_news) {
             goTo(new NewsFragment());
         } else if (id == R.id.nav_main_info) {
-            goTo(new MainFragment());//TODO image
+            goTo(new MainFragment());
         } else if (id == R.id.nav_balance) {
             goTo(new BalanceFragment());
         } else if (id == R.id.nav_add_balance) {
-            goTo(new PayFragment());//TODO image
+            goTo(new PayFragment());
         } else if (id == R.id.nav_tarif_plans) {
-            goTo(new TarifFragment());//TODO image
+            goTo(new TarifFragment());
         } else if (id == R.id.nav_free_day) {
             goTo(new FreeDayFragment());
         } else if (id == R.id.nav_turbo_day) {
             goTo(new TurboDayFragment());
         } else if (id == R.id.nav_dovira) {
-            goTo(new CreditFragment());//TODO image
+            goTo(new CreditFragment());
         } else if (id == R.id.nav_garant_service) {
-            goTo(new GarantServiceFragment());//TODO image
+            goTo(new GarantServiceFragment());
         } else if (id == R.id.nav_vkl_internet) {
-            goTo(new OnOffInternet());//TODO image
+            goTo(new OnOffInternet());
         } else if (id == R.id.nav_dr_web) {
             goTo(new DrWebFragment());
         } else if (id == R.id.nav_megogo) {
@@ -253,13 +242,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_oll_tv) {
             goTo(new OllTvFragment());
         } else if (id == R.id.nav_friend) {
-            goTo(new FriendFragment());//TODO image
+            goTo(new FriendFragment());
         } else if (id == R.id.nav_bonus) {
-            goTo(new BonusFragment());//TODO image
+            goTo(new BonusFragment());
         } else if (id == R.id.nav_support) {
-            goTo(new SupportFragment());//TODO image
+            goTo(new SupportFragment());
         } else if (id == R.id.nav_settings) {
-            goTo(new SettingsFragment());//TODO image
+            goTo(new SettingsFragment());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

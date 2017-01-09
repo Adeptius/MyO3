@@ -31,7 +31,7 @@ import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.MegogoPts;
 import ua.adeptius.myo3.utils.Utilits;
 
-//TODO переваги
+
 public class MegogoFragment extends BaseFragment {
 
     private List<ChannelMegogo> allChannelMegogos = new ArrayList<>();

@@ -235,7 +235,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 titleTextView.setText(titleText);
 
                 TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
-                // TODO исправить отображение титла
+                // TODO исправить отображение титла при переходе в другой фрагмент, если коллапс тулбар біл закріт
                 MainActivity.title = titleText;
                 if ("".equals(descriptionText)) {
                     descriptionTextView.setVisibility(View.GONE);

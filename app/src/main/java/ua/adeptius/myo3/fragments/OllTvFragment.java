@@ -4,33 +4,27 @@ package ua.adeptius.myo3.fragments;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.net.URL;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.ChannelOllTv;
-import ua.adeptius.myo3.model.ChannelDivan;
-import ua.adeptius.myo3.model.ChannelDivanDetails;
 import ua.adeptius.myo3.utils.Utilits;
 
 
+//TODO як замовити послугу
 public class OllTvFragment  extends BaseFragment {
 
     private Button buttonStart;
