@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,21 +27,21 @@ import java.util.List;
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
-import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.MegogoPts;
+import ua.adeptius.myo3.utils.Utilits;
 
+//TODO переваги
 public class MegogoFragment extends BaseFragment {
 
-    List<ChannelMegogo> allChannelMegogos = new ArrayList<>();
-    List<ChannelMegogo> light = new ArrayList<>();
-    List<ChannelMegogo> optimal = new ArrayList<>();
-    List<ChannelMegogo> maximum = new ArrayList<>();
-    List<ChannelMegogo> filmBox = new ArrayList<>();
-    List<ChannelMegogo> viasat = new ArrayList<>();
-    String activeSubscribe = "";
-    String activationLink = "";
-
+    private List<ChannelMegogo> allChannelMegogos = new ArrayList<>();
+    private List<ChannelMegogo> light = new ArrayList<>();
+    private List<ChannelMegogo> optimal = new ArrayList<>();
+    private List<ChannelMegogo> maximum = new ArrayList<>();
+    private List<ChannelMegogo> filmBox = new ArrayList<>();
+    private List<ChannelMegogo> viasat = new ArrayList<>();
+    private String activeSubscribe = "";
+    private String activationLink = "";
     private List<MegogoPts> megogoPts;
 
     @Override
@@ -91,7 +90,6 @@ public class MegogoFragment extends BaseFragment {
 
     @Override
     void processIfOk() {
-
         draw();
         animateScreen();
     }
@@ -109,6 +107,9 @@ public class MegogoFragment extends BaseFragment {
     }
 
     private void draw() {
+        View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_megogo_perevagy, null);
+        perevagyLayout.setVisibility(View.GONE);
+        mainLayout.addView(perevagyLayout);
 
         if (!"".equals(activeSubscribe)) {
             View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
@@ -164,15 +165,8 @@ public class MegogoFragment extends BaseFragment {
             Button activateButton = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
 
             final Button showButton = (Button) mainLayoutMegogo.findViewById(R.id.show_button);
-//            if (name.equals("Підписка оптимальна")) {
-//                showButton.setText("Колекція фільмів");
-//                TextView free = (TextView) mainLayoutMegogo.findViewById(R.id.text_free_first_month);
-//                free.setVisibility(View.VISIBLE);
-//            } else if (name.equals("Підписка максимальна")) {
-//                showButton.setText("Закордонні канали");
-//            }
-            final LinearLayout channelList = (LinearLayout) mainLayoutMegogo.findViewById(R.id.list_of_chanels);
 
+            final LinearLayout channelList = (LinearLayout) mainLayoutMegogo.findViewById(R.id.list_of_chanels);
 
             nameField.setText(name + " (" + cost + "грн/міс)");
 
@@ -245,7 +239,6 @@ public class MegogoFragment extends BaseFragment {
     }
 
     private void showChannels(LinearLayout container, List<ChannelMegogo> chanels) {
-
         TextView coment = new TextView(context);
         coment.setTextColor(COLOR_GREEN);
         coment.setTextSize(16);
@@ -258,20 +251,7 @@ public class MegogoFragment extends BaseFragment {
             container.addView(coment);
         }
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int dpi = metrics.densityDpi;
-
-        int column = 3;
-        if (dpi > 600) {
-            column = 3;
-        } else if (dpi > 450) {
-            column = 4;
-        } else if (dpi > 300) {
-            column = 5;
-        } else if (dpi > 150) {
-            column = 6;
-        }
-
+        int column = Utilits.calculateColums(this);
         LinearLayout layout = null;
 
         for (final ChannelMegogo channelMegogo : chanels) {

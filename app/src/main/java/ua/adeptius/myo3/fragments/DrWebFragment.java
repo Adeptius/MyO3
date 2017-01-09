@@ -123,8 +123,6 @@ public class DrWebFragment extends BaseFragment {
                 mainLayout.addView(drWebLayout, 0);
             }
         }
-
-
     }
 
     private void deativate(final String sid) {

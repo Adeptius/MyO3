@@ -40,6 +40,7 @@ public class ChannelDivanDetails {
         available = available.replaceAll("Детский","Дитячий");
         available = available.replaceAll("Престижный","Престижний");
         available = available.replaceAll("Стартовый","Стартовий");
+        available = available.replaceAll("Оптимальный","Оптимальний");
         return available;
     }
 

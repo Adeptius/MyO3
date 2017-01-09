@@ -1,6 +1,7 @@
 package ua.adeptius.myo3.utils;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
@@ -116,4 +117,20 @@ public class Utilits {
         return "" + year + "-" + m;
     }
 
+    public static int calculateColums(Fragment fragment){
+        DisplayMetrics metrics = fragment.getResources().getDisplayMetrics();
+        int dpi = metrics.densityDpi;
+
+        int column = 3;
+        if (dpi > 600) {
+            column = 3;
+        } else if (dpi > 450) {
+            column = 4;
+        } else if (dpi > 300) {
+            column = 5;
+        } else if (dpi > 150) {
+            column = 6;
+        }
+        return 4;
+    }
 }

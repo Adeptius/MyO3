@@ -31,6 +31,7 @@ import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.ChannelDivan;
 import ua.adeptius.myo3.model.ChannelDivanDetails;
 import ua.adeptius.myo3.model.ChannelMegogo;
+import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
@@ -71,7 +72,6 @@ public class DivanTvFragment extends BaseFragment {
     @Override
     void init() {
         hideAllViewsInMainScreen();
-
     }
 
     @Override
@@ -168,19 +168,7 @@ public class DivanTvFragment extends BaseFragment {
 
 
     private void drawIcons(final LinearLayout container, List<ChannelDivan> divanList) {
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int dpi = metrics.densityDpi;
-
-        int column = 3;
-        if (dpi > 600) {
-            column = 3;
-        } else if (dpi > 450) {
-            column = 4;
-        } else if (dpi > 300) {
-            column = 5;
-        } else if (dpi > 150) {
-            column = 6;
-        }
+        int column = Utilits.calculateColums(this);
 
         LinearLayout layout = null;
 
@@ -215,14 +203,14 @@ public class DivanTvFragment extends BaseFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
-        final TextView titleView = new TextView(context);
-        titleView.setText(channelDivan.getName());
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        titleView.setBackgroundColor(Color.WHITE);
-        builder.setCustomTitle(titleView);
+//        final TextView titleView = new TextView(context);
+//        titleView.setText(channelDivan.getName());
+//        titleView.setGravity(Gravity.CENTER);
+//        titleView.setTextSize(24);
+//        titleView.setTypeface(null, Typeface.BOLD);
+//        titleView.setTextColor(COLOR_BLUE);
+//        titleView.setBackgroundColor(Color.WHITE);
+//        builder.setCustomTitle(titleView);
 
         final View layout = LayoutInflater.from(context).inflate(R.layout.item_divan_chanel_detail, null);
         final ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
@@ -233,11 +221,8 @@ public class DivanTvFragment extends BaseFragment {
         final LinearLayout lin = (LinearLayout) layout.findViewById(R.id.lin);
         final LinearLayout loading = (LinearLayout) layout.findViewById(R.id.loading_layout);
 
-
-
         builder.setView(layout);
 
-        builder.setCustomTitle(titleView);
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -316,7 +301,6 @@ public class DivanTvFragment extends BaseFragment {
                             drawIcons(layout, divanList);
                         }
                     });
-
                 } catch (Exception e) {
                     HANDLER.post(new Runnable() {
                         @Override
@@ -328,7 +312,6 @@ public class DivanTvFragment extends BaseFragment {
                             layout.addView(textView);
                         }
                     });
-
                 } finally {
                     HANDLER.post(new Runnable() {
                         @Override
@@ -337,7 +320,6 @@ public class DivanTvFragment extends BaseFragment {
                         }
                     });
                 }
-
             }
         });
     }

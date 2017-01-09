@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import ua.adeptius.myo3.model.ChannelDivan;
 import ua.adeptius.myo3.model.ChannelDivanDetails;
 import ua.adeptius.myo3.model.ChannelMegogo;
+import ua.adeptius.myo3.model.ChannelOllTv;
 import ua.adeptius.myo3.model.Ip;
 import ua.adeptius.myo3.model.AvailableTarif;
 import ua.adeptius.myo3.model.DrWebSubscribe;
@@ -35,6 +36,20 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static List<ChannelOllTv> getOllTvChanels(String url) throws Exception{
+        Document doc = Jsoup.connect(url).get();
+
+        Elements lis = doc.getElementsByClass("tv-chan b-channels-list").first()
+                .getElementsByTag("li");
+        List<ChannelOllTv> list = new ArrayList<>();
+        for (Element li : lis) {
+            String imgUrl = li.getElementsByTag("img").first().attr("src");
+            String name = li.getElementsByClass("head").first().html();
+            list.add(new ChannelOllTv(name, imgUrl));
+        }
+        return list;
+    }
+
     public static ChannelDivanDetails getDivanDetails(String chanelId) throws Exception{
         String url = "https://divan.tv/tv/channelInfo/" + chanelId;
         log("Запрос инфы о канале: " + chanelId);
@@ -46,6 +61,7 @@ public class GetInfo {
         if ("".equals(description)){
             description = doc.getElementsByClass("presentation mt20").first().getElementsByTag("p").get(1).html();
         }
+        if (description.startsWith("<strong>Где смотреть:</strong>")) description = "";
         Elements availableOn = doc.getElementsByClass("tci-watch-block").first().getElementsByTag("a");
         String listAvailableOn = availableOn.get(0).html();
         for (int i = 1; i < availableOn.size(); i++) {
@@ -314,6 +330,7 @@ public class GetInfo {
         }
         return ips;
     }
+
 
 
 }
