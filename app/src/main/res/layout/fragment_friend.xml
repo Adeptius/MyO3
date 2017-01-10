@@ -69,7 +69,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:paddingBottom="5dp"
-                android:text="Тепер нехай друг зателефонує нам та замовить підключення." />
+                android:text="Вашому другу зателефонує наш співробітник протягом дня, щоб запланувати підключення. (Потрібен деякий час, щоб з'ясувати технічну можливість, та наявну бригаду)" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,14 +119,14 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:paddingBottom="5dp"
-                android:text="Протягом тижня ваша заявка буде розглянута, та друг отримає місяць безкоштовного інтернету!" />
+                android:text="Протягом дня ваша заявка буде розглянута, та друг отримає місяць безкоштовного інтернету!" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="А ви отримуєте 2 місяці безкоштовного інтернету за кожного друга!"
-            android:textAlignment="textStart"
+            android:text="А ви отримуєте 2 місяці безкоштовного інтернету!"
+            android:textAlignment="center"
             android:textColor="@color/blue"
             android:textSize="16sp" />
 
@@ -137,6 +137,30 @@
             android:layout_height="wrap_content"
             android:text="Привести друга" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_for_invites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/roundrect"
+        android:elevation="5dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Ви запрошували:"
+            android:textColor="@color/blue"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
     </LinearLayout>
 
     <TextView

@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new FriendFragment());
+        goTo(new BonusFragment());
     }
 
 

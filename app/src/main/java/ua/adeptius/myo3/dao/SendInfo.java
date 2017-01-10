@@ -1,6 +1,7 @@
 package ua.adeptius.myo3.dao;
 
 
+
 import java.util.HashMap;
 
 import ua.adeptius.myo3.utils.Settings;
@@ -9,6 +10,27 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
 
+    public static boolean spendBonuses(HashMap<String, String> map) {
+        Utilits.networkLog("Запрос траты бонусов");
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/add_refer", map, false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public static String bringNewFriend(HashMap<String, String> map) {
+        Utilits.networkLog("Запрос на приведи друга");
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/add_refer", map, false);
+            if (response.contains("успішно створена")) return "Заявка створена";
+            if (response.contains("Така заявка існує!")) return "Заявка по цьому номеру вже існує.";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Трапилась помилка..";
+    }
 
     public static boolean deActivateMegogo(String id) {
         Utilits.networkLog("Запрос деактивации megogo " + id);
@@ -252,4 +274,6 @@ public class SendInfo {
         if (response.contains("Номер успішно збережений!")) return true;
         return false;
     }
+
+
 }

@@ -17,10 +17,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ua.adeptius.myo3.model.BonusServiceSpending;
 import ua.adeptius.myo3.model.ChannelDivan;
 import ua.adeptius.myo3.model.ChannelDivanDetails;
 import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.ChannelOllTv;
+import ua.adeptius.myo3.model.FriendInvite;
 import ua.adeptius.myo3.model.Ip;
 import ua.adeptius.myo3.model.AvailableTarif;
 import ua.adeptius.myo3.model.DrWebSubscribe;
@@ -35,6 +37,36 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 
 public class GetInfo {
+
+    public static List<BonusServiceSpending> getBonusesSpending() throws Exception {
+        Utilits.networkLog("Запрос списка сервисов для оплаты");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/spending");
+        s = s.substring(1, s.length() - 1);
+        List<BonusServiceSpending> list = new ArrayList<>();
+        String[] splitted = Utilits.splitJson(s);
+        for (String s1 : splitted) {
+            list.add(new BonusServiceSpending(s1));
+        }
+        return list;
+    }
+    public static int getBonuses() throws Exception {
+        Utilits.networkLog("Запрос количества бонусов");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/amount_bonus");
+        return Integer.valueOf(s);
+    }
+
+    public static List<FriendInvite> getFriendInvites() throws Exception {
+        Utilits.networkLog("Запрос приглашений друзей");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/refer");
+        List<FriendInvite> invites = new ArrayList<>();
+        if (s.equals("[]")) return new ArrayList<>();
+        s = s.substring(1, s.length() - 1);
+        String[] splitted = Utilits.splitJson(s);
+        for (String s1 : splitted) {
+            invites.add(new FriendInvite(s1));
+        }
+        return invites;
+    }
 
     public static List<ChannelOllTv> getOllTvChanels(String url) throws Exception{
         Document doc = Jsoup.connect(url).get();
