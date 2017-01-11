@@ -12,8 +12,8 @@ public class SettingsFragment extends BaseFragment {
         titleText = "";
         descriptionText = "";
         fragmentId = R.layout.fragment_base_scrolling;
-        titleImage = R.drawable.background_main1;
         layoutId = R.id.base_scroll_view;
+        titleImage = R.drawable.background_main1;
     }
 
     @Override

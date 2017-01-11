@@ -71,10 +71,10 @@ public class FriendFragment  extends BaseFragment  {
         editSurname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editSurname.getText().toString().equals("Фамілія")){
+                if (hasFocus && editSurname.getText().toString().equals("Прізвище")){
                     editSurname.setText("");
                 }else if (!hasFocus &&  editSurname.getText().toString().equals("")){
-                    editSurname.setText("Фамілія");
+                    editSurname.setText("Прізвище");
                 }
             }
         });
@@ -146,7 +146,7 @@ public class FriendFragment  extends BaseFragment  {
                             phone = "+"+phone;
                         }
 
-                        if ("".equals(surname) || "Фамілія".equals(surname) ||
+                        if ("".equals(surname) || "Прізвище".equals(surname) ||
                                 "".equals(name) || "Ім'я".equals(name) ||
                                 "".equals(fatherName) || "По-батькові".equals(fatherName) ||
                                 "".equals(phone) || "Телефон".equals(phone) ||
@@ -226,7 +226,6 @@ public class FriendFragment  extends BaseFragment  {
             TextView name = (TextView) layout.findViewById(R.id.text_name);
             TextView adress = (TextView) layout.findViewById(R.id.text_address);
             TextView phone = (TextView) layout.findViewById(R.id.text_phone);
-
 
             int color = Color.parseColor("#2E7D32");
             if ("У розгляді".equals(invite.getStatus())){

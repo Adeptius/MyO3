@@ -38,6 +38,15 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+    public static boolean[] getBonusesStatus() throws Exception {
+        Utilits.networkLog("Запрос состояния бонусов");
+        String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_bonus");
+        boolean[] boo = new boolean[2];
+        boo[0] = new JSONObject(s).getString("public_card").equals("1");
+        boo[1] = new JSONObject(s).getBoolean("confirmed_bonus");
+        return boo;
+    }
+
     public static List<BonusServiceSpending> getBonusesSpending() throws Exception {
         Utilits.networkLog("Запрос списка сервисов для оплаты");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/spending");
@@ -49,6 +58,7 @@ public class GetInfo {
         }
         return list;
     }
+
     public static int getBonuses() throws Exception {
         Utilits.networkLog("Запрос количества бонусов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/amount_bonus");

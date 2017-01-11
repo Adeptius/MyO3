@@ -30,9 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint=""
             android:inputType="textPersonName"
-            android:text="Фамілія"
-            android:hint=""/>
+            android:text="Прізвище" />
 
         <EditText
             android:id="@+id/friend_name"

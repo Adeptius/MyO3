@@ -10,16 +10,29 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
 
-    public static boolean spendBonuses(HashMap<String, String> map) {
-        Utilits.networkLog("Запрос траты бонусов");
+    public static boolean activateBonusProgram() {
+        Utilits.networkLog("Запрос активации бонусной программы");
         try {
-            String response = Web.sendPost("https://my.o3.ua/ajax/add_refer", map, false);
+            String response = Web.sendPost("https://my.o3.ua/ajax/bonus_confirm",
+                    new HashMap<String, String>(), false);
             if (response.contains("\"success\":true")) return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
+
+    public static boolean spendBonuses(HashMap<String, String> map) {
+        Utilits.networkLog("Запрос траты бонусов");
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/pay_bonus", map, false);
+            if (response.contains("\"success\":true")) return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static String bringNewFriend(HashMap<String, String> map) {
         Utilits.networkLog("Запрос на приведи друга");
         try {

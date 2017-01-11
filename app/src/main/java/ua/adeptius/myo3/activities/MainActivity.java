@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
 
         // гарантированый сервис подключен!
 //        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
-        Settings.setCurrentLogin("441135231");
-        Settings.setCurrentPassword("5145026");
+//        Settings.setCurrentLogin("441135231");
+//        Settings.setCurrentPassword("5145026");
 
 //        Тест Имя Отчество 	!-Новый абонент
 //        Settings.setCurrentLogin("441132990");
@@ -145,8 +145,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("12345678");
 
 //        Сюй Шенцай тест
-//        Settings.setCurrentLogin("6391");
-//        Settings.setCurrentPassword("ahmatovoj");
+        Settings.setCurrentLogin("6391");
+        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new BonusFragment());
