@@ -8,7 +8,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,6 +21,7 @@ import ua.adeptius.myo3.model.ChannelDivan;
 import ua.adeptius.myo3.model.ChannelDivanDetails;
 import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.model.ChannelOllTv;
+import ua.adeptius.myo3.model.City;
 import ua.adeptius.myo3.model.FriendInvite;
 import ua.adeptius.myo3.model.Ip;
 import ua.adeptius.myo3.model.AvailableTarif;
@@ -37,6 +37,67 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 
 public class GetInfo {
+
+    public static City getCityPhones(String url) throws Exception {
+        Utilits.networkLog("Получение списка телефонов по урл: " + url);
+        Document doc = Jsoup.connect(url).get();
+        Elements editors = doc.getElementsByClass("text-editor row");
+
+        City phones = new City();
+
+        for (Element editor : editors) {
+            String raw = editor.toString();
+            raw = raw.replaceAll("&nbsp;", " ");
+            if (raw.contains("Телефон служби")) {
+                phones.setSupport(Utilits.getPhonesFromString(raw));
+            } else if (raw.contains("діл та відд")) {
+                phones.setAbon(Utilits.getPhonesFromString(raw));
+            } else if (url.equals("http://o3.ua/ua/contacts/")) {
+
+                List<String> call = new ArrayList<>();
+                call.add("(044) 593-39-29");
+                List<String> abon = new ArrayList<>();
+                abon.add("(044) 538-15-19");
+                phones.setCall(call);
+                phones.setAbon(abon);
+            }
+        }
+
+        Element divContacts = doc.getElementsByTag("tbody").first();
+        Element tr = divContacts.getElementsByTag("tr").get(1);
+        Elements td = tr.getElementsByTag("td");
+        String time = td.get(0).html().replaceAll("&nbsp;", " ");
+        String reason = td.get(1).html().replaceAll("&nbsp;", " ");
+        if (reason.contains("span")) {
+            reason = td.get(1).getElementsByTag("span").html().replaceAll("&nbsp;", " ");
+        }
+        Element a = td.get(2).getElementsByTag("a").first();
+        String adress = a.html().replaceAll("&nbsp;", " ");
+        String coordinates = a.attr("data-lat") + " " + a.attr("data-lon");
+
+        phones.setTime(time);
+        phones.setReason(reason);
+        phones.setAdress(adress);
+        phones.setCoordinates(coordinates);
+
+        return phones;
+    }
+
+    public static String getUrlOfCity(String city) throws Exception {
+        Utilits.networkLog("Получение урла на страницу города " + city);
+        String url = "http://o3.ua/ua/contacts/";
+        Document doc = Jsoup.connect(url).get();
+        Element list = doc.getElementById("citySelect");
+        Elements options = list.getElementsByTag("option");
+        for (Element option : options) {
+            if (city.equals(option.html())) {
+                String url2 = option.attr("value");
+                url2 = url2.replaceAll("\u200B", "");
+                return url2;
+            }
+        }
+        return "Ошибка получения урла для города " + city;
+    }
 
     public static boolean[] getBonusesStatus() throws Exception {
         Utilits.networkLog("Запрос состояния бонусов");
@@ -78,7 +139,8 @@ public class GetInfo {
         return invites;
     }
 
-    public static List<ChannelOllTv> getOllTvChanels(String url) throws Exception{
+    public static List<ChannelOllTv> getOllTvChanels(String url) throws Exception {
+        Utilits.networkLog("Получение каналов олл тв");
         Document doc = Jsoup.connect(url).get();
 
         Elements lis = doc.getElementsByClass("tv-chan b-channels-list").first()
@@ -92,7 +154,7 @@ public class GetInfo {
         return list;
     }
 
-    public static ChannelDivanDetails getDivanDetails(String chanelId) throws Exception{
+    public static ChannelDivanDetails getDivanDetails(String chanelId) throws Exception {
         String url = "https://divan.tv/tv/channelInfo/" + chanelId;
         log("Запрос инфы о канале: " + chanelId);
         Document doc = Jsoup.connect(url).get();
@@ -100,7 +162,7 @@ public class GetInfo {
         String image = doc.getElementsByClass("image").first().getElementsByTag("img").first().attr("src");
         String name = doc.getElementsByClass("tci-info").first().getElementsByTag("h1").first().html();
         String description = doc.getElementsByClass("presentation mt20").first().getElementsByTag("p").first().html();
-        if ("".equals(description)){
+        if ("".equals(description)) {
             description = doc.getElementsByClass("presentation mt20").first().getElementsByTag("p").get(1).html();
         }
         if (description.startsWith("<strong>Где смотреть:</strong>")) description = "";
@@ -120,12 +182,12 @@ public class GetInfo {
             listAvailableIn += "\n" + availableIn.get(i).html();
         }
 
-        return new ChannelDivanDetails(image, name,description,listAvailableIn,listAvailableOn);
+        return new ChannelDivanDetails(image, name, description, listAvailableIn, listAvailableOn);
     }
 
     public static List<ChannelDivan> getDivanChanels(String url) throws Exception {
         String subscription = URLDecoder.decode(url, "UTF-8");
-        log("Запрос каналов в подписке: " + subscription.substring(subscription.indexOf("name=")+5));
+        log("Запрос каналов в подписке: " + subscription.substring(subscription.indexOf("name=") + 5));
         Document doc = Jsoup.connect(url).get();
         Element ul = doc.getElementsByClass("ci-channels").first();
         Elements lis = ul.getElementsByTag("li");
@@ -152,7 +214,8 @@ public class GetInfo {
             String category = "";
             try {
                 category = div.getElementsByTag("h3").first().html();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             Element ul = div.getElementsByClass("videos-mask").first()
                     .getElementsByTag("ul").first();
             Elements listOfLi = ul.getElementsByTag("li");
@@ -166,22 +229,23 @@ public class GetInfo {
         return channelMegogos;
     }
 
-    public static String getMegogoActivationLink() throws Exception{
+    public static String getMegogoActivationLink() throws Exception {
         Utilits.networkLog("Запрос ссылки на активацию мегого");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo_auth_link");
         s = new JSONObject(s).getString("authLink");
         return s;
     }
-    public static List<MegogoPts> getMegogoPts() throws Exception{
+
+    public static List<MegogoPts> getMegogoPts() throws Exception {
         Utilits.networkLog("Запрос какой-то хрени мегого птс");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo");
         List<MegogoPts> pts = new ArrayList<>();
 
 //        s = new JSONObject(s).getString("megogoPts");
-        s = s.substring(s.indexOf("\"megogoPts\":{")+12, s.length()-1 );
-        s = s.substring(1, s.length()-1);
+        s = s.substring(s.indexOf("\"megogoPts\":{") + 12, s.length() - 1);
+        s = s.substring(1, s.length() - 1);
         Matcher regexMatcher = Pattern.compile("\"\\d{1,5}\":").matcher(s);
-        while(regexMatcher.find()){
+        while (regexMatcher.find()) {
             String math = regexMatcher.group();
             s = s.replaceAll(math, "");
         }
@@ -193,10 +257,10 @@ public class GetInfo {
         return pts;
     }
 
-    public static List<DrWebSubscribe> getDrWebServices() throws Exception{
+    public static List<DrWebSubscribe> getDrWebServices() throws Exception {
         Utilits.networkLog("Запрос сервисов DrWeb");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services/dr_web");
-        s = s.substring(1, s.length()-1);
+        s = s.substring(1, s.length() - 1);
         List<DrWebSubscribe> subscribes = new ArrayList<>();
         if (s.equals("")) return subscribes;
         String[] splitted = Utilits.splitJson(s);
@@ -206,7 +270,7 @@ public class GetInfo {
         return subscribes;
     }
 
-    public static Boolean[] getInternetSwitches() throws Exception{
+    public static Boolean[] getInternetSwitches() throws Exception {
         Utilits.networkLog("Запрос состояние вкл/выкл инета");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/internet/status");
         JSONObject jsonObject = new JSONObject(s);
@@ -217,10 +281,10 @@ public class GetInfo {
         return status;
     }
 
-    public static String isGarantedServiceEnabled() throws Exception{
+    public static String isGarantedServiceEnabled() throws Exception {
         Utilits.networkLog("Запрос состояние гарантированного сервиса");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/guaranteed_service");
-        if (s.contains("e_date")) return s.substring(s.indexOf("e_date")+9, s.lastIndexOf(" "));
+        if (s.contains("e_date")) return s.substring(s.indexOf("e_date") + 9, s.lastIndexOf(" "));
         if (s.contains("pay_type")) return "enabled";
         if (s.equals("[]")) return "disabled";
         if (s.contains("\"pending_enable\": true")) return "enabling";
@@ -372,7 +436,6 @@ public class GetInfo {
         }
         return ips;
     }
-
 
 
 }

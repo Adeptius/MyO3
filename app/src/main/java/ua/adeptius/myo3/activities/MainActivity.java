@@ -145,11 +145,11 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("12345678");
 
 //        Сюй Шенцай тест
-        Settings.setCurrentLogin("6391");
-        Settings.setCurrentPassword("ahmatovoj");
+//        Settings.setCurrentLogin("6391");
+//        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new BonusFragment());
+        goTo(new SupportFragment());
     }
 
 

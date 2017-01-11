@@ -59,6 +59,8 @@ public class Address {
     }
 
     public String getCityNameUa() {
+        String cityNameUa = this.cityNameUa;
+        cityNameUa = cityNameUa.replaceAll("Дніпропетровськ","Дніпро");
         return cityNameUa;
     }
 

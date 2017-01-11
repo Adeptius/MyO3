@@ -12,8 +12,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utilits {
 
@@ -29,6 +32,16 @@ public class Utilits {
 
     public static void log(String message){
         if (miscLogEnable) Log.d("---O3 Logger---", message);
+    }
+
+    public static List<String> getPhonesFromString(String s){
+        String regex = "[(]?\\d{1,5}[)]?[ ]{0,4}\\d{1,4}[-| ]\\d{1,4}[-| ]\\d{1,4}[-\\d\\d]+";
+        Matcher regexMatcher = Pattern.compile(regex).matcher(s);
+        List<String> list = new ArrayList<>();
+        while (regexMatcher.find()){
+            list.add(regexMatcher.group());
+        }
+        return list;
     }
 
     public static String[] splitJson(String json){
