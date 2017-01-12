@@ -10,6 +10,20 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
 
+    public static String rememberPassword(String card){
+        Utilits.networkLog("Запрос восстановления пароля договора : "+card);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("card", card);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/remember", map, false);
+            if (response.contains("\"success\":true")) return "Пароль відправлено на вашу пошту";
+            if (response.contains("невірний номер договору")) return "Номер угоди невірний, або ви не вказали його в особистому кабінеті раніше.";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Трапилась помилка. Можливо інтернет відсутній.";
+    }
+
     public static boolean activateBonusProgram() {
         Utilits.networkLog("Запрос активации бонусной программы");
         try {

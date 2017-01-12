@@ -40,6 +40,7 @@ public class OnOffInternet extends BaseFragment {
     void processIfOk() {
         draw();
         animateScreen();
+        updateTitle();
     }
 
     private void draw() {

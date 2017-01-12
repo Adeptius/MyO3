@@ -128,6 +128,9 @@ public class Servise {
         if (name.startsWith("20")) {
             name = name.substring(name.indexOf(" ") + 1);
         }
+        if (name.startsWith("!-")) {
+            name = name.substring(name.indexOf("!-") + 2);
+        }
 
         try{
             Matcher regexMatcher = Pattern.compile("\\d{1,3}грн").matcher(name);

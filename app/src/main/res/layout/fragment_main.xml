@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:background="@drawable/roundrect"
-            android:elevation="5dp"
+            android:elevation="@dimen/shadow_elevation"
             android:orientation="vertical">
 
             <LinearLayout

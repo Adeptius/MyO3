@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:background="@drawable/roundrect_for_news"
-        android:elevation="5dp"
+        android:elevation="@dimen/shadow_elevation"
         android:orientation="vertical">
 
 
         <ImageView
             android:id="@+id/imageView_news"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/o3_logo" />
 

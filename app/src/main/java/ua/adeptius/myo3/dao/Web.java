@@ -1,29 +1,29 @@
 package ua.adeptius.myo3.dao;
 
-import com.gistlabs.mechanize.MechanizeAgent;
-import com.gistlabs.mechanize.Resource;
-import com.gistlabs.mechanize.document.Document;
-import com.gistlabs.mechanize.document.html.form.Form;
-import com.gistlabs.mechanize.document.html.form.FormElement;
-import com.gistlabs.mechanize.document.html.form.Forms;
+//import com.gistlabs.mechanize.MechanizeAgent;
+//import com.gistlabs.mechanize.Resource;
+//import com.gistlabs.mechanize.document.Document;
+//import com.gistlabs.mechanize.document.html.form.Form;
+//import com.gistlabs.mechanize.document.html.form.FormElement;
+//import com.gistlabs.mechanize.document.html.form.Forms;
 
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+//import org.jsoup.Jsoup;
+//import org.jsoup.nodes.Element;
+//import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
-import ua.adeptius.myo3.model.ChannelMegogo;
+//import ua.adeptius.myo3.model.ChannelMegogo;
 import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
@@ -78,42 +78,18 @@ public class Web {
 //    }
 
     public static String getPhpSession() throws Exception {
-        URL obj = new URL("https://my.o3.ua/login");
+        URL  obj = new URL("https://my.o3.ua/login_check");
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestProperty("User-Agent", "Mozilla");
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-        String session1 = getSessionFromHeaders(con.getHeaderFields());
-        System.out.println("Session 1 = " + session1);
-
-        obj = new URL("https://my.o3.ua/login_check");
-        con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
-        con.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
-        con.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.8,ru;q=0.6,uk;q=0.4");
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        con.setRequestProperty("Connection", "keep-alive");
-        con.setRequestProperty("Content-Length", "53");
-        con.setRequestProperty("Host", "my.o3.ua");
-        con.setRequestProperty("Origin", "https://my.o3.ua");
-        con.setRequestProperty("Referer", "https://my.o3.ua/login");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
         con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-        con.setRequestProperty("Cookie", "PHPSESSID=" + session1);
-        String urlParameters = "_target_path=%2F&_username=02514521&_password=5351301";
+        String urlParameters = "_target_path=%2F&_username="+Settings.getCurrentLogin()
+                +"&_password="+Settings.getCurrentPassword();
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         wr.writeBytes(urlParameters);
         wr.flush();
         wr.close();
-        String session2 = getSessionFromHeaders(con.getHeaderFields());
-        System.out.println("Session 2 = " + session2);
-        return session2;
-    }
-
-    public static String getSessionFromHeaders(Map<String, List<String>> map) throws Exception {
-
-        List<String> list = map.get("Set-Cookie");
+        List<String> list = con.getHeaderFields().get("Set-Cookie");
         String result = list.get(0);
         result = result.substring(result.indexOf("PHPSESSID=")+10, result.indexOf(";"));
         return result;

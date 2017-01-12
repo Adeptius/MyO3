@@ -34,6 +34,20 @@ public class Utilits {
         if (miscLogEnable) Log.d("---O3 Logger---", message);
     }
 
+    public static String getUkrDateNow(){
+        Calendar calendar = new GregorianCalendar();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return day + " " + getStrMonth(month) + " " + year + "р.";
+    }
+
+    public static String getStrMonth(int a){
+        String[] month = new String[]{"Січня","Лютого","Березня","Квітня","Травня","Червня","Липня",
+                "Серпня","Вересня","Жовтня","Листопада","Грудня"};
+        return month[a];
+    }
+
     public static List<String> getPhonesFromString(String s){
         String regex = "[(]?\\d{1,5}[)]?[ ]{0,4}\\d{1,4}[-| ]\\d{1,4}[-| ]\\d{1,4}[-\\d\\d]+";
         Matcher regexMatcher = Pattern.compile(regex).matcher(s);

@@ -18,23 +18,21 @@ public class SettingsFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        draw();
-        animateScreen();
-    }
-
-    private void draw() {
 
     }
 
     @Override
     void processIfOk() {
+        draw();
+        animateScreen();
+    }
+
+    private void draw() {
 
     }
 

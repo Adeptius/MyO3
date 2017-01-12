@@ -38,6 +38,7 @@ import static ua.adeptius.myo3.utils.Utilits.splitJson;
 
 public class GetInfo {
 
+
     public static City getCityPhones(String url) throws Exception {
         Utilits.networkLog("Получение списка телефонов по урл: " + url);
         Document doc = Jsoup.connect(url).get();
@@ -73,6 +74,13 @@ public class GetInfo {
         }
         Element a = td.get(2).getElementsByTag("a").first();
         String adress = a.html().replaceAll("&nbsp;", " ");
+        String moreAddress = td.get(2).toString();
+        if (moreAddress.contains("<br>")){
+            moreAddress = moreAddress.substring(moreAddress.indexOf("<br>")+4);
+            moreAddress = moreAddress.substring(0, moreAddress.indexOf("<"));
+            adress = adress + " " + moreAddress;
+        }
+
         String coordinates = a.attr("data-lat") + " " + a.attr("data-lon");
 
         phones.setTime(time);

@@ -7,5 +7,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="punkt_menu">18dp</dimen>
     <dimen name="punkt_menu_widht">100dp</dimen>
+    <dimen name="shadow_elevation">5dp</dimen>
     <item name="punkt_menu_weight" type="dimen" format="float">0.8</item>
 </resources>

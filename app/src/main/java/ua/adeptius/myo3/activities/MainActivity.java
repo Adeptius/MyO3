@@ -2,7 +2,6 @@ package ua.adeptius.myo3.activities;
 
 import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -16,17 +15,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.BitmapEncoder;
-import com.bumptech.glide.load.resource.gif.GifResourceEncoder;
-import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResourceEncoder;
-
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.fragments.BalanceFragment;
 import ua.adeptius.myo3.fragments.BaseFragment;
 import ua.adeptius.myo3.fragments.BonusFragment;
 import ua.adeptius.myo3.fragments.CreditFragment;
 import ua.adeptius.myo3.fragments.DivanTvFragment;
+import ua.adeptius.myo3.fragments.DocumentFragment;
 import ua.adeptius.myo3.fragments.DrWebFragment;
 import ua.adeptius.myo3.fragments.FreeDayFragment;
 import ua.adeptius.myo3.fragments.FriendFragment;
@@ -38,11 +33,11 @@ import ua.adeptius.myo3.fragments.OllTvFragment;
 import ua.adeptius.myo3.fragments.OnOffInternet;
 import ua.adeptius.myo3.fragments.PayFragment;
 import ua.adeptius.myo3.fragments.SettingsFragment;
-import ua.adeptius.myo3.fragments.SupportFragment;
+import ua.adeptius.myo3.fragments.ContactFragment;
 import ua.adeptius.myo3.fragments.TarifFragment;
 import ua.adeptius.myo3.fragments.TurboDayFragment;
 import ua.adeptius.myo3.utils.Settings;
-
+import ua.adeptius.myo3.utils.Utilits;
 
 
 // TODO подключить аналитику
@@ -51,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String title = "";
+
 
 
     @Override
@@ -62,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,8 +81,8 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         //мой договор
-//        Settings.setCurrentLogin("02514521");
-//        Settings.setCurrentPassword("5351301");
+        Settings.setCurrentLogin("02514521");
+        Settings.setCurrentPassword("5351301");
 
 //      Абон
 //        Settings.setCurrentLogin("561100728");
@@ -149,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new SupportFragment());
+        goTo(new DocumentFragment());
     }
 
 
@@ -172,6 +170,7 @@ public class MainActivity extends AppCompatActivity
         collapsingToolbar.setTitle(" ");
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
+
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
@@ -203,9 +202,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void goTo(BaseFragment fragment){
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+    private void goTo(final BaseFragment fragment){
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true);
+        Utilits.EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            }
+        });
+
+
     }
 
 
@@ -245,10 +258,14 @@ public class MainActivity extends AppCompatActivity
             goTo(new FriendFragment());
         } else if (id == R.id.nav_bonus) {
             goTo(new BonusFragment());
-        } else if (id == R.id.nav_support) {
-            goTo(new SupportFragment());
+        } else if (id == R.id.nav_contact) {
+            goTo(new ContactFragment());
+        } else if (id == R.id.nav_documents) {
+            goTo(new DocumentFragment());
         } else if (id == R.id.nav_settings) {
             goTo(new SettingsFragment());
+        }else if (id == R.id.nav_exit) {
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

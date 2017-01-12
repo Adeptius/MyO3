@@ -10,7 +10,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/roundrect_for_news"
-        android:elevation="5dp"
+        android:elevation="@dimen/shadow_elevation"
         android:orientation="vertical">
 
         <TextView

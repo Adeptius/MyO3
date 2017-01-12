@@ -10,7 +10,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+//        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
+//        appBarLayout.setExpanded(true);
         setAllSettings();
         baseView = inflater.inflate(fragmentId, container, false);
         mainLayout = (LinearLayout) baseView.findViewById(layoutId);
@@ -145,7 +149,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 }
             }
         });
-
     }
 
 
