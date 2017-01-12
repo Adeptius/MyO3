@@ -122,6 +122,12 @@ public class SupportFragment  extends BaseFragment {
         }
         layForContacts.addView(layoutSupport);
 
+        if (sityNameUa.equals("Київ")){
+
+        }else {
+
+        }
+
 
 
 
