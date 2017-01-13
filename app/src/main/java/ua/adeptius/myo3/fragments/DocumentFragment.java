@@ -13,9 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,11 +26,11 @@ import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.MailType;
 import ua.adeptius.myo3.model.Person;
 import ua.adeptius.myo3.model.Phone;
+import ua.adeptius.myo3.model.Zayava;
 import ua.adeptius.myo3.model.Zayavleniya;
 import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
-import static ua.adeptius.myo3.model.MailType.ACTIVATION_INTERNET;
 import static ua.adeptius.myo3.model.MailType.CHANGE_DEAL;
 import static ua.adeptius.myo3.model.MailType.CHANGE_IP;
 import static ua.adeptius.myo3.model.MailType.CHANGE_TARIF;
@@ -38,7 +39,7 @@ import static ua.adeptius.myo3.model.MailType.CREATE_EMAIL;
 import static ua.adeptius.myo3.model.MailType.DISABLE_REAL_IP;
 import static ua.adeptius.myo3.model.MailType.DOP_IP;
 import static ua.adeptius.myo3.model.MailType.REAL_IP;
-import static ua.adeptius.myo3.model.MailType.STOP_INTERNET;
+import static ua.adeptius.myo3.model.MailType.SMTP;
 import static ua.adeptius.myo3.model.MailType.WRONG_PAY;
 
 
@@ -76,21 +77,90 @@ public class DocumentFragment extends BaseFragment {
     }
 
     private void draw() {
-        askAgree(REAL_IP, "Вартість послуги 30 грн/щомісячно.");
+        List<Zayava> list = Zayavleniya.getAllZayava();
+        for (final Zayava zayava : list) {
+            View zayavaLayout = LayoutInflater.from(context).inflate(R.layout.item_document_zayava, null);
+            TextView zayavaName = (TextView) zayavaLayout.findViewById(R.id.zayava_name);
+            TextView zayavaComent = (TextView) zayavaLayout.findViewById(R.id.zayava_coment);
+            TextView zayavaCost = (TextView) zayavaLayout.findViewById(R.id.zayava_cost);
+            TextView zayavaCostType = (TextView) zayavaLayout.findViewById(R.id.zayava_cost_type);
+            Button zayavaButton = (Button) zayavaLayout.findViewById(R.id.zayava_button);
 
+            zayavaName.setText(zayava.getName());
+            zayavaComent.setText(zayava.getComent());
+            if (zayava.getPrice() == 0){
+                zayavaCost.setText(zayava.getPriceType());
+                zayavaCost.setTextSize(20);
+                zayavaCostType.setVisibility(View.GONE);
+            }else {
+                zayavaCost.setText(String.valueOf(zayava.getPrice()));
+                zayavaCostType.setText(zayava.getPriceType());
+            }
+            zayavaButton.setText(zayava.getButtonName());
+            zayavaButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonWasClicked(zayava);
+                }
+            });
+            mainLayout.addView(zayavaLayout);
+        }
+    }
+
+    private String checkMoneyMessage(Zayava zayava){
+        String message = "Вартість послуги складає " + zayava.getPrice() + " грн " + zayava.getPriceType().toLowerCase() +".";
+        int willCostIfNow = 0;
+        message += "\nУ вас зараз " + (int)person.getCurrent() + " грн";
+        if (zayava.getPriceType().equals("Щомісячно")){
+            willCostIfNow = Utilits.calculateDaysCostLeft(zayava.getPrice()) + 1;
+            message += "\nЯкщо активувати прямо зараз - з вашого рахунку буде знято ";
+            message += willCostIfNow + " грн. ";
+        }else {
+            willCostIfNow = zayava.getPrice();
+            message += "\nЯкщо активувати прямо зараз - ";
+        }
+
+        int moneyWillLeft = (int) person.getCurrent() - willCostIfNow;
+        if (moneyWillLeft<0){
+            message += "та на рахунку не вистачить " + Math.abs(moneyWillLeft) + " грн. Послуги припиняться.";
+            message += "\nРекомендуємо спочатку поповнити рахунок.";
+        }else {
+            message += "на рахунку залишиться " + moneyWillLeft + " грн. Інтернет працюватиме.";
+        }
+
+        message += "\nДо речі: зараз ви зможете вибрати будь-який інший день активації.";
+        return message;
+    }
+
+    private void buttonWasClicked(Zayava zayava){
+        MailType type = zayava.getType();
+        if (type == REAL_IP) {
+            askAgree(type, zayava, checkMoneyMessage(zayava));
+        } else if (type == DISABLE_REAL_IP) {
+            askAgree(type, zayava, "Відключення реальної IP. Ми замінимо її на внутрішню.");
+        } else if (type == DOP_IP) {
+            askAgree(type, zayava, checkMoneyMessage(zayava));
+        } else if (type == CHANGE_DEAL) {
+            askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
+        } else if (type == CHANGE_TARIF) {
+            askAgree(type, zayava, "Зміна тарифу. До речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
+        } else if (type == CREATE_EMAIL){
+            askAgree(type, zayava, "Створення поштової скриньки. Безкоштовно надається тільки одна скринька. \nУВАГА!\n У разі відключення від мережі \"Фрінет\" скринька буде автоматично видалена!");
+        } else if (type == CHANGE_IP){
+            askAgree(type, zayava, checkMoneyMessage(zayava));
+        } else if (type == COMPENSATION){
+            askAgree(type, zayava, "Нам шкода, що Вам доводиться відправляти цю заяву. Ми зробили все, щоб це у вас зайняло якнайменше часу.");
+        } else if (type == WRONG_PAY) {
+            askAgree(type, zayava, "Не хвилюйтесь, ми допоможемо повернути ваші кошти.");
+        } else if (type == SMTP) {
+            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
+        }
 
     }
 
-    private void askAgree(final MailType type, String agree){
+    private void askAgree(final MailType type, final Zayava zayava, String agree){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Погодження");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
@@ -100,7 +170,7 @@ public class DocumentFragment extends BaseFragment {
         builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                askHeaderData(type);
+                askHeaderData(type, zayava);
             }
         });
         AlertDialog dialog = builder.create();
@@ -108,7 +178,7 @@ public class DocumentFragment extends BaseFragment {
 
     }
 
-    private void askHeaderData(final MailType type) {
+    private void askHeaderData(final MailType type, final Zayava zayava) {
         final View headerLayout = LayoutInflater.from(context).inflate(R.layout.item_documents_header_data, null);
 
         // Обработка телефона
@@ -240,7 +310,6 @@ public class DocumentFragment extends BaseFragment {
             }
         });
 
-
         final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
                 .setView(headerLayout)
                 .setPositiveButton("Далі", null)
@@ -269,12 +338,12 @@ public class DocumentFragment extends BaseFragment {
                                     );
 
 
-                            if (type == CREATE_EMAIL || type == CHANGE_IP || type == COMPENSATION || type == WRONG_PAY) {
-                                showWithoutDate(type);
-                            }else askDate(type);
+                            if (type == CREATE_EMAIL || type == COMPENSATION || type == WRONG_PAY || type == SMTP) {
+                                showWithoutDate(type, zayava);
+                            }else askDate(type, zayava);
 
                         } else {
-                            makeSimpleSnackBar("Заповніть всі поля", headerLayout);
+                            makeSimpleSnackBar("Заповніть правильно всі поля, будь-ласка", headerLayout);
                         }
                     }
                 });
@@ -283,30 +352,33 @@ public class DocumentFragment extends BaseFragment {
         dialog.show();
     }
 
-    private void askDate(final MailType type){
+    private void askDate(final MailType type, final Zayava zayava){
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker_zayava, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         Button todayButton = (Button)  datepickerLayout.findViewById(R.id.button_today);
-        todayButton.setOnClickListener(new View.OnClickListener() {
+        final Button hideButton = (Button)  datepickerLayout.findViewById(R.id.button_show_calendar);
+        final LinearLayout hideLayout = (LinearLayout) datepickerLayout.findViewById(R.id.lay_hide);
+        hideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String today = Utilits.getUkrDateNow();
-                showWithDate(type, today);
+                hideLayout.setVisibility(View.VISIBLE);
+                hideButton.setVisibility(View.GONE);
             }
         });
+
+
         builder.setCancelable(true);
-        builder.setView(datePicker);
+        builder.setView(datepickerLayout);
 
         TextView titleText = new TextView(context);
-        titleText.setText("Коли нам обробити заяву?");
+        titleText.setText("Коли виконати зміни?");
         titleText.setGravity(Gravity.CENTER);
         titleText.setTextSize(24);
         titleText.setTypeface(null, Typeface.BOLD);
         titleText.setTextColor(COLOR_BLUE);
 
         builder.setCustomTitle(titleText);
-        builder.setView(datePicker);
         builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
@@ -315,43 +387,78 @@ public class DocumentFragment extends BaseFragment {
                         datePicker.getMonth(),
                         datePicker.getDayOfMonth()
                 );
-                showWithDate(type, date);
+                showWithDate(type, date, zayava);
             }
         });
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
         dialog.show();
+
+        todayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                String today = Utilits.getUkrDateNow();
+                showWithDate(type, today, zayava);
+            }
+        });
     }
 
 
-    private void showWithDate(MailType type, String date){
+    private void showWithDate(MailType type, String date, Zayava zayava){
         if (type == REAL_IP) {
-
+            sendEmail(type, Zayavleniya.realIP(date, zayava));
         } else if (type == DISABLE_REAL_IP) {
-
+            sendEmail(type, Zayavleniya.realIPOff(date, zayava));
         } else if (type == DOP_IP) {
-
-        } else if (type == ACTIVATION_INTERNET) {
-
+            sendEmail(type, Zayavleniya.dopIP(date,zayava));
         } else if (type == CHANGE_DEAL) {
-
-        } else if (type == STOP_INTERNET) {
 
         } else if (type == CHANGE_TARIF) {
 
+        } else if (type == CHANGE_IP){
+            sendEmail(type, Zayavleniya.changeIP(date,zayava));
         }
     }
 
 
-    private void showWithoutDate(MailType type) {
+    private void showWithoutDate(MailType type, Zayava zayava) {
         if (type == CREATE_EMAIL){
-
-        } else if (type == CHANGE_IP){
 
         } else if (type == COMPENSATION){
 
         } else if (type == WRONG_PAY) {
 
+        } else if (type == SMTP) {
+
         }
+    }
+
+    private void sendEmail(final MailType type, final String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Зараз у вас відкриється ваша поштова програма. " +
+                "\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". " +
+                "\nМи намагаємось відповідати як можно скоріше. " +
+                "\nІнколи це пара хвилин, інколи - годин (залежить від навантаження). " +
+                "\nДякуємо за розуміння!");
+        builder.setView(textLayout);
+
+        builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", type.getEmail(), null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, type.getSubject() + " Угода " + person.getCard());
+                String message2 = header + message + footer;
+                emailIntent.putExtra(Intent.EXTRA_TEXT, message2);
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -409,7 +516,7 @@ public class DocumentFragment extends BaseFragment {
                         if (phone1.getSmsInform() == 1) phone = phone1;
                     }
                     if (SendInfo.changeSmsNumber(phone1, phone)) {
-                        makeSimpleSnackBar("Номер змінено", viewForSnackBar);
+                        makeSimpleSnackBar("Номер збережено", viewForSnackBar);
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -439,7 +546,7 @@ public class DocumentFragment extends BaseFragment {
             public void run() {
                 try {
                     if (SendInfo.changeEmail(email)) {
-                        makeSimpleSnackBar("Email змінено", viewForSnackBar);
+                        makeSimpleSnackBar("Email збережено", viewForSnackBar);
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -462,11 +569,5 @@ public class DocumentFragment extends BaseFragment {
         });
     }
 
-    private void sendEmail(String recipient, String subject, String message) {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", recipient, null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject + "Угода " + person.getCard());
-        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-    }
+
 }

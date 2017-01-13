@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         //мой договор
-        Settings.setCurrentLogin("02514521");
-        Settings.setCurrentPassword("5351301");
+//        Settings.setCurrentLogin("02514521");
+//        Settings.setCurrentPassword("5351301");
 
 //      Абон
 //        Settings.setCurrentLogin("561100728");
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity
 
         // гарантированый сервис подключен!
 //        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
-//        Settings.setCurrentLogin("441135231");
-//        Settings.setCurrentPassword("5145026");
+        Settings.setCurrentLogin("441135231");
+        Settings.setCurrentPassword("5145026");
 
 //        Тест Имя Отчество 	!-Новый абонент
 //        Settings.setCurrentLogin("441132990");

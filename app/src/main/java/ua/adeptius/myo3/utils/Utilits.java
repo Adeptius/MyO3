@@ -30,6 +30,13 @@ public class Utilits {
         if (networkLogEnable) Log.d("---O3 Logger---", message);
     }
 
+    public static int calculateDaysCostLeft(int costOfFullMonth){
+        Calendar calendar = new GregorianCalendar();
+        int current = calendar.get(Calendar.DAY_OF_MONTH);
+        int left = 30 - current;
+        return (costOfFullMonth /30) * left;
+    }
+
     public static void log(String message){
         if (miscLogEnable) Log.d("---O3 Logger---", message);
     }
@@ -49,7 +56,7 @@ public class Utilits {
     public static String getStrMonth(int a){
         String[] month = new String[]{"Січня","Лютого","Березня","Квітня","Травня","Червня","Липня",
                 "Серпня","Вересня","Жовтня","Листопада","Грудня"};
-        return month[a];
+        return month[a].toLowerCase();
     }
 
     public static List<String> getPhonesFromString(String s){

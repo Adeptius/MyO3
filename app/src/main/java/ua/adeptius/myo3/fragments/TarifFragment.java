@@ -231,6 +231,7 @@ public class TarifFragment extends BaseFragment {
                 willcost = "Ви бажаєте перейти на більш дорогий тариф. " +
                         "Вам буде надана знижка 20% на 2 місяці.";
             }
+            willcost += "\n Новий тариф буде активовано з першого числа наступного місяця";
         }catch (Exception ignored){}
 
         TextView titleView = new TextView(context);

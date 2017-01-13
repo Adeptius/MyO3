@@ -65,6 +65,7 @@ public class BonusFragment extends BaseFragment {
     @Override
     void processIfOk() {
         draw();
+        hideAllViewsInMainScreen();
         animateScreen();
     }
 
