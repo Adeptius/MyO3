@@ -34,6 +34,10 @@ public class Utilits {
         if (miscLogEnable) Log.d("---O3 Logger---", message);
     }
 
+    public static String parseUkrTime(int year, int month, int day) {
+        return day + " " + getStrMonth(month) + " " + year + "р.";
+    }
+
     public static String getUkrDateNow(){
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
@@ -160,4 +164,6 @@ public class Utilits {
         }
         return 4;
     }
+
+
 }

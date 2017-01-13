@@ -40,6 +40,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected LinearLayout mainLayout;
     protected final int COLOR_BLUE = Color.parseColor("#1976D2");
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
+    protected final int COLOR_RED = Color.RED;
     protected ProgressBar progressBar;
 
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup

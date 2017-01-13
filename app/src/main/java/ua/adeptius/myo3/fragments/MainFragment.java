@@ -109,15 +109,7 @@ public class MainFragment extends BaseFragment {
         many = many.length() > 4 ? many.substring(0, 4) : many;
         money.setText(many + " грн");
         fee.setText(mountlyFee + " грн");
-
-        String phoneNumber = "";
-        for (Phone phone : person.getPhones()) {
-            if (phone.getSmsInform() == 1) {
-                phoneNumber = phone.getPhone();
-                phoneNumber = phoneNumber.replaceAll("\\+38", "");
-            }
-        }
-        smsInfo.setText(phoneNumber);
+        smsInfo.setText(person.getPhoneWithSms());
         email.setText(person.getEmail());
         password.setText("Показати");
         for (Mailing mailing : person.getMailing()) {
@@ -331,7 +323,7 @@ public class MainFragment extends BaseFragment {
                             for (Phone phone1 : person.getPhones()) {
                                 if (phone1.getSmsInform() == 1) phone = phone1;
                             }
-                            if (SendInfo.changeSmsNumber("+380" + text.getText(), phone)) {
+                            if (SendInfo.changeSmsNumber(text.getText().toString(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
                                 try {Thread.sleep(300);} catch (InterruptedException ignored) {}
                                 reloadFragment();

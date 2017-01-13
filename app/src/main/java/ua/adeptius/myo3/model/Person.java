@@ -112,6 +112,17 @@ public class Person {
         return email;
     }
 
+    public String getPhoneWithSms() {
+        String phoneNumber = "";
+        for (Phone phone : getPhones()) {
+            if (phone.getSmsInform() == 1) {
+                phoneNumber = phone.getPhone();
+                phoneNumber = phoneNumber.replaceAll("\\+38", "");
+            }
+        }
+        return phoneNumber;
+    }
+
     public double getCurrent() {
         return current;
     }

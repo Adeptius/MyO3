@@ -282,6 +282,7 @@ public class SendInfo {
 
     public static boolean changeSmsNumber(String number, Phone phone) throws Exception{
         Utilits.networkLog("Запрос смены смс номера для рассылки");
+        if (number.length()==10)number = "+38"+ number;
         HashMap<String, String> map = new HashMap<>();
         if (phone==null){
             map.put("id","null");

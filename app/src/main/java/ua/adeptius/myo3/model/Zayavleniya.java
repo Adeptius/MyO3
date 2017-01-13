@@ -27,7 +27,7 @@ public class Zayavleniya {
     public static String getFooter() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n").append("\n").append(Utilits.getUkrDateNow());
-        sb.append("\n").append("_____________________________________");
+        sb.append("\n").append("_____________________________________________________");
         sb.append("\n");
         sb.append("\n").append("Заповнюється співробітником компанії:");
         sb.append("\n");
