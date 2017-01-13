@@ -1,6 +1,8 @@
 package ua.adeptius.myo3.model;
 
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,22 +56,22 @@ public class Zayavleniya {
                 "Замовити"
         ));
 
-        list.add(new Zayava(
-                "Доступ до SMTP серверу",
-                MailType.SMTP,
-                "Отримання доступу до нашого серверу вихідної пошти, якщо у вашої пошти свого немає. Послуга доступна тільки абонентам з реальними IP. На всякий випадок: google, ukr.net, mail.ru, i.ua мають свої сервери",
-                0,
-                "Безкоштовно",
-                "Замовити"
-        ));
-        list.add(new Zayava(
-                "Компенсація абонентської плати",
-                MailType.COMPENSATION,
-                "Повернення коштів на ваш рахунок по причині відсутності інтернету, або некористування, якщо ви забули завчасно призупинити послуги. Будь-ласка, не пишіть по одній заяві кожного разу, по можливості, почекайте і відправте заяву за декілька днів. Дякуємо.",
-                0,
-                "Безкоштовно",
-                "Відправити"
-        ));
+//        list.add(new Zayava(
+//                "Доступ до SMTP серверу",
+//                MailType.SMTP,
+//                "Отримання доступу до нашого серверу вихідної пошти, якщо у вашої пошти свого немає. Працює тільки у нашій мережі. Послуга доступна тільки абонентам з реальними IP. На всякий випадок: google, ukr.net, mail.ru, i.ua мають свої сервери",
+//                0,
+//                "Безкоштовно",
+//                "Замовити"
+//        ));
+//        list.add(new Zayava(
+//                "Компенсація абонентської плати",
+//                MailType.COMPENSATION,
+//                "Повернення коштів на ваш рахунок по причині відсутності інтернету, або некористування, якщо ви забули завчасно призупинити послуги. Будь-ласка, не пишіть по одній заяві кожного разу, по можливості, почекайте і відправте заяву за декілька днів. Дякуємо.",
+//                0,
+//                "Безкоштовно",
+//                "Відправити"
+//        ));
         list.add(new Zayava(
                 "Зміна тарифного пакету",
                 MailType.CHANGE_TARIF,
@@ -110,14 +112,12 @@ public class Zayavleniya {
         sb.append("\n").append("e-mail: ").append(email);
         sb.append("\n");
         sb.append("\n               ЗАЯВА");
-        sb.append("\n");
-
-
         return sb.toString();
     }
 
     public static String getFooter() {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("\n").append("\n").append(Utilits.getUkrDateNow());
         sb.append("\n").append("_____________________________________________________");
         sb.append("\n");
@@ -130,6 +130,7 @@ public class Zayavleniya {
 
     public static String realIP(String startDate, Zayava zayava) {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("\n").append("Прошу з ").append(startDate).append(" надати мені реальну IP адресу.");
         sb.append("\n");
         sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
@@ -139,6 +140,7 @@ public class Zayavleniya {
 
     public static String dopIP(String startDate, Zayava zayava) {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("\n").append("Прошу з ").append(startDate).append(" надати мені додаткову IP адресу.");
         sb.append("\n");
         sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
@@ -147,6 +149,7 @@ public class Zayavleniya {
 
     public static String realIPOff(String startDate, Zayava zayava) {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("\n").append("Прошу з ").append(startDate).append(" відключити  мені реальну IP адресу.");
         sb.append("\n");
         return sb.toString();
@@ -154,11 +157,33 @@ public class Zayavleniya {
 
     public static String changeIP(String startDate, Zayava zayava) {
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("\n").append("Прошу з ").append(startDate).append(" змінити мою IP адресу.");
         sb.append("\n");
         sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
         return sb.toString();
     }
+
+
+    public static String createEmail(String login, String password) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("\n").append("Прошу з ").append(Utilits.getUkrDateNow()).append(" надати електронну поштову скриньку");
+        sb.append("\n");
+        sb.append("\n").append("Логін " + login + "@freenet.com.ua пароль " + password);
+        return sb.toString();
+
+    }
+
+
+//    public static String compens(String reason) {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("\nна компенсацію абонентської плати");
+//        sb.append("\n").append(reason);
+//        sb.append("\n");
+//        sb.append("\n").append(Utilits.getUkrDateNow());
+//        return sb.toString();
+//    }
 
 
 }

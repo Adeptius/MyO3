@@ -1,7 +1,11 @@
 package ua.adeptius.myo3.activities;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import ua.adeptius.myo3.R;
@@ -81,8 +86,8 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         //мой договор
-//        Settings.setCurrentLogin("02514521");
-//        Settings.setCurrentPassword("5351301");
+        Settings.setCurrentLogin("02514521");
+        Settings.setCurrentPassword("5351301");
 
 //      Абон
 //        Settings.setCurrentLogin("561100728");
@@ -123,8 +128,8 @@ public class MainActivity extends AppCompatActivity
 
         // гарантированый сервис подключен!
 //        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
-        Settings.setCurrentLogin("441135231");
-        Settings.setCurrentPassword("5145026");
+//        Settings.setCurrentLogin("441135231");
+//        Settings.setCurrentPassword("5145026");
 
 //        Тест Имя Отчество 	!-Новый абонент
 //        Settings.setCurrentLogin("441132990");
@@ -148,6 +153,10 @@ public class MainActivity extends AppCompatActivity
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
         goTo(new DocumentFragment());
+
+//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        MainActivity.this.finish();
+//        startActivity(intent);
     }
 
 
@@ -265,11 +274,34 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             goTo(new SettingsFragment());
         }else if (id == R.id.nav_exit) {
-
+            exit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void exit() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+
+        View textLayout = LayoutInflater.from(this).inflate(R.layout.item_alert_message, null);
+        TextView text = (TextView) textLayout.findViewById(R.id.text);
+        text.setText("Ви впевнені, що хочете вийти з облікового запису?\n"
+                +"\nПри наступному вході в додаток вам доведеться знову вводити логін та пароль.");
+        builder.setView(textLayout);
+        builder.setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                Settings.setCurrentPassportNumber("");
+                Settings.setCurrentPassportSerial("");
+                Settings.setCurrentLogin("");
+                Settings.setCurrentPassword("");
+                MainActivity.this.finish();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

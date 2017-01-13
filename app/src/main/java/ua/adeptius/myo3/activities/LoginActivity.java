@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity{
 //        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         final Button enterButton = (Button) findViewById(R.id.email_sign_in_button);
 
-        goToMain();
+//        goToMain();
     }
 
     public void goToMain() {

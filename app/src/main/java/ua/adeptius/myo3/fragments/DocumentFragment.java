@@ -34,12 +34,12 @@ import ua.adeptius.myo3.utils.Utilits;
 import static ua.adeptius.myo3.model.MailType.CHANGE_DEAL;
 import static ua.adeptius.myo3.model.MailType.CHANGE_IP;
 import static ua.adeptius.myo3.model.MailType.CHANGE_TARIF;
-import static ua.adeptius.myo3.model.MailType.COMPENSATION;
+//import static ua.adeptius.myo3.model.MailType.COMPENSATION;
 import static ua.adeptius.myo3.model.MailType.CREATE_EMAIL;
 import static ua.adeptius.myo3.model.MailType.DISABLE_REAL_IP;
 import static ua.adeptius.myo3.model.MailType.DOP_IP;
 import static ua.adeptius.myo3.model.MailType.REAL_IP;
-import static ua.adeptius.myo3.model.MailType.SMTP;
+//import static ua.adeptius.myo3.model.MailType.SMTP;
 import static ua.adeptius.myo3.model.MailType.WRONG_PAY;
 
 
@@ -52,10 +52,10 @@ public class DocumentFragment extends BaseFragment {
     @Override
     void setAllSettings() {
         titleText = "Заяви";
-        descriptionText = "";
+        descriptionText = "Просто та зручно";
         fragmentId = R.layout.fragment_base_scrolling;
         layoutId = R.id.base_scroll_view;
-        titleImage = R.drawable.background_main1;
+        titleImage = R.drawable.background_documents;
     }
 
     @Override
@@ -148,12 +148,12 @@ public class DocumentFragment extends BaseFragment {
             askAgree(type, zayava, "Створення поштової скриньки. Безкоштовно надається тільки одна скринька. \nУВАГА!\n У разі відключення від мережі \"Фрінет\" скринька буде автоматично видалена!");
         } else if (type == CHANGE_IP){
             askAgree(type, zayava, checkMoneyMessage(zayava));
-        } else if (type == COMPENSATION){
-            askAgree(type, zayava, "Нам шкода, що Вам доводиться відправляти цю заяву. Ми зробили все, щоб це у вас зайняло якнайменше часу.");
+//        } else if (type == COMPENSATION){
+//            askAgree(type, zayava, "Нам шкода, що Вам доводиться відправляти цю заяву. Ми зробили все, щоб це у вас зайняло якнайменше часу.");
         } else if (type == WRONG_PAY) {
             askAgree(type, zayava, "Не хвилюйтесь, ми допоможемо повернути ваші кошти.");
-        } else if (type == SMTP) {
-            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
+//        } else if (type == SMTP) {
+//            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
         }
 
     }
@@ -338,7 +338,7 @@ public class DocumentFragment extends BaseFragment {
                                     );
 
 
-                            if (type == CREATE_EMAIL || type == COMPENSATION || type == WRONG_PAY || type == SMTP) {
+                            if (type == CREATE_EMAIL || type == WRONG_PAY ) {
                                 showWithoutDate(type, zayava);
                             }else askDate(type, zayava);
 
@@ -406,34 +406,97 @@ public class DocumentFragment extends BaseFragment {
 
     private void showWithDate(MailType type, String date, Zayava zayava){
         if (type == REAL_IP) {
-            sendEmail(type, Zayavleniya.realIP(date, zayava));
+            sendEmail(type, Zayavleniya.realIP(date, zayava), true);
         } else if (type == DISABLE_REAL_IP) {
-            sendEmail(type, Zayavleniya.realIPOff(date, zayava));
+            sendEmail(type, Zayavleniya.realIPOff(date, zayava), true);
         } else if (type == DOP_IP) {
-            sendEmail(type, Zayavleniya.dopIP(date,zayava));
+            sendEmail(type, Zayavleniya.dopIP(date,zayava), true);
         } else if (type == CHANGE_DEAL) {
 
         } else if (type == CHANGE_TARIF) {
 
         } else if (type == CHANGE_IP){
-            sendEmail(type, Zayavleniya.changeIP(date,zayava));
+            sendEmail(type, Zayavleniya.changeIP(date,zayava), true);
         }
     }
 
 
     private void showWithoutDate(MailType type, Zayava zayava) {
         if (type == CREATE_EMAIL){
-
-        } else if (type == COMPENSATION){
-
+            askEmailWantedName(type, zayava);
+//        } else if (type == COMPENSATION){
         } else if (type == WRONG_PAY) {
 
-        } else if (type == SMTP) {
-
         }
+//        else if (type == SMTP) {
+//
+//        }
     }
 
-    private void sendEmail(final MailType type, final String message) {
+//    private void askCompensation(final MailType type, Zayava zayava) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setCancelable(true);
+//
+//        View compensLayout = LayoutInflater.from(context).inflate(R.layout.item_document_ask_compens, null);
+//        final TextView reason = (TextView) compensLayout.findViewById(R.id.text_reason);
+//        reason.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (login.getText().toString().equals("Логін")){
+//                    login.setText("");
+//                }
+//            }
+//        });
+//
+//        builder.setView(compensLayout);
+//        builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(final DialogInterface dialog, int which) {
+//                sendEmail(type, Zayavleniya.compens(reason.getText().toString()), false);
+//            }
+//        });
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+
+
+    private void askEmailWantedName(final MailType type, Zayava zayava) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+
+        View emailLayout = LayoutInflater.from(context).inflate(R.layout.item_document_ask_email, null);
+        final TextView login = (TextView) emailLayout.findViewById(R.id.text_login);
+        login.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (login.getText().toString().equals("Логін")){
+                    login.setText("");
+                }
+            }
+        });
+        final TextView password = (TextView) emailLayout.findViewById(R.id.text_password);
+        password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (password.getText().toString().equals("Пароль")){
+                    password.setText("");
+                }
+            }
+        });
+        builder.setView(emailLayout);
+        builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                sendEmail(type, Zayavleniya.createEmail(
+                        login.getText().toString(),
+                        password.getText().toString()), true);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void sendEmail(final MailType type, final String message, final boolean useStandartFooter) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
@@ -441,7 +504,7 @@ public class DocumentFragment extends BaseFragment {
         TextView text = (TextView) textLayout.findViewById(R.id.text);
         text.setText("Зараз у вас відкриється ваша поштова програма. " +
                 "\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". " +
-                "\nМи намагаємось відповідати як можно скоріше. " +
+                "\nМи намагаємось відповідати якомога швидше. " +
                 "\nІнколи це пара хвилин, інколи - годин (залежить від навантаження). " +
                 "\nДякуємо за розуміння!");
         builder.setView(textLayout);
@@ -452,7 +515,13 @@ public class DocumentFragment extends BaseFragment {
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto", type.getEmail(), null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, type.getSubject() + " Угода " + person.getCard());
-                String message2 = header + message + footer;
+                String message2;
+                if (useStandartFooter){
+                    message2 = header + message + footer;
+                }else {
+                    message2 = header + message;
+                }
+
                 emailIntent.putExtra(Intent.EXTRA_TEXT, message2);
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
             }
