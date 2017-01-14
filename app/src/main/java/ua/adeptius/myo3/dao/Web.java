@@ -24,7 +24,7 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class Web {
 
-    private static String sessionId;
+    public static String sessionId;
     private static long sessionCreatedTime;
 
     public static String getSessionId() throws Exception {

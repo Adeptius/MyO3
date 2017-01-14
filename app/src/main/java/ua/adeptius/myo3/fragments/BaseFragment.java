@@ -177,6 +177,9 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                         }
                     });
                 } finally {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException ignored) {  }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }

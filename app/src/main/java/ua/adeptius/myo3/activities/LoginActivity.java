@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,7 +24,10 @@ import android.widget.TextView;
 import java.net.InetAddress;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.dao.SendInfo;
+import ua.adeptius.myo3.dao.Web;
 import ua.adeptius.myo3.model.Person;
 import ua.adeptius.myo3.utils.Settings;
 
@@ -81,8 +85,11 @@ public class LoginActivity extends AppCompatActivity {
 
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
-        Settings.setCurrentLogin("234");
-        Settings.setCurrentPassword("2354");
+//        Settings.setCurrentLogin("413100711");
+//        Settings.setCurrentPassword("0464023");
+
+//        Settings.setCurrentLogin("6584");
+//        Settings.setCurrentPassword("6874");
 
         startAnimation();
 
@@ -99,8 +106,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkAll() throws InterruptedException {
-        startProgressBar();
         Thread.sleep(1500);
+        startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
         if (!isInternetOk()){
             setStatusTextView("Інтернет відсутній");
@@ -114,19 +121,19 @@ public class LoginActivity extends AppCompatActivity {
                 showLogin();
             }else{
                 try {
-                    Person person = GetInfo.getPersonInfo();
+                    Person person = DbCache.getPerson();
                     if (person.getCard() == null) {
+                        DbCache.markPersonOld();
                         setStatusTextView("Будь-ласка увійдіть");
                         stopProgressBar();
                         Thread.sleep(2000);
                         showLogin();
                     }else {
-                        MainActivity.person = person;
                         setStatusTextView("Вхід виконан");
+                        stopProgressBar();
                         Thread.sleep(1000);
                         goToMain();
                     }
-
                 } catch (Exception e) {
                     showLogin();
                 }
@@ -135,18 +142,56 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void showLogin(){
+    private void showLogin() throws InterruptedException {
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
+                Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
+                        R.anim.login_screen_trans_out);
+                splashLayout.startAnimation(anim);
                 splashLayout.setVisibility(View.GONE);
                 loginLayout.setVisibility(View.VISIBLE);
+                Animation anim2 = AnimationUtils.loadAnimation(LoginActivity.this,
+                        R.anim.login_screen_trans_in);
+                loginLayout.startAnimation(anim2);
             }
         });
     }
 
     private void rememberPassword() {
+        if (textLogin.getText().toString().equals("")) {
+            showSnackBar("Будь-ласка, введіть логін (номер угоди)");
+        } else {
+            final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+                    R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Зачекайте будь-ласка...");
+            progressDialog.show();
+            EXECUTOR.submit(new Runnable() {
+                @Override
+                public void run() {
+                    String result = SendInfo.rememberPassword(textLogin.getText().toString());
+                    showSnackBar(result);
+                    HANDLER.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                        }
+                    });
+                }
+            });
+        }
+    }
 
+    private void showSnackBar(final String message){
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                Snackbar.make(loginLayout,
+                        message,
+                        Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void startAnimation() {
@@ -206,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = textPassword.getText().toString();
         Settings.setCurrentLogin(login);
         Settings.setCurrentPassword(password);
+        Web.sessionId = null;
 
         final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(textPassword.getWindowToken(), 0);
@@ -214,8 +260,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try{
-                    Person person = GetInfo.getPersonInfo();
+                    Person person = DbCache.getPerson();
                     if (person.getCard() == null) {
+                        DbCache.markPersonOld();
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -225,7 +272,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     }else {
-                        MainActivity.person = person;
                         goToMain();
                     }
                 }catch (Exception e){

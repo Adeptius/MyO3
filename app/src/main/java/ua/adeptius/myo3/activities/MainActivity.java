@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.fragments.BalanceFragment;
 import ua.adeptius.myo3.fragments.BaseFragment;
 import ua.adeptius.myo3.fragments.BonusFragment;
@@ -52,8 +53,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String title = "";
-    public static Person person;
-
 
 
     @Override
@@ -153,12 +152,12 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentLogin("6391");
 //        Settings.setCurrentPassword("ahmatovoj");
 
-        setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new MainFragment());
+        try{
+            Person person = DbCache.getPerson();
+            setDrawlerText(person.getName(),"Угода " + Settings.getCurrentLogin());
+        }catch (Exception ignored){}
 
-//        Intent intent = new Intent(MainActivity.this, SecondLoginActivity.class);
-//        MainActivity.this.finish();
-//        startActivity(intent);
+        goTo(new MainFragment());
     }
 
 

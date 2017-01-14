@@ -19,6 +19,7 @@ import java.util.List;
 
 import ua.adeptius.myo3.R;
 import ua.adeptius.myo3.activities.MainActivity;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.utils.Settings;
@@ -51,8 +52,6 @@ public class MainFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         pib = getTextView(R.id.pib);
         contractNumber = getTextView(R.id.contractNumber);
         city = getTextView(R.id.city);
@@ -83,15 +82,10 @@ public class MainFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        if (MainActivity.person != null){
-            person = MainActivity.person;
-            MainActivity.person = null;
-        }else {
-            person = GetInfo.getPersonInfo();
-        }
-        ips = GetInfo.getIP();
-        mountlyFee = GetInfo.getMountlyFeefromLK();
-        creditEnabled = GetInfo.getCreditStatus().startsWith("20");
+        person = DbCache.getPerson();
+        ips = DbCache.getIps();
+        mountlyFee = DbCache.getMountlyFeefromLK();
+        creditEnabled = DbCache.getCreditStatus().startsWith("20");
     }
 
     @Override
@@ -173,14 +167,13 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void onClick(View view) {
-        System.out.println(view.getClass());
-        System.out.println(view);
         if (view.equals(newsCheckBox)) {
             EXECUTOR.submit(new Runnable() {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(2);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    DbCache.markPersonOld();
                     reloadFragment();
                 }
             });
@@ -189,7 +182,8 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(5);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    DbCache.markPersonOld();
                     reloadFragment();
                 }
             });
@@ -198,7 +192,8 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(6);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    DbCache.markPersonOld();
                     reloadFragment();
                 }
             });
@@ -331,7 +326,8 @@ public class MainFragment extends BaseFragment {
                             }
                             if (SendInfo.changeSmsNumber(text.getText().toString(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
-                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                DbCache.markPersonOld();
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Номер невірний.", view);
@@ -368,7 +364,8 @@ public class MainFragment extends BaseFragment {
                         try {
                             if (SendInfo.changeEmail(text.getText().toString())) {
                                 makeSimpleSnackBar("Email змінено", view);
-                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                DbCache.markPersonOld();
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Email невірний.", view);
@@ -406,7 +403,8 @@ public class MainFragment extends BaseFragment {
                             if (SendInfo.changePassword(text.getText().toString())) {
                                 makeSimpleSnackBar("Пароль змінено", view);
                                 Settings.setCurrentPassword(text.getText().toString());
-                                try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                DbCache.markPersonOld();
                                 reloadFragment();
                             } else
                                 makeSimpleSnackBar("Помилка. Пароль невірний.", view);

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">My O3</string>
-    <string name="title_activity_login">Увійти в особистий кабінет</string>
+    <string name="title_activity_login">Мій O3</string>
     <string name="title_activity_main">My O3</string>
 
     <!-- Strings related to login -->

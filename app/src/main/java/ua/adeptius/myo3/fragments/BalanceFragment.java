@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.Operation;
 import ua.adeptius.myo3.model.Person;
@@ -35,9 +36,9 @@ public class BalanceFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        operations = GetInfo.getWildrowsByFewMonth(5);
-        person = GetInfo.getPersonInfo();
-        mountlyFee = GetInfo.getMountlyFeefromLK();
+        operations = DbCache.getWildraws();
+        person = DbCache.getPerson();
+        mountlyFee = DbCache.getMountlyFeefromLK();
         sortByDate(operations);
         configureSaldo(person);
     }

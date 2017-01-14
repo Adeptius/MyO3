@@ -1,120 +1,151 @@
 package ua.adeptius.myo3.dao;
 
 
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+
+import ua.adeptius.myo3.model.Ip;
+import ua.adeptius.myo3.model.Operation;
+import ua.adeptius.myo3.model.Person;
+
 public class DbCache {
-//
-//
-//    // PERSON
-//    private static Person person;
-//
-//    public static Person getPerson() throws Exception {
-//        if (person == null) {
-//            loadPerson();
-//        }
-//        return person;
-//    }
-//
-//    public static void loadPerson() throws Exception {
-//        person = GetInfo.getPersonInfo();
-//    }
-//
-//    public static void reLoadPersonNoException() {
-//        try {
-//            person = GetInfo.getPersonInfo();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    //IPS
-//    private static List<Ip> ips;
-//
-//    public static List<Ip> getIps() throws Exception {
-//        if (ips == null) {
-//            loadIps();
-//        }
-//        return ips;
-//    }
-//
-//    public static void loadIps() throws Exception {
-//        ips = GetInfo.getIP();
-//    }
-//
-//    public static void reLoadIpsNoException() {
-//        try {
-//            ips = GetInfo.getIP();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    //MOUNTLYFEE
-//    private static String mountlyFee;
-//
-//    public static String getMountlyFee() throws Exception {
-//        if (mountlyFee == null) {
-//            loadMountlyFee();
-//        }
-//        return mountlyFee;
-//    }
-//
-//    public static void loadMountlyFee() throws Exception {
-//        mountlyFee = GetInfo.getMountlyFeefromLK();
-//    }
-//
-//    public static void reLoadMountlyFeeNoException() {
-//        try {
-//            mountlyFee = GetInfo.getMountlyFeefromLK();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    //CREDITSTATUS
-//    private static String creditStatus;
-//
-//    public static String getCreditStatus() throws Exception {
-//        if (creditStatus == null) {
-//            loadCreditStatus();
-//        }
-//        return creditStatus;
-//    }
-//
-//    public static void loadCreditStatus() throws Exception {
-//        creditStatus = GetInfo.getCreditStatus();
-//    }
-//
-//    public static void reLoadCreditStatusNoException(){
-//        try {
-//            creditStatus = GetInfo.getCreditStatus();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//    //BALANCE
-//    private static List<Operation> operations;
-//
-//    public static List<Operation> getOperations() throws Exception{
-//        if (operations == null){
-//            loadOperations();
-//        }
-//        return operations;
-//    }
-//
-//    public static void loadOperations() throws Exception{
-//        operations = GetInfo.getWildrowsByFewMonth(5);
-//    }
-//
-//    public static void reLoadOperationsNoException(){
-//        try {
-//            operations = GetInfo.getWildrowsByFewMonth(5);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public static long getCurrentTime(){
+        return new GregorianCalendar().getTimeInMillis();
+    }
+
+    private static int getPastMinutes(long createdTime){
+        long currentTime = getCurrentTime();
+        long sessionTime = currentTime - createdTime;
+        return (int) sessionTime / 1000 / 60;
+    }
+
+
+    private static Person person;
+    private static long personCreatedTime;
+
+    public static Person getPerson() throws Exception {
+        if (person == null) {
+            person = GetInfo.getPersonInfo();
+            personCreatedTime = getCurrentTime();
+            return person;
+        } else {
+            if (getPastMinutes(personCreatedTime) > 5) {
+                person = GetInfo.getPersonInfo();
+                personCreatedTime = getCurrentTime();
+                return getPerson();
+            } else {
+                return person;
+            }
+        }
+    }
+
+    public static void markPersonOld(){
+        personCreatedTime = 0;
+    }
+
+
+    private static List<Ip> ips;
+    private static long ipsCreatedTime;
+
+    public static List<Ip> getIps() throws Exception {
+        if (ips == null) {
+            ips = GetInfo.getIP();
+            ipsCreatedTime = getCurrentTime();
+            return ips;
+        } else {
+            if (getPastMinutes(ipsCreatedTime) > 5) {
+                ips = GetInfo.getIP();
+                ipsCreatedTime = getCurrentTime();
+                return getIps();
+            } else {
+                return ips;
+            }
+        }
+    }
+
+    public static void markIpOld(){
+        personCreatedTime = 0;
+    }
+
+
+
+    private static String mountlyFee;
+    private static long mountlyFeeCreatedTime;
+
+    public static String getMountlyFeefromLK() throws Exception {
+        if (mountlyFee == null) {
+            mountlyFee = GetInfo.getMountlyFeefromLK();
+            mountlyFeeCreatedTime = getCurrentTime();
+            return mountlyFee;
+        } else {
+            if (getPastMinutes(mountlyFeeCreatedTime) > 5) {
+                mountlyFee = GetInfo.getMountlyFeefromLK();
+                mountlyFeeCreatedTime = getCurrentTime();
+                return getMountlyFeefromLK();
+            } else {
+                return mountlyFee;
+            }
+        }
+    }
+
+    public static void markMountlyFeeOld(){
+        mountlyFeeCreatedTime = 0;
+    }
+
+
+    private static String creditStatus;
+    private static long creditStatusCreatedTime;
+
+    public static String getCreditStatus() throws Exception {
+        if (creditStatus == null) {
+            creditStatus = GetInfo.getCreditStatus();
+            creditStatusCreatedTime = getCurrentTime();
+            return creditStatus;
+        } else {
+            if (getPastMinutes(creditStatusCreatedTime) > 5) {
+                creditStatus = GetInfo.getCreditStatus();
+                creditStatusCreatedTime = getCurrentTime();
+                return getCreditStatus();
+            } else {
+                return creditStatus;
+            }
+        }
+    }
+
+    public static void markCreditStatusOld(){
+        creditStatusCreatedTime = 0;
+    }
+
+
+ private static List<Operation> wildraws;
+    private static long wildrawsCreatedTime;
+
+    public static List<Operation> getWildraws() throws Exception {
+        if (wildraws == null) {
+            wildraws = GetInfo.getWildrowsByFewMonth(4);
+            wildrawsCreatedTime = getCurrentTime();
+            return wildraws;
+        } else {
+            if (getPastMinutes(wildrawsCreatedTime) > 5) {
+                wildraws = GetInfo.getWildrowsByFewMonth(4);
+                wildrawsCreatedTime = getCurrentTime();
+                return getWildraws();
+            } else {
+                return wildraws;
+            }
+        }
+    }
+
+    public static void markWildrawsOld(){
+        wildrawsCreatedTime = 0;
+    }
+
+
+
+
+
+
+
 }
