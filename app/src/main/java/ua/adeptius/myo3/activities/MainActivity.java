@@ -86,12 +86,12 @@ public class MainActivity extends AppCompatActivity
 //        }
 
         //мой договор
-        Settings.setCurrentLogin("02514521");
-        Settings.setCurrentPassword("5351301");
+//        Settings.setCurrentLogin("02514521");
+//        Settings.setCurrentPassword("5351301");
 
 //      Абон
-//        Settings.setCurrentLogin("561100728");
-//        Settings.setCurrentPassword("5276229");
+        Settings.setCurrentLogin("561100728");
+        Settings.setCurrentPassword("5276229");
 
 //        Settings.setCurrentLogin("561600377");
 //        Settings.setCurrentPassword("1217229");
