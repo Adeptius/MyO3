@@ -17,9 +17,9 @@ import android.widget.TextView;
 import java.net.InetAddress;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.dao.Web;
+import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.model.Person;
 import ua.adeptius.myo3.utils.Settings;
-import ua.adeptius.myo3.utils.Utilits;
 
 import static ua.adeptius.myo3.utils.Utilits.EXECUTOR;
 import static ua.adeptius.myo3.utils.Utilits.HANDLER;
@@ -42,45 +42,30 @@ public class SplashScreenActivity extends AppCompatActivity {
         titleText = (TextView) findViewById(R.id.text_title);
         comentText = (TextView) findViewById(R.id.text_coment);
         progressBar = (ProgressBar) findViewById(R.id.progressBarInSplashScreen);
+        progressBar.setVisibility(View.INVISIBLE);
+
         startAnimation();
 
-        //Preparing Shared Preferences
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
-        try {
-            currentSessionId = Web.getSessionId();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Settings.setCurrentLogin("234");
+        Settings.setCurrentPassword("2354");
 
-        //TODO сообщить что нет инета
-
-        try {
-            if (true){ //TODO условие, если залогинен
-                goToMain();
-            }else {
-
-                goToLogin();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Utilits.networkLog("Не могу проверить сессию, что бы залогинится");
-        }
-
-
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkAll();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        goToLogin();
+//        EXECUTOR.submit(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    checkAll();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     private void checkAll() throws InterruptedException {
+        startProgressBar();
         Thread.sleep(1500);
         setStatusTextView("Перевірка наявності інтернету");
         if (!isInternetOk()){
@@ -91,17 +76,30 @@ public class SplashScreenActivity extends AppCompatActivity {
             if (isItFirstEnter()){
                 setStatusTextView("Будь-ласка увійдіть");
                 stopProgressBar();
-                Thread.sleep(1000);
-                goToMain();
+                Thread.sleep(2000);
+                goToLogin();
             }else{
+                try {
+                    Person person = GetInfo.getPersonInfo();
+                    if (person.getCard() == null) {
+                        setStatusTextView("Будь-ласка увійдіть");
+                        stopProgressBar();
+                        Thread.sleep(2000);
+                        goToLogin();
+                    }else {
+                        MainActivity.person = person;
+                        setStatusTextView("Вхід виконан");
+                        Thread.sleep(1000);
+                        goToMain();
+                    }
 
+                } catch (Exception e) {
+                    goToLogin();
+                }
             }
         }
     }
 
-    private boolean isAuthorizationOk(){
-        return false;
-    }
 
     private boolean isItFirstEnter(){
         boolean logIsEmpty = Settings.getCurrentLogin().equals("");
@@ -114,6 +112,14 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 progressBar.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+  private void startProgressBar(){
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.VISIBLE);
             }
         });
     }

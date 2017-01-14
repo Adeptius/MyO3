@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.activities.MainActivity;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.utils.Settings;
@@ -82,7 +83,12 @@ public class MainFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        person = GetInfo.getPersonInfo();
+        if (MainActivity.person != null){
+            person = MainActivity.person;
+            MainActivity.person = null;
+        }else {
+            person = GetInfo.getPersonInfo();
+        }
         ips = GetInfo.getIP();
         mountlyFee = GetInfo.getMountlyFeefromLK();
         creditEnabled = GetInfo.getCreditStatus().startsWith("20");

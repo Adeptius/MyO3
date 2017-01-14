@@ -41,6 +41,7 @@ import ua.adeptius.myo3.fragments.SettingsFragment;
 import ua.adeptius.myo3.fragments.ContactFragment;
 import ua.adeptius.myo3.fragments.TarifFragment;
 import ua.adeptius.myo3.fragments.TurboDayFragment;
+import ua.adeptius.myo3.model.Person;
 import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.utils.Utilits;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String title = "";
+    public static Person person;
 
 
 
@@ -152,9 +154,9 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("ahmatovoj");
 
         setDrawlerText("Володимир","Угода " + Settings.getCurrentLogin());
-        goTo(new DocumentFragment());
+        goTo(new MainFragment());
 
-//        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//        Intent intent = new Intent(MainActivity.this, SecondLoginActivity.class);
 //        MainActivity.this.finish();
 //        startActivity(intent);
     }

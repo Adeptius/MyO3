@@ -1,11 +1,6 @@
 package ua.adeptius.myo3.dao;
 
-//import com.gistlabs.mechanize.MechanizeAgent;
-//import com.gistlabs.mechanize.Resource;
-//import com.gistlabs.mechanize.document.Document;
-//import com.gistlabs.mechanize.document.html.form.Form;
-//import com.gistlabs.mechanize.document.html.form.FormElement;
-//import com.gistlabs.mechanize.document.html.form.Forms;
+
 
 import org.json.JSONObject;
 //import org.jsoup.Jsoup;
