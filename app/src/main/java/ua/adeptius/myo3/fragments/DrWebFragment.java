@@ -19,6 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.DrWebSubscribe;
@@ -38,13 +39,12 @@ public class DrWebFragment extends BaseFragment {
 
     @Override
     void init() {
-
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        subscribes = GetInfo.getDrWebServices();
+        subscribes = DbCache.getDrWebServices();
     }
 
     @Override
@@ -147,10 +147,8 @@ public class DrWebFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.deactivateDrWeb(sid)) {
                             makeSimpleSnackBar("Буде відключено!", mainLayout);
-                            try {
-                                Thread.sleep(300);
-                            } catch (InterruptedException ignored) {
-                            }
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markDrWebServicesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -237,11 +235,9 @@ public class DrWebFragment extends BaseFragment {
                     @Override
                     public void run() {
                         if (SendInfo.activateDrWeb(version)) {
-                            makeSimpleSnackBar("Активовано!", mainLayout);
-                            try {
-                                Thread.sleep(300);
-                            } catch (InterruptedException ignored) {
-                            }
+                            makeSimpleSnackBar("Підключено!", mainLayout);
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markDrWebServicesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.City;
@@ -44,11 +45,10 @@ public class ContactFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        person = GetInfo.getPersonInfo();
+        person = DbCache.getPerson();
         sityNameUa = person.getAddress().getCityNameUa();
-        String url = GetInfo.getUrlOfCity(sityNameUa);
-        city = GetInfo.getCityPhones(url);
-        System.out.println(city);
+        String url = DbCache.getUrlOfCity(sityNameUa);
+        city = DbCache.getCityPhones(url);
     }
 
     @Override

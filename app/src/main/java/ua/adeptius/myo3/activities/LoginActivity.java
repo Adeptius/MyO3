@@ -260,9 +260,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try{
+                    DbCache.markPersonOld();
                     Person person = DbCache.getPerson();
                     if (person.getCard() == null) {
-                        DbCache.markPersonOld();
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {

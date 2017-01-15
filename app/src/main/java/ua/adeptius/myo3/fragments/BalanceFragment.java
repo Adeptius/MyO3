@@ -64,7 +64,6 @@ public class BalanceFragment extends BaseFragment {
     private void prepareAllOperations(List<Operation> operations) {
         for (Operation operation : operations) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_balance_operation, null);
-            mainLayout.addView(itemView);
 
             TextView textOperationDate = (TextView) itemView.findViewById(R.id.operation_date);
             TextView textOperationComent = (TextView) itemView.findViewById(R.id.operation_coment);
@@ -74,6 +73,9 @@ public class BalanceFragment extends BaseFragment {
             String date = operation.getDate().replaceAll("00:00:00", "");
 
             String note = operation.getMyNote();
+            if (!note.equals("Нема проплат та списань")){
+                mainLayout.addView(itemView);
+            }
 
             String money;
             if (operation.getMoney() > 0) {

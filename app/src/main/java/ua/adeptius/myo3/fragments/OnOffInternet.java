@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.SendInfo;
 
 public class OnOffInternet extends BaseFragment {
@@ -24,14 +24,12 @@ public class OnOffInternet extends BaseFragment {
 
     @Override
     void init() {
-
-
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        Boolean[] status = GetInfo.getInternetSwitches();
+        Boolean[] status = DbCache.getInternetSwitches();
         internetIsActive = status[0];
         worldIsActive = status[1];
     }
@@ -66,7 +64,8 @@ public class OnOffInternet extends BaseFragment {
                     public void run() {
                         if (SendInfo.internetSwitchWorld()) {
                             makeSimpleSnackBar("Виконано.", mainLayout);
-                            try {Thread.sleep(500);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markInternetSwitchesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка.", mainLayout);
@@ -84,7 +83,8 @@ public class OnOffInternet extends BaseFragment {
                     public void run() {
                         if (SendInfo.internetSwitchAll()) {
                             makeSimpleSnackBar("Виконано.", mainLayout);
-                            try {Thread.sleep(500);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markInternetSwitchesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка.", mainLayout);

@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.AvailableTarif;
@@ -47,7 +48,7 @@ public class TarifFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        services = GetInfo.getServises();
+        services = DbCache.getServises();
     }
 
     @Override
@@ -268,7 +269,8 @@ public class TarifFragment extends BaseFragment {
 
                         if (SendInfo.changeTarif(map)) {
                             makeSimpleSnackBar("Тариф змінено", mainLayout);
-                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
+                            DbCache.markServicesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -404,7 +406,8 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.stopService(startDate, endDate)) {
                             makeSimpleSnackBar("Успішно", mainLayout);
-                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
+                            DbCache.markServicesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдало", mainLayout);
@@ -458,7 +461,8 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.startService(query)) {
                             makeSimpleSnackBar("Послуга відновлена. Зачекайте.", mainLayout);
-                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
+                            DbCache.markServicesOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Невдалось. Спробуйте ще раз.", mainLayout);

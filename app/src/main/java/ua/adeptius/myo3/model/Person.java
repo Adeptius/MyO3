@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
+import ua.adeptius.myo3.fragments.DocumentFragment;
 import ua.adeptius.myo3.utils.Utilits;
 
 public class Person {
@@ -41,7 +42,12 @@ public class Person {
             name = allInfo.get("name").toString();
             lastname = allInfo.get("lastname").toString();
             card = allInfo.get("card").toString();
-            current = Double.parseDouble(allInfo.get("current").toString());
+            String money = allInfo.getString("current");
+            if (money.contains("E-")){
+                current = 0;
+            }else {
+                current = Double.parseDouble(money.substring(0,7));
+            }
             email = allInfo.get("email").toString();
             age = Integer.parseInt(allInfo.get("age").toString());
 

@@ -128,7 +128,7 @@ public class GetInfo {
         return list;
     }
 
-    public static int getBonuses() throws Exception {
+    public static int getCountOfBonuses() throws Exception {
         Utilits.networkLog("Запрос количества бонусов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/amount_bonus");
         return Integer.valueOf(s);
@@ -289,7 +289,7 @@ public class GetInfo {
         return status;
     }
 
-    public static String isGarantedServiceEnabled() throws Exception {
+    public static String getGarantedServiceStatus() throws Exception {
         Utilits.networkLog("Запрос состояние гарантированного сервиса");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/guaranteed_service");
         if (s.contains("e_date")) return s.substring(s.indexOf("e_date") + 9, s.lastIndexOf(" "));
@@ -411,6 +411,11 @@ public class GetInfo {
         s = s.replaceAll("\"Повторная активация услуги \"Кредит доверия\"\"",
                 "\"Повторная активация услуги Кредит доверия\"");
         List<Operation> operations = new ArrayList<>();
+        if (s.equals("[]")){
+            Operation operation = new Operation("{\"date\":\""+date+"\",\"money\":0,\"note\":\"Нема проплат та списань\",\"bonus\":null,\"p_id\":7077763}");
+            operations.add(operation);
+            return operations;
+        }
         s = s.substring(1, s.length() - 1);
         String[] splitted = splitJson(s);
         for (String s1 : splitted) {

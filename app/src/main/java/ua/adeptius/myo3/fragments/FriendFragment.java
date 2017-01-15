@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.FriendInvite;
@@ -185,7 +186,8 @@ public class FriendFragment  extends BaseFragment  {
                                             }
                                         });
                                         makeSimpleSnackBar("Заявка створена!", mainLayout);
-                                        try{Thread.sleep(2500);}catch (Exception ignored){}
+                                        try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
+                                        DbCache.markFriendInvitesOld();
                                         reloadFragment();
                                     }else if ("Заявка по цьому номеру вже існує.".equals(result)){
                                         HANDLER.post(new Runnable() {
@@ -210,10 +212,7 @@ public class FriendFragment  extends BaseFragment  {
 
     @Override
     void doInBackground() throws Exception {
-        invites = GetInfo.getFriendInvites();
-        for (FriendInvite invite : invites) {
-            System.out.println(invite);
-        }
+        invites = DbCache.getFriendInvites();
     }
 
     private void draw() {
@@ -244,11 +243,7 @@ public class FriendFragment  extends BaseFragment  {
             phone.setText(invite.getPhone());
             phone.setTextColor(color);
             layout_for_invites.addView(layout);
-
         }
-
-        
-
     }
 
     @Override

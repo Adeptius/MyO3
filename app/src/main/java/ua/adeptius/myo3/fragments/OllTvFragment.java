@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.model.ChannelOllTv;
 import ua.adeptius.myo3.utils.Utilits;
@@ -54,9 +55,9 @@ public class OllTvFragment  extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        start = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/1095");
-        optimal = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/1097");
-        premium = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/2062");
+        start = DbCache.getOllTvStartChannels();
+        optimal = DbCache.getOllTvOptimalChannels();
+        premium = DbCache.getOllTvPremiumChannels();
         deleteSecondFromFirst(premium, optimal);
         deleteSecondFromFirst(optimal, start);
     }

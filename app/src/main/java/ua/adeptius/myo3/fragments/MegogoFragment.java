@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.ChannelMegogo;
@@ -62,22 +63,22 @@ public class MegogoFragment extends BaseFragment {
     @Override
     void doInBackground() throws Exception {
         try {
-            allChannelMegogos = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/8701-light-tv-online");
+            allChannelMegogos = DbCache.getMegogoMainChannels();
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            filmBox = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2691-filmbox-tv-online");
+            filmBox = DbCache.getMegogoFilmBoxChannels();
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            viasat = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2701-tv1000premium-tv-online");
+            viasat = DbCache.getMegogoViasatChannels();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        megogoPts = GetInfo.getMegogoPts();
+        megogoPts = DbCache.getMegogoPts();
         for (int i = megogoPts.size() - 1; i >= 0; i--) {
             if (megogoPts.get(i).isSubscribe())
                 activeSubscribe = megogoPts.get(i).getName();
@@ -455,10 +456,8 @@ public class MegogoFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateMegogo(megogoPt.getId())) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ignored) {
-                    }
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    DbCache.markMegogoPtsOld();
                     goTo(new TarifFragment());
                 } else {
                     makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -497,10 +496,8 @@ public class MegogoFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.deActivateMegogo(megogoPt.getId())) {
                     makeSimpleSnackBar("Відключення..", mainLayout);
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ignored) {
-                    }
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    DbCache.markMegogoPtsOld();
                     goTo(new TarifFragment());
                 } else {
                     makeSimpleSnackBar("Трапилась помилка", mainLayout);

@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity
 //        Settings.setCurrentPassword("5351301");
 
 //      Абон
-        Settings.setCurrentLogin("561100728");
-        Settings.setCurrentPassword("5276229");
+//        Settings.setCurrentLogin("561100728");
+//        Settings.setCurrentPassword("5276229");
 
 //        Settings.setCurrentLogin("561600377");
 //        Settings.setCurrentPassword("1217229");
@@ -121,6 +121,11 @@ public class MainActivity extends AppCompatActivity
 
 
             // для теста восстановления кредита
+//        Settings.setCurrentLogin("02519238");
+//        Settings.setCurrentPassword("9332428");
+
+
+            // Много олл тв
 //        Settings.setCurrentLogin("02519238");
 //        Settings.setCurrentPassword("9332428");
 
@@ -208,7 +213,13 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            drawer.openDrawer(GravityCompat.START);
+//            FragmentManager fm = getFragmentManager();
+//            if (fm.getBackStackEntryCount() > 0) {
+//                fm.popBackStackImmediate();
+//            } else {
+//                super.onBackPressed();
+//            }
         }
     }
 
@@ -224,7 +235,7 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                fm.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
             }
         });
 
@@ -283,6 +294,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
     private void exit() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -300,9 +313,12 @@ public class MainActivity extends AppCompatActivity
                 Settings.setCurrentLogin("");
                 Settings.setCurrentPassword("");
                 MainActivity.this.finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }

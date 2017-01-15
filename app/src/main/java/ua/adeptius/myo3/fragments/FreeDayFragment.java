@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 
@@ -43,17 +44,15 @@ public class FreeDayFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        Map<String, Integer> map = GetInfo.getFreeDayInfo();
+        Map<String, Integer> map = DbCache.getFreeDayInfo();
         numberOfFreeDays = map.get("daysTotal");
         availableFreeDays = map.get("daysLeft");
-        statistics = GetInfo.getFreeDayStatistics();
+        statistics = DbCache.getFreeDayStatistics();
     }
 
     @Override
@@ -222,7 +221,9 @@ public class FreeDayFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateFreeDay(map)) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    DbCache.markFreeDayInfoOld();
+                    DbCache.markFreeDayStatisticsOld();
                     reloadFragment();
                 } else {
                     makeSimpleSnackBar("Послуга вже активна.", mainLayout);

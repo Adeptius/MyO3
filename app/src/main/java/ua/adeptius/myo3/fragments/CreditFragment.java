@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.Date;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.utils.Utilits;
@@ -34,16 +35,14 @@ public class CreditFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         activateButton = getButton(R.id.activate_button);
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        creditStatus = GetInfo.getCreditStatus();
-        garantServiceEnabled = GetInfo.isGarantedServiceEnabled().equals("enabled");
+        creditStatus = DbCache.getCreditStatus();
+        garantServiceEnabled = DbCache.garantedServiceStatus().equals("enabled");
     }
 
     @Override
@@ -181,7 +180,8 @@ public class CreditFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.reActivateCredit()) {
                     makeSimpleSnackBar("Зачекайте, послуга відновлюється", mainLayout);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    DbCache.markCreditStatusOld();
                     reloadFragment();
                 } else {
                     makeSimpleSnackBar("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
@@ -196,7 +196,8 @@ public class CreditFragment extends BaseFragment {
             public void run() {
                 if (SendInfo.activateCredit()) {
                     makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    DbCache.markCreditStatusOld();
                     reloadFragment();
                 } else {
                     makeSimpleSnackBar("Трапилась помилка", mainLayout);

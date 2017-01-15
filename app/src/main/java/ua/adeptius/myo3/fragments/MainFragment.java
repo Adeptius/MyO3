@@ -40,6 +40,7 @@ public class MainFragment extends BaseFragment {
     private List<Ip> ips;
     private String mountlyFee;
 
+
     @Override
     void setAllSettings() {
         titleText = "Головна";
@@ -107,7 +108,13 @@ public class MainFragment extends BaseFragment {
         age.setText(person.getAge() + " місяців");
         String many = String.valueOf(person.getCurrent());
         many = many.length() > 4 ? many.substring(0, 4) : many;
+        if (person.getCurrent() > 0){
+            money.setTextColor(COLOR_GREEN);
+        }else if (person.getCurrent()< person.getStopsum()){
+            money.setTextColor(COLOR_RED);
+        }
         money.setText(many + " грн");
+        money.setOnClickListener(this);
         fee.setText(mountlyFee + " грн");
         smsInfo.setText(person.getPhoneWithSms());
         email.setText(person.getEmail());
@@ -172,7 +179,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(2);
-                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markPersonOld();
                     reloadFragment();
                 }
@@ -182,7 +189,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(5);
-                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markPersonOld();
                     reloadFragment();
                 }
@@ -192,7 +199,7 @@ public class MainFragment extends BaseFragment {
                 @Override
                 public void run() {
                     SendInfo.changeMailings(6);
-                    try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markPersonOld();
                     reloadFragment();
                 }
@@ -205,6 +212,8 @@ public class MainFragment extends BaseFragment {
             changeEmail(view);
         } else if (view.equals(password)) {
             password.setText(Settings.getCurrentPassword());
+        } else if (view.equals(money)) {
+            goTo(new BalanceFragment());
         }
     }
 
@@ -326,7 +335,7 @@ public class MainFragment extends BaseFragment {
                             }
                             if (SendInfo.changeSmsNumber(text.getText().toString(), phone)) {
                                 makeSimpleSnackBar("Номер змінено", view);
-                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                                 DbCache.markPersonOld();
                                 reloadFragment();
                             } else
@@ -364,7 +373,7 @@ public class MainFragment extends BaseFragment {
                         try {
                             if (SendInfo.changeEmail(text.getText().toString())) {
                                 makeSimpleSnackBar("Email змінено", view);
-                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                                 DbCache.markPersonOld();
                                 reloadFragment();
                             } else
@@ -403,7 +412,7 @@ public class MainFragment extends BaseFragment {
                             if (SendInfo.changePassword(text.getText().toString())) {
                                 makeSimpleSnackBar("Пароль змінено", view);
                                 Settings.setCurrentPassword(text.getText().toString());
-                                try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
+                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                                 DbCache.markPersonOld();
                                 reloadFragment();
                             } else
@@ -420,4 +429,6 @@ public class MainFragment extends BaseFragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }

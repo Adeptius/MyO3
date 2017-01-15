@@ -14,18 +14,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.BonusServiceSpending;
 import ua.adeptius.myo3.utils.Utilits;
-
-import static ua.adeptius.myo3.utils.Utilits.doTwoSymb;
 
 public class BonusFragment extends BaseFragment {
 
@@ -53,12 +50,12 @@ public class BonusFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        boolean[] boo = GetInfo.getBonusesStatus();
+        boolean[] boo = DbCache.getBonusesStatus();
         signedPublicCard = boo[0];
         confirmedBonus = boo[1];
         if (signedPublicCard && confirmedBonus){
-            bonuses = GetInfo.getBonuses();
-            serviceSpendings = GetInfo.getBonusesSpending();
+            bonuses = DbCache.getCountOfBonuses();
+            serviceSpendings = DbCache.getBonusesSpending();
         }
     }
 
@@ -209,10 +206,11 @@ public class BonusFragment extends BaseFragment {
                         if (SendInfo.activateBonusProgram()) {
                             makeSimpleSnackBar("Хвилинку, триває активація!", mainLayout);
                             try {Thread.sleep(5000);} catch (InterruptedException ignored) {}
+                            DbCache.markBonusesStatusOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
-                            try {Thread.sleep(3000);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             reloadFragment();
                         }
                     }
@@ -290,7 +288,9 @@ public class BonusFragment extends BaseFragment {
                                     if (SendInfo.spendBonuses(map)){ // отправляю запрос
 
                                         makeSimpleSnackBar("Сплачено!", vlayout);
-                                        try{Thread.sleep(2500);}catch (Exception ignored){}
+                                        try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
+                                        DbCache.markCountOfBonusesOld();
+                                        DbCache.markBonusesSpendingOld();
                                         HANDLER.post(new Runnable() {
                                             @Override
                                             public void run() {

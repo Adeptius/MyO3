@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 import ua.adeptius.myo3.model.MailType;
@@ -65,7 +66,7 @@ public class DocumentFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        person = GetInfo.getPersonInfo();
+        person = DbCache.getPerson();
         footer = Zayavleniya.getFooter();
     }
 

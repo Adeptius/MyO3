@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.utils.Settings;
 import ua.adeptius.myo3.model.Person;
@@ -45,7 +46,7 @@ public class PayFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        person = GetInfo.getPersonInfo();
+        person = DbCache.getPerson();
         prepareAll();
     }
 

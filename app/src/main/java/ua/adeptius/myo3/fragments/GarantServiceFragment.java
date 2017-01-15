@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ua.adeptius.myo3.R;
-import ua.adeptius.myo3.dao.GetInfo;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.SendInfo;
 
 import static ua.adeptius.myo3.R.id.activate_garant_button;
@@ -35,15 +35,13 @@ public class GarantServiceFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-        serviseStatus = GetInfo.isGarantedServiceEnabled();
-        privatHouse = GetInfo.getPersonInfo().getAddress().isPrivat();
+        serviseStatus = DbCache.garantedServiceStatus();
+        privatHouse = DbCache.getPerson().getAddress().isPrivat();
         prepareScreen();
     }
 
@@ -135,7 +133,8 @@ public class GarantServiceFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.deActivateGarantedService()) {
                             makeSimpleSnackBar("Послуга відключається", mainLayout);
-                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markGarantedServiceStatusOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);
@@ -166,7 +165,8 @@ public class GarantServiceFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.activateGarantedService()) {
                             makeSimpleSnackBar("Послуга підключається", mainLayout);
-                            try {Thread.sleep(300);} catch (InterruptedException ignored) {}
+                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            DbCache.markGarantedServiceStatusOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Трапилась помилка", mainLayout);

@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ua.adeptius.myo3.R;
+import ua.adeptius.myo3.dao.DbCache;
 import ua.adeptius.myo3.dao.GetInfo;
 import ua.adeptius.myo3.dao.SendInfo;
 
@@ -37,15 +38,13 @@ public class TurboDayFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
         hideAllViewsInMainScreen();
     }
 
 
     @Override
     void doInBackground() throws Exception {
-        statistics = GetInfo.getTurboDayStatistics();
+        statistics = DbCache.getTurboDayStatistics();
     }
 
     @Override
@@ -181,6 +180,8 @@ public class TurboDayFragment extends BaseFragment {
                     public void run() {
                         if (SendInfo.activateTurboDay(startDate, endDate)) {
                             makeSimpleSnackBar("Послуга активована.", mainLayout);
+                            try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
+                            DbCache.markTurboDayStatisticsOld();
                             reloadFragment();
                         } else {
                             makeSimpleSnackBar("Неправильний термін", mainLayout);

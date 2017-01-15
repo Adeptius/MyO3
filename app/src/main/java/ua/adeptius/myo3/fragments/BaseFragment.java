@@ -65,6 +65,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected int titleImage;
     protected int layoutId;
     protected int SCREEN_WIDTH;
+    protected final int TIME_TO_WAIT_BEFORE_UPDATE = 3000;
 
     @Nullable
     @Override
@@ -188,7 +189,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected void goTo(BaseFragment fragment) {
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fm.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
     }
 
     abstract void doInBackground() throws Exception;
@@ -257,4 +258,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     abstract void init();
 
     abstract void setAllSettings();
+
+
+
 }
