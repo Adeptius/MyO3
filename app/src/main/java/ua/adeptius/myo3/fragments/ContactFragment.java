@@ -69,7 +69,7 @@ public class ContactFragment extends BaseFragment {
             TextView callCentreName = (TextView) layoutCallCentre.findViewById(R.id.centre_name);
             callCentreName.setText("Відділ підключень");
             TextView callCentreDesc = (TextView) layoutCallCentre.findViewById(R.id.centre_desc);
-            callCentreDesc.setText("Телефонуйте, якщо бажаєте підключитись, або дізнатись про діючи акції");
+            callCentreDesc.setText("Телефонуйте, якщо бажаєте оформити підключення, або дізнатись про діючи акції");
             TextView callCentreWork = (TextView) layoutCallCentre.findViewById(R.id.text_work_time);
             callCentreWork.setText("З 09 до 20 щоденно");
             Button callCentreButton = (Button) layoutCallCentre.findViewById(R.id.button);

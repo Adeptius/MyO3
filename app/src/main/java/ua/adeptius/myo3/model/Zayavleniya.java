@@ -1,8 +1,6 @@
 package ua.adeptius.myo3.model;
 
 
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,7 @@ public class Zayavleniya {
         list.add(new Zayava(
                 "Додаткова IP адреса",
                 MailType.DOP_IP,
-                "Для організації роботи серверів паралельно з домашньою лінією. Або для підключення додаткового ПК без роутера(необхіден свіч).",
+                "Для організації роботи серверів паралельно з домашньою лінією. Або для підключення додаткового ПК без роутера(потрібен свіч).",
                 30,
                 "щомісячно",
                 "Замовити"
@@ -174,16 +172,4 @@ public class Zayavleniya {
         return sb.toString();
 
     }
-
-
-//    public static String compens(String reason) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("\nна компенсацію абонентської плати");
-//        sb.append("\n").append(reason);
-//        sb.append("\n");
-//        sb.append("\n").append(Utilits.getUkrDateNow());
-//        return sb.toString();
-//    }
-
-
 }

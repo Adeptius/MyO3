@@ -6,7 +6,6 @@ public class ChannelDivan {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
-        System.out.println(this);
     }
 
     private String id;
@@ -31,9 +30,5 @@ public class ChannelDivan {
 
     public String getIconUrl() {
         return iconUrl;
-    }
-
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
     }
 }

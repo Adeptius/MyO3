@@ -78,85 +78,6 @@ public class MainActivity extends AppCompatActivity
         //TODO переместить это в сплэш скрин
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
-
-
-//        try {
-//            Glide.with(this).load(R.drawable.cover).into((ImageView) findViewById(R.id.backdrop));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-        //мой договор
-//        Settings.setCurrentLogin("02514521");
-//        Settings.setCurrentPassword("5351301");
-
-//      Абон
-//        Settings.setCurrentLogin("561100728");
-//        Settings.setCurrentPassword("5276229");
-
-//        Settings.setCurrentLogin("561600377");
-//        Settings.setCurrentPassword("1217229");
-
-
-//        абон с оллтв
-//        Settings.setCurrentLogin("561700845");
-//        Settings.setCurrentPassword("7897107");
-
-//        абон с диванТВ
-//        Settings.setCurrentLogin("441120767");
-//        Settings.setCurrentPassword("3147698");
-
-            // АБОН!!!!!!
-//        Settings.setCurrentLogin("561000369");
-//        Settings.setCurrentPassword("0849788");
-
-            // АБОН!!!!!!
-//        Settings.setCurrentLogin("6191300086");
-//        Settings.setCurrentPassword("6909125");
-
-
-            // Згоревший кредит доверия. абон
-//        Settings.setCurrentLogin("7231");
-//        Settings.setCurrentPassword("3786492");
-
-
-            // для теста восстановления кредита
-//        Settings.setCurrentLogin("02519238");
-//        Settings.setCurrentPassword("9332428");
-
-
-            // Много олл тв
-//        Settings.setCurrentLogin("02519238");
-//        Settings.setCurrentPassword("9332428");
-
-
-//        ТЕСТОВЫЕ ДОГОВОРА
-
-        // гарантированый сервис подключен!
-//        тест Бандл тест Безлимитный 50 Мбит/с - 100 грн.
-//        Settings.setCurrentLogin("441135231");
-//        Settings.setCurrentPassword("5145026");
-
-//        Тест Имя Отчество 	!-Новый абонент
-//        Settings.setCurrentLogin("441132990");
-//        Settings.setCurrentPassword("2208123");
-
-//        	Тест Тест Тест 		!-Бесплатный 5Мбит/с
-//        Settings.setCurrentLogin("442401931");
-//        Settings.setCurrentPassword("0263949");
-
-//        тест тест тест			!-Новый абонент
-//        Settings.setCurrentLogin("61311100905");
-//        Settings.setCurrentPassword("7846791");
-
-//        test 1 ТЕСТ 1 ТЕСТ 1	Безлимитный 20 Мбит/с + МЕГОГО - 85 грн.
-//        Settings.setCurrentLogin("dhcp_test");
-//        Settings.setCurrentPassword("12345678");
-
-//        Сюй Шенцай тест
-//        Settings.setCurrentLogin("6391");
-//        Settings.setCurrentPassword("ahmatovoj");
-
         try{
             Person person = DbCache.getPerson();
             setDrawlerText(person.getName(),"Угода " + Settings.getCurrentLogin());
@@ -175,10 +96,6 @@ public class MainActivity extends AppCompatActivity
         drawlerDescription.setText(description);
     }
 
-    /**
-     * Initializing collapsing toolbar
-     * Will show and hide the toolbar title on scroll
-     */
     private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);

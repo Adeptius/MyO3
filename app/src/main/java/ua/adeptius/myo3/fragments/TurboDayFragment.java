@@ -57,7 +57,10 @@ public class TurboDayFragment extends BaseFragment {
         Button activateButton = getButton(R.id.button_activate_free_and_turbo_day);
         TextView firstText = getTextView(R.id.first_text);
         TextView textStatisticsTitle = getTextView(R.id.text_statistics_title);
+        TextView daysLeft = getTextView(R.id.days_left);
+        daysLeft.setVisibility(View.GONE);
         LinearLayout layout = (LinearLayout) mainLayout.findViewById(R.id.layout_for_statistics);
+
 
         firstText.setText("Послуга діє з 09:00 до 17:00 години обраного дня та коштує 2,4 грн за день.");
 

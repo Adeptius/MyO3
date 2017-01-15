@@ -7,18 +7,14 @@ public class AvailableTarif {
 
     private String id;
     private String name;
-//    private String month;
-//    private String bundle;
 
     public AvailableTarif(String json) {
         try {
             JSONObject jobject = new JSONObject(json);
             this.id = jobject.getString("id");
             this.name = jobject.getString("name");
-//            this.month = jobject.get("month").toString();
-//            this.bundle = jobject.get("bundle").toString();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

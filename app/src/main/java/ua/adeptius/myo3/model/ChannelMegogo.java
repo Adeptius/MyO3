@@ -4,14 +4,12 @@ import org.json.JSONObject;
 
 public class ChannelMegogo {
 
-    public ChannelMegogo(String json, String iconUrl, String category) {
+    public ChannelMegogo(String json, String iconUrl) {
         try{
             JSONObject jsonObject = new JSONObject(json);
-            this.genre = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("genre"));
             this.title = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("title"));
             this.description = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(jsonObject.getString("description"));
             this.iconUrl = "http://" + iconUrl.substring(25, iconUrl.length()-2);
-            this.category = category;
 
             String available = "";
             try {
@@ -30,18 +28,12 @@ public class ChannelMegogo {
     }
 
     private String description;
-    private String genre;
     private String title;
     private String iconUrl;
     private String availableIn;
-    private String category;
 
     public String getDescription() {
         return description;
-    }
-
-    public String getGenre() {
-        return genre;
     }
 
     public String getTitle() {
@@ -54,9 +46,5 @@ public class ChannelMegogo {
 
     public String getAvailableIn() {
         return availableIn;
-    }
-
-    public String getCategory() {
-        return category;
     }
 }

@@ -376,8 +376,7 @@ public class MainFragment extends BaseFragment {
                                 try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                                 DbCache.markPersonOld();
                                 reloadFragment();
-                            } else
-                                makeSimpleSnackBar("Помилка. Email невірний.", view);
+                            } else makeSimpleSnackBar("Помилка. Email невірний.", view);
                         } catch (Exception e) {
                             e.printStackTrace();
                             makeSimpleSnackBar("Помилка. Нема з'єднання.", view);

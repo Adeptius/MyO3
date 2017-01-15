@@ -103,7 +103,7 @@ public class CreditFragment extends BaseFragment {
             activateButton.setClickable(false);
             activateButton.setText("Відновення...");
         } else if ("disabled".equals(creditStatus)) {
-
+            getTextView(R.id.text_title).setVisibility(View.GONE);
             activateButton.setText("Відновити кредит довіри");
             ifCreditLoss.setVisibility(View.VISIBLE);
             ifCreditLoss.setText("Нажаль, кредит довіри недоступний. Можливо ви раніше не оплатили " +

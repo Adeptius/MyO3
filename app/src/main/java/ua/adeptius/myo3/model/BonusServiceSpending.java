@@ -8,24 +8,24 @@ import java.util.regex.Pattern;
 
 public class BonusServiceSpending {
 
-    public BonusServiceSpending(String json) {
-        try{
-            JSONObject j = new JSONObject(json);
-            this.bonus = j.getInt("bonus");
-            this.date = j.getString("date");
-            this.money = j.getInt("money");
-            this.note = j.getString("note");
-            this.s_id = j.getString("s_id");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     private int bonus;
     private String date;
     private int money;
     private String note;
     private String s_id;
+
+    public BonusServiceSpending(String json) {
+        try{
+            JSONObject j = new JSONObject(json);
+            bonus = j.getInt("bonus");
+            date = j.getString("date");
+            money = j.getInt("money");
+            note = j.getString("note");
+            s_id = j.getString("s_id");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public int getBonus() {
         return bonus;
@@ -67,12 +67,12 @@ public class BonusServiceSpending {
 
         try{
             Matcher regexMatcher = Pattern.compile("\\d{1,3}грн").matcher(name);
-            regexMatcher.find();
-            String s = regexMatcher.group();
-            name = name.replaceAll(s,"");
-        }catch (Exception e){
+            if (regexMatcher.find()){
+                String s = regexMatcher.group();
+                name = name.replaceAll(s,"");
+            }
+        }catch (Exception ignored){}
 
-        }
         name = name.replaceAll("Мбит", "Мбіт");
         name = name.replaceAll("Безлимитный", "Безліміт");
         name = name.replaceAll("Реальный", "Реальний");

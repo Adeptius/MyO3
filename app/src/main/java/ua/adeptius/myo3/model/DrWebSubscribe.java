@@ -8,10 +8,7 @@ import java.util.regex.Pattern;
 
 public class DrWebSubscribe {
 
-    private String login;
     private String sid;
-    private String payType;
-    private String newprice;
     private String dchange;
     private String name;
     private String android_url;
@@ -20,10 +17,7 @@ public class DrWebSubscribe {
     public DrWebSubscribe(String json) {
         try{
             JSONObject jsonObject = new JSONObject(json);
-            this.login = jsonObject.getString("login");
             this.sid = jsonObject.getString("sid");
-            this.payType = jsonObject.getString("payType");
-            this.newprice = jsonObject.getString("newprice");
             this.dchange = jsonObject.getString("dchange");
             this.name = jsonObject.getString("name");
             this.url = jsonObject.getString("url");
@@ -36,21 +30,8 @@ public class DrWebSubscribe {
         System.out.println(this);
     }
 
-
-    public String getLogin() {
-        return login;
-    }
-
     public String getSid() {
         return sid;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public String getNewprice() {
-        return newprice;
     }
 
     public String getDchange() {
@@ -83,21 +64,6 @@ public class DrWebSubscribe {
         e.printStackTrace();
         }
         return cost;
-    }
-
-
-    @Override
-    public String toString() {
-        return "DrWebSubscribe{" +
-                "login='" + login + '\'' +
-                ", sid='" + sid + '\'' +
-                ", payType='" + payType + '\'' +
-                ", newprice='" + newprice + '\'' +
-                ", dchange='" + dchange + '\'' +
-                ", name='" + name + '\'' +
-                ", android_url='" + android_url + '\'' +
-                ", url='" + url + '\'' +
-                '}';
     }
 
     public String getAndroid_url() {

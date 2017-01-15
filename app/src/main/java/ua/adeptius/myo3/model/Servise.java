@@ -10,17 +10,6 @@ import static java.lang.Integer.*;
 
 public class Servise {
 
-//    private int old;
-//    private int sid;
-//    private double money;
-//    private String start_date;
-//    private int pay_type;
-//    private String login;
-//    private String domen;
-//    private String end_date;
-//    private String chprices;
-//    private String discounts;
-//    private String typeName;
     private int id;
     private int type;
     private int month;
@@ -40,16 +29,16 @@ public class Servise {
     public Servise(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
-            this.id = allInfo.getInt("id");
-            this.type = allInfo.getInt("type");
-            this.month = allInfo.getInt("month");
-            this.pay_type_name = allInfo.getString("pay_type_name");
+            id = allInfo.getInt("id");
+            type = allInfo.getInt("type");
+            month = allInfo.getInt("month");
+            pay_type_name = allInfo.getString("pay_type_name");
             if ("!-Приостановлен".equals(pay_type_name)) {
                 isStopped = true;
-                this.pay_type_name = "Призупинено";
+                pay_type_name = "Призупинено";
             }
-            this.is_allow_change = allInfo.getBoolean("is_allow_change");
-            this.is_allow_suspend = allInfo.getBoolean("is_allow_suspend");
+            is_allow_change = allInfo.getBoolean("is_allow_change");
+            is_allow_suspend = allInfo.getBoolean("is_allow_suspend");
 
             try{
                 String s = allInfo.getString("discounts");
@@ -58,20 +47,20 @@ public class Servise {
                 int discount = disc.getInt("amount");
                 String date = disc.getString("eDate");
                 date = date.substring(0, date.indexOf(" "));
-                this.discount = discount;
-                this.haveDiscount = true;
-                this.discountTo = date;
+                discount = discount;
+                haveDiscount = true;
+                discountTo = date;
             }catch (Exception ignored){}
 
             try {
                 String s = allInfo.getString("chprices");
                 s = s.substring(1, s.length() - 1);
                 JSONObject details = new JSONObject(s.trim());
-                this.newName = details.getString("newName");
-                this.dateWillChange = details.getString("dchange");
+                newName = details.getString("newName");
+                dateWillChange = details.getString("dchange");
             } catch (Exception ignored) {
-                this.newName = "";
-                this.dateWillChange = "";
+                newName = "";
+                dateWillChange = "";
             }
 
             if (!"".equals(dateWillChange)){
@@ -90,19 +79,16 @@ public class Servise {
                     isActivatingNow = true;
                 }
             }
+
+            try{
+                if (!allInfo.getString("login").equals("") && type==3){
+                    pay_type_name = allInfo.getString("login") + "@freenet.com.ua";
+                }
+
+            }catch (Exception ignored){}
         } catch (Exception e) {
             e.printStackTrace();
         }
-//            this.old = Integer.parseInt(allInfo.get("old").toString());
-//            this.sid = Integer.parseInt(allInfo.get("sid").toString());
-//            this.money = Double.parseDouble(allInfo.get("money").toString());
-//            this.start_date = allInfo.get("start_date").toString();
-//            this.pay_type = Integer.parseInt(allInfo.get("pay_type").toString());
-//            this.login = allInfo.get("login").toString();
-//            this.domen = allInfo.get("domen").toString();
-//            this.end_date = allInfo.get("end_date").toString();
-//            this.chprices = allInfo.get("chprices").toString();
-//            this.discounts = allInfo.get("discounts").toString();
     }
 
     public String getMyServiceName() {
@@ -157,6 +143,8 @@ public class Servise {
         name = name.replaceAll("MEGOGO Максимальная", "Підписка максимальна");
         name = name.replaceAll("MEGOGO Viasat Premium", "Пакет Viasat Premium");
         name = name.replaceAll("MEGOGO FilmBox", "Пакет FilmBox");
+        name = name.replaceAll("бесплатный", "безкоштовний");
+        name = name.replaceAll("Почтовый ящик 30Мб", "Обсяг 30мб");
         return name;
     }
 
@@ -169,6 +157,7 @@ public class Servise {
         if (getType() == 13) return "Телебачення OLL.TV";
         if (getType() == 14) return "Телебачення Divan.TV";
         if (getType() == 9) return "Антивірус";
+        if (getType() == 3) return "Поштова скринька";
         return "";
     }
 

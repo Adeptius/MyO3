@@ -13,18 +13,6 @@ public class City {
     private String adress;
     private String coordinates;
 
-    @Override
-    public String toString() {
-        return "City{" +
-                "support=" + support +
-                ", abon=" + abon +
-                ", call=" + call +
-                ", time='" + time + '\'' +
-                ", reason='" + reason + '\'' +
-                ", adress='" + adress + '\'' +
-                ", coordinates='" + coordinates + '\'' +
-                '}';
-    }
 
     public List<String> getSupport() {
         return support;

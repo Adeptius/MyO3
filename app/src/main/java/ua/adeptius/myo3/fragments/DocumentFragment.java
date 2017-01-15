@@ -112,7 +112,7 @@ public class DocumentFragment extends BaseFragment {
         String message = "Вартість послуги складає " + zayava.getPrice() + " грн " + zayava.getPriceType().toLowerCase() +".";
         int willCostIfNow = 0;
         message += "\nУ вас зараз " + (int)person.getCurrent() + " грн";
-        if (zayava.getPriceType().equals("Щомісячно")){
+        if (zayava.getPriceType().equals("щомісячно")){
             willCostIfNow = Utilits.calculateDaysCostLeft(zayava.getPrice()) + 1;
             message += "\nЯкщо активувати прямо зараз - з вашого рахунку буде знято ";
             message += willCostIfNow + " грн. ";

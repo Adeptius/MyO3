@@ -219,11 +219,6 @@ public class GetInfo {
         Elements divs = doc.body().getElementsByClass("videos-inner");
         List<ChannelMegogo> channelMegogos = new ArrayList<>();
         for (Element div : divs) {
-            String category = "";
-            try {
-                category = div.getElementsByTag("h3").first().html();
-            } catch (Exception e) {
-            }
             Element ul = div.getElementsByClass("videos-mask").first()
                     .getElementsByTag("ul").first();
             Elements listOfLi = ul.getElementsByTag("li");
@@ -231,7 +226,7 @@ public class GetInfo {
                 Element li2 = li;
                 String description = li.attr("data-description");
                 String iconUrl = li.getElementsByClass("voi__poster").first().attr("style");
-                channelMegogos.add(new ChannelMegogo(description, iconUrl, category));
+                channelMegogos.add(new ChannelMegogo(description, iconUrl));
             }
         }
         return channelMegogos;

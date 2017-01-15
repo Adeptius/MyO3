@@ -73,7 +73,7 @@ public class FreeDayFragment extends BaseFragment {
         StringBuilder mainMessage = new StringBuilder();
         mainMessage.append("Ви з нами ");
         if (numberOfFreeDays == 0) {
-            mainMessage.append("менше року, нажаль, поки що, послуга вам не доступна.");
+            mainMessage.append("менше року, нажаль, поки що, послуга вам не доступна. Залишайтесь з нами та отримуйте більше бонусів.");
         } else if (numberOfFreeDays == 1) {
             mainMessage.append("один рік. Вам надається один день у місяць без обмежень швидкості.");
         } else if (numberOfFreeDays == 2) {
@@ -91,7 +91,9 @@ public class FreeDayFragment extends BaseFragment {
 
         StringBuilder leftMessage = new StringBuilder();
         if (availableFreeDays == 0) {
-            leftMessage.append("Ви вже використали всі вільні дні у цьому місяці.");
+            if (!(numberOfFreeDays == 0)){
+                leftMessage.append("Ви вже використали всі вільні дні у цьому місяці.");
+            }
         }else{
             activateButton.setVisibility(View.VISIBLE);
         } if (availableFreeDays == 1) {

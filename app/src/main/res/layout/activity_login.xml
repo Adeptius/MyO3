@@ -23,7 +23,7 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/enter_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -44,18 +44,19 @@
                 android:layout_height="wrap_content"
                 android:theme="@style/TextLabel">
 
-                    <android.support.v7.widget.AppCompatEditText
+                    <EditText
                         android:id="@+id/input_login"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:hint="Логін"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:maxLines="1"/>
 
                 </android.support.design.widget.TextInputLayout>
 
 
-
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/pass_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"

@@ -10,9 +10,6 @@ import ua.adeptius.myo3.utils.Utilits;
 
 public class Person {
 
-    //    private boolean vip;
-//    private String currency;
-    //    private boolean yur;
     private double stopsum;
     private int id;
     private String surname;
@@ -49,6 +46,7 @@ public class Person {
                 current = Double.parseDouble(money.substring(0,7));
             }
             email = allInfo.get("email").toString();
+            if (email==null) email = "";
             age = Integer.parseInt(allInfo.get("age").toString());
 
             //Phones
@@ -63,7 +61,7 @@ public class Person {
 
             // Address
             String addressJson = allInfo.get("address").toString();
-            this.address = new Address(addressJson);
+            address = new Address(addressJson);
 
             // Mailing
             String mailingsJson = allInfo.get("mailings").toString();
@@ -73,10 +71,7 @@ public class Person {
                 mailing.add(new Mailing(s));
             }
 
-//            currency = allInfo.get("currency").toString();
-//            yur = allInfo.get("yur").toString().equals("1");
             stopsum = allInfo.getDouble("stopsum");
-//            vip = allInfo.get("vip").toString().equals("1");
         } catch (JSONException e) {
             e.printStackTrace();
         }

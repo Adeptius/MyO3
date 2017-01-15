@@ -16,11 +16,9 @@ public class ChannelDivanDetails {
         this.description = description;
         this.availableIn = availableIn;
         this.availableOn = availableOn;
-        System.out.println(this);
     }
 
     public String getImage() {
-
         return image;
     }
 

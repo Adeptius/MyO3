@@ -7,37 +7,22 @@ public class Ip {
     private String ip;
     private String gateway;
     private String mask;
-    private String dns1 = "193.24.25.1";
-    private String dns2 = "193.24.25.250";
 
     public Ip(String json) {
         try {
             JSONObject jobject = new JSONObject(json);
-            this.setIp(jobject.get("ip").toString());
-            this.setMask(jobject.get("mask").toString());
-            this.setGateway(jobject.get("gateway").toString());
+            this.ip = jobject.getString("ip");
+            this.mask = jobject.getString("mask");
+            this.gateway = jobject.getString("gateway");
         } catch (JSONException e) {
             e.printStackTrace();
-            this.setIp("");
-            this.setMask("");
-            this.setGateway("");
+            this.ip = "";
+            this.mask = "";
+            this.gateway = "";
         }
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public void setGateway(String gateway) {
-        this.gateway = gateway;
-    }
-
-    public void setMask(String mask) {
-        this.mask = mask;
-    }
-
     public String getIp() {
-
         return ip;
     }
 
@@ -50,10 +35,10 @@ public class Ip {
     }
 
     public String getDns1() {
-        return dns1;
+        return "193.24.25.1";
     }
 
     public String getDns2() {
-        return dns2;
+        return "193.24.25.250";
     }
 }

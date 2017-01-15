@@ -100,6 +100,7 @@ public class Web {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
+        result = result.replaceAll("\"\"\"","\"\"");
         Utilits.networkLog("Получен Json: " + result);
         in.close();
         return result;

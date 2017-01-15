@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -101,6 +102,16 @@ public class TarifFragment extends BaseFragment {
                 });
             }
 
+            if (service.getMyTypeName().equals("Поштова скринька")){
+                goToButton.setVisibility(View.VISIBLE);
+                goToButton.setText("Змінити пароль");
+                goToButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changePasswordForEmail(String.valueOf(service.getId()));
+                    }
+                });
+            }
 
             Button changeButton = (Button) itemView.findViewById(R.id.service_change_button);
             if (!service.is_allow_change()) {
@@ -421,6 +432,40 @@ public class TarifFragment extends BaseFragment {
         dialog.show();
     }
 
+    private void changePasswordForEmail(final String id) {
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
+        builder.setCancelable(true);
+        builder.setView(datePicker);
+
+        TextView titleView = new TextView(context);
+        titleView.setText("Зміна паролю");
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+
+
+        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_change_mail, null);
+        final EditText text = (EditText) textLayout.findViewById(R.id.text_new_password);
+        builder.setView(textLayout);
+        builder.setCustomTitle(titleView);
+        builder.setPositiveButton("Готово", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialog, int which) {
+                EXECUTOR.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        String result = SendInfo.changeEmailPassword(text.getText().toString(),id);
+                        makeSimpleSnackBar(result, mainLayout);
+                    }
+                });
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private void startTheService() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

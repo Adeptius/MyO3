@@ -9,7 +9,6 @@ public class Operation {
     private double money;
     private String note;
     private double saldo;
-    //    private boolean bonus;
 
 
     public Operation(String json) {
@@ -18,12 +17,10 @@ public class Operation {
             this.date = jobject.getString("date");
             this.note = jobject.getString("note");
             this.money = jobject.getDouble("money");
-//            this.bonus = jobject.getBoolean("bonus");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public String getTextSaldo() {
         String result = String.valueOf(saldo);

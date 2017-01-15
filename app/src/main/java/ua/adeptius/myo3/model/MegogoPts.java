@@ -6,30 +6,24 @@ import org.json.JSONObject;
 public class MegogoPts {
 
     private String id;
-    private String megogoPayTypeId;
     private String month;
     private String name;
-    private String serType;
     private boolean subscribe;
     private String description;
 
     public MegogoPts(String json) {
         try{
             JSONObject j = new JSONObject(json);
-            setId(j.getString("id"));
-            setMegogoPayTypeId(j.getString("megogoPayTypeId"));
-            setMonth(j.getString("month"));
-            setName(j.getString("name"));
-            setSerType(j.getString("serType"));
-            setSubscribe(j.getString("subscribe").equals("1"));
+            id = j.getString("id");
+            month = j.getString("month");
+            name = j.getString("name");
+            subscribe = j.getString("subscribe").equals("1");
         }catch (Exception e){
-            setId("");
-            setMegogoPayTypeId("");
-            setMonth("");
-            setName("Помилка");
-            setDescription("Помилка обробки данних. Повідомте, будь-ласка, про це.");
-            setSerType("");
-            setSubscribe(false);
+            id = "";
+            month = "";
+            name = "Помилка";
+            description = "Помилка обробки данних. Повідомте, будь-ласка, про це.";
+            subscribe = false;
         }
     }
 
@@ -68,42 +62,16 @@ public class MegogoPts {
         this.name = name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
-
     public String getDescription() {
         return description;
     }
-
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setMegogoPayTypeId(String megogoPayTypeId) {
-        this.megogoPayTypeId = megogoPayTypeId;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-
-
-    public void setSerType(String serType) {
-        this.serType = serType;
-    }
-
-
     public String getId() {
         return id;
-    }
-
-    public String getMegogoPayTypeId() {
-        return megogoPayTypeId;
     }
 
     public String getMonth() {
@@ -114,28 +82,9 @@ public class MegogoPts {
         return name;
     }
 
-    public String getSerType() {
-        return serType;
-    }
-
     public boolean isSubscribe() {
         return subscribe;
     }
 
-    public void setSubscribe(boolean subscribe) {
-        this.subscribe = subscribe;
-    }
 
-    @Override
-    public String toString() {
-        return "MegogoPts{" +
-                "id='" + id + '\'' +
-                ", megogoPayTypeId='" + megogoPayTypeId + '\'' +
-                ", month='" + month + '\'' +
-                ", name='" + name + '\'' +
-                ", serType='" + serType + '\'' +
-                ", subscribe=" + subscribe +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

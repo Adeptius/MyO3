@@ -2,6 +2,8 @@ package ua.adeptius.myo3.dao;
 
 
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import ua.adeptius.myo3.utils.Settings;
@@ -9,6 +11,23 @@ import ua.adeptius.myo3.model.Phone;
 import ua.adeptius.myo3.utils.Utilits;
 
 public class SendInfo {
+
+
+    public static String changeEmailPassword(String newPass, String sid) {
+        Utilits.networkLog("Запрос изменения пароля:");
+        HashMap<String, String> map = new HashMap<>();
+        map.put("new_password", newPass);
+        map.put("confirm_password", newPass);
+        map.put("s_id", sid);
+        try {
+            String response = Web.sendPost("https://my.o3.ua/ajax/save_mail_password", map, false);
+            response = new JSONObject(response).getString("message");
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "Трапилась помилка. Можливо інтернет відсутній.";
+    }
 
     public static String rememberPassword(String card){
         Utilits.networkLog("Запрос восстановления пароля договора : "+card);
@@ -302,6 +321,7 @@ public class SendInfo {
         if (response.contains("Номер успішно збережений!")) return true;
         return false;
     }
+
 
 
 }

@@ -73,6 +73,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
                                 android:text='Канали "Футбол 1" та "Футбол 2" у якості HD' />
@@ -157,6 +158,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
                                 android:text='Канали "TV 1000 Megahit" та "TV 1000 Premium" у якості HD' />
@@ -241,6 +243,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
                                 android:text="Ви можете підключити до трьох пристроїв к пакету" />

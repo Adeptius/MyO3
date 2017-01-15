@@ -6,6 +6,10 @@ import org.json.JSONObject;
 
 public class Mailing {
 
+    private int id;
+    private String title;
+    private boolean subscribe;
+
     public Mailing(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
@@ -28,9 +32,4 @@ public class Mailing {
     public boolean isSubscribe() {
         return subscribe;
     }
-
-    private int id;
-    private String title;
-    private boolean subscribe;
-
 }

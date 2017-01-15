@@ -46,7 +46,6 @@ public class NewsFragment extends BaseFragment {
     @Override
     void init() {
 
-
     }
 
     @Override
@@ -136,7 +135,7 @@ public class NewsFragment extends BaseFragment {
         Document doc2 = Jsoup.connect(url).get();
         Elements images = doc2.getElementsByTag("img");
         for (Element image : images) {
-            if (image.toString().contains("/content/images/")) {
+            if (image.toString().contains("/content/images/") ) {
                 return "http://o3.ua" + image.attributes().get("src");
             }
         }
@@ -173,7 +172,6 @@ public class NewsFragment extends BaseFragment {
             News news = new News();
             news.setComment(text);
             news.setTitle(title2);
-            news.setDate(date);
             news.setImgUrl(imageUrl);
             news.setNumberedDate(convertDateToNumbers(date));
             news.setUrl(href);
@@ -208,7 +206,6 @@ public class NewsFragment extends BaseFragment {
             News news = new News();
             news.setComment(text);
             news.setTitle(title2);
-            news.setDate(date);
             news.setImgUrl(imageUrl);
             news.setUrl(href);
             news.setNumberedDate(convertDateToNumbers(date));

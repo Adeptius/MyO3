@@ -2,7 +2,6 @@ package ua.adeptius.myo3.model;
 
 
 public class News {
-    private String date;
     private String title;
     private String comment;
     private String url;
@@ -15,11 +14,6 @@ public class News {
 
     public void setNumberedDate(String numberedDate) {
         NumberedDate = numberedDate;
-    }
-
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getTitle() {
