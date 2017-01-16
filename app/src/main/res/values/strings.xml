@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">My O3</string>
-    <string name="title_activity_login">Мій O3</string>
-    <string name="title_activity_main">My O3</string>
+    <string name="app_name">Фрінет особистий кабінет</string>
+    <string name="title_activity_login">Фрінет особистий кабінет</string>
+    <string name="title_activity_main">Фрінет особистий кабінет</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
