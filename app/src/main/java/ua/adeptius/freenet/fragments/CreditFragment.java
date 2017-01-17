@@ -46,11 +46,11 @@ public class CreditFragment extends BaseFragment {
 
     @Override
     void processIfOk() {
+        int creditDays = 5;
         if (garantServiceEnabled) {
-            descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 10 діб";
-        } else {
-            descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на 5 діб";
+            creditDays = 10;
         }
+        descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на "+creditDays+" діб при заборгованості";
         updateTitle();
         draw();
         animateScreen();

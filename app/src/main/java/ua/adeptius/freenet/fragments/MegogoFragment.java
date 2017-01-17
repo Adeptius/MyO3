@@ -382,6 +382,7 @@ public class MegogoFragment extends BaseFragment {
                     double y = loadedBitMap.getHeight();
                     double x = loadedBitMap.getWidth();
 
+                    Thread.sleep(200);
             int currentX = ((LinearLayout) imageView.getParent()).getWidth();
 //                    int currentX = 500;
                     double ratio = y / x;
