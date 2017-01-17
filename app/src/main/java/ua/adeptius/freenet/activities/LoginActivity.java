@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -30,7 +29,7 @@ import ua.adeptius.freenet.R;
 import ua.adeptius.freenet.dao.DbCache;
 import ua.adeptius.freenet.dao.SendInfo;
 import ua.adeptius.freenet.dao.Web;
-import ua.adeptius.freenet.model.Testing2;
+import ua.adeptius.freenet.model.Testing;
 import ua.adeptius.freenet.model.TestingUser;
 import ua.adeptius.freenet.utils.Settings;
 
@@ -39,6 +38,7 @@ import static ua.adeptius.freenet.utils.Utilits.HANDLER;
 
 public class LoginActivity extends AppCompatActivity {
 
+    ImageView logoImageView;
     private LinearLayout loginLayout;
     private EditText textLogin;
     private EditText textPassword;
@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        logoImageView = (ImageView) findViewById(R.id.logoView);
         textLogin = (EditText) findViewById(R.id.input_login);
         textPassword = (EditText) findViewById(R.id.input_password);
         buttonLogin = (Button) findViewById(R.id.button_login);
@@ -212,6 +214,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     titleText.setVisibility(View.INVISIBLE);
+//                    logoImageView.setVisibility(View.INVISIBLE);
                     comentText.setVisibility(View.INVISIBLE);
 
                     titleText.setVisibility(View.VISIBLE);
@@ -224,10 +227,10 @@ public class LoginActivity extends AppCompatActivity {
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    final ImageView imageView = (ImageView) findViewById(R.id.logoView);
+//                    logoImageView.setVisibility(View.VISIBLE);
                     Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
                             R.anim.splash_screen_scale);
-                    imageView.startAnimation(anim);
+                    logoImageView.startAnimation(anim);
                 }
             });
 
@@ -358,7 +361,7 @@ public class LoginActivity extends AppCompatActivity {
      */
 
     private void showChoise() {
-        final List<TestingUser> users = Testing2.users;
+        final List<TestingUser> users = Testing.users;
         String[] cloneForUsers = new String[users.size()];
         for (int i = 0; i < cloneForUsers.length; i++) {
             cloneForUsers[i] = users.get(i).desc;

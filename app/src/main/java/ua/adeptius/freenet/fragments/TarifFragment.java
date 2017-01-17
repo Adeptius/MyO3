@@ -160,7 +160,7 @@ public class TarifFragment extends BaseFragment {
             }
 
             TextView discountView = (TextView) itemView.findViewById(R.id.discount_text);
-            if (service.isHaveDiscount()) {
+            if (service.isHaveDiscount() && service.getDiscount() != 0) {
                 discountView.setVisibility(View.VISIBLE);
                 discountView.setText("Знижка " + service.getDiscount() + "% до " + service.getDiscountTo());
             }

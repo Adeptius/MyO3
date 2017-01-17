@@ -22,7 +22,7 @@ public class BalanceFragment extends BaseFragment {
     @Override
     void setAllSettings() {
         titleText = "Баланс";
-        descriptionText = "Кожного першого числа знімається абонентська плата наперед на цілий місяць";
+        descriptionText = "Кожного першого числа знімається абонентська плата авансом на цілий місяць";
         fragmentId = R.layout.fragment_base_scrolling;
         layoutId = R.id.base_scroll_view;
         titleImage = R.drawable.background_balance2;

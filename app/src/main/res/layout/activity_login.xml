@@ -114,7 +114,8 @@
                 android:text="FreeNet"
                 android:textColor="@android:color/white"
                 android:textSize="60sp"
-                android:textStyle="normal|bold" />
+                android:textStyle="normal|bold"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/logoView"
@@ -123,6 +124,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="0dp"
                 android:layout_weight="0.57"
+                android:visibility="visible"
                 app:srcCompat="@drawable/logo_png_1024" />
 
             <TextView
@@ -134,7 +136,8 @@
                 android:text="Особистий кабінет"
                 android:textColor="@color/white"
                 android:textSize="30sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/progressBarInSplashScreen"

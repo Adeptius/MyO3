@@ -96,6 +96,42 @@ public class PayFragment extends BaseFragment {
             }
         });
 
+        final View iBoxContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
+        ImageView iBox = (ImageView) iBoxContainer.findViewById(R.id.pay_image_view);
+        addImageToViewFromResources(iBox,  R.drawable.ibox);
+        iBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://www.ibox.ua/?section=maps"));
+                startActivity(i);
+            }
+        });
+
+        final View easyPayContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
+        ImageView easyPay = (ImageView) easyPayContainer.findViewById(R.id.pay_image_view);
+        addImageToViewFromResources(easyPay,  R.drawable.easy_pay);
+        easyPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://map.easypay.ua:8465/"));
+                startActivity(i);
+            }
+        });
+
+        final View tymeContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
+        ImageView tyme = (ImageView) tymeContainer.findViewById(R.id.pay_image_view);
+        addImageToViewFromResources(tyme,  R.drawable.tyme);
+        tyme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("https://tyme.ua/ru/clients/where/"));
+                startActivity(i);
+            }
+        });
+
         final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView privatBank = (ImageView) privatBankContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(privatBank,  R.drawable.privat);
@@ -115,6 +151,9 @@ public class PayFragment extends BaseFragment {
                 mainLayout.addView(eCommerceConnectContainer);
                 mainLayout.addView(payMasterContainer);
                 mainLayout.addView(platonContainer);
+                mainLayout.addView(iBoxContainer);
+                mainLayout.addView(easyPayContainer);
+                mainLayout.addView(tymeContainer);
                 mainLayout.addView(privatBankContainer);
             }
         });
