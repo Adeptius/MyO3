@@ -223,10 +223,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                Settings.setCurrentPassportNumber("");
-                Settings.setCurrentPassportSerial("");
-                Settings.setCurrentLogin("");
-                Settings.setCurrentPassword("");
+                Settings.clearAllData();
                 MainActivity.this.finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
             }

@@ -44,7 +44,7 @@ public class ContactFragment extends BaseFragment {
     void doInBackground() throws Exception {
         person = DbCache.getPerson();
         sityNameUa = person.getAddress().getCityNameUa();
-        String url = DbCache.getUrlOfCity(sityNameUa);
+        String url = DbCache.getUrlOfCityPhones(sityNameUa);
         city = DbCache.getCityPhones(url);
     }
 

@@ -69,4 +69,17 @@ public class City {
     public void setCoordinates(String coordinates) {
         this.coordinates = coordinates;
     }
+
+    @Override
+    public String toString() {
+        return "City{" +
+                "support=" + support +
+                ", abon=" + abon +
+                ", call=" + call +
+                ", time='" + time + '\'' +
+                ", reason='" + reason + '\'' +
+                ", adress='" + adress + '\'' +
+                ", coordinates='" + coordinates + '\'' +
+                '}';
+    }
 }

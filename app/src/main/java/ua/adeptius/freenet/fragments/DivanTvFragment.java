@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.adeptius.freenet.R;
+import ua.adeptius.freenet.dao.DbCache;
 import ua.adeptius.freenet.dao.GetInfo;
 import ua.adeptius.freenet.model.ChannelDivan;
 import ua.adeptius.freenet.model.ChannelDivanDetails;
@@ -287,7 +288,7 @@ public class DivanTvFragment extends BaseFragment {
             @Override
             public void run() {
                 try {
-                    final List<ChannelDivan> divanList = GetInfo.getDivanChanels(url);
+                    final List<ChannelDivan> divanList = DbCache.getDivanChanels(url);
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {

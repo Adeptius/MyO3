@@ -3,6 +3,12 @@ package ua.adeptius.freenet.utils;
 
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+
+import ua.adeptius.freenet.model.City;
+
 public class Settings {
 
     private static SharedPreferences sPref;
@@ -13,6 +19,16 @@ public class Settings {
             Settings.sPref = sPref;
             Settings.settingsEditor = sPref.edit();
         }
+    }
+
+    public static void clearAllData() {
+        setCurrentLogin("");
+        setCurrentPassword("");
+        setCurrentPassportSerial("");
+        setCurrentPassportNumber("");
+        setUrlAccii("");
+        setUrlNews("");
+        setUrlPhone("");
     }
 
     //Login
@@ -53,5 +69,53 @@ public class Settings {
 
     public static String getCurrentPassportNumber() {
         return sPref.getString("passportNumber", "");
+    }
+
+
+    //passportNumber
+    public static void setUrlNews(String url) {
+        settingsEditor.putString("urlNews", url);
+        settingsEditor.commit();
+    }
+
+    public static String getUrlNews() {
+        return sPref.getString("urlNews", "");
+    }
+
+
+    //passportNumber
+    public static void setUrlAccii(String url) {
+        settingsEditor.putString("urlAccii", url);
+        settingsEditor.commit();
+    }
+
+    public static String getUrlAccii() {
+        return sPref.getString("urlAccii", "");
+    }
+
+
+    //passportNumber
+    public static void setUrlPhone(String url) {
+        settingsEditor.putString("urlPhone", url);
+        settingsEditor.commit();
+    }
+
+    public static String getUrlPhone() {
+        return sPref.getString("urlPhone", "");
+    }
+
+
+    //City
+    public static void saveCity(City city) {
+        Gson gson = new Gson();
+        String s = gson.toJson(city);
+        settingsEditor.putString("city", s);
+        settingsEditor.commit();
+    }
+
+    public static City loadCity() {
+        String s = sPref.getString("city", "");
+        City c = new Gson().fromJson(s, City.class);
+        return c;
     }
 }

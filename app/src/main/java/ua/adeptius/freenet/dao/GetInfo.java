@@ -30,6 +30,7 @@ import ua.adeptius.freenet.model.MegogoPts;
 import ua.adeptius.freenet.model.Operation;
 import ua.adeptius.freenet.model.Person;
 import ua.adeptius.freenet.model.Servise;
+import ua.adeptius.freenet.utils.Settings;
 import ua.adeptius.freenet.utils.Utilits;
 
 import static ua.adeptius.freenet.utils.Utilits.log;
@@ -75,8 +76,8 @@ public class GetInfo {
         Element a = td.get(2).getElementsByTag("a").first();
         String adress = a.html().replaceAll("&nbsp;", " ");
         String moreAddress = td.get(2).toString();
-        if (moreAddress.contains("<br>")){
-            moreAddress = moreAddress.substring(moreAddress.indexOf("<br>")+4);
+        if (moreAddress.contains("<br>")) {
+            moreAddress = moreAddress.substring(moreAddress.indexOf("<br>") + 4);
             moreAddress = moreAddress.substring(0, moreAddress.indexOf("<"));
             adress = adress + " " + moreAddress;
         }
@@ -91,10 +92,27 @@ public class GetInfo {
         return phones;
     }
 
-    public static String getUrlOfCity(String city) throws Exception {
-        Utilits.networkLog("Получение урла на страницу города " + city);
-        String url = "http://o3.ua/ua/contacts/";
-        Document doc = Jsoup.connect(url).get();
+    public static String getUrlOfCityPhones(String city) throws Exception {
+        String result = getUrlOfCity(city, "http://o3.ua/ua/contacts/");
+        Settings.setUrlPhone(result);
+        return result;
+    }
+
+    public static String getUrlOfCityNews(String city) throws Exception {
+        String result = getUrlOfCity(city, "http://o3.ua/ua/about/news/");
+        Settings.setUrlNews(result);
+        return result;
+    }
+
+    public static String getUrlOfCityAccii(String city) throws Exception {
+        String result = getUrlOfCity(city, "http://o3.ua/ua/about/akzii_programma_loyalnosti/");
+        Settings.setUrlAccii(result);
+        return result;
+    }
+
+    private static String getUrlOfCity(String city, String generalUrl) throws Exception {
+        Utilits.networkLog("Получение уникального урла на страницу города " + city);
+        Document doc = Jsoup.connect(generalUrl).get();
         Element list = doc.getElementById("citySelect");
         Elements options = list.getElementsByTag("option");
         for (Element option : options) {
@@ -406,8 +424,8 @@ public class GetInfo {
         s = s.replaceAll("\"Повторная активация услуги \"Кредит доверия\"\"",
                 "\"Повторная активация услуги Кредит доверия\"");
         List<Operation> operations = new ArrayList<>();
-        if (s.equals("[]")){
-            Operation operation = new Operation("{\"date\":\""+date+"\",\"money\":0,\"note\":\"Нема проплат та списань\",\"bonus\":null,\"p_id\":7077763}");
+        if (s.equals("[]")) {
+            Operation operation = new Operation("{\"date\":\"" + date + "\",\"money\":0,\"note\":\"Нема проплат та списань\",\"bonus\":null,\"p_id\":7077763}");
             operations.add(operation);
             return operations;
         }

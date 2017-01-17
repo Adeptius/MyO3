@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ua.adeptius.freenet.R;
+import ua.adeptius.freenet.dao.DbCache;
 import ua.adeptius.freenet.model.News;
 
 public class NewsFragment extends BaseFragment {
@@ -45,7 +46,13 @@ public class NewsFragment extends BaseFragment {
 
     @Override
     void doInBackground() throws Exception {
-        newses = getAllNews();
+
+        String city = DbCache.getPerson().getAddress().getCityNameUa();
+
+        String newsUrl = DbCache.getUrlOfCityNews(city);
+        String acciiurl = DbCache.getUrlOfCityAccii(city);
+
+        newses = getAllNews(acciiurl, newsUrl);
         sortByDate(newses);
         newses = subList(newses, 10);
         prepareNews(newses);
@@ -137,9 +144,8 @@ public class NewsFragment extends BaseFragment {
         return null;
     }
 
-    private List<News> getAllNews() throws Exception {
-        String url = "http://o3.ua/ua/about/akzii_programma_loyalnosti/";
-        Document doc = Jsoup.connect(url).get();
+    private List<News> getAllNews(String urlAccii, String urlnews) throws Exception {
+        Document doc = Jsoup.connect(urlAccii).get();
         Elements post = doc.body().getElementsByClass("post");
 
         List<News> newses = new ArrayList<>();
@@ -168,8 +174,7 @@ public class NewsFragment extends BaseFragment {
             newses.add(news);
         }
 
-        url = "http://o3.ua/ua/about/news/";
-        doc = Jsoup.connect(url).get();
+        doc = Jsoup.connect(urlnews).get();
         post = doc.body().getElementsByClass("post");
 
         for (Element element : post) {
@@ -195,6 +200,9 @@ public class NewsFragment extends BaseFragment {
 
             News news = new News(title2, text, href, imageUrl, convertDateToNumbers(date));
             newses.add(news);
+        }
+        for (News newse : newses) {
+            System.out.println(newse.getImgUrl());
         }
         return newses;
     }

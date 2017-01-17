@@ -34,7 +34,7 @@ public class News {
     }
 
     public String getImgUrl() {
-        return imgUrl;
+        return "http://o3.ua"+imgUrl;
     }
 
 }

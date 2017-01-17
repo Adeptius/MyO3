@@ -1,11 +1,15 @@
 package ua.adeptius.freenet.dao;
 
 
+import org.json.JSONObject;
+
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ua.adeptius.freenet.model.BonusServiceSpending;
+import ua.adeptius.freenet.model.ChannelDivan;
 import ua.adeptius.freenet.model.ChannelMegogo;
 import ua.adeptius.freenet.model.ChannelOllTv;
 import ua.adeptius.freenet.model.City;
@@ -16,6 +20,8 @@ import ua.adeptius.freenet.model.MegogoPts;
 import ua.adeptius.freenet.model.Operation;
 import ua.adeptius.freenet.model.Person;
 import ua.adeptius.freenet.model.Servise;
+import ua.adeptius.freenet.utils.Settings;
+import ua.adeptius.freenet.utils.Utilits;
 
 public class DbCache {
 
@@ -303,24 +309,47 @@ public class DbCache {
 
 
 
+    private static HashMap<String,List<ChannelDivan>> divanList = new HashMap<>();
 
-
-    private static String urlOfCity;
-
-    public static String getUrlOfCity(String city) throws Exception {
-        if (urlOfCity == null) {
-            urlOfCity = GetInfo.getUrlOfCity(city);
+    public static List<ChannelDivan> getDivanChanels(String url) throws Exception{
+        List<ChannelDivan> list = divanList.get(url);
+        if (list == null){
+            list = GetInfo.getDivanChanels(url);
+            divanList.put(url, list);
         }
-        return urlOfCity;
+        return list;
     }
+
+
+
+
+    public static String getUrlOfCityPhones(String city) throws Exception {
+        return Settings.getUrlPhone().equals("")? GetInfo.getUrlOfCityPhones(city) : Settings.getUrlPhone();
+    }
+
+    public static String getUrlOfCityAccii(String city) throws Exception {
+        return Settings.getUrlAccii().equals("")? GetInfo.getUrlOfCityAccii(city) : Settings.getUrlAccii();
+    }
+
+    public static String getUrlOfCityNews(String city) throws Exception {
+        return Settings.getUrlNews().equals("")? GetInfo.getUrlOfCityNews(city) : Settings.getUrlNews();
+    }
+
 
 
     private static City cityPhones;
 
     public static City getCityPhones(String url) throws Exception {
-        if (cityPhones == null) {
+        if (cityPhones!= null) return cityPhones;
+        try {
             cityPhones = GetInfo.getCityPhones(url);
+            Settings.saveCity(cityPhones);
+            return cityPhones;
+        }catch (Exception e){
+            Utilits.networkLog("Не удалось загрузить телефоны с сайта. Загружаю из файла.");
         }
+        cityPhones = Settings.loadCity();
+        if (cityPhones == null) throw new Exception();
         return cityPhones;
     }
 
