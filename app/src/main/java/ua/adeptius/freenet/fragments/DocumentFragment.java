@@ -91,11 +91,11 @@ public class DocumentFragment extends BaseFragment {
 
             zayavaName.setText(zayava.getName());
             zayavaComent.setText(zayava.getComent());
-            if (zayava.getPrice() == 0){
+            if (zayava.getPrice() == 0) {
                 zayavaCost.setText(zayava.getPriceType());
                 zayavaCost.setTextSize(20);
                 zayavaCostType.setVisibility(View.GONE);
-            }else {
+            } else {
                 zayavaCost.setText(String.valueOf(zayava.getPrice()));
                 zayavaCostType.setText(zayava.getPriceType());
             }
@@ -110,24 +110,24 @@ public class DocumentFragment extends BaseFragment {
         }
     }
 
-    private String checkMoneyMessage(Zayava zayava){
-        String message = "Вартість послуги складає " + zayava.getPrice() + " грн " + zayava.getPriceType().toLowerCase() +".";
+    private String checkMoneyMessage(Zayava zayava) {
+        String message = "Вартість послуги складає " + zayava.getPrice() + " грн " + zayava.getPriceType().toLowerCase() + ".";
         int willCostIfNow;
-        message += "\nУ вас зараз " + (int)person.getCurrent() + " грн";
-        if (zayava.getPriceType().equals("щомісячно")){
+        message += "\nУ вас зараз " + (int) person.getCurrent() + " грн";
+        if (zayava.getPriceType().equals("щомісячно")) {
             willCostIfNow = Utilits.calculateDaysCostLeft(zayava.getPrice()) + 1;
             message += "\nЯкщо активувати прямо зараз - з вашого рахунку буде знято ";
             message += willCostIfNow + " грн. ";
-        }else {
+        } else {
             willCostIfNow = zayava.getPrice();
             message += "\nЯкщо активувати прямо зараз - ";
         }
 
         int moneyWillLeft = (int) person.getCurrent() - willCostIfNow;
-        if (moneyWillLeft<0){
+        if (moneyWillLeft < 0) {
             message += "на рахунку не вистачить " + Math.abs(moneyWillLeft) + " грн. Послуги припиняться.";
             message += "\nРекомендуємо спочатку поповнити рахунок.";
-        }else {
+        } else {
             message += "на рахунку залишиться " + moneyWillLeft + " грн. Інтернет працюватиме.";
         }
 
@@ -135,7 +135,7 @@ public class DocumentFragment extends BaseFragment {
         return message;
     }
 
-    private void buttonWasClicked(Zayava zayava){
+    private void buttonWasClicked(Zayava zayava) {
         MailType type = zayava.getType();
         if (type == REAL_IP) {
             askAgree(type, zayava, checkMoneyMessage(zayava));
@@ -145,9 +145,9 @@ public class DocumentFragment extends BaseFragment {
             askAgree(type, zayava, checkMoneyMessage(zayava));
         } else if (type == CHANGE_TARIF) {
             askAgree(type, zayava, "Зміна тарифу. До речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
-        } else if (type == CREATE_EMAIL){
+        } else if (type == CREATE_EMAIL) {
             askAgree(type, zayava, "Створення поштової скриньки. Безкоштовно надається тільки одна скринька. \nУВАГА!\n У разі відключення від мережі \"Фрінет\" скринька буде автоматично видалена!");
-        } else if (type == CHANGE_IP){
+        } else if (type == CHANGE_IP) {
             askAgree(type, zayava, checkMoneyMessage(zayava));
 //        } else if (type == CHANGE_DEAL) {
 //            askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
@@ -160,7 +160,7 @@ public class DocumentFragment extends BaseFragment {
         }
     }
 
-    private void askAgree(final MailType type, final Zayava zayava, String agree){
+    private void askAgree(final MailType type, final Zayava zayava, String agree) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
@@ -337,12 +337,12 @@ public class DocumentFragment extends BaseFragment {
                                     passNumEdit.getText().toString(),
                                     phoneEdit.getText().toString(),
                                     emailEdit.getText().toString()
-                                    );
+                            );
 
 
-                            if (type == CREATE_EMAIL ) {
+                            if (type == CREATE_EMAIL) {
                                 showWithoutDate(type, zayava);
-                            }else askDate(type, zayava);
+                            } else askDate(type, zayava);
 
                         } else {
                             makeSimpleSnackBar("Заповніть правильно всі поля, будь-ласка", headerLayout);
@@ -354,12 +354,12 @@ public class DocumentFragment extends BaseFragment {
         dialog.show();
     }
 
-    private void askDate(final MailType type, final Zayava zayava){
+    private void askDate(final MailType type, final Zayava zayava) {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker_zayava, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        Button todayButton = (Button)  datepickerLayout.findViewById(R.id.button_today);
-        final Button hideButton = (Button)  datepickerLayout.findViewById(R.id.button_show_calendar);
+        Button todayButton = (Button) datepickerLayout.findViewById(R.id.button_today);
+        final Button hideButton = (Button) datepickerLayout.findViewById(R.id.button_show_calendar);
         final LinearLayout hideLayout = (LinearLayout) datepickerLayout.findViewById(R.id.lay_hide);
         hideButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -406,19 +406,19 @@ public class DocumentFragment extends BaseFragment {
     }
 
 
-    private void showWithDate(MailType type, String date, Zayava zayava){
+    private void showWithDate(MailType type, String date, Zayava zayava) {
         if (type == REAL_IP) {
             sendEmail(type, Zayavleniya.realIP(date, zayava), true);
         } else if (type == DISABLE_REAL_IP) {
             sendEmail(type, Zayavleniya.realIPOff(date, zayava), true);
         } else if (type == DOP_IP) {
-            sendEmail(type, Zayavleniya.dopIP(date,zayava), true);
+            sendEmail(type, Zayavleniya.dopIP(date, zayava), true);
 //        } else if (type == CHANGE_DEAL) {
 
         } else if (type == CHANGE_TARIF) {
             showTarifChoise(type, date);
-        } else if (type == CHANGE_IP){
-            sendEmail(type, Zayavleniya.changeIP(date,zayava), true);
+        } else if (type == CHANGE_IP) {
+            sendEmail(type, Zayavleniya.changeIP(date, zayava), true);
         }
     }
 
@@ -433,13 +433,14 @@ public class DocumentFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 try {
                     String serviseFound = "";
                     String serviceId = "";
                     List<Servise> services = DbCache.getServises();
 
                     for (Servise service : services) {
-                        if (service.getType() == 5){
+                        if (service.getType() == 5) {
                             serviseFound = service.getPay_type_name();
                             serviceId = String.valueOf(service.getId());
                         }
@@ -447,13 +448,14 @@ public class DocumentFragment extends BaseFragment {
                     final List<AvailableTarif> availableTarifs = GetInfo.getAvailableTarifs(serviceId);
 
                     final String oldTarif = serviseFound;
+                    hideProgressDialog();
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
                             textOldTarif.setText(oldTarif);
                             for (final AvailableTarif availableTarif : availableTarifs) {
                                 View layForNewTarif = LayoutInflater.from(context).inflate(R.layout.alert_item_tarif_choice, null);
-                                TextView name = (TextView)  layForNewTarif.findViewById(R.id.text_name);
+                                TextView name = (TextView) layForNewTarif.findViewById(R.id.text_name);
                                 name.setText(availableTarif.getName());
                                 name.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -465,7 +467,8 @@ public class DocumentFragment extends BaseFragment {
                             }
                         }
                     });
-                }catch (Exception ignored){}
+                } catch (Exception ignored) {
+                }
             }
         });
 
@@ -474,7 +477,7 @@ public class DocumentFragment extends BaseFragment {
         builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                sendEmail(type,Zayavleniya.changeTarif(date,
+                sendEmail(type, Zayavleniya.changeTarif(date,
                         textOldTarif.getText().toString(),
                         textNewTarif.getText().toString()),
                         false);
@@ -497,7 +500,6 @@ public class DocumentFragment extends BaseFragment {
     }
 
 
-
     private void askEmailWantedName(final MailType type, Zayava zayava) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
@@ -507,7 +509,7 @@ public class DocumentFragment extends BaseFragment {
         login.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (login.getText().toString().equals("Логін")){
+                if (login.getText().toString().equals("Логін")) {
                     login.setText("");
                 }
             }
@@ -516,7 +518,7 @@ public class DocumentFragment extends BaseFragment {
         password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (password.getText().toString().equals("Пароль")){
+                if (password.getText().toString().equals("Пароль")) {
                     password.setText("");
                 }
             }
@@ -554,9 +556,9 @@ public class DocumentFragment extends BaseFragment {
                         "mailto", type.getEmail(), null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, type.getSubject() + " Угода " + person.getCard());
                 String message2;
-                if (useStandartFooter){
+                if (useStandartFooter) {
                     message2 = header + message + footer;
-                }else {
+                } else {
                     message2 = header + message;
                 }
 
@@ -617,13 +619,14 @@ public class DocumentFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 try {
                     Phone phone = null;
                     for (Phone phone1 : person.getPhones()) {
                         if (phone1.getSmsInform() == 1) phone = phone1;
                     }
                     if (SendInfo.changeSmsNumber(phone1, phone)) {
-                        makeSimpleSnackBar("Номер збережено", viewForSnackBar);
+                        progressDialogStopAndShowMessage("Номер збережено", viewForSnackBar);
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -631,7 +634,7 @@ public class DocumentFragment extends BaseFragment {
                             }
                         });
                     } else
-                        makeSimpleSnackBar("Помилка. Номер невірний.", viewForSnackBar);
+                        progressDialogStopAndShowMessage("Помилка. Номер невірний.", viewForSnackBar);
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
@@ -640,20 +643,20 @@ public class DocumentFragment extends BaseFragment {
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
-                    makeSimpleSnackBar("Помилка. Нема з'єднання.", viewForSnackBar);
+                    progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", viewForSnackBar);
                 }
             }
         });
-
     }
 
     private void saveNewEmail(final Button button, final String email, final View viewForSnackBar) {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 try {
                     if (SendInfo.changeEmail(email)) {
-                        makeSimpleSnackBar("Email збережено", viewForSnackBar);
+                        progressDialogStopAndShowMessage("Email збережено", viewForSnackBar);
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -661,7 +664,7 @@ public class DocumentFragment extends BaseFragment {
                             }
                         });
                     } else
-                        makeSimpleSnackBar("Помилка. Email невірний.", viewForSnackBar);
+                        progressDialogStopAndShowMessage("Помилка. Email невірний.", viewForSnackBar);
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
@@ -670,7 +673,7 @@ public class DocumentFragment extends BaseFragment {
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
-                    makeSimpleSnackBar("Помилка. Нема з'єднання.", viewForSnackBar);
+                    progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", viewForSnackBar);
                 }
             }
         });

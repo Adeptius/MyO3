@@ -62,13 +62,12 @@ public class OnOffInternet extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.internetSwitchWorld()) {
-                            makeSimpleSnackBar("Виконано.", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markInternetSwitchesOld();
-                            reloadFragment();
+                         progressDialogWaitStopShowMessageReload("Виконано.", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка.", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка.", mainLayout);
                         }
                     }
                 });
@@ -81,20 +80,17 @@ public class OnOffInternet extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.internetSwitchAll()) {
-                            makeSimpleSnackBar("Виконано.", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markInternetSwitchesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Виконано.", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка.", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка.", mainLayout);
                         }
                     }
                 });
             }
         });
-
-
     }
 
     @Override

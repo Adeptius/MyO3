@@ -115,7 +115,7 @@ public class BonusFragment extends BaseFragment {
 
 
                 TextView cost = (TextView) spendingLayout.findViewById(R.id.cost);
-                String money = String.valueOf(serviceSpending.getMoney());
+                String money = String.valueOf(Math.abs(serviceSpending.getMoney()));
                 cost.setText(money);
 
                 TextView name = (TextView) spendingLayout.findViewById(R.id.name);
@@ -207,15 +207,12 @@ public class BonusFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.activateBonusProgram()) {
-                            makeSimpleSnackBar("Хвилинку, триває активація!", mainLayout);
-                            try {Thread.sleep(5000);} catch (InterruptedException ignored) {}
                             DbCache.markBonusesStatusOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Хвилинку, триває активація!", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Трапилась помилка", mainLayout);
                         }
                     }
                 });
@@ -289,19 +286,17 @@ public class BonusFragment extends BaseFragment {
                             EXECUTOR.submit(new Runnable() {
                                 @Override
                                 public void run() {
+                                    progressDialogShow();
                                     if (SendInfo.spendBonuses(map)){ // отправляю запрос
-
-                                        makeSimpleSnackBar("Сплачено!", vlayout);
-                                        try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
                                         DbCache.markCountOfBonusesOld();
                                         DbCache.markBonusesSpendingOld();
+                                        progressDialogWaitStopShowMessageReload("Сплачено!", vlayout);
                                         HANDLER.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 dialog.dismiss();
                                             }
                                         });
-                                        reloadFragment();
                                     }else { // если вернулась неудача
                                         HANDLER.post(new Runnable() {
                                             @Override
@@ -309,7 +304,7 @@ public class BonusFragment extends BaseFragment {
                                                 dialog.dismiss();
                                             }
                                         });
-                                        makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                                        progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                                     }
                                 }
                             });

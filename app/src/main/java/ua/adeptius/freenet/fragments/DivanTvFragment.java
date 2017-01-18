@@ -281,6 +281,7 @@ public class DivanTvFragment extends BaseFragment {
     }
 
     private void showList(final LinearLayout layout, final String url) {
+        layout.setVisibility(View.VISIBLE);
         final ProgressBar progressBar = new ProgressBar(context);
         layout.addView(progressBar);
 
@@ -349,6 +350,7 @@ public class DivanTvFragment extends BaseFragment {
         if (v.equals(buttonStart)) {
             if (listStart.getChildCount() > 0) {
                 listStart.removeAllViews();
+                listStart.setVisibility(View.GONE);
                 buttonStart.setText("Список каналів");
             } else {
                 showList(listStart, "https://divan.tv/tariffs/channels/?tariff_id=37&devices=all&tariff_name=%D0%A1%D1%82%D0%B0%D1%80%D1%82%D0%BE%D0%B2%D1%8B%D0%B9");
@@ -357,6 +359,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonOptimal)) {
             if (listOptimal.getChildCount() > 0) {
                 listOptimal.removeAllViews();
+                listOptimal.setVisibility(View.GONE);
                 buttonOptimal.setText("Список каналів");
             } else {
                 showList(listOptimal, "https://divan.tv/tariffs/channels/?tariff_id=130&devices=all&tariff_name=%D0%9E%D0%BF%D1%82%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9");
@@ -365,6 +368,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonPrestige)) {
             if (listPrestige.getChildCount() > 0) {
                 listPrestige.removeAllViews();
+                listPrestige.setVisibility(View.GONE);
                 buttonPrestige.setText("Список каналів");
             } else {
                 showList(listPrestige, "https://divan.tv/tariffs/channels/?tariff_id=13&devices=all&tariff_name=%D0%9F%D1%80%D0%B5%D1%81%D1%82%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9");
@@ -373,6 +377,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonVip)) {
             if (listVip.getChildCount() > 0) {
                 listVip.removeAllViews();
+                listVip.setVisibility(View.GONE);
                 buttonVip.setText("Список каналів");
             } else {
                 showList(listVip, "https://divan.tv/tariffs/channels/?tariff_id=99&devices=all&tariff_name=VIP");
@@ -381,6 +386,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonFilm)) {
             if (listFilm.getChildCount() > 0) {
                 listFilm.removeAllViews();
+                listFilm.setVisibility(View.GONE);
                 buttonFilm.setText("Список каналів");
             } else {
                 showList(listFilm, "https://divan.tv/tariffs/channels/?tariff_id=38&devices=all&tariff_name=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2%D1%8B%D0%B9");
@@ -389,6 +395,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonEnglish)) {
             if (listEnglish.getChildCount() > 0) {
                 listEnglish.removeAllViews();
+                listEnglish.setVisibility(View.GONE);
                 buttonEnglish.setText("Список каналів");
             } else {
                 showList(listEnglish, "https://divan.tv/tariffs/channels/?tariff_id=12&devices=all&tariff_name=In+English");
@@ -397,6 +404,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonKid)) {
             if (listKid.getChildCount() > 0) {
                 listKid.removeAllViews();
+                listKid.setVisibility(View.GONE);
                 buttonKid.setText("Список каналів");
             } else {
                 showList(listKid, "https://divan.tv/tariffs/channels/?tariff_id=23&devices=all&tariff_name=%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9");
@@ -405,6 +413,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonTv1000)) {
             if (listTv1000.getChildCount() > 0) {
                 listTv1000.removeAllViews();
+                listTv1000.setVisibility(View.GONE);
                 buttonTv1000.setText("Список каналів");
             } else {
                 showList(listTv1000, "https://divan.tv/tariffs/channels/?tariff_id=206&devices=all&tariff_name=TV1000+%D0%9F%D0%BB%D1%8E%D1%81");
@@ -413,6 +422,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonNight)) {
             if (listNight.getChildCount() > 0) {
                 listNight.removeAllViews();
+                listNight.setVisibility(View.GONE);
                 buttonNight.setText("Список каналів");
             } else {
                 showList(listNight, "https://divan.tv/tariffs/channels/?tariff_id=320&devices=all&tariff_name=%D0%9D%D0%BE%D1%87%D0%BD%D0%BE%D0%B9");
@@ -421,6 +431,7 @@ public class DivanTvFragment extends BaseFragment {
         } else if (v.equals(buttonViasat)) {
             if (listViasat.getChildCount() > 0) {
                 listViasat.removeAllViews();
+                listViasat.setVisibility(View.GONE);
                 buttonViasat.setText("Список каналів");
             } else {
                 showList(listViasat, "https://divan.tv/tariffs/channels/?tariff_id=198&devices=all&tariff_name=VIASAT+Premium");

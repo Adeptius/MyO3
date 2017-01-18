@@ -104,9 +104,9 @@ public class MainFragment extends BaseFragment {
         age.setText(person.getAge() + " місяців");
         String many = String.valueOf(person.getCurrent());
         many = many.length() > 4 ? many.substring(0, 4) : many;
-        if (person.getCurrent() > 0){
+        if (person.getCurrent() > 0) {
             money.setTextColor(COLOR_GREEN);
-        }else if (person.getCurrent()< person.getStopsum()){
+        } else if (person.getCurrent() < person.getStopsum()) {
             money.setTextColor(COLOR_RED);
         }
         money.setText(many + " грн");
@@ -131,10 +131,10 @@ public class MainFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
-                if (person.getStopsum()>person.getCurrent()){
-                    try{
+                if (person.getStopsum() > person.getCurrent()) {
+                    try {
                         boolean creditEnabled = DbCache.getCreditStatus().startsWith("20");
-                        if (!creditEnabled){
+                        if (!creditEnabled) {
                             HANDLER.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -153,7 +153,8 @@ public class MainFragment extends BaseFragment {
                                     sb.append("На вашому рахунку недостатньо коштів.\n");
                                     sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
                                     String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
-                                    if (notAnoth.contains(".")) notAnoth = notAnoth.substring(0, notAnoth.indexOf(".")+2);
+                                    if (notAnoth.contains("."))
+                                        notAnoth = notAnoth.substring(0, notAnoth.indexOf(".") + 2);
                                     sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
                                     sb.append("Перейти до перегляду історії проплат?");
                                     text.setText(sb.toString());
@@ -176,7 +177,9 @@ public class MainFragment extends BaseFragment {
                                 }
                             });
                         }
-                    }catch (Exception e){e.printStackTrace();}
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -186,35 +189,11 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onClick(View view) {
         if (view.equals(newsCheckBox)) {
-            EXECUTOR.submit(new Runnable() {
-                @Override
-                public void run() {
-                    SendInfo.changeMailings(2);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                    DbCache.markPersonOld();
-                    reloadFragment();
-                }
-            });
+            tumblerMailing(2);
         } else if (view.equals(worksCheckBox)) {
-            EXECUTOR.submit(new Runnable() {
-                @Override
-                public void run() {
-                    SendInfo.changeMailings(5);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                    DbCache.markPersonOld();
-                    reloadFragment();
-                }
-            });
+            tumblerMailing(5);
         } else if (view.equals(akciiCheckBox)) {
-            EXECUTOR.submit(new Runnable() {
-                @Override
-                public void run() {
-                    SendInfo.changeMailings(6);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                    DbCache.markPersonOld();
-                    reloadFragment();
-                }
-            });
+            tumblerMailing(6);
         } else if (view.equals(editPass)) {
             changePassword(view);
         } else if (view.equals(editSms)) {
@@ -226,6 +205,18 @@ public class MainFragment extends BaseFragment {
         } else if (view.equals(money)) {
             goTo(new BalanceFragment());
         }
+    }
+
+    private void tumblerMailing(final int mailing) {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                progressDialogShow();
+                SendInfo.changeMailings(mailing);
+                DbCache.markPersonOld();
+                progressDialogWaitStopShowMessageReload("Збережено", newsCheckBox);
+            }
+        });
     }
 
     public void showIps(List<Ip> ips) {
@@ -339,21 +330,20 @@ public class MainFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         try {
                             Phone phone = null;
                             for (Phone phone1 : person.getPhones()) {
                                 if (phone1.getSmsInform() == 1) phone = phone1;
                             }
-                            if (SendInfo.changeSmsNumber(text.getText().toString(), phone)) {
-                                makeSimpleSnackBar("Номер змінено", view);
-                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            if (SendInfo.changeSmsNumber(text.getText().toString().trim(), phone)) {
                                 DbCache.markPersonOld();
-                                reloadFragment();
+                                progressDialogWaitStopShowMessageReload("Номер змінено", view);
                             } else
-                                makeSimpleSnackBar("Помилка. Номер невірний.", view);
+                                progressDialogStopAndShowMessage("Помилка. Номер невірний.", view);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            makeSimpleSnackBar("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
                         }
                         dialog.dismiss();
                     }
@@ -381,16 +371,15 @@ public class MainFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         try {
-                            if (SendInfo.changeEmail(text.getText().toString())) {
-                                makeSimpleSnackBar("Email змінено", view);
-                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            if (SendInfo.changeEmail(text.getText().toString().trim())) {
                                 DbCache.markPersonOld();
-                                reloadFragment();
-                            } else makeSimpleSnackBar("Помилка. Email невірний.", view);
+                                progressDialogWaitStopShowMessageReload("Email змінено", view);
+                            } else progressDialogStopAndShowMessage("Помилка. Email невірний.", view);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            makeSimpleSnackBar("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
                         }
                         dialog.dismiss();
                     }
@@ -418,18 +407,17 @@ public class MainFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         try {
-                            if (SendInfo.changePassword(text.getText().toString())) {
-                                makeSimpleSnackBar("Пароль змінено", view);
-                                Settings.setCurrentPassword(text.getText().toString());
-                                try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                            if (SendInfo.changePassword(text.getText().toString().trim())) {
                                 DbCache.markPersonOld();
-                                reloadFragment();
+                                Settings.setCurrentPassword(text.getText().toString().trim());
+                                progressDialogWaitStopShowMessageReload("Пароль змінено", view);
                             } else
-                                makeSimpleSnackBar("Помилка. Пароль невірний.", view);
+                                progressDialogStopAndShowMessage("Помилка. Пароль невірний.", view);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            makeSimpleSnackBar("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
                         }
                         dialog.dismiss();
                     }
@@ -439,6 +427,4 @@ public class MainFragment extends BaseFragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 }

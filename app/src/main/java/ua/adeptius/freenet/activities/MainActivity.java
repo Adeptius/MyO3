@@ -78,9 +78,8 @@ public class MainActivity extends AppCompatActivity
 
         try{
             Person person = DbCache.getPerson();
-            setDrawlerText(person.getName(),"Угода " + Settings.getCurrentLogin());
+            setDrawlerText(person.getName(),"Угода " + person.getCard());
         }catch (Exception ignored){}
-
         goTo(new MainFragment());
     }
 

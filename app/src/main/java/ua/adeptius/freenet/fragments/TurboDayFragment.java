@@ -180,13 +180,12 @@ public class TurboDayFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.activateTurboDay(startDate, endDate)) {
-                            makeSimpleSnackBar("Послуга активована.", mainLayout);
-                            try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
                             DbCache.markTurboDayStatisticsOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Послуга активована.", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Неправильний термін", mainLayout);
+                            progressDialogStopAndShowMessage("Неправильний термін", mainLayout);
                         }
                     }
                 });

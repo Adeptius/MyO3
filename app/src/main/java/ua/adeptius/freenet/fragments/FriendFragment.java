@@ -166,22 +166,21 @@ public class FriendFragment  extends BaseFragment  {
                             map.put("phone", phone);
                             map.put("address", adress);
                             map.put("email", "");
+
+                            progressDialogShow();
                             EXECUTOR.submit(new Runnable() {
                                 @Override
                                 public void run() {
                                     String result = SendInfo.bringNewFriend(map);
-
                                     if ("Заявка створена!".equals(result)) {
+                                        DbCache.markFriendInvitesOld();
                                         HANDLER.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 dialog.dismiss();
                                             }
                                         });
-                                        makeSimpleSnackBar("Заявка створена!", mainLayout);
-                                        try{Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);}catch (Exception ignored){}
-                                        DbCache.markFriendInvitesOld();
-                                        reloadFragment();
+                                        progressDialogWaitStopShowMessageReload("Заявка створена!", mainLayout);
                                     }else if ("Заявка по цьому номеру вже існує.".equals(result)){
                                         HANDLER.post(new Runnable() {
                                             @Override
@@ -189,9 +188,9 @@ public class FriendFragment  extends BaseFragment  {
                                                 dialog.dismiss();
                                             }
                                         });
-                                        makeSimpleSnackBar("Заявка по цьому номеру вже існує", layout);
+                                        progressDialogStopAndShowMessage("Заявка по цьому номеру вже існує", layout);
                                     }else {
-                                        makeSimpleSnackBar(result, layout);
+                                        progressDialogStopAndShowMessage(result, layout);
                                     }
                                 }
                             });
@@ -212,7 +211,7 @@ public class FriendFragment  extends BaseFragment  {
         LinearLayout layout_for_invites = getLayout(R.id.layout_for_invites);
         for (FriendInvite invite : invites) {
             final View layout = LayoutInflater.from(context).inflate(R.layout.item_friend_invites, null);
-            layout.setVisibility(View.VISIBLE);
+            layout_for_invites.setVisibility(View.VISIBLE);
             TextView date = (TextView) layout.findViewById(R.id.text_date);
             TextView status = (TextView) layout.findViewById(R.id.text_status);
             TextView name = (TextView) layout.findViewById(R.id.text_name);

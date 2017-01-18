@@ -277,15 +277,13 @@ public class TarifFragment extends BaseFragment {
                         HashMap<String, String> map = new HashMap<String, String>();
                         map.put("pt_new", id);
                         map.put("service_id",String.valueOf(servise.getId()));
-
+                        progressDialogShow();
                         if (SendInfo.changeTarif(map)) {
-                            makeSimpleSnackBar("Тариф змінено", mainLayout);
-                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
                             DbCache.markMountlyFeeOld();
                             DbCache.markServicesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Тариф змінено", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
                 });
@@ -416,17 +414,15 @@ public class TarifFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.stopService(startDate, endDate)) {
-                            makeSimpleSnackBar("Успішно", mainLayout);
-                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
                             DbCache.markServicesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Успішно", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Невдало", mainLayout);
+                            progressDialogStopAndShowMessage("Невдало", mainLayout);
                         }
                     }
                 });
-
             }
         });
         AlertDialog dialog = builder.create();
@@ -501,17 +497,15 @@ public class TarifFragment extends BaseFragment {
                 }
                 final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day)
                         + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
-
+                progressDialogShow();
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
                         if (SendInfo.startService(query)) {
-                            makeSimpleSnackBar("Послуга відновлена. Зачекайте.", mainLayout);
-                            try {Thread.sleep(2500);} catch (InterruptedException ignored) {}
                             DbCache.markServicesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Послуга відновлена. Зачекайте.", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Невдалось. Спробуйте ще раз.", mainLayout);
+                            progressDialogStopAndShowMessage("Невдалось. Спробуйте ще раз.", mainLayout);
                         }
                     }
                 });

@@ -3,6 +3,7 @@ package ua.adeptius.freenet.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,10 +23,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import ua.adeptius.freenet.R;
+import ua.adeptius.freenet.activities.LoginActivity;
 import ua.adeptius.freenet.activities.MainActivity;
 import ua.adeptius.freenet.utils.Utilits;
 
@@ -41,6 +44,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected final int COLOR_GREEN = Color.parseColor("#388E3C");
     protected final int COLOR_RED = Color.RED;
     protected ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
@@ -110,7 +114,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    protected void addViewToMainLayout(final View view){
+    protected void addViewToMainLayout(final View view) {
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
@@ -120,7 +124,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    protected void addViewToMainLayout(final List<View> viewsToAdd){
+    protected void addViewToMainLayout(final List<View> viewsToAdd) {
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
@@ -160,7 +164,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     final int a = i;
                     try {
                         Thread.sleep(250);
-                    } catch (InterruptedException ignored) {}
+                    } catch (InterruptedException ignored) {
+                    }
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
@@ -173,7 +178,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             }
         });
     }
-
 
 
     protected void startBackgroundTask() {
@@ -201,7 +205,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 } finally {
                     try {
                         Thread.sleep(200);
-                    } catch (InterruptedException ignored) {  }
+                    } catch (InterruptedException ignored) {
+                    }
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
@@ -275,6 +280,48 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     abstract void setAllSettings();
 
+    protected void progressDialogShow() {
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Зачекайте..");
+                progressDialog.show();
+            }
+        });
+    }
+
+    protected void hideProgressDialog() {
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        });
+    }
+
+    protected void progressDialogStopAndShowMessage(final String message, final View view) {
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        });
+        if (!message.equals("")){
+            makeSimpleSnackBar(message,view);
+        }
+    }
+
+    protected void progressDialogWaitStopShowMessageReload(String message, View view) {
+        try {
+            Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);
+        } catch (InterruptedException ignored) {
+        }
+        hideProgressDialog();
+        makeSimpleSnackBar(message, view);
+        reloadFragment();
+    }
 
 
 }

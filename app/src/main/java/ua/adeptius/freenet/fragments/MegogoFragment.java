@@ -452,13 +452,14 @@ public class MegogoFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 if (SendInfo.activateMegogo(megogoPt.getId())) {
-                    makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markMegogoPtsOld();
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    progressDialogStopAndShowMessage("10 хвилин активація..", mainLayout);
                     goTo(new TarifFragment());
                 } else {
-                    makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                 }
             }
         });
@@ -492,14 +493,15 @@ public class MegogoFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 if (SendInfo.deActivateMegogo(megogoPt.getId())) {
-                    makeSimpleSnackBar("Відключення..", mainLayout);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markMountlyFeeOld();
                     DbCache.markMegogoPtsOld();
+                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
+                    progressDialogStopAndShowMessage("Відключення..", mainLayout);
                     goTo(new TarifFragment());
                 } else {
-                    makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                 }
             }
         });

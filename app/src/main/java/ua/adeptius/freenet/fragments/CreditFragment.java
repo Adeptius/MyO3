@@ -177,13 +177,12 @@ public class CreditFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 if (SendInfo.reActivateCredit()) {
-                    makeSimpleSnackBar("Зачекайте, послуга відновлюється", mainLayout);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markCreditStatusOld();
-                    reloadFragment();
+                    progressDialogWaitStopShowMessageReload("Зачекайте, послуга відновлюється", mainLayout);
                 } else {
-                    makeSimpleSnackBar("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
+                    progressDialogStopAndShowMessage("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
                 }
             }
         });
@@ -193,13 +192,12 @@ public class CreditFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 if (SendInfo.activateCredit()) {
-                    makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markCreditStatusOld();
-                    reloadFragment();
+                    progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
                 } else {
-                    makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                 }
             }
         });

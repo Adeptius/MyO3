@@ -131,14 +131,13 @@ public class GarantServiceFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.deActivateGarantedService()) {
-                            makeSimpleSnackBar("Послуга відключається", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markMountlyFeeOld();
                             DbCache.markGarantedServiceStatusOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Послуга відключається", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
                 });
@@ -164,14 +163,13 @@ public class GarantServiceFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.activateGarantedService()) {
-                            makeSimpleSnackBar("Послуга підключається", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markMountlyFeeOld();
                             DbCache.markGarantedServiceStatusOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Послуга підключається", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
                 });

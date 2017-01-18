@@ -144,14 +144,13 @@ public class DrWebFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.deactivateDrWeb(sid)) {
-                            makeSimpleSnackBar("Буде відключено!", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markMountlyFeeOld();
                             DbCache.markDrWebServicesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Буде відключено!", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
                 });
@@ -234,14 +233,13 @@ public class DrWebFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
+                        progressDialogShow();
                         if (SendInfo.activateDrWeb(version)) {
-                            makeSimpleSnackBar("Підключено!", mainLayout);
-                            try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                             DbCache.markMountlyFeeOld();
                             DbCache.markDrWebServicesOld();
-                            reloadFragment();
+                            progressDialogWaitStopShowMessageReload("Підключено!", mainLayout);
                         } else {
-                            makeSimpleSnackBar("Трапилась помилка", mainLayout);
+                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
                 });

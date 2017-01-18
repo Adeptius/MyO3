@@ -1,5 +1,6 @@
 package ua.adeptius.freenet.activities;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import ua.adeptius.freenet.dao.SendInfo;
 import ua.adeptius.freenet.dao.Web;
 import ua.adeptius.freenet.model.Testing;
 import ua.adeptius.freenet.model.TestingUser;
+import ua.adeptius.freenet.service.BackgroundService;
 import ua.adeptius.freenet.utils.Settings;
 
 import static ua.adeptius.freenet.utils.Utilits.EXECUTOR;
@@ -59,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (!isMyServiceRunning(BackgroundService.class))
+            startService(new Intent(LoginActivity.this, BackgroundService.class));
 
         logoImageView = (ImageView) findViewById(R.id.logoView);
         textLogin = (EditText) findViewById(R.id.input_login);
@@ -353,6 +357,16 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

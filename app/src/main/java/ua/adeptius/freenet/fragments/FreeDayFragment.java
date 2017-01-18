@@ -22,6 +22,8 @@ import java.util.Map;
 import ua.adeptius.freenet.R;
 import ua.adeptius.freenet.dao.DbCache;
 import ua.adeptius.freenet.dao.SendInfo;
+import ua.adeptius.freenet.model.Person;
+import ua.adeptius.freenet.model.Servise;
 
 import static ua.adeptius.freenet.utils.Utilits.doTwoSymb;
 
@@ -30,6 +32,8 @@ public class FreeDayFragment extends BaseFragment {
     private int numberOfFreeDays;
     private int availableFreeDays;
     private List<String> statistics;
+    private List<Servise> services;
+
 
     @Override
     void setAllSettings() {
@@ -52,6 +56,8 @@ public class FreeDayFragment extends BaseFragment {
         numberOfFreeDays = map.get("daysTotal");
         availableFreeDays = map.get("daysLeft");
         statistics = DbCache.getFreeDayStatistics();
+        services = DbCache.getServises();
+
     }
 
     @Override
@@ -107,6 +113,13 @@ public class FreeDayFragment extends BaseFragment {
             leftMessage.append("Вам доступно ще п'ять вільних днів.");
         }
 
+        boolean stopped = false;
+        for (Servise service : services) {
+            if (service.getType() == 5){
+               stopped = service.isStopped();
+            }
+        }
+
         firstText.setText(mainMessage.toString());
         textDaysLeft.setText(leftMessage.toString());
 
@@ -145,6 +158,10 @@ public class FreeDayFragment extends BaseFragment {
                     e.printStackTrace();
                 }
             }
+        }
+        if (stopped){
+            activateButton.setText("Інтернет призупинений");
+            activateButton.setClickable(false);
         }
     }
 
@@ -220,14 +237,13 @@ public class FreeDayFragment extends BaseFragment {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                progressDialogShow();
                 if (SendInfo.activateFreeDay(map)) {
-                    makeSimpleSnackBar("10 хвилин активація..", mainLayout);
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     DbCache.markFreeDayInfoOld();
                     DbCache.markFreeDayStatisticsOld();
-                    reloadFragment();
+                    progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
                 } else {
-                    makeSimpleSnackBar("Послуга вже активна.", mainLayout);
+                    progressDialogStopAndShowMessage("Послуга вже активна.", mainLayout);
                 }
             }
         });

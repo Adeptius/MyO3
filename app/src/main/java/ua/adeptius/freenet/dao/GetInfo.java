@@ -149,7 +149,8 @@ public class GetInfo {
     public static int getCountOfBonuses() throws Exception {
         Utilits.networkLog("Запрос количества бонусов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/amount_bonus");
-        return Integer.valueOf(s);
+        double d = Double.parseDouble(s);
+        return (int) d;
     }
 
     public static List<FriendInvite> getFriendInvites() throws Exception {
