@@ -99,6 +99,8 @@ public class DivanTvFragment extends BaseFragment {
         newsTitle3.setText("Шоу не роспочнеться без вас!");
         comentText3.setText("Ви самі обираєте що і коли дивитися.");
 
+
+
         final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
         final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
         hideButton.setOnClickListener(new View.OnClickListener() {

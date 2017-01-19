@@ -12,7 +12,8 @@ public class Servise {
 
     private int id;
     private int type;
-    private int month;
+    private int serviceCost;
+    private int costForCustomer;
     private String pay_type_name;
     private boolean is_allow_change;
     private boolean is_allow_suspend;
@@ -31,7 +32,7 @@ public class Servise {
             JSONObject allInfo = new JSONObject(json.trim());
             id = allInfo.getInt("id");
             type = allInfo.getInt("type");
-            month = allInfo.getInt("month");
+            serviceCost = (int) allInfo.getDouble("month");
             pay_type_name = allInfo.getString("pay_type_name");
             if ("!-Приостановлен".equals(pay_type_name)) {
                 isStopped = true;
@@ -47,10 +48,17 @@ public class Servise {
                 int discount = disc.getInt("amount");
                 String date = disc.getString("eDate");
                 date = date.substring(0, date.indexOf(" "));
-                discount = discount;
+                this.discount = discount;
                 haveDiscount = true;
                 discountTo = date;
             }catch (Exception ignored){}
+
+            if (haveDiscount){
+                double exactlyCost = (serviceCost / 100) * (100-discount);
+                costForCustomer = (int) Math.round(exactlyCost);
+            }else {
+                costForCustomer = serviceCost;
+            }
 
             try {
                 String s = allInfo.getString("chprices");
@@ -210,8 +218,8 @@ public class Servise {
         return type;
     }
 
-    public int getMonth() {
-        return month;
+    public int getServiceCost() {
+        return serviceCost;
     }
 
     public String getPay_type_name() {
@@ -234,5 +242,15 @@ public class Servise {
         return discountTo;
     }
 
+    public int getCostForCustomer() {
+        return costForCustomer;
+    }
 
+    public String getNewName() {
+        return newName;
+    }
+
+    public String getDateWillChange() {
+        return dateWillChange;
+    }
 }

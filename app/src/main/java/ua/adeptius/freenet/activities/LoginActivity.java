@@ -278,6 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                         DbCache.getMountlyFeefromLK();
                         goToMain();
                     } else {
+                        Settings.clearAllData();
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -288,6 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }
                 } catch (Exception e) {
+                    Settings.clearAllData();
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {

@@ -489,6 +489,7 @@ public class DocumentFragment extends BaseFragment {
     }
 
 
+
     private void showWithoutDate(MailType type, Zayava zayava) {
         if (type == CREATE_EMAIL) {
             askEmailWantedName(type, zayava);

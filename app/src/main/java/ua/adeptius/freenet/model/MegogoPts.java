@@ -8,6 +8,7 @@ public class MegogoPts {
     private String id;
     private String month;
     private String name;
+    private String originalName;
     private boolean subscribe;
     private String description;
 
@@ -27,7 +28,12 @@ public class MegogoPts {
         }
     }
 
+    public String getOriginalName() {
+        return originalName;
+    }
+
     public void setName(String name) {
+        originalName = name;
         if (name.equals("MEGOGO Легкая")) {
             name = "Підписка легка";
             description = "Національні телеканали" +

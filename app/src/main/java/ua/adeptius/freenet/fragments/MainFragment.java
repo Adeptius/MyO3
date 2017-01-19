@@ -103,7 +103,14 @@ public class MainFragment extends BaseFragment {
         room.setText(person.getAddress().getAddressFlatName());
         age.setText(person.getAge() + " місяців");
         String many = String.valueOf(person.getCurrent());
-        many = many.length() > 4 ? many.substring(0, 4) : many;
+        int pos = many.indexOf(".")+2;
+        boolean cont = many.contains(".");
+        int len = many.length();
+
+        if (cont && len>=pos){
+            many = many.substring(0,many.indexOf(".")+2);
+        }
+//        many = many.length() > 4 ? many.substring(0, 4) : many;
         if (person.getCurrent() > 0) {
             money.setTextColor(COLOR_GREEN);
         } else if (person.getCurrent() < person.getStopsum()) {

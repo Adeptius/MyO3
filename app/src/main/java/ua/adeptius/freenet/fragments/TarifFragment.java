@@ -80,7 +80,7 @@ public class TarifFragment extends BaseFragment {
             }
 
             TextView serviceCost = (TextView) itemView.findViewById(R.id.service_cost);
-            serviceCost.setText(String.valueOf(service.getMonth()));
+            serviceCost.setText(String.valueOf(service.getCostForCustomer()));
 
             Button goToButton = (Button) itemView.findViewById(R.id.button_go_to);
             goToButton.setVisibility(View.GONE);
@@ -168,6 +168,7 @@ public class TarifFragment extends BaseFragment {
     }
 
     private void changeTarif(final Servise servise) {
+        progressDialogShow();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -215,6 +216,8 @@ public class TarifFragment extends BaseFragment {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                } finally {
+                    hideProgressDialog();
                 }
             }
         });

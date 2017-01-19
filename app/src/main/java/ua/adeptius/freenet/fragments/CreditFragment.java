@@ -172,7 +172,6 @@ public class CreditFragment extends BaseFragment {
         dialog.show();
     }
 
-
     private void reActivateNow() {
         EXECUTOR.submit(new Runnable() {
             @Override

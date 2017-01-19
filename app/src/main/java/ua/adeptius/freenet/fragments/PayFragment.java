@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -194,6 +195,7 @@ public class PayFragment extends BaseFragment {
         text.setWidth((int) Utilits.dpToPixel(50,context));
         text.setCursorVisible(true);
         text.hasFocus();
+        text.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         layout.addView(before);
         layout.addView(text);

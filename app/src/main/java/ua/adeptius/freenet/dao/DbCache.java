@@ -74,10 +74,18 @@ public class DbCache {
     private static long mountlyFeeCreatedTime;
 
     public static String getMountlyFeefromLK() throws Exception {
-        if (mountlyFee == null || getPastMinutes(mountlyFeeCreatedTime) > 30) {
-            mountlyFee = GetInfo.getMountlyFeefromLK();
-            mountlyFeeCreatedTime = getCurrentTime();
+        List<Servise> servises = getServises();
+        int tempFee = 0;
+        for (Servise servise : servises) {
+            tempFee += servise.getCostForCustomer();
         }
+        mountlyFee = tempFee + "";
+
+//        Мой личный расчёт абонплаты
+//        if (mountlyFee == null || getPastMinutes(mountlyFeeCreatedTime) > 30) {
+//            mountlyFee = GetInfo.getMountlyFeefromLK();
+//            mountlyFeeCreatedTime = getCurrentTime();
+//        }
         return mountlyFee;
     }
 

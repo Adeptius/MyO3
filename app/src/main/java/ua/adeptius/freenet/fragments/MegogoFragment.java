@@ -455,6 +455,7 @@ public class MegogoFragment extends BaseFragment {
                 progressDialogShow();
                 if (SendInfo.activateMegogo(megogoPt.getId())) {
                     DbCache.markMegogoPtsOld();
+                    DbCache.markServicesOld();
                     try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     progressDialogStopAndShowMessage("10 хвилин активація..", mainLayout);
                     goTo(new TarifFragment());
@@ -497,6 +498,7 @@ public class MegogoFragment extends BaseFragment {
                 if (SendInfo.deActivateMegogo(megogoPt.getId())) {
                     DbCache.markMountlyFeeOld();
                     DbCache.markMegogoPtsOld();
+                    DbCache.markServicesOld();
                     try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
                     progressDialogStopAndShowMessage("Відключення..", mainLayout);
                     goTo(new TarifFragment());
