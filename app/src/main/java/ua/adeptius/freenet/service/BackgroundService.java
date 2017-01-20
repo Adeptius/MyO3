@@ -1,6 +1,7 @@
 package ua.adeptius.freenet.service;
 
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -10,8 +11,11 @@ import ua.adeptius.freenet.utils.Utilits;
 
 public class BackgroundService  extends Service {
 
+
+
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Checker checker = new Checker();
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Checker checker = new Checker(nm, this);
         checker.start();
         return super.onStartCommand(intent, flags, startId);
     }

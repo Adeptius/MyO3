@@ -308,6 +308,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);
+
+        Intent intentIn = getIntent();
+        String message = intentIn.getStringExtra("notAnothMessage");
+        if (!"".equals(message)){
+            intent.putExtra("notAnothMessage", message);
+        }
+
         this.finish();
         startActivity(intent);
     }

@@ -153,6 +153,9 @@ public class Servise {
         name = name.replaceAll("MEGOGO FilmBox", "Пакет FilmBox");
         name = name.replaceAll("бесплатный", "безкоштовний");
         name = name.replaceAll("Почтовый ящик 30Мб", "Обсяг 30мб");
+
+        name = name.trim();
+
         return name;
     }
 

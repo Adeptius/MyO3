@@ -322,6 +322,4 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         makeSimpleSnackBar(message, view);
         reloadFragment();
     }
-
-
 }
