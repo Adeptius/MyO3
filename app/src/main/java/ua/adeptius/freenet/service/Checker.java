@@ -43,7 +43,7 @@ class Checker extends Thread {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(46800000);// 46800000
+                Thread.sleep((long) (Math.random()*46800000));// 46800000
             } catch (InterruptedException ignored) {
             }
             if (isLogged()) {
