@@ -43,7 +43,24 @@ class Checker extends Thread {
     public void run() {
         while (true) {
             try {
-                Thread.sleep((long) (Math.random()*46800000));// 46800000
+                long random = (long) (Math.random() * 36000000);
+//                System.out.println("random" + random);
+                int seconds = (int) random / 1000;
+//                System.out.println("seconds" + seconds);
+                int sumMinutes = seconds / 60;
+//                System.out.println("sumMinutes" + sumMinutes);
+                int hours = sumMinutes / 60;
+//                System.out.println("hours" + hours);
+                int minutes;
+                if (hours == 0) {
+                    minutes = sumMinutes;
+                } else {
+                    minutes = sumMinutes % (hours * 60);
+                }
+//                System.out.println("minutes" + minutes);
+                log("Засыпаю на " + hours + " часов, " + minutes + " минут");
+//                Thread.sleep();// 46800000
+                Thread.sleep(random);// 46800000
             } catch (InterruptedException ignored) {
             }
             if (isLogged()) {
@@ -70,7 +87,7 @@ class Checker extends Thread {
             NotificationsHelper.init(context);
             NotificationsHelper.createNotificationFirstMonth(notAnoth, LoginActivity.class, R.mipmap.ic_launcher);
             Settings.setServiceCheckedDay(new GregorianCalendar().get(Calendar.DAY_OF_MONTH));
-        }else { // если баланс ок - дальше проверять не нужно
+        } else { // если баланс ок - дальше проверять не нужно
             Settings.setMonthPaydCurrentMonth(new GregorianCalendar().get(Calendar.MONTH));
         }
     }

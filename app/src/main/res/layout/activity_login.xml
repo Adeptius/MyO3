@@ -111,7 +111,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_weight="0.01"
                 android:gravity="center"
-                android:text="FreeNet"
+                android:text="FREENET"
                 android:textColor="@android:color/white"
                 android:textSize="60sp"
                 android:textStyle="normal|bold"
@@ -127,17 +127,17 @@
                 android:visibility="visible"
                 app:srcCompat="@drawable/logo_png_1024" />
 
-            <TextView
-                android:id="@+id/text_coment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.01"
-                android:gravity="center"
-                android:text="Особистий кабінет"
-                android:textColor="@color/white"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:visibility="visible" />
+            <!--<TextView-->
+                <!--android:id="@+id/text_coment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="0.01"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Особистий кабінет"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="30sp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:visibility="visible" />-->
 
             <ProgressBar
                 android:id="@+id/progressBarInSplashScreen"

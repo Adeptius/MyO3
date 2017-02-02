@@ -1,6 +1,8 @@
 package ua.adeptius.freenet.model;
 
 
+import com.google.gson.Gson;
+
 import org.json.JSONObject;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -28,6 +30,7 @@ public class Servise {
     private String discountTo;
 
     public Servise(String json) {
+//        Gson allGSon = new Gson();
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             id = allInfo.getInt("id");
@@ -53,12 +56,17 @@ public class Servise {
                 discountTo = date;
             }catch (Exception ignored){}
 
-            if (haveDiscount){
-                double exactlyCost = (serviceCost / 100) * (100-discount);
+            if (haveDiscount){ // тут вообще можно брать "money" из json
+                double del100 = (double) serviceCost / 100;
+                double discMultiplier = 100-discount;
+                double exactlyCost = del100 * discMultiplier;
                 costForCustomer = (int) Math.round(exactlyCost);
             }else {
                 costForCustomer = serviceCost;
             }
+
+            // На время теста: беру инфу с биллинга
+            costForCustomer = (int) allInfo.getDouble("money");
 
             try {
                 String s = allInfo.getString("chprices");

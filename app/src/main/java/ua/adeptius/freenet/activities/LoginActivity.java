@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextView statusTextView;
     private TextView titleText;
-    private TextView comentText;
+//    private TextView comentText;
     private ProgressBar progressBar;
 
     private TextView enterText;
@@ -65,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
             startService(new Intent(LoginActivity.this, BackgroundService.class));
 
         logoImageView = (ImageView) findViewById(R.id.logoView);
+//        logoImageView.setVisibility(View.INVISIBLE);
+//        logoImageView.setScaleX(1);
+
         textLogin = (EditText) findViewById(R.id.input_login);
         textPassword = (EditText) findViewById(R.id.input_password);
         buttonLogin = (Button) findViewById(R.id.button_login);
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         splashLayout = (LinearLayout) findViewById(R.id.splash_layout);
         statusTextView = (TextView) findViewById(R.id.status_text_view);
         titleText = (TextView) findViewById(R.id.text_title);
-        comentText = (TextView) findViewById(R.id.text_coment);
+//        comentText = (TextView) findViewById(R.id.text_coment);
         progressBar = (ProgressBar) findViewById(R.id.progressBarInSplashScreen);
         progressBar.setVisibility(View.INVISIBLE);
 
@@ -98,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (textPassword.getText().toString().equals("4593")){
                     showChoise();
+                }else if (textPassword.getText().toString().equals("4592")){
+                    throw new RuntimeException("Exception just for testing");
                 }
             }
         });
@@ -109,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 startAnimation();
                 try {
-                    Thread.sleep(800);
+                    Thread.sleep(1000);
                     checkAll();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -219,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void run() {
                     titleText.setVisibility(View.INVISIBLE);
 //                    logoImageView.setVisibility(View.INVISIBLE);
-                    comentText.setVisibility(View.INVISIBLE);
+//                    comentText.setVisibility(View.INVISIBLE);
 
                     titleText.setVisibility(View.VISIBLE);
                     Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
@@ -227,28 +232,36 @@ public class LoginActivity extends AppCompatActivity {
                     titleText.startAnimation(anim);
                 }
             });
-            Thread.sleep(500);
+            Thread.sleep(300);
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
 //                    logoImageView.setVisibility(View.VISIBLE);
-                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
-                            R.anim.splash_screen_scale);
-                    logoImageView.startAnimation(anim);
                 }
             });
-
-            Thread.sleep(500);
-
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
-                    comentText.setVisibility(View.VISIBLE);
-                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
-                            R.anim.splash_screen_scale);
-                    comentText.startAnimation(anim);
+//                    logoImageView.setVisibility(View.VISIBLE);
+//                    logoImageView.setScaleX(1);
+//
+//                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
+//                            R.anim.splash_screen_scale);
+//                    logoImageView.startAnimation(anim);
                 }
             });
+
+//            Thread.sleep(500);
+
+//            HANDLER.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    comentText.setVisibility(View.VISIBLE);
+//                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
+//                            R.anim.splash_screen_scale);
+//                    comentText.startAnimation(anim);
+//                }
+//            });
         } catch (InterruptedException ignore) {}
     }
 

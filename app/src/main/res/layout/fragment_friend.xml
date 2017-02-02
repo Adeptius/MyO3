@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:paddingBottom="5dp"
-                android:text="Заповніть форму, натиснувши кнопку нижче (так ми будемо знати, що це ваш друг)." />
+                android:text="Заповніть форму, натиснувши кнопку нижче." />
         </LinearLayout>
 
         <LinearLayout
@@ -119,13 +119,13 @@
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:paddingBottom="5dp"
-                android:text="Протягом дня ваша заявка буде розглянута, та друг отримає місяць безкоштовного інтернету!" />
+                android:text="Протягом дня ваша заявка буде розглянута, та друг отримає місяць безкоштовного інтернету, а ви - два місяці за кожного друга!" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="А ви отримуєте 2 місяці безкоштовного інтернету!"
+            android:text="А хочете РІК БЕЗКОШТОВНОГО ІНТЕРНЕТУ? Приведіть шістьох друзів протягом місяця!\n Почніть прямо зараз!"
             android:textAlignment="center"
             android:textColor="@color/blue"
             android:textSize="16sp" />

@@ -35,13 +35,13 @@ public class MegogoPts {
     public void setName(String name) {
         originalName = name;
         if (name.equals("MEGOGO Легкая")) {
-            name = "Підписка легка";
+            name = "Пакет легкий";
             description = "Національні телеканали" +
                     "\nІнтерактивні канали MEGOGO" +
                     "\nВідключення всієї реклами на MEGOGO";
 
         } else if (name.equals("MEGOGO Оптимальная")) {
-            name = "Підписка оптимальна";
+            name = "Пакет оптимальний";
             description = "Національні телеканали" +
             "\nІнтерактивні канали MEGOGO" +
                     "\nВідключення всієї реклами на MEGOGO"+
@@ -49,7 +49,7 @@ public class MegogoPts {
             "\n+Безкоштовно перші 30 днів";
 
         } else if (name.equals("MEGOGO Максимальная")) {
-            name = "Підписка максимальна";
+            name = "Пакет максимальний";
             description = "Національні телеканали" +
                     "\nІнтерактивні канали MEGOGO" +
                     "\nВідключення всієї реклами на MEGOGO"+

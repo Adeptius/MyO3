@@ -98,7 +98,7 @@ public class NotificationsHelper {
         final NotificationCompat.Builder nb = getNotificationBuilder() // получаем из хелпера generic Builder, и далее донастраиваем его
                 .setContentText(notAnothMessage) // сообщение, которое будет отображаться в самом уведомлении
                 .setTicker(notAnothMessage) //сообщение, которое будет показано в статус-баре при создании уведомления, ставлю тот же
-                .setSmallIcon(iconResId != 0 ? iconResId : R.mipmap.ic_launcher);// иконка, если 0, то используется иконка самого аппа
+                .setSmallIcon(R.mipmap.ic_launcher);// иконка, если 0, то используется иконка самого аппа
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(appContext);
         stackBuilder.addParentStack(LoginActivity.class);

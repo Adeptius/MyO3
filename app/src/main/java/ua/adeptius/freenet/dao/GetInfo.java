@@ -259,7 +259,7 @@ public class GetInfo {
     }
 
     public static List<MegogoPts> getMegogoPts() throws Exception {
-        Utilits.networkLog("Запрос какой-то хрени мегого птс");
+        Utilits.networkLog("Запрос подписок мегого");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo");
         List<MegogoPts> pts = new ArrayList<>();
 
@@ -378,7 +378,7 @@ public class GetInfo {
     }
 
     public static List<AvailableTarif> getAvailableTarifs(String serviceId) throws Exception {
-        Utilits.networkLog("Запрос доступных тарифов");
+        Utilits.networkLog("Запрос доступных тарифов мегого");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/new_pt?service_id=" + serviceId);
         s = s.substring(1, s.length() - 1);
         List<AvailableTarif> availableTarifList = new ArrayList<>();

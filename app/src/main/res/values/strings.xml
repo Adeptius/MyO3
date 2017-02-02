@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Фрінет особистий кабінет</string>
-    <string name="title_activity_login">Фрінет особистий кабінет</string>
-    <string name="title_activity_main">Фрінет особистий кабінет</string>
+    <string name="app_name">ФРІНЕТ</string>
+    <string name="title_activity_login">ФРІНЕТ</string>
+    <string name="title_activity_main">ФРІНЕТ</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

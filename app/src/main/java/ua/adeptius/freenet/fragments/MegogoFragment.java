@@ -220,11 +220,11 @@ public class MegogoFragment extends BaseFragment {
                 public void onClick(View v) {
                     if (channelList.getChildCount() > 0) {
                         channelList.removeAllViews();
-                        if (name.equals("Підписка легка")) {
+                        if (name.equals("Пакет легкий")) {
                             showButton.setText("Канали");
-                        } else if (name.equals("Підписка оптимальна")) {
+                        } else if (name.equals("Пакет оптимальний")) {
                             showButton.setText("Канали");
-                        } else if (name.equals("Підписка максимальна")) {
+                        } else if (name.equals("Пакет максимальний")) {
                             showButton.setText("Канали");
                         } else if (name.equals("Додатковий пакет FilmBox")) {
                             showButton.setText("Канали");
@@ -233,11 +233,11 @@ public class MegogoFragment extends BaseFragment {
                         }
                     } else {
                         showButton.setText("Сховати");
-                        if (name.equals("Підписка легка")) {
+                        if (name.equals("Пакет легкий")) {
                             showChannels(channelList, light);
-                        } else if (name.equals("Підписка оптимальна")) {
+                        } else if (name.equals("Пакет оптимальний")) {
                             showChannels(channelList, optimal);
-                        } else if (name.equals("Підписка максимальна")) {
+                        } else if (name.equals("Пакет максимальний")) {
                             showChannels(channelList, maximum);
                         } else if (name.equals("Додатковий пакет FilmBox")) {
                             showChannels(channelList, filmBox);
@@ -286,10 +286,10 @@ public class MegogoFragment extends BaseFragment {
         coment.setTextSize(16);
         coment.setTypeface(null, Typeface.BOLD);
         if (chanels.equals(optimal)){
-            coment.setText("Всі канали з легкої підписки та плюс наступні:");
+            coment.setText("Всі канали з пакету \"Легкий\" та плюс наступні:");
             container.addView(coment);
         }else if (chanels.equals(maximum)){
-            coment.setText("Всі канали з оптимальної підписки та плюс наступні:");
+            coment.setText("Всі канали з пакету \"Оптимальний\" та плюс наступні:");
             container.addView(coment);
         }
 

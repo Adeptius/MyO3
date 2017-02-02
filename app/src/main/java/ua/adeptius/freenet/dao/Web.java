@@ -117,7 +117,6 @@ public class Web {
         }
     }
 
-
     public static String getJsonFromUrl(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -165,6 +164,4 @@ public class Web {
         in.close();
         return result;
     }
-
-
 }

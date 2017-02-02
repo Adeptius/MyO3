@@ -80,7 +80,7 @@ public class TarifFragment extends BaseFragment {
             }
 
             TextView serviceCost = (TextView) itemView.findViewById(R.id.service_cost);
-            serviceCost.setText(String.valueOf(service.getCostForCustomer()));
+            serviceCost.setText(String.valueOf(service.getServiceCost()));
 
             Button goToButton = (Button) itemView.findViewById(R.id.button_go_to);
             goToButton.setVisibility(View.GONE);
@@ -89,10 +89,10 @@ public class TarifFragment extends BaseFragment {
                 goToButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       goTo(new MegogoFragment());
+                        goTo(new MegogoFragment());
                     }
                 });
-            }else if (service.getMyTypeName().contains("Антивірус")){
+            } else if (service.getMyTypeName().contains("Антивірус")) {
                 goToButton.setVisibility(View.VISIBLE);
                 goToButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -102,7 +102,7 @@ public class TarifFragment extends BaseFragment {
                 });
             }
 
-            if (service.getMyTypeName().equals("Поштова скринька")){
+            if (service.getMyTypeName().equals("Поштова скринька")) {
                 goToButton.setVisibility(View.VISIBLE);
                 goToButton.setText("Змінити пароль");
                 goToButton.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +162,13 @@ public class TarifFragment extends BaseFragment {
             TextView discountView = (TextView) itemView.findViewById(R.id.discount_text);
             if (service.isHaveDiscount() && service.getDiscount() != 0) {
                 discountView.setVisibility(View.VISIBLE);
-                discountView.setText("Знижка " + service.getDiscount() + "% до " + service.getDiscountTo());
+                discountView.setText(
+                                "Знижка "
+                                + service.getDiscount()
+                                + "% ("
+                                + service.getCostForCustomer()
+                                + " грн) до "
+                                + service.getDiscountTo());
             }
         }
     }
@@ -223,7 +229,7 @@ public class TarifFragment extends BaseFragment {
         });
     }
 
-    private void proceedShoosenTarif(final String id, String name, final Servise servise){
+    private void proceedShoosenTarif(final String id, String name, final Servise servise) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
@@ -239,15 +245,16 @@ public class TarifFragment extends BaseFragment {
             s = regexMatcher.group();
             int willBeMoney = Integer.parseInt(s.substring(0, s.indexOf(" ")));
 
-            if (currentMoney > willBeMoney){
+            if (currentMoney > willBeMoney) {
                 willcost = "Ви бажаєте перейти на більш дешевий тариф. " +
                         "З вашого рахунку, зараз, буде одноразово знято 10 грн.";
-            }else if(currentMoney < willBeMoney){
+            } else if (currentMoney < willBeMoney) {
                 willcost = "Ви бажаєте перейти на більш дорогий тариф. " +
                         "Вам буде надана знижка 20% на 2 місяці.";
             }
             willcost += "\n Новий тариф буде активовано з першого числа наступного місяця";
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
 
         TextView titleView = new TextView(context);
         titleView.setText("Ви обрали:");
@@ -260,8 +267,8 @@ public class TarifFragment extends BaseFragment {
         StringBuilder sb = new StringBuilder();
         sb.append(name + "\n");
         sb.append("Протягом цього місяця ви не зможете призупиняти послугу, або її змінити.\n");
-        sb.append("Зміна тарифного плану відбудеться 1-го числа наступного місяця.\n");
-        if(!"".equals(willcost)){
+//        sb.append("Зміна тарифного плану відбудеться 1-го числа наступного місяця.\n");
+        if (!"".equals(willcost)) {
             sb.append(willcost);
         }
 
@@ -279,7 +286,7 @@ public class TarifFragment extends BaseFragment {
                     public void run() {
                         HashMap<String, String> map = new HashMap<String, String>();
                         map.put("pt_new", id);
-                        map.put("service_id",String.valueOf(servise.getId()));
+                        map.put("service_id", String.valueOf(servise.getId()));
                         progressDialogShow();
                         if (SendInfo.changeTarif(map)) {
                             DbCache.markMountlyFeeOld();
@@ -457,7 +464,7 @@ public class TarifFragment extends BaseFragment {
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
-                        String result = SendInfo.changeEmailPassword(text.getText().toString(),id);
+                        String result = SendInfo.changeEmailPassword(text.getText().toString(), id);
                         makeSimpleSnackBar(result, mainLayout);
                     }
                 });
