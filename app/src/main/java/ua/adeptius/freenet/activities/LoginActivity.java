@@ -101,8 +101,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (textPassword.getText().toString().equals("4593")){
                     showChoise();
-                }else if (textPassword.getText().toString().equals("4592")){
-                    throw new RuntimeException("Exception just for testing");
                 }
             }
         });

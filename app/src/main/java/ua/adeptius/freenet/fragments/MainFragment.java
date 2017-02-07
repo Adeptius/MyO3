@@ -3,12 +3,17 @@ package ua.adeptius.freenet.fragments;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,6 +97,47 @@ public class MainFragment extends BaseFragment {
     }
 
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
+        String version = "";
+        int verCode = 0;
+        PackageInfo pInfo = null;
+        try {
+            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = pInfo.versionName;
+            verCode = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        Button phoneButton = getButton(R.id.button_call);
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:0934027182"));
+                startActivity(intent1);
+            }
+        });
+
+        TextView textVersion = getTextView(R.id.text_version);
+        textVersion.setText("Версия программы: " + verCode);
+
+        TextView textDesc = getTextView(R.id.text_desc);
+        textDesc.setText("Что бы ускорить запуск программы, что бы не возникало эффекта испорченного телефона, да и вообще если будут любые вопросы - пожалуйста звоните мне или пишите в любое время! Неточности и неисправности я устраняю очень быстро :)");
+
+
+        Button emailButton = getButton(R.id.button_email);
+        final int finalVerCode = verCode;
+        emailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", "adeptius@gmail.com", null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Тестирование ЛК версия " + finalVerCode);
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+            }
+        });
+
+
         descriptionText = person.getUkrName() +
                 ", тут відображається основна інформація по вашій угоді";
         updateTitle();
@@ -103,12 +149,12 @@ public class MainFragment extends BaseFragment {
         room.setText(person.getAddress().getAddressFlatName());
         age.setText(person.getAge() + " місяців");
         String many = String.valueOf(person.getCurrent());
-        int pos = many.indexOf(".")+2;
+        int pos = many.indexOf(".") + 2;
         boolean cont = many.contains(".");
         int len = many.length();
 
-        if (cont && len>=pos){
-            many = many.substring(0,many.indexOf(".")+2);
+        if (cont && len >= pos) {
+            many = many.substring(0, many.indexOf(".") + 2);
         }
 //        many = many.length() > 4 ? many.substring(0, 4) : many;
         if (person.getCurrent() > 0) {
@@ -131,7 +177,56 @@ public class MainFragment extends BaseFragment {
                 akciiCheckBox.setChecked(mailing.isSubscribe());
         }
         showIps(ips);
+        showWarningIfNewAbon();
         showWarningIfInternetInactive();
+    }
+
+
+    private void showWarningIfNewAbon() {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                if (person.getAge() < 1 && person.getStopsum() > person.getCurrent()) {
+                    try {
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                                builder.setCancelable(true);
+                                TextView titleView = new TextView(context);
+                                titleView.setText("Перша сплата");
+                                titleView.setGravity(Gravity.CENTER);
+                                titleView.setTextSize(24);
+                                titleView.setTypeface(null, Typeface.BOLD);
+                                titleView.setTextColor(COLOR_BLUE);
+                                builder.setCustomTitle(titleView);
+                                View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+                                TextView text = (TextView) textLayout.findViewById(R.id.text);
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("Шановний абонент!\n");
+                                sb.append("Нагадуємо, що першу оплату необхідно внести у повному обсязі ");
+                                sb.append("незалежно від стану вашого балансу.\n");
+                                sb.append("Будь ласка, поповніть рахунок на ").append(1).append(mountlyFee).append(" грн. ");
+                                sb.append("(1 грн за підключення плюс ваш тариф)");
+
+                                text.setText(sb.toString());
+                                builder.setView(textLayout);
+                                builder.setPositiveButton("Гаразд", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                android.app.AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void showWarningIfInternetInactive() {
@@ -140,50 +235,50 @@ public class MainFragment extends BaseFragment {
             public void run() {
                 if (person.getStopsum() > person.getCurrent()) {
                     try {
-                        boolean creditEnabled = DbCache.getCreditStatus().startsWith("20");
-                        if (!creditEnabled) {
-                            HANDLER.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                                    builder.setCancelable(true);
-                                    TextView titleView = new TextView(context);
-                                    titleView.setText("Інтернет не активний");
-                                    titleView.setGravity(Gravity.CENTER);
-                                    titleView.setTextSize(24);
-                                    titleView.setTypeface(null, Typeface.BOLD);
-                                    titleView.setTextColor(COLOR_BLUE);
-                                    builder.setCustomTitle(titleView);
-                                    View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-                                    TextView text = (TextView) textLayout.findViewById(R.id.text);
-                                    StringBuilder sb = new StringBuilder();
-                                    sb.append("На вашому рахунку недостатньо коштів.\n");
-                                    sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
-                                    String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
-                                    if (notAnoth.contains("."))
-                                        notAnoth = notAnoth.substring(0, notAnoth.indexOf(".") + 2);
-                                    sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
-                                    sb.append("Перейти до перегляду історії проплат?");
-                                    text.setText(sb.toString());
-                                    builder.setView(textLayout);
-                                    builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(final DialogInterface dialog, int which) {
-                                            FragmentManager fm = getFragmentManager();
-                                            try {
-                                                fm.beginTransaction().replace(R.id.content_frame, BalanceFragment.class.newInstance()).commit();
-                                            } catch (java.lang.InstantiationException e) {
-                                                e.printStackTrace();
-                                            } catch (IllegalAccessException e) {
-                                                e.printStackTrace();
-                                            }
+//                        boolean creditEnabled = DbCache.getCreditStatus().startsWith("20");
+//                        if (!creditEnabled) {
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                                builder.setCancelable(true);
+                                TextView titleView = new TextView(context);
+                                titleView.setText("Інтернет не активний");
+                                titleView.setGravity(Gravity.CENTER);
+                                titleView.setTextSize(24);
+                                titleView.setTypeface(null, Typeface.BOLD);
+                                titleView.setTextColor(COLOR_BLUE);
+                                builder.setCustomTitle(titleView);
+                                View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
+                                TextView text = (TextView) textLayout.findViewById(R.id.text);
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("На вашому рахунку недостатньо коштів.\n");
+                                sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
+                                String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
+                                if (notAnoth.contains("."))
+                                    notAnoth = notAnoth.substring(0, notAnoth.indexOf(".") + 2);
+                                sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
+                                sb.append("Перейти до перегляду історії проплат?");
+                                text.setText(sb.toString());
+                                builder.setView(textLayout);
+                                builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, int which) {
+                                        FragmentManager fm = getFragmentManager();
+                                        try {
+                                            fm.beginTransaction().replace(R.id.content_frame, BalanceFragment.class.newInstance()).commit();
+                                        } catch (java.lang.InstantiationException e) {
+                                            e.printStackTrace();
+                                        } catch (IllegalAccessException e) {
+                                            e.printStackTrace();
                                         }
-                                    });
-                                    android.app.AlertDialog dialog = builder.create();
-                                    dialog.show();
-                                }
-                            });
-                        }
+                                    }
+                                });
+                                android.app.AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -383,7 +478,8 @@ public class MainFragment extends BaseFragment {
                             if (SendInfo.changeEmail(text.getText().toString().trim())) {
                                 DbCache.markPersonOld();
                                 progressDialogWaitStopShowMessageReload("Email змінено", view);
-                            } else progressDialogStopAndShowMessage("Помилка. Email невірний.", view);
+                            } else
+                                progressDialogStopAndShowMessage("Помилка. Email невірний.", view);
                         } catch (Exception e) {
                             e.printStackTrace();
                             progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);

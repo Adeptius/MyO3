@@ -357,7 +357,7 @@ public class TarifFragment extends BaseFragment {
         builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                if (!isRightChoice(datePicker)) {
+                if (!isShoosenFutureDay(datePicker)) {
                     makeSimpleSnackBar("Сьогодні або вчора вибрати не можливо", mainLayout);
                 } else {
                     askEndDate(getStringedDate(datePicker));
@@ -526,7 +526,7 @@ public class TarifFragment extends BaseFragment {
     }
 
 
-    private boolean isRightChoice(DatePicker datePicker) {
+    public static boolean isShoosenFutureDay(DatePicker datePicker) {
         Calendar calendar = new GregorianCalendar();
         int year = datePicker.getYear();
         int month = datePicker.getMonth();
@@ -534,6 +534,25 @@ public class TarifFragment extends BaseFragment {
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        boolean y = currentYear >= year;
+        boolean m = currentMonth >= month;
+        boolean d = currentDay >= day;
+
+        if (y && m && d) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isShoosenTodayOrFuture(DatePicker datePicker) {
+        Calendar calendar = new GregorianCalendar();
+        int year = datePicker.getYear();
+        int month = datePicker.getMonth();
+        int day = datePicker.getDayOfMonth();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH);
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH)-1;
 
         boolean y = currentYear >= year;
         boolean m = currentMonth >= month;

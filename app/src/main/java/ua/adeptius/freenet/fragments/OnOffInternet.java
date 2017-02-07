@@ -16,7 +16,7 @@ public class OnOffInternet extends BaseFragment {
     @Override
     void setAllSettings() {
         titleText = "Вимикання інтернету";
-        descriptionText = "Вимикання інтернету у цьому меню не впливає на абонентську плату";
+        descriptionText = "Вимикання інтернету у цьому меню не скасовує абонентську плату";
         fragmentId = R.layout.fragment_on_off_internet;
         titleImage = R.drawable.background_main1;
         layoutId = R.id.main_on_off;

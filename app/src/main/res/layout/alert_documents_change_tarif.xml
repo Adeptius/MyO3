@@ -32,14 +32,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Введіть назву нового тарифу"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/edit_tarif_new"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/lay_for_tarifs"
@@ -50,7 +52,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Або оберіть з наявних:"
+            android:text="Оберіть новий тариф з наявних:"
             android:textAlignment="center" />
     </LinearLayout>
 </LinearLayout>

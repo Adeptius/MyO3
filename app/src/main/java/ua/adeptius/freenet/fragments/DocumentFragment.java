@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,7 +146,7 @@ public class DocumentFragment extends BaseFragment {
         } else if (type == DOP_IP) {
             askAgree(type, zayava, checkMoneyMessage(zayava));
         } else if (type == CHANGE_TARIF) {
-            askAgree(type, zayava, "Зміна тарифу. До речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
+            askAgree(type, zayava, "Зміна тарифу. \nМайте на увазі: перехід можливий не раніше ніж з завтрішнього дня. \nДо речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
         } else if (type == CREATE_EMAIL) {
             askAgree(type, zayava, "Створення поштової скриньки. Безкоштовно надається тільки одна скринька. \nУВАГА!\n У разі відключення від мережі \"Фрінет\" скринька буде автоматично видалена!");
         } else if (type == CHANGE_IP) {
@@ -272,12 +274,10 @@ public class DocumentFragment extends BaseFragment {
                     Settings.setCurrentPassportSerial(ser);
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
-
 
         // Поле Номера паспорта
         final EditText passNumEdit = (EditText) headerLayout.findViewById(R.id.edit_pass_num);
@@ -339,7 +339,6 @@ public class DocumentFragment extends BaseFragment {
                                     emailEdit.getText().toString()
                             );
 
-
                             if (type == CREATE_EMAIL) {
                                 showWithoutDate(type, zayava);
                             } else askDate(type, zayava);
@@ -356,53 +355,65 @@ public class DocumentFragment extends BaseFragment {
 
     private void askDate(final MailType type, final Zayava zayava) {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker_zayava, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        Button todayButton = (Button) datepickerLayout.findViewById(R.id.button_today);
-        final Button hideButton = (Button) datepickerLayout.findViewById(R.id.button_show_calendar);
-        final LinearLayout hideLayout = (LinearLayout) datepickerLayout.findViewById(R.id.lay_hide);
-        hideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideLayout.setVisibility(View.VISIBLE);
-                hideButton.setVisibility(View.GONE);
-            }
-        });
-
-
-        builder.setCancelable(true);
-        builder.setView(datepickerLayout);
+        final boolean itsMailToSupport = type.getEmail().equals("support@o3.ua");
+        if (itsMailToSupport){
+            datePicker.setMinDate(new GregorianCalendar().getTimeInMillis());
+        }else {
+            datePicker.setMinDate(new GregorianCalendar().getTimeInMillis()+86400000);
+        }
 
         TextView titleText = new TextView(context);
-        titleText.setText("Коли виконати зміни?");
+        titleText.setText("Вкажіть дату зміни");
         titleText.setGravity(Gravity.CENTER);
         titleText.setTextSize(24);
         titleText.setTypeface(null, Typeface.BOLD);
-        titleText.setTextColor(COLOR_BLUE);
+        titleText.setTextColor(COLOR_GREEN);
 
-        builder.setCustomTitle(titleText);
-        builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
+        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                .setView(datepickerLayout)
+                .setCustomTitle(titleText)
+                .setPositiveButton("Далі", null)
+                .setCancelable(true)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                String date = Utilits.parseUkrTime(
-                        datePicker.getYear(),
-                        datePicker.getMonth(),
-                        datePicker.getDayOfMonth()
-                );
-                showWithDate(type, date, zayava);
+            public void onShow(final DialogInterface dialog) {
+                Button button = ((android.app.AlertDialog) dialog).getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (itsMailToSupport){
+                            if (TarifFragment.isShoosenTodayOrFuture(datePicker)){
+                                String date = Utilits.parseUkrTime(
+                                        datePicker.getYear(),
+                                        datePicker.getMonth(),
+                                        datePicker.getDayOfMonth()
+                                );
+                                showWithDate(type, date, zayava);
+                                dialog.dismiss();
+                            }else {
+                                makeSimpleSnackBar("Минуле не можно вибирати", datePicker);
+                            }
+                        }else {
+                            if (TarifFragment.isShoosenFutureDay(datePicker)){
+                                String date = Utilits.parseUkrTime(
+                                        datePicker.getYear(),
+                                        datePicker.getMonth(),
+                                        datePicker.getDayOfMonth()
+                                );
+                                showWithDate(type, date, zayava);
+                                dialog.dismiss();
+                            }else {
+                                makeSimpleSnackBar("Сьогодні або вчора не можно вибирати", datePicker);
+                            }
+                        }
+                    }
+                });
             }
         });
-        final AlertDialog dialog = builder.create();
         dialog.show();
-
-        todayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                String today = Utilits.getUkrDateNow();
-                showWithDate(type, today, zayava);
-            }
-        });
     }
 
 
@@ -430,6 +441,8 @@ public class DocumentFragment extends BaseFragment {
         final EditText textOldTarif = (EditText) tarifLayout.findViewById(R.id.edit_tarif_old);
         final EditText textNewTarif = (EditText) tarifLayout.findViewById(R.id.edit_tarif_new);
         final LinearLayout lin = (LinearLayout) tarifLayout.findViewById(R.id.lay_for_tarifs);
+        builder.setView(tarifLayout);
+        final AlertDialog dialog = builder.create();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -460,7 +473,11 @@ public class DocumentFragment extends BaseFragment {
                                 name.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        textNewTarif.setText(availableTarif.getName());
+                                        sendEmail(type, Zayavleniya.changeTarif(date,
+                                                textOldTarif.getText().toString(),
+                                                availableTarif.getName().toString()),
+                                                false);
+                                        dialog.dismiss();
                                     }
                                 });
                                 lin.addView(layForNewTarif);
@@ -472,20 +489,8 @@ public class DocumentFragment extends BaseFragment {
             }
         });
 
-        builder.setView(tarifLayout);
 
-        builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                sendEmail(type, Zayavleniya.changeTarif(date,
-                        textOldTarif.getText().toString(),
-                        textNewTarif.getText().toString()),
-                        false);
-            }
-        });
-        AlertDialog dialog = builder.create();
         dialog.show();
-
     }
 
 
@@ -543,11 +548,12 @@ public class DocumentFragment extends BaseFragment {
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Зараз у вас відкриється ваша поштова програма. " +
-                "\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". " +
-                "\nМи намагаємось відповідати якомога швидше. " +
-                "\nІнколи це пара хвилин, інколи - годин (залежить від навантаження). " +
-                "\nДякуємо за розуміння!");
+        text.setText(new StringBuilder()
+                .append("Зараз у вас відкриється ваша поштова програма. ")
+                .append("\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". ")
+                .append("\nМи намагаємось відповідати якомога швидше. ")
+                .append("\nВи обов'язково отримаєте відповідь протягом дня")
+                .append("\nДякуємо за розуміння!").toString());
         builder.setView(textLayout);
 
         builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {
