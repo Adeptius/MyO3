@@ -77,6 +77,15 @@ public class ContactFragment extends BaseFragment {
                     call(city.getCall());
                 }
             });
+            Button emailCallCentreButton = (Button) layoutCallCentre.findViewById(R.id.button_email);
+            emailCallCentreButton.setText("написати листа");
+            emailCallCentreButton.setVisibility(View.VISIBLE);
+            emailCallCentreButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendEmail("sales@o3.ua");
+                }
+            });
             layForContacts.addView(layoutCallCentre);
 
             // Добавляем контакт Киевского абон отдела

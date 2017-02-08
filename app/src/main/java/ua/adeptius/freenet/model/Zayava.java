@@ -10,14 +10,20 @@ public class Zayava {
     private int price;
     private String priceType;
     private String buttonName;
+    private String headerText;
 
-    Zayava(String name, MailType type, String coment, int price, String priceType, String buttonName) {
+    Zayava(String name, MailType type, String coment, int price, String priceType, String buttonName, String headerText) {
         this.name = name;
         this.type = type;
         this.coment = coment;
         this.price = price;
         this.priceType = priceType;
         this.buttonName = buttonName;
+        this.headerText = headerText;
+    }
+
+    public String getHeaderText() {
+        return headerText;
     }
 
     public String getName() {

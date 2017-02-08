@@ -111,6 +111,9 @@ public class Person {
     }
 
     public String getEmail() {
+        if ("null".equals(email)){
+            return "";
+        }
         return email;
     }
 

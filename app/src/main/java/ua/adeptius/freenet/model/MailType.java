@@ -10,8 +10,9 @@ public enum MailType {
 //    SMTP("Доступ до SMTP серверу", "support@o3.ua"),
     CHANGE_IP("Зміна IP адреси.", "support@o3.ua"),
 //    COMPENSATION("Компенсація абонентської плати.", "support@o3.ua"),
-//    CHANGE_DEAL("Переоформлення угоди.", "abon_otdel@o3.ua"),
-//    WRONG_PAY("Помилкова проплата.", "abon_otdel@o3.ua"),
+    CHANGE_DEAL("Переоформлення угоди.", "abon_otdel@o3.ua"),
+    WRONG_PAY("Помилкова проплата.", "abon_otdel@o3.ua"),
+    STOP_TARIF("Призупинення послуг.", "abon_otdel@o3.ua"),
     CHANGE_TARIF("Зміна тарифу.", "abon_otdel@o3.ua");
 
 

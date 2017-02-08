@@ -3,9 +3,14 @@ package ua.adeptius.freenet.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,7 +21,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,16 +40,16 @@ import ua.adeptius.freenet.model.Zayavleniya;
 import ua.adeptius.freenet.utils.Settings;
 import ua.adeptius.freenet.utils.Utilits;
 
-//import static ua.adeptius.myo3.model.MailType.CHANGE_DEAL;
+import static android.app.Activity.RESULT_OK;
+import static ua.adeptius.freenet.model.MailType.CHANGE_DEAL;
 import static ua.adeptius.freenet.model.MailType.CHANGE_IP;
 import static ua.adeptius.freenet.model.MailType.CHANGE_TARIF;
-//import static ua.adeptius.myo3.model.MailType.COMPENSATION;
 import static ua.adeptius.freenet.model.MailType.CREATE_EMAIL;
 import static ua.adeptius.freenet.model.MailType.DISABLE_REAL_IP;
 import static ua.adeptius.freenet.model.MailType.DOP_IP;
 import static ua.adeptius.freenet.model.MailType.REAL_IP;
-//import static ua.adeptius.myo3.model.MailType.SMTP;
-//import static ua.adeptius.myo3.model.MailType.WRONG_PAY;
+import static ua.adeptius.freenet.model.MailType.STOP_TARIF;
+import static ua.adeptius.freenet.model.MailType.WRONG_PAY;
 
 
 public class DocumentFragment extends BaseFragment {
@@ -53,6 +57,8 @@ public class DocumentFragment extends BaseFragment {
     private Person person;
     private String header;
     private String footer;
+    private static final int CAMERA_REQUEST = 1888;
+    private String wrongPayMessage = "";
 
     @Override
     void setAllSettings() {
@@ -146,17 +152,17 @@ public class DocumentFragment extends BaseFragment {
         } else if (type == DOP_IP) {
             askAgree(type, zayava, checkMoneyMessage(zayava));
         } else if (type == CHANGE_TARIF) {
-            askAgree(type, zayava, "Зміна тарифу. \nМайте на увазі: перехід можливий не раніше ніж з завтрішнього дня. \nДо речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
+            askAgree(type, zayava, "Зміна тарифу. \nДо речі: подивіться, чи зможете ви самостійно перейти на інший тариф у розділі \"Підключені послуги\"");
         } else if (type == CREATE_EMAIL) {
             askAgree(type, zayava, "Створення поштової скриньки. Безкоштовно надається тільки одна скринька. \nУВАГА!\n У разі відключення від мережі \"Фрінет\" скринька буде автоматично видалена!");
         } else if (type == CHANGE_IP) {
             askAgree(type, zayava, checkMoneyMessage(zayava));
-//        } else if (type == CHANGE_DEAL) {
-//            askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
-//        } else if (type == COMPENSATION){
-//            askAgree(type, zayava, "Нам шкода, що Вам доводиться відправляти цю заяву. Ми зробили все, щоб це у вас зайняло якнайменше часу.");
-//        } else if (type == WRONG_PAY) {
-//            askAgree(type, zayava, "Не хвилюйтесь, ми допоможемо повернути ваші кошти.");
+        } else if (type == CHANGE_DEAL) {
+            askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
+        } else if (type == STOP_TARIF) {
+            askAgree(type, zayava, "Подивіться чи звожете ви самостійно зупинити послугу в розділі \"Підключені послуги\"");
+        } else if (type == WRONG_PAY) {
+            askAgree(type, zayava, "Перед продовженням сфотографуйте ваш чек, котрий видав вам термінал, будь ласка.");
 //        } else if (type == SMTP) {
 //            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
         }
@@ -274,6 +280,7 @@ public class DocumentFragment extends BaseFragment {
                     Settings.setCurrentPassportSerial(ser);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -357,14 +364,14 @@ public class DocumentFragment extends BaseFragment {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker_zayava, null);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
         final boolean itsMailToSupport = type.getEmail().equals("support@o3.ua");
-        if (itsMailToSupport){
+        if (itsMailToSupport) {
             datePicker.setMinDate(new GregorianCalendar().getTimeInMillis());
-        }else {
-            datePicker.setMinDate(new GregorianCalendar().getTimeInMillis()+86400000);
+        } else if (type != MailType.WRONG_PAY) { // если это неправильная оплата, ограничений в выборе даты быть не должно.
+            datePicker.setMinDate(new GregorianCalendar().getTimeInMillis() + 86400000);
         }
 
         TextView titleText = new TextView(context);
-        titleText.setText("Вкажіть дату зміни");
+        titleText.setText(zayava.getHeaderText());
         titleText.setGravity(Gravity.CENTER);
         titleText.setTextSize(24);
         titleText.setTypeface(null, Typeface.BOLD);
@@ -384,8 +391,16 @@ public class DocumentFragment extends BaseFragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (itsMailToSupport){
-                            if (TarifFragment.isShoosenTodayOrFuture(datePicker)){
+                        if (type == MailType.WRONG_PAY) {// если это неправильная оплата, ограничений в выборе даты быть не должно.
+                            String date = Utilits.parseUkrTime(
+                                    datePicker.getYear(),
+                                    datePicker.getMonth(),
+                                    datePicker.getDayOfMonth()
+                            );
+                            showWithDate(type, date, zayava);
+                            dialog.dismiss();
+                        } else if (itsMailToSupport) {
+                            if (TarifFragment.isShoosenTodayOrFuture(datePicker)) {
                                 String date = Utilits.parseUkrTime(
                                         datePicker.getYear(),
                                         datePicker.getMonth(),
@@ -393,11 +408,11 @@ public class DocumentFragment extends BaseFragment {
                                 );
                                 showWithDate(type, date, zayava);
                                 dialog.dismiss();
-                            }else {
+                            } else {
                                 makeSimpleSnackBar("Минуле не можно вибирати", datePicker);
                             }
-                        }else {
-                            if (TarifFragment.isShoosenFutureDay(datePicker)){
+                        } else {
+                            if (TarifFragment.isShoosenFutureDay(datePicker)) {
                                 String date = Utilits.parseUkrTime(
                                         datePicker.getYear(),
                                         datePicker.getMonth(),
@@ -405,7 +420,7 @@ public class DocumentFragment extends BaseFragment {
                                 );
                                 showWithDate(type, date, zayava);
                                 dialog.dismiss();
-                            }else {
+                            } else {
                                 makeSimpleSnackBar("Сьогодні або вчора не можно вибирати", datePicker);
                             }
                         }
@@ -416,22 +431,139 @@ public class DocumentFragment extends BaseFragment {
         dialog.show();
     }
 
-
     private void showWithDate(MailType type, String date, Zayava zayava) {
         if (type == REAL_IP) {
-            sendEmail(type, Zayavleniya.realIP(date, zayava), true);
+            sendEmail(type, Zayavleniya.realIP(date, zayava), true, null);
         } else if (type == DISABLE_REAL_IP) {
-            sendEmail(type, Zayavleniya.realIPOff(date, zayava), true);
+            sendEmail(type, Zayavleniya.realIPOff(date, zayava), true, null);
         } else if (type == DOP_IP) {
-            sendEmail(type, Zayavleniya.dopIP(date, zayava), true);
-//        } else if (type == CHANGE_DEAL) {
-
+            sendEmail(type, Zayavleniya.dopIP(date, zayava), true, null);
+        } else if (type == CHANGE_DEAL) {
+            showChangeDialQuestions(type, date);
         } else if (type == CHANGE_TARIF) {
             showTarifChoise(type, date);
         } else if (type == CHANGE_IP) {
-            sendEmail(type, Zayavleniya.changeIP(date, zayava), true);
+            sendEmail(type, Zayavleniya.changeIP(date, zayava), true, null);
+        } else if (type == WRONG_PAY) {
+            proceedAskWrongPay(date);
+        } else if (type == STOP_TARIF) {
+            askEndDate(date);
         }
     }
+
+    private void askEndDate(final String startDate) {
+        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker_zayava, null);
+        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
+
+        TextView titleText = new TextView(context);
+        titleText.setText("Вкажіть кінцеву дату призупинки");
+        titleText.setGravity(Gravity.CENTER);
+        titleText.setTextSize(24);
+        titleText.setTypeface(null, Typeface.BOLD);
+        titleText.setTextColor(COLOR_GREEN);
+
+        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                .setView(datepickerLayout)
+                .setCustomTitle(titleText)
+                .setPositiveButton("Далі", null)
+                .setCancelable(true)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button button = ((android.app.AlertDialog) dialog).getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String endDate = Utilits.parseUkrTime(
+                                datePicker.getYear(),
+                                datePicker.getMonth(),
+                                datePicker.getDayOfMonth()
+                        );
+                        String message = Zayavleniya.stopInternet(startDate, endDate, person.getCard());
+                        sendEmail(STOP_TARIF, message, false, null);
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    private void proceedAskWrongPay(final String date) {
+        View tarifLayout = LayoutInflater.from(context).inflate(R.layout.alert_item_wrong_pay, null);
+        final EditText dogovor = (EditText) tarifLayout.findViewById(R.id.edit_dog);
+        final EditText suma = (EditText) tarifLayout.findViewById(R.id.edit_sum);
+        dogovor.setInputType(InputType.TYPE_CLASS_NUMBER);
+        suma.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                .setView(tarifLayout)
+                .setPositiveButton("Обрати файл", null)
+                .setCancelable(true)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button button = ((android.app.AlertDialog) dialog).getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String sum = suma.getText().toString();
+                        String dog = dogovor.getText().toString();
+                        wrongPayMessage = Zayavleniya.wrongPay(date, sum, dog);
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    private void showWithoutDate(MailType type, Zayava zayava) {
+        if (type == CREATE_EMAIL) {
+            askEmailWantedName(type, zayava);
+        }
+    }
+
+
+    private void showChangeDialQuestions(final MailType type, final String date) {
+        View tarifLayout = LayoutInflater.from(context).inflate(R.layout.alert_item_change_dial, null);
+        final EditText newDog = (EditText) tarifLayout.findViewById(R.id.edit_new_dog);
+        final EditText newAddress = (EditText) tarifLayout.findViewById(R.id.edit_new_adress);
+
+        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
+                .setView(tarifLayout)
+                .setPositiveButton("Далі", null)
+                .setCancelable(true)
+                .create();
+
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                Button button = ((android.app.AlertDialog) dialog).getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String adr = newAddress.getText().toString();
+                        String dog = newDog.getText().toString();
+                        String message = Zayavleniya.changeDial(date, person.getCard(), adr, dog, person.getAge());
+                        sendEmail(type, message, false, null);
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
 
     private void showTarifChoise(final MailType type, final String date) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -439,7 +571,6 @@ public class DocumentFragment extends BaseFragment {
 
         View tarifLayout = LayoutInflater.from(context).inflate(R.layout.alert_documents_change_tarif, null);
         final EditText textOldTarif = (EditText) tarifLayout.findViewById(R.id.edit_tarif_old);
-        final EditText textNewTarif = (EditText) tarifLayout.findViewById(R.id.edit_tarif_new);
         final LinearLayout lin = (LinearLayout) tarifLayout.findViewById(R.id.lay_for_tarifs);
         builder.setView(tarifLayout);
         final AlertDialog dialog = builder.create();
@@ -476,7 +607,7 @@ public class DocumentFragment extends BaseFragment {
                                         sendEmail(type, Zayavleniya.changeTarif(date,
                                                 textOldTarif.getText().toString(),
                                                 availableTarif.getName().toString()),
-                                                false);
+                                                false, null);
                                         dialog.dismiss();
                                     }
                                 });
@@ -488,21 +619,7 @@ public class DocumentFragment extends BaseFragment {
                 }
             }
         });
-
-
         dialog.show();
-    }
-
-
-
-    private void showWithoutDate(MailType type, Zayava zayava) {
-        if (type == CREATE_EMAIL) {
-            askEmailWantedName(type, zayava);
-        }
-//        } else if (type == COMPENSATION){
-//        } else if (type == WRONG_PAY) {
-//        } else if (type == SMTP) {//
-//        }
     }
 
 
@@ -535,14 +652,14 @@ public class DocumentFragment extends BaseFragment {
             public void onClick(final DialogInterface dialog, int which) {
                 sendEmail(type, Zayavleniya.createEmail(
                         login.getText().toString(),
-                        password.getText().toString()), true);
+                        password.getText().toString()), true, null);
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void sendEmail(final MailType type, final String message, final boolean useStandartFooter) {
+    private void sendEmail(final MailType type, final String message, final boolean useStandartFooter, final Uri bitmapUri) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
 
@@ -552,7 +669,7 @@ public class DocumentFragment extends BaseFragment {
                 .append("Зараз у вас відкриється ваша поштова програма. ")
                 .append("\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". ")
                 .append("\nМи намагаємось відповідати якомога швидше. ")
-                .append("\nВи обов'язково отримаєте відповідь протягом дня")
+                .append("\nВи обов'язково отримаєте відповідь протягом дня.")
                 .append("\nДякуємо за розуміння!").toString());
         builder.setView(textLayout);
 
@@ -570,6 +687,9 @@ public class DocumentFragment extends BaseFragment {
                 }
 
                 emailIntent.putExtra(Intent.EXTRA_TEXT, message2);
+                if (bitmapUri != null) {
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+                }
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
             }
         });
@@ -686,5 +806,9 @@ public class DocumentFragment extends BaseFragment {
         });
     }
 
-
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        Uri selectedImage = imageReturnedIntent.getData();
+        sendEmail(WRONG_PAY, wrongPayMessage, false, selectedImage);
+    }
 }

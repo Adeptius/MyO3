@@ -259,12 +259,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
-
                 TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
                 titleTextView.setText(titleText);
 
                 TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
-                // TODO исправить отображение титла при переходе в другой фрагмент, если коллапс тулбар біл закріт
                 MainActivity.title = titleText;
                 if ("".equals(descriptionText)) {
                     descriptionTextView.setVisibility(View.GONE);

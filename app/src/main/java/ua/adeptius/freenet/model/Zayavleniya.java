@@ -1,6 +1,8 @@
 package ua.adeptius.freenet.model;
 
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,8 @@ public class Zayavleniya {
                 "Для організації роботи серверів паралельно з домашньою лінією. Або для підключення додаткового ПК без роутера(потрібен свіч).",
                 30,
                 "щомісячно",
-                "Замовити"
+                "Замовити",
+                "Коли надати адресу?"
         ));
 
         list.add(new Zayava(
@@ -25,7 +28,8 @@ public class Zayavleniya {
                 "Для серверів, VPN, відеонагляду та PlayStation Network.",
                 30,
                 "щомісячно",
-                "Замовити"
+                "Замовити",
+                "Коли надати адресу?"
         ));
 
         list.add(new Zayava(
@@ -34,7 +38,8 @@ public class Zayavleniya {
                 "У випадку, якщо вона вам більше не потрібна.",
                 0,
                 "Безкоштовно",
-                "Відключити"
+                "Відключити",
+                "Вкажіть дату відключення"
         ));
 
         list.add(new Zayava(
@@ -43,7 +48,8 @@ public class Zayavleniya {
                 "Поштова скринька на @freenet.com.ua. Має велике обмеження: обсяг 30 мегабайтів. На випадок, якщо вона вам реально потрібна. В інших випадках краще google mail.",
                 0,
                 "Безкоштовно",
-                "Замовити"
+                "Замовити",
+                ""
         ));
         list.add(new Zayava(
                 "Зміна IP адреси",
@@ -51,7 +57,8 @@ public class Zayavleniya {
                 "Зміна IP адреси на випадок, якщо така необхідна.",
                 90,
                 "одноразово",
-                "Замовити"
+                "Замовити",
+                "Вкажіть дату зміни"
         ));
 
 //        list.add(new Zayava(
@@ -76,27 +83,43 @@ public class Zayavleniya {
                 "На деякі акційні тарифи можно перейти тільки по заяві.",
                 0,
                 "Залежить від умов",
-                "Замовити"
+                "Замовити",
+                "Вкажіть дату зміни"
         ));
-//        list.add(new Zayava(
-//                "Помилкова проплата",
-//                MailType.WRONG_PAY,
-//                "Якщо ви випадково проплатили інтернет на іншу угоду, та у вас є чек - ми вам допоможемо.",
-//                0,
-//                "Безкоштовно",
-//                "Відправити"
-//        ));
-//        list.add(new Zayava(
-//                "Переоформлення угоди",
-//                MailType.CHANGE_DEAL,
-//                "Якщо ви переїзджаєте на нову адресу, і там також підключились до нашого інтернету - ми вам перенесемо ваш рахунок на нову угоду.",
-//                0,
-//                "Безкоштовно",
-//                "Відправити"
-//        ));
+        list.add(new Zayava(
+                "Переоформлення угоди",
+                MailType.CHANGE_DEAL,
+                "Якщо ви переїзджаєте на нову адресу, і там також підключились до нашого інтернету - ми вам перенесемо ваш рахунок на нову угоду.",
+                0,
+                "Безкоштовно",
+                "Відправити",
+                "Вкажіть дату переоформлення"
+        ));
+        list.add(new Zayava(
+                "Помилкова проплата",
+                MailType.WRONG_PAY,
+                "Ми допоможем вам повернути ваші кошти.",
+                0,
+                "Безкоштовно",
+                "Відправити",
+                "Вкажіть дату помилкової проплати"
+        ));
+        list.add(new Zayava(
+                "Призупинення послуг",
+                MailType.STOP_TARIF,
+                "Призупинка, якщо вам недоступно це в розділі підключених послуг.",
+                0,
+                "Безкоштовно",
+                "Відправити",
+                "Вкажіть початкову дату призупинки"
+        ));
         return list;
     }
 
+
+    /**
+     * Задание шапки
+     */
     public static String getHeader(Person person, String passSer, String passNum, String phoneNum, String email) {
         StringBuilder sb = new StringBuilder();
         sb.append("Директору ТОВ «Фрінет»");
@@ -183,7 +206,7 @@ public class Zayavleniya {
         sb.append("\n");
         sb.append("\nЗ умовами надання послуги «Зміна тарифного пакету» ознайомлений/на.");
         sb.append("\n");
-        sb.append("\n"+Utilits.getUkrDateNow());
+        sb.append("\n" + Utilits.getUkrDateNow());
         sb.append("\n");
         sb.append("\n").append("_____________________________________________________");
         sb.append("\n");
@@ -195,6 +218,78 @@ public class Zayavleniya {
         sb.append("\n");
         sb.append("\n").append("Виставлено в чергу на зміну пакету");
 
+        return sb.toString();
+    }
+
+
+    public static String changeDial(String date, String dogovor, String newAdress, String newDogovor, int age) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("\n").append("Прошу з ").append(date).append(" переоформити договір № ").append(dogovor);
+        sb.append(" в зв’язку з переїздом на іншу адресу:\n");
+        sb.append(newAdress);
+        sb.append("\n");
+        sb.append("\nПозитивний залишок на рахунку перенести на договір ").append(newDogovor);
+        sb.append("\n");
+        sb.append("\nЗберегти історію користування послугами ООО “Фрінет” за ").append(age).append(" місяців");
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("\n" + Utilits.getUkrDateNow());
+        sb.append("\n");
+        sb.append("\n").append("_____________________________________________________");
+        sb.append("\n");
+        sb.append("\n").append("Заповнюється співробітником компанії:");
+        sb.append("\n");
+        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
+        sb.append("\n");
+        sb.append("\n").append("Договір закрито");
+        sb.append("\n");
+        sb.append("\n").append("Залишок перенесено");
+
+        return sb.toString();
+    }
+
+
+    public static String wrongPay(String date, String wrongPayedSum, String wrongDogovor) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("\n").append("Я помилково сплатив(ла) ").append(date);
+        sb.append("\nсуму ").append(wrongPayedSum).append(" грн на договір № ").append(wrongDogovor);
+        sb.append("\n");
+        sb.append("\nПрошу перенести цю сплату на мій договір.");
+        sb.append("\n");
+        sb.append("\nКопія квитанції додається.");
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("\n" + Utilits.getUkrDateNow());
+        sb.append("\n");
+        sb.append("\n").append("_____________________________________________________");
+        sb.append("\n");
+        sb.append("\n").append("Заповнюється співробітником компанії:");
+        sb.append("\n");
+        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
+        return sb.toString();
+    }
+
+    public static String stopInternet(String startDate, String endDate, String dog) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        sb.append("\n").append("Прошу призупинити надання послуг доступу до Інтернету за договором ").append(dog);
+        sb.append("\nЗ ").append(startDate).append(" по ").append(endDate);
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("\n");
+        sb.append("\n" + Utilits.getUkrDateNow());
+        sb.append("\n");
+        sb.append("\n").append("_____________________________________________________");
+        sb.append("\n");
+        sb.append("\n").append("Заповнюється співробітником компанії:");
+        sb.append("\n");
+        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
+        sb.append("\nВ черзі на призупинення");
+        sb.append("\nПризупинено");
+        sb.append("\nВ черзі на активацію");
+        sb.append("\nПодовження Призупинення послуги");
         return sb.toString();
     }
 }
