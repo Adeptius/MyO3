@@ -77,16 +77,13 @@ public class MainActivity extends AppCompatActivity
 
         Menu menu = navigationView.getMenu();
 
-
-        //TODO переместить это в сплэш скрин
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
 
         try {
             Person person = DbCache.getPerson();
             setDrawlerText(person.getName(), "Угода " + person.getCard());
 
-            if (person.isYur()) {
-                menu.findItem(R.id.nav_add_balance).setVisible(false);
+            if (person.isYur() || person.isVip()) {
                 menu.findItem(R.id.nav_free_day).setVisible(false);
                 menu.findItem(R.id.nav_turbo_day).setVisible(false);
                 menu.findItem(R.id.nav_dovira).setVisible(false);
@@ -98,6 +95,9 @@ public class MainActivity extends AppCompatActivity
                 menu.findItem(R.id.nav_bonus).setVisible(false);
                 menu.findItem(R.id.nav_oll_tv).setVisible(false);
                 menu.findItem(R.id.nav_oll_tv).setVisible(false);
+            }
+            if (person.isYur()){
+                menu.findItem(R.id.nav_add_balance).setVisible(false);
             }
         } catch (Exception ignored) {
         }
@@ -263,6 +263,4 @@ public class MainActivity extends AppCompatActivity
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 }

@@ -22,6 +22,7 @@ public class Person {
     private ArrayList<Mailing> mailing = new ArrayList<>();
     private Address address;
     private boolean yur;
+    private boolean vip;
 
     public Person(String json) {
         try {
@@ -77,11 +78,15 @@ public class Person {
 
 
             yur = allInfo.getString("yur").equals("1");
+            vip = allInfo.getString("vip").equals("1");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    public boolean isVip() {
+        return vip;
+    }
 
     public boolean isYur() {
         return yur;

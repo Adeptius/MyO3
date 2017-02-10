@@ -30,7 +30,7 @@ public class DbCache {
     private static int getPastMinutes(long createdTime) {
         long currentTime = getCurrentTime();
         long sessionTime = currentTime - createdTime;
-        return (int) sessionTime / 1000 / 60;
+        return Math.abs((int) sessionTime / 1000 / 60);
     }
 
     private static final long FUTURE_TIME = 3000000000000L;

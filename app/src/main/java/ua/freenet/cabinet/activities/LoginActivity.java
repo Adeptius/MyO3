@@ -65,9 +65,6 @@ public class LoginActivity extends AppCompatActivity {
             startService(new Intent(LoginActivity.this, BackgroundService.class));
 
         logoImageView = (ImageView) findViewById(R.id.logoView);
-//        logoImageView.setVisibility(View.INVISIBLE);
-//        logoImageView.setScaleX(1);
-
         textLogin = (EditText) findViewById(R.id.input_login);
         textPassword = (EditText) findViewById(R.id.input_password);
         buttonLogin = (Button) findViewById(R.id.button_login);
@@ -110,6 +107,11 @@ public class LoginActivity extends AppCompatActivity {
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 startAnimation();
                 try {
                     Thread.sleep(1000);
@@ -145,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
                         stopProgressBar();
-                        setStatusTextView("Вхід виконан");
+                        setStatusTextView("Вхід виконано");
                         Thread.sleep(1000);
                         goToMain();
                     } else {
@@ -221,9 +223,6 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     titleText.setVisibility(View.INVISIBLE);
-//                    logoImageView.setVisibility(View.INVISIBLE);
-//                    comentText.setVisibility(View.INVISIBLE);
-
                     titleText.setVisibility(View.VISIBLE);
                     Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
                             R.anim.splash_screen_scale);
@@ -231,35 +230,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             Thread.sleep(300);
-            HANDLER.post(new Runnable() {
-                @Override
-                public void run() {
-//                    logoImageView.setVisibility(View.VISIBLE);
-                }
-            });
-            HANDLER.post(new Runnable() {
-                @Override
-                public void run() {
-//                    logoImageView.setVisibility(View.VISIBLE);
-//                    logoImageView.setScaleX(1);
-//
-//                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
-//                            R.anim.splash_screen_scale);
-//                    logoImageView.startAnimation(anim);
-                }
-            });
-
-//            Thread.sleep(500);
-
-//            HANDLER.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    comentText.setVisibility(View.VISIBLE);
-//                    Animation anim = AnimationUtils.loadAnimation(LoginActivity.this,
-//                            R.anim.splash_screen_scale);
-//                    comentText.startAnimation(anim);
-//                }
-//            });
         } catch (InterruptedException ignore) {}
     }
 
@@ -316,7 +286,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);
 
@@ -328,12 +297,6 @@ public class LoginActivity extends AppCompatActivity {
 
         this.finish();
         startActivity(intent);
-    }
-
-    public boolean isCurrentDeviceOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private boolean isItFirstEnter() {
@@ -393,7 +356,6 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * TESTING
      */
-
     private void showChoise() {
         final List<TestingUser> users = Testing.users;
         String[] cloneForUsers = new String[users.size()];

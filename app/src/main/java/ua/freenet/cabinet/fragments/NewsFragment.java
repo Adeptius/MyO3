@@ -16,6 +16,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,19 +103,21 @@ public class NewsFragment extends BaseFragment {
     }
 
     private void loadImageForNews(News news, ImageView imageView) {
-
-
         try {
             String url = getHiResImg(news.getUrl());
             if (url == null) {
                 url = news.getImgUrl();
             } // если по ссылке не найден hi-res image - берём low-res
+            url = url.replaceAll("http:","https:");
             URL newurl = new URL(url);
-            final Bitmap loadedBitMap = BitmapFactory
-                    .decodeStream(newurl.openConnection().getInputStream());
+
+            InputStream stream = newurl.openConnection().getInputStream();
+            final Bitmap loadedBitMap = BitmapFactory.decodeStream(stream);
 
             double y = loadedBitMap.getHeight();
             double x = loadedBitMap.getWidth();
+
+            if (x < 200) return;
 
             int currentX = (int) (mainLayout.getWidth() * 0.9D);
             double ratio = y / x;
@@ -200,9 +204,6 @@ public class NewsFragment extends BaseFragment {
 
             News news = new News(title2, text, href, imageUrl, convertDateToNumbers(date));
             newses.add(news);
-        }
-        for (News newse : newses) {
-            System.out.println(newse.getImgUrl());
         }
         return newses;
     }

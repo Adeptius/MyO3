@@ -155,7 +155,7 @@ public class DocumentFragment extends BaseFragment {
         } else if (type == CHANGE_DEAL) {
             askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
         } else if (type == STOP_TARIF) {
-            askAgree(type, zayava, "Подивіться чи звожете ви самостійно зупинити послугу в розділі \"Підключені послуги\"");
+            askAgree(type, zayava, "Подивіться чи зможете ви самостійно зупинити послугу в розділі \"Підключені послуги\"");
         } else if (type == WRONG_PAY) {
             askAgree(type, zayava, "Перед продовженням сфотографуйте ваш чек, котрий видав вам термінал, будь ласка.");
 //        } else if (type == SMTP) {
