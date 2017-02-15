@@ -66,13 +66,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     protected int titleImage;
     protected int layoutId;
     protected int SCREEN_WIDTH;
-    protected final int TIME_TO_WAIT_BEFORE_UPDATE = 3000;
+    protected final int TIME_TO_WAIT_BEFORE_UPDATE = 4000;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-//        AppBarLayout appBarLayout = (AppBarLayout) getActivity().findViewById(R.id.appbar);
-//        appBarLayout.setExpanded(true);
         setAllSettings();
         baseView = inflater.inflate(fragmentId, container, false);
         mainLayout = (LinearLayout) baseView.findViewById(layoutId);
@@ -94,7 +92,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
 
         return baseView;
-
     }
 
     public void makeSimpleSnackBar(final String message, final View text) {

@@ -23,7 +23,9 @@
                 android:id="@+id/operation_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Дата операції" />
+                android:text="Дата операції"
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/operation_coment"

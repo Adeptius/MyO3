@@ -34,6 +34,7 @@ import ua.freenet.cabinet.model.Testing;
 import ua.freenet.cabinet.model.TestingUser;
 import ua.freenet.cabinet.service.BackgroundService;
 import ua.freenet.cabinet.utils.Settings;
+import ua.freenet.cabinet.utils.Utilits;
 
 import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
 import static ua.freenet.cabinet.utils.Utilits.HANDLER;
@@ -124,8 +125,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkAll() throws InterruptedException {
+
         startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
+        Utilits.check();
         Thread.sleep(400);
         if (!isInternetOk()) {
             setStatusTextView("Інтернет відсутній");

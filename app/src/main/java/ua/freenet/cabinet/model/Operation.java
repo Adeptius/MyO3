@@ -64,6 +64,16 @@ public class Operation {
     }
 
     public String getNote() {
+        note = note.replaceAll("\\(Промо 1-аренда stb\\)","Оренда приставки");
+        note = note.replaceAll(" - тариф аренды","");
+        note = note.replaceAll("Телевидение ","");
+        if (note.startsWith("20")) {
+            note = note.substring(note.indexOf(" ") + 1);
+        }
+        if (note.contains("грн")){
+            note = note.substring(0, note.indexOf("грн")+3);
+        }
+
         return note;
     }
 
@@ -79,4 +89,13 @@ public class Operation {
         return money;
     }
 
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "date='" + date + '\'' +
+                ", money=" + money +
+                ", note='" + note + '\'' +
+                ", saldo=" + saldo +
+                '}';
+    }
 }

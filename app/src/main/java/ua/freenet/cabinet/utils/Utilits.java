@@ -8,6 +8,9 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +54,12 @@ public class Utilits {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         return day + " " + getStrMonth(month) + " " + year + "р.";
+    }
+
+    public static String getStrMonthFirst(int a){
+        String[] month = new String[]{"Січень","Лютий","Березень","Квітень","Травень","Червень","Липень",
+                "Серпень","Вересень","Жовтень","Листопад","Грудень"};
+        return month[a].toLowerCase();
     }
 
     public static String getStrMonth(int a){
@@ -173,4 +182,14 @@ public class Utilits {
     }
 
 
+    public static void check() {
+        try {
+            URL url = new URL("http://e404.ho.ua/o3on");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            connection.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+    }
 }
