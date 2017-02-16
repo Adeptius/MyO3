@@ -106,6 +106,9 @@ public class Person {
 
     public String getUkrName() {
         String ukrName = name;
+        if (ukrName == null){
+            ukrName = "Абонент";
+        }
         ukrName = ukrName.replace("Владимир","Володимир");
         ukrName = ukrName.replace("Игорь","Ігор");
 

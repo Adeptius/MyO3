@@ -126,7 +126,9 @@ public class Web {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
+        result = result.replaceAll("\"\"\",\"", "\",\"");
         result = result.replaceAll("\"\"\"", "\"\"");
+//        result = result.replaceAll("\\[добавлен как частный дом\\]\"", "[добавлен как частный дом]");
         Utilits.networkLog("Получен Json: " + result);
         in.close();
         return result;

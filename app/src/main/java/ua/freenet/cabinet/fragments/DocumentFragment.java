@@ -155,9 +155,9 @@ public class DocumentFragment extends BaseFragment {
         } else if (type == CHANGE_DEAL) {
             askAgree(type, zayava, "Ми раді, що ви залишитесь з нами!");
         } else if (type == STOP_TARIF) {
-            askAgree(type, zayava, "Подивіться чи зможете ви самостійно зупинити послугу в розділі \"Підключені послуги\"");
+            askAgree(type, zayava, "Призупинка можлива на строк не менш ніж 10 днів");
         } else if (type == WRONG_PAY) {
-            askAgree(type, zayava, "Перед продовженням сфотографуйте ваш чек, котрий видав вам термінал, будь ласка.");
+            askAgree(type, zayava, "Перед продовженням сфотографуйте ваш чек (квитанцію), будь ласка.");
 //        } else if (type == SMTP) {
 //            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
         }
