@@ -146,10 +146,10 @@ public class OllTvFragment  extends BaseFragment {
         coment.setTextSize(16);
         coment.setTypeface(null, Typeface.BOLD);
         if (container.equals(listOptimal)){
-            coment.setText("Всі канали із стартового пакету та плюс наступні:");
+            coment.setText("Всі канали з пакету \"Стартовий\" та плюс наступні:");
             container.addView(coment);
         }else if (container.equals(listPremium)){
-            coment.setText("Всі канали із оптимального пакету та плюс наступні:");
+            coment.setText("Всі канали з пакету \"Оптимальний\" та плюс наступні:");
             container.addView(coment);
         }
 

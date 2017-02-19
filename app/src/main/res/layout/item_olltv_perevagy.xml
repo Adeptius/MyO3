@@ -183,7 +183,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:text="Радіо эфирное и онлайн"
+                    android:text="Радіо ефірне та онлайн"
                     android:textAlignment="viewStart"
                     android:textSize="18sp" />
             </TableRow>

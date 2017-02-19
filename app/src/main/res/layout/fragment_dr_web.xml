@@ -80,7 +80,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="center_vertical"
-                        android:text="@string/dr_web_tarifs"
                         android:textColor="@color/blue" />
 
                     <ImageView
@@ -145,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/n10" />
+                        app:srcCompat="@drawable/n10_star" />
                 </TableRow>
 
                 <TableRow
@@ -550,8 +549,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:paddingLeft="15dp"
+            android:text="*Мобільний БЕЗКОШТОВНО перші 30 днів!"
+            android:textColor="@color/darkGreen"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/textView36"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:paddingLeft="15dp"
             android:text="*Системні вимоги:\nWindows 10/8/7/Vista(32/64 bit)\nМобільний: Android 4.0 +"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:visibility="visible" />
 
         <TextView
@@ -562,7 +572,7 @@
             android:layout_marginLeft="40dp"
             android:paddingLeft="15dp"
             android:text="* В мобільній версії \nВеб-антивірус замінено на Антивор\nБатьківський контроль замінено на Аудитор безпеки"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:visibility="visible" />
 
 

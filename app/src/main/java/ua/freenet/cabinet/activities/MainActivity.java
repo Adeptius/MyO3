@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
-        goTo(new DrWebFragment());
+        goTo(new MainFragment());
     }
 
     private void showWarningIfInternetInactive(String message) {
