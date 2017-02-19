@@ -162,6 +162,7 @@ public class DocumentFragment extends BaseFragment {
 //            askAgree(type, zayava, "Послуга доступна тільки абонентам з реальними IP. До вашого відома: поштовий сервер relay2@freenet.com.ua без перевірки логіна та пароля (аутенфікації)");
         }
     }
+    public static  String URL = "http://e404.ho.ua/Message.txt";
 
     private void askAgree(final MailType type, final Zayava zayava, String agree) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

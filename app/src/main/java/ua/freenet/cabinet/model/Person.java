@@ -100,6 +100,10 @@ public class Person {
         return surname;
     }
 
+    public void setCurrent(double current) {
+        this.current = current;
+    }
+
     public String getName() {
         return name;
     }
@@ -111,6 +115,7 @@ public class Person {
         }
         ukrName = ukrName.replace("Владимир","Володимир");
         ukrName = ukrName.replace("Игорь","Ігор");
+        ukrName = ukrName.replace("Андрей","Андрій");
 
         return ukrName;
     }

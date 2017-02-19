@@ -275,7 +275,7 @@ public class MegogoFragment extends BaseFragment {
             hardwareIsHidden = false;
         }else {
             hardwareIsHidden = true;
-            hideButton.setText("Необхідне обладнання");
+            hideButton.setText("Показати необхідне обладнання");
             hideLayout.setVisibility(View.GONE);
         }
     }

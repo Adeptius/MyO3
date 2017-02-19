@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutorService;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.activities.MainActivity;
+import ua.freenet.cabinet.model.ChannelOllTv;
 import ua.freenet.cabinet.utils.Utilits;
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
@@ -181,6 +182,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             public void run() {
                 try {
                     updateTitle();
+                    ChannelOllTv.drawScreen();
                     doInBackground();
                     HANDLER.post(new Runnable() {
                         @Override

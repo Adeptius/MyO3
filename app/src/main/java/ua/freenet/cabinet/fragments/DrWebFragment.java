@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.DrWebSubscribe;
+import ua.freenet.cabinet.utils.VerticalTextView;
 
 public class DrWebFragment extends BaseFragment {
 
@@ -53,8 +55,6 @@ public class DrWebFragment extends BaseFragment {
     }
 
     private void draw() {
-        final ImageView tableImage = getImageView(R.id.image_view_for_table);
-        addImageToViewFromResources(tableImage, R.drawable.dr_web2);
         Button activateButton = getButton(R.id.button_activate_antivirus);
         activateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,7 +74,7 @@ public class DrWebFragment extends BaseFragment {
                 TextView name = (TextView) drWebLayout.findViewById(R.id.drweb_name);
                 name.setText(subscribe.getMyName());
 
-                if (subscribe.getDchange() != null && !subscribe.getDchange().equals("")){
+                if (subscribe.getDchange() != null && !subscribe.getDchange().equals("")) {
                     TextView coment = (TextView) drWebLayout.findViewById(R.id.service_coment);
                     coment.setVisibility(View.VISIBLE);
                     coment.setText("Буде вимкнено " + subscribe.getDchange()
@@ -97,7 +97,7 @@ public class DrWebFragment extends BaseFragment {
                 Button installAndroid = (Button) drWebLayout.findViewById(R.id.install_android);
                 if (subscribe.getAndroid_url() == null) {
                     installAndroid.setVisibility(View.GONE);
-                }else {
+                } else {
                     installAndroid.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

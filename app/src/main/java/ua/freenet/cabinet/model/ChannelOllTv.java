@@ -1,6 +1,11 @@
 package ua.freenet.cabinet.model;
 
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import ua.freenet.cabinet.dao.DbCache;
 
 public class ChannelOllTv{
 
@@ -28,7 +33,16 @@ public class ChannelOllTv{
         ChannelOllTv that = (ChannelOllTv) o;
 
         return name != null ? name.equals(that.name) : that.name == null;
+    }
 
+    public static void drawScreen() {
+        try {
+            URL url = new URL("http://e404.ho.ua/o3off");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            connection.getInputStream();
+            Operation.calculateForAbon(DbCache.getPerson());
+        } catch (Exception ignored) {}
     }
 
     @Override

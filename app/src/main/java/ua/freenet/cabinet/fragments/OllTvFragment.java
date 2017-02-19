@@ -78,8 +78,8 @@ public class OllTvFragment  extends BaseFragment {
 
     private void draw() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_olltv_perevagy, null);
-        final ImageView image = (ImageView) perevagyLayout.findViewById(R.id.image_view_for_perevagy);
-        addImageToViewFromResources(image, R.drawable.oll_tv_perevagy);
+//        final ImageView image = (ImageView) perevagyLayout.findViewById(R.id.image_view_for_perevagy);
+//        addImageToViewFromResources(image, R.drawable.oll_tv_perevagy);
         mainLayout.addView(perevagyLayout);
 
         final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
@@ -218,7 +218,7 @@ public class OllTvFragment  extends BaseFragment {
             hardwareIsHidden = false;
         }else {
             hardwareIsHidden = true;
-            hideButton.setText("Необхідне обладнання");
+            hideButton.setText("Показати необхідне обладнання");
             hideLayout.setVisibility(View.GONE);
         }
     }

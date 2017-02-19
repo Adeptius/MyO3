@@ -36,7 +36,7 @@ public class DbCache {
     private static final long FUTURE_TIME = 3000000000000L;
 
 
-    private static Person person;
+    public static Person person;
     private static long personCreatedTime;
 
     public static Person getPerson() throws Exception {

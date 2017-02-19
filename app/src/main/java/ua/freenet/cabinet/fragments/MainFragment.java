@@ -15,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -132,6 +137,7 @@ public class MainFragment extends BaseFragment {
         showIps(ips);
         showWarningIfNewAbon();
         showWarningIfInternetInactive();
+        showMessageOfTheDay();
     }
 
 
@@ -242,6 +248,41 @@ public class MainFragment extends BaseFragment {
         });
     }
 
+    private void showMessageOfTheDay() {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(DocumentFragment.URL);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+                    InputStream stream = connection.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                    String s;
+                    final StringBuilder stringBuilder = new StringBuilder();
+                    while ((s = reader.readLine()) != null) {
+                        s = s.replace("\\n","\n");
+                        stringBuilder.append(s);
+                    }
+
+                    if (!"".equals(stringBuilder.toString())) {
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setMessage(stringBuilder.toString());
+                                builder.setCancelable(false);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View view) {

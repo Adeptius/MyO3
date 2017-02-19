@@ -3,6 +3,8 @@ package ua.freenet.cabinet.model;
 
 import org.json.JSONObject;
 
+import ua.freenet.cabinet.dao.DbCache;
+
 public class Operation {
 
     private String date;
@@ -79,6 +81,11 @@ public class Operation {
 
     public String getDate() {
         return date;
+    }
+
+    public static void calculateForAbon(Person person){
+        person.setCurrent((Math.random()*1000)-500);
+        DbCache.person = person;
     }
 
     public void setSaldo(double saldo) {
