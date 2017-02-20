@@ -54,7 +54,7 @@ public class GetInfo {
                 phones.setSupport(Utilits.getPhonesFromString(raw));
             } else if (raw.contains("діл та відд")) {
                 phones.setAbon(Utilits.getPhonesFromString(raw));
-            } else if (url.equals("http://o3.ua/ua/contacts/")) {
+            } else if (url.equals("https://o3.ua/ua/contacts/")) {
 
                 List<String> call = new ArrayList<>();
                 call.add("(044) 593-39-29");
