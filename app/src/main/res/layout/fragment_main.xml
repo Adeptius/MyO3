@@ -57,11 +57,12 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView15"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.5"
                     android:width="@dimen/punkt_menu_widht"
-                    android:text="Номер угоди:"
+                    android:text="Договір:"
                     android:textSize="@dimen/punkt_menu"
                     android:textStyle="bold" />
 

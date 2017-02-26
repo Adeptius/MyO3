@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_news"
             android:icon="@drawable/ic_news"
@@ -22,7 +25,6 @@
             android:id="@+id/nav_tarif_plans"
             android:icon="@drawable/ic_tarif"
             android:title="Підключені послуги" />
-
         <item
             android:id="@+id/nav_free_day"
             android:icon="@drawable/ic_free_day"
@@ -59,7 +61,6 @@
             android:id="@+id/nav_oll_tv"
             android:icon="@drawable/ic_tv2"
             android:title="Oll.tv" />
-
         <item
             android:id="@+id/nav_friend"
             android:icon="@drawable/ic_friend"
@@ -78,28 +79,10 @@
             android:id="@+id/nav_documents"
             android:icon="@drawable/ic_document"
             android:title="Заяви" />
-        <!--<item-->
-            <!--android:id="@+id/nav_settings"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Налагодження" />-->
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_exit"
             android:title="Вийти" />
 
     </group>
-
-    <!--<item android:title="Communicate">-->
-    <!--<menu>-->
-    <!--<item-->
-    <!--android:id="@+id/nav_share"-->
-    <!--android:icon="@drawable/ic_menu_share"-->
-    <!--android:title="Share" />-->
-    <!--<item-->
-    <!--android:id="@+id/nav_send"-->
-    <!--android:icon="@drawable/ic_menu_send"-->
-    <!--android:title="Send" />-->
-    <!--</menu>-->
-    <!--</item>-->
-
 </menu>

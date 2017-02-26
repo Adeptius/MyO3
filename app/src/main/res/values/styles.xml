@@ -1,46 +1,44 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!--Тема логин скрина-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:colorBackground">@color/colorPrimary</item>-->
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <!--Тема в приложении для старых версий ОБЯЗАТЕЛЬНО СИНХРОНИЗИРОВАТЬ С НОВОЙ-->
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
+        <item name="colorControlActivated">@color/colorAccent</item> <!--это цвет активных галочек-->
+        <item name="colorControlHighlight">@color/colorAccent</item> <!--это цвет фона выделения в меню-->
+        <item name="colorControlNormal">@color/colorAccent</item> <!--это цвет неактивных галочек и скролбара-->
+        <item name="android:textColorHint">@color/white</item>
     </style>
 
-    <style name="SplashActivityTheme"
-        parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <style
-        name="AppTheme.AppBarOverlay"
-        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style
-        name="AppTheme.PopupOverlay"
-        parent="ThemeOverlay.AppCompat.Light" />
-
-
+    <!--Тема прогрес диалога-->
     <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
         <item name="android:background">#1976D2</item>
     </style>
 
-    <!--<style name="TextLabel" parent="TextAppearance.AppCompat">-->
-        <!--<item name="android:textColorHint">@color/white</item>-->
-        <!--<item name="android:textSize">20sp</item>-->
-        <!--<item name="colorAccent">@color/white</item>-->
-        <!--<item name="colorControlNormal">@color/white</item>-->
-        <!--<item name="colorControlActivated">@color/white</item>-->
+    <!--<style name="SplashActivityTheme"-->
+        <!--parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<item name="android:windowFullscreen">true</item>-->
     <!--</style>-->
+
+    <!--<style-->
+        <!--name="AppTheme.AppBarOverlay"-->
+        <!--parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <!--<style-->
+        <!--name="AppTheme.PopupOverlay"-->
+        <!--parent="ThemeOverlay.AppCompat.Light" />-->
+
 
 
 </resources>

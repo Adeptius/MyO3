@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -75,13 +76,16 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        disableNavigationViewScrollbars(navigationView);
+
         Menu menu = navigationView.getMenu();
 
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
+        menu.findItem(R.id.nav_main_info).setChecked(true);
 
         try {
             Person person = DbCache.getPerson();
-            setDrawlerText(person.getName(), "Угода " + person.getCard());
+            setDrawlerText(person.getName(), "Договір " + person.getCard());
 
             if (person.isYur() || person.isVip()) {
                 menu.findItem(R.id.nav_free_day).setVisible(false);
@@ -107,6 +111,15 @@ public class MainActivity extends AppCompatActivity
             showWarningIfInternetInactive(message);
         }
         goTo(new MainFragment());
+    }
+
+    private void disableNavigationViewScrollbars(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     private void showWarningIfInternetInactive(String message) {

@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void rememberPassword() {
         if (textLogin.getText().toString().equals("")) {
-            showSnackBar("Будь-ласка, введіть логін (номер угоди)");
+            showSnackBar("Будь-ласка, введіть логін (номер договору)");
         } else {
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                     R.style.AppTheme_Dark_Dialog);
