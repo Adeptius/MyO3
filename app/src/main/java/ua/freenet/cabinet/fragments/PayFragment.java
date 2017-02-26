@@ -23,7 +23,6 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.utils.Utilits;
-import ua.freenet.cabinet.utils.VerticalTextView;
 
 //TODO добавить карту терминалов
 public class PayFragment extends BaseFragment {

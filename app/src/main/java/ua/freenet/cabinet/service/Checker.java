@@ -120,7 +120,7 @@ class Checker extends Thread {
             } else if (servise.isHaveDiscount()) { // если есть скидка
                 if (isThatDateIsNextMonth(servise.getDiscountTo())) {// и она кончается в след месяце
                     summaryCost += servise.getServiceCost();
-                    willChanged.add("Закінчиться знижка" + servise.getDiscount() + "% на " + servise.getMyServiceName());
+                    willChanged.add("Закінчиться знижка " + servise.getDiscount() + "% на " + servise.getMyServiceName());
                 } else { // и она пока не кончается
                     summaryCost += servise.getCostForCustomer();
                 }
@@ -268,6 +268,4 @@ class Checker extends Thread {
         }
         return -9999999;
     }
-
-
 }

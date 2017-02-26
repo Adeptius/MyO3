@@ -36,7 +36,7 @@ public class NotificationsHelper {
                 .setAutoCancel(true) // чтобы уведомление закрылось после тапа по нему
                 .setOnlyAlertOnce(true) // уведомить однократно
                 .setWhen(System.currentTimeMillis()) // время создания уведомления, будет отображено в стандартном уведомлении справа
-                .setContentTitle("Фрінет особистий кабінет") //заголовок
+                .setContentTitle("ФРИНЕТ") //заголовок
                 .setDefaults(Notification.DEFAULT_ALL); // alarm при выводе уведомления: звук, вибратор и диод-индикатор - по умолчанию
         return nb;
     }

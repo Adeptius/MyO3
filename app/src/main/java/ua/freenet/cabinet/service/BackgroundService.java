@@ -9,9 +9,7 @@ import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
 
-public class BackgroundService  extends Service {
-
-
+public class BackgroundService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

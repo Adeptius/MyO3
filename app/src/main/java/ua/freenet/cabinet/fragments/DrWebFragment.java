@@ -23,7 +23,6 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.DrWebSubscribe;
-import ua.freenet.cabinet.utils.VerticalTextView;
 
 public class DrWebFragment extends BaseFragment {
 
