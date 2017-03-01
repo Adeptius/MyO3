@@ -1,10 +1,7 @@
 package ua.freenet.cabinet.service;
 
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,8 +10,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ua.freenet.cabinet.R;
-import ua.freenet.cabinet.activities.LoginActivity;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.MegogoPts;
 import ua.freenet.cabinet.model.Person;
@@ -26,56 +21,27 @@ import static ua.freenet.cabinet.utils.Utilits.*;
 
 class Checker extends Thread {
 
-    private NotificationManager nm;
     private Context context;
 
-
-    Checker(NotificationManager nm, Context context) {
-        this.nm = nm;
+    Checker(Context context) {
         this.context = context;
-    }
-
-    public IBinder onBind(Intent arg0) {
-        return null;
+        start();
     }
 
     @Override
     public void run() {
-        while (true) {
+        if (isLogged()) {
             try {
-                long random = (long) (Math.random() * 36000000);
-//                System.out.println("random" + random);
-                int seconds = (int) random / 1000;
-//                System.out.println("seconds" + seconds);
-                int sumMinutes = seconds / 60;
-//                System.out.println("sumMinutes" + sumMinutes);
-                int hours = sumMinutes / 60;
-//                System.out.println("hours" + hours);
-                int minutes;
-                if (hours == 0) {
-                    minutes = sumMinutes;
-                } else {
-                    minutes = sumMinutes % (hours * 60);
+                if (isItNormalTimeToCheckFutureMonth()) {
+                    checkMoneyForNextMonth();
+                } else if (isThatStartOfMonth()) {
+                    checkMoneyForCurrentMonth();
                 }
-//                System.out.println("minutes" + minutes);
-                log("Засыпаю на " + hours + " часов, " + minutes + " минут");
-//                Thread.sleep();// 46800000
-                Thread.sleep(random);// 46800000
-            } catch (InterruptedException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            if (isLogged()) {
-                try {
-                    if (isItNormalTimeToCheckFutureMonth()) {
-                        checkMoneyForNextMonth();
-                    } else if (isThatStartOfMonth()) {
-                        checkMoneyForCurrentMonth();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                log("Не залогинено");
-            }
+        } else {
+            log("Не залогинено");
         }
     }
 
@@ -85,13 +51,12 @@ class Checker extends Thread {
             int notAnoth = (int) Math.round(Math.abs(person.getCurrent()));
 //            NotificationsHelper helper = new NotificationsHelper();
             NotificationsHelper.init(context);
-            NotificationsHelper.createNotificationFirstMonth(notAnoth, LoginActivity.class, R.mipmap.ic_launcher);
+            NotificationsHelper.createNotificationFirstMonth(notAnoth);
             Settings.setServiceCheckedDay(new GregorianCalendar().get(Calendar.DAY_OF_MONTH));
         } else { // если баланс ок - дальше проверять не нужно
             Settings.setMonthPaydCurrentMonth(new GregorianCalendar().get(Calendar.MONTH));
         }
     }
-
 
     private boolean isLogged() {
         boolean logNotNull = !Settings.getCurrentLogin().equals("");
@@ -151,7 +116,7 @@ class Checker extends Thread {
 
 //            NotificationsHelper helper = new NotificationsHelper();
             NotificationsHelper.init(context);
-            NotificationsHelper.createNotification(notAnoth, sb.toString(), LoginActivity.class, R.mipmap.ic_launcher);
+            NotificationsHelper.createNotification(notAnoth, sb.toString());
         } else { // Если всё в порядке - то больше в этом месяце проверять не нужно
             Settings.setMonthPaydFutureMonth(new GregorianCalendar().get(Calendar.MONTH));
         }
@@ -210,7 +175,7 @@ class Checker extends Thread {
             Utilits.log("Слишком раннее время");
             return false;
         }
-        if (hours > 21) {
+        if (hours > 22) {
             Utilits.log("Слишком позднее время");
             return false;
         }

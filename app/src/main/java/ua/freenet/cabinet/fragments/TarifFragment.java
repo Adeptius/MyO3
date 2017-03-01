@@ -265,9 +265,8 @@ public class TarifFragment extends BaseFragment {
         builder.setCustomTitle(titleView);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(name + "\n");
+        sb.append(name).append("\n");
         sb.append("Протягом цього місяця ви не зможете призупиняти послугу, або її змінити.\n");
-//        sb.append("Зміна тарифного плану відбудеться 1-го числа наступного місяця.\n");
         if (!"".equals(willcost)) {
             sb.append(willcost);
         }
@@ -316,15 +315,14 @@ public class TarifFragment extends BaseFragment {
         titleView.setTextColor(COLOR_BLUE);
         builder.setCustomTitle(titleView);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("1. Поки послуга призупинена - абонентська плата за неї не знімається.\n");
-        sb.append("2. Призупиняти можно 6 разів на рік.\n");
-        sb.append("3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n");
-        sb.append("4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n");
+        String sb = "1. Поки послуга призупинена - абонентська плата за неї не знімається.\n" +
+                "2. Призупиняти можно 6 разів на рік.\n" +
+                "3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n" +
+                "4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n";
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb.toString());
+        text.setText(sb);
         builder.setView(textLayout);
 
         builder.setPositiveButton("Зрозуміло", new DialogInterface.OnClickListener() {
@@ -409,8 +407,8 @@ public class TarifFragment extends BaseFragment {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Послуга призупиняється\n");
-        sb.append("з: " + startDate);
-        sb.append("\nпо: " + endDate);
+        sb.append("з: ").append(startDate);
+        sb.append("\nпо: ").append(endDate);
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
@@ -539,10 +537,7 @@ public class TarifFragment extends BaseFragment {
         boolean m = currentMonth >= month;
         boolean d = currentDay >= day;
 
-        if (y && m && d) {
-            return false;
-        }
-        return true;
+        return !(y && m && d);
     }
 
     public static boolean isShoosenTodayOrFuture(DatePicker datePicker) {
@@ -558,10 +553,7 @@ public class TarifFragment extends BaseFragment {
         boolean m = currentMonth >= month;
         boolean d = currentDay >= day;
 
-        if (y && m && d) {
-            return false;
-        }
-        return true;
+        return !(y && m && d);
     }
 
     private String getStringedDate(DatePicker datePicker) {

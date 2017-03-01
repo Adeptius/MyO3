@@ -12,12 +12,12 @@ import android.support.v4.app.TaskStackBuilder;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.activities.LoginActivity;
 
-public class NotificationsHelper {
+import static ua.freenet.cabinet.utils.Utilits.log;
+
+class NotificationsHelper {
 
     private static Context appContext; // контекст приложения
-    private static int lastNotificationId = 0; //уин последнего уведомления
-    public static final int NOTIFICATION_ID = 1;
-
+    private static final int NOTIFICATION_ID = 1;
     private static NotificationManager manager; // менеджер уведомлений
 
     // метод инциализации данного хелпера
@@ -28,87 +28,44 @@ public class NotificationsHelper {
         }
     }
 
-    /**
-     * Создает и возвращает общий NotificationCompat.Builder
-     */
-    private static NotificationCompat.Builder getNotificationBuilder() {
-        final NotificationCompat.Builder nb = new NotificationCompat.Builder(appContext)
+    private static NotificationCompat.Builder getNotificationBuilder(String notAnothMessage) {
+        return new NotificationCompat.Builder(appContext)
                 .setAutoCancel(true) // чтобы уведомление закрылось после тапа по нему
                 .setOnlyAlertOnce(true) // уведомить однократно
                 .setWhen(System.currentTimeMillis()) // время создания уведомления, будет отображено в стандартном уведомлении справа
                 .setContentTitle("ФРИНЕТ") //заголовок
-                .setDefaults(Notification.DEFAULT_ALL); // alarm при выводе уведомления: звук, вибратор и диод-индикатор - по умолчанию
-        return nb;
-    }
-
-    // удаляет все уведомления, созданные приложением
-    public static void cancelAllNotifications() {
-        manager.cancelAll();
-    }
-
-    /**
-     * @param message             - текст уведомления
-     * @param targetActivityClass - класс целевой активити
-     * @param iconResId           - R.drawable необходимой иконки
-     */
-    public static void createNotification(int notAnoth, final String message, final Class targetActivityClass, final int iconResId) {
-
-        // некоторые проверки на null не помешают, зачем нам NPE?
-        if (targetActivityClass == null) {
-            new Exception("createNotification() targetActivity is null!").printStackTrace();
-        }
-        if (manager == null) {
-            new Exception("createNotification() NotificationUtils not initialized!").printStackTrace();
-        }
-
-        String notAnothMessage = "Не вистачає " + notAnoth + " грн на наступний місяць";
-        final NotificationCompat.Builder nb = getNotificationBuilder() // получаем из хелпера generic Builder, и далее донастраиваем его
+                .setDefaults(Notification.DEFAULT_ALL) // alarm при выводе уведомления: звук, вибратор и диод-индикатор - по умолчанию
                 .setContentText(notAnothMessage) // сообщение, которое будет отображаться в самом уведомлении
                 .setTicker(notAnothMessage) //сообщение, которое будет показано в статус-баре при создании уведомления, ставлю тот же
-                .setSmallIcon(iconResId != 0 ? iconResId : R.mipmap.ic_launcher);// иконка, если 0, то используется иконка самого аппа
+                .setSmallIcon(R.mipmap.ic_launcher);
+    }
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(appContext);
-        stackBuilder.addParentStack(LoginActivity.class);
+
+    static void createNotification(int notAnoth, final String message) {
+        String notAnothMessage = "Не вистачає " + notAnoth + " грн на наступний місяць";
         Intent resultIntent = new Intent(appContext, LoginActivity.class);
         resultIntent.putExtra("notAnothMessage", message);
-
-        stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        nb.setContentIntent(resultPendingIntent);
-
-        final Notification notification = nb.build(); //генерируем уведомление, getNotification() - deprecated!
-        manager.notify(NOTIFICATION_ID, notification); // "запускаем" уведомление
-
+        notifyAbon(notAnothMessage,resultIntent);
     }
 
-    public static void createNotificationFirstMonth(int notAnoth, final Class targetActivityClass, final int iconResId) {
-
-        // некоторые проверки на null не помешают, зачем нам NPE?
-        if (targetActivityClass == null) {
-            new Exception("createNotification() targetActivity is null!").printStackTrace();
-        }
-        if (manager == null) {
-            new Exception("createNotification() NotificationUtils not initialized!").printStackTrace();
-        }
-
+    static void createNotificationFirstMonth(int notAnoth) {
         String notAnothMessage = "Не вистачило " + notAnoth + " грн на цей місяць";
-        final NotificationCompat.Builder nb = getNotificationBuilder() // получаем из хелпера generic Builder, и далее донастраиваем его
-                .setContentText(notAnothMessage) // сообщение, которое будет отображаться в самом уведомлении
-                .setTicker(notAnothMessage) //сообщение, которое будет показано в статус-баре при создании уведомления, ставлю тот же
-                .setSmallIcon(R.mipmap.ic_launcher);// иконка, если 0, то используется иконка самого аппа
+        Intent resultIntent = new Intent(appContext, LoginActivity.class);
+        notifyAbon(notAnothMessage, resultIntent);
+    }
 
+    private static void notifyAbon(String notAnothMessage, Intent resultIntent){
+        if (manager == null) {
+            log("notifyAbon() NotificationUtils not initialized! manager is null");
+            return;
+        }
+        final NotificationCompat.Builder nb = getNotificationBuilder(notAnothMessage); // получаем из хелпера generic Builder, и далее донастраиваем его
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(appContext);
         stackBuilder.addParentStack(LoginActivity.class);
-        Intent resultIntent = new Intent(appContext, LoginActivity.class);
-
         stackBuilder.addNextIntent(resultIntent);
-
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         nb.setContentIntent(resultPendingIntent);
-
         final Notification notification = nb.build(); //генерируем уведомление, getNotification() - deprecated!
         manager.notify(NOTIFICATION_ID, notification); // "запускаем" уведомление
-
     }
 }

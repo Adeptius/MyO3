@@ -91,22 +91,21 @@ public class BonusFragment extends BaseFragment {
             bonusesText.setText(String.valueOf(bonuses));
 
             TextView textHowTo = (TextView) layout.findViewById(R.id.text_how_to);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Нарахування БОНУСІВ відбувається при розрахунку за придбання або оплату послуг компанії, враховуючи те, скільки часу ви наш абонент.")
-                    .append("\n6 місяців - нарахування 2% бонусів від внесеної абонплати.")
-                    .append("\n13 місяців - 4%")
-                    .append("\n19 місяців - 6%")
-                    .append("\n25 місяців - 8%")
-                    .append("\n31 місяць та більше - 10%")
-                    .append("\n")
-                    .append("\nБОНУСИ нараховуються при своєчасному внесенні абонплати (до першого числа, щоб не допускати заборгованість).")
-                    .append("\n")
-                    .append("\nБонуси нараховуються моментально.")
-                    .append("\n")
-                    .append("\nНакопичені БОНУСИ не можуть бути переведені в грошовий еквівалент чи видані Учаснику готівковими коштами.")
-                    .append("\n")
-                    .append("\nОдин БОНУС дорівнює 1 одній гривні.");
-            textHowTo.setText(sb.toString());
+            String sb = "Нарахування БОНУСІВ відбувається при розрахунку за придбання або оплату послуг компанії, враховуючи те, скільки часу ви наш абонент." +
+                    "\n6 місяців - нарахування 2% бонусів від внесеної абонплати." +
+                    "\n13 місяців - 4%" +
+                    "\n19 місяців - 6%" +
+                    "\n25 місяців - 8%" +
+                    "\n31 місяць та більше - 10%" +
+                    "\n" +
+                    "\nБОНУСИ нараховуються при своєчасному внесенні абонплати (до першого числа, щоб не допускати заборгованість)." +
+                    "\n" +
+                    "\nБонуси нараховуються моментально." +
+                    "\n" +
+                    "\nНакопичені БОНУСИ не можуть бути переведені в грошовий еквівалент чи видані Учаснику готівковими коштами." +
+                    "\n" +
+                    "\nОдин БОНУС дорівнює 1 одній гривні.";
+            textHowTo.setText(sb);
 
             for (final BonusServiceSpending serviceSpending : serviceSpendings) {
                 View spendingLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_service, null);
@@ -141,7 +140,7 @@ public class BonusFragment extends BaseFragment {
                 if (bonuses == 0) payButton.setVisibility(View.GONE);
                 mainLayout.addView(spendingLayout);
             }
-        }else if (signedPublicCard && !confirmedBonus) { // если подписано, но бонусы не подключены
+        }else if (signedPublicCard) { // если подписано, но бонусы не подключены
             View activateLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_activate, null);
 
             Button activateButton = (Button) activateLayout.findViewById(R.id.button_activate);
@@ -165,7 +164,7 @@ public class BonusFragment extends BaseFragment {
             mainLayout.addView(activateLayout);
 
 
-        }else if (!signedPublicCard && !confirmedBonus){ // если договор не подписан.
+        }else if (!confirmedBonus){ // если договор не подписан.
             View iditeVCoaLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_idite_v_coa, null);
 
             Button button = (Button) iditeVCoaLayout.findViewById(R.id.button_show_dial);

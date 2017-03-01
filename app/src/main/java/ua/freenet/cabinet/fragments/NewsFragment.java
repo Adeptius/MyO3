@@ -16,7 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,8 +29,6 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.News;
 
 public class NewsFragment extends BaseFragment {
-
-    private List<News> newses;
 
     @Override
     void setAllSettings() {
@@ -54,7 +52,7 @@ public class NewsFragment extends BaseFragment {
         String newsUrl = DbCache.getUrlOfCityNews(city);
         String acciiurl = DbCache.getUrlOfCityAccii(city);
 
-        newses = getAllNews(acciiurl, newsUrl);
+        List<News> newses = getAllNews(acciiurl, newsUrl);
         sortByDate(newses);
         newses = subList(newses, 10);
         prepareNews(newses);
@@ -121,9 +119,8 @@ public class NewsFragment extends BaseFragment {
 
             int currentX = (int) (mainLayout.getWidth() * 0.9D);
             double ratio = y / x;
-            int needY = (int) (currentX * ratio);
 
-            imageView.getLayoutParams().height = needY;
+            imageView.getLayoutParams().height = (int) (currentX * ratio);
             imageView.setImageBitmap(loadedBitMap);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } catch (Exception e) {

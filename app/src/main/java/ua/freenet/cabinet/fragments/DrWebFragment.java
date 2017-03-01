@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.List;
@@ -252,21 +251,5 @@ public class DrWebFragment extends BaseFragment {
     @Override
     public void onClick(View v) {
 
-    }
-
-    private void addImageToViewFromResources(ImageView view, int image) {
-        final Bitmap loadedBitMap = BitmapFactory
-                .decodeResource(getResources(), image);
-
-        double y = loadedBitMap.getHeight();
-        double x = loadedBitMap.getWidth();
-
-        int currentX = (int) (mainLayout.getWidth() * 0.95);
-        double ratio = y / x;
-        int needY = (int) (currentX * ratio);
-
-        view.getLayoutParams().height = needY;
-        view.setImageBitmap(loadedBitMap);
-        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 }

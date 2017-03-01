@@ -40,7 +40,7 @@ import static ua.freenet.cabinet.utils.Utilits.splitJson;
 public class GetInfo {
 
 
-    public static City getCityPhones(String url) throws Exception {
+    static City getCityPhones(String url) throws Exception {
         Utilits.networkLog("Получение списка телефонов по урл: " + url);
         Document doc = Jsoup.connect(url).get();
         Elements editors = doc.getElementsByClass("text-editor row");
@@ -92,19 +92,19 @@ public class GetInfo {
         return phones;
     }
 
-    public static String getUrlOfCityPhones(String city) throws Exception {
+    static String getUrlOfCityPhones(String city) throws Exception {
         String result = getUrlOfCity(city, "http://o3.ua/ua/contacts/");
         Settings.setUrlPhone(result);
         return result;
     }
 
-    public static String getUrlOfCityNews(String city) throws Exception {
+    static String getUrlOfCityNews(String city) throws Exception {
         String result = getUrlOfCity(city, "http://o3.ua/ua/about/news/");
         Settings.setUrlNews(result);
         return result;
     }
 
-    public static String getUrlOfCityAccii(String city) throws Exception {
+    static String getUrlOfCityAccii(String city) throws Exception {
         String result = getUrlOfCity(city, "http://o3.ua/ua/about/akzii_programma_loyalnosti/");
         Settings.setUrlAccii(result);
         return result;
@@ -125,7 +125,7 @@ public class GetInfo {
         return "Ошибка получения урла для города " + city;
     }
 
-    public static boolean[] getBonusesStatus() throws Exception {
+    static boolean[] getBonusesStatus() throws Exception {
         Utilits.networkLog("Запрос состояния бонусов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_bonus");
         boolean[] boo = new boolean[2];
@@ -134,7 +134,7 @@ public class GetInfo {
         return boo;
     }
 
-    public static List<BonusServiceSpending> getBonusesSpending() throws Exception {
+    static List<BonusServiceSpending> getBonusesSpending() throws Exception {
         Utilits.networkLog("Запрос списка сервисов для оплаты");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/spending");
         s = s.substring(1, s.length() - 1);
@@ -146,14 +146,14 @@ public class GetInfo {
         return list;
     }
 
-    public static int getCountOfBonuses() throws Exception {
+    static int getCountOfBonuses() throws Exception {
         Utilits.networkLog("Запрос количества бонусов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/amount_bonus");
         double d = Double.parseDouble(s);
         return (int) d;
     }
 
-    public static List<FriendInvite> getFriendInvites() throws Exception {
+    static List<FriendInvite> getFriendInvites() throws Exception {
         Utilits.networkLog("Запрос приглашений друзей");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/refer");
         List<FriendInvite> invites = new ArrayList<>();
@@ -166,7 +166,7 @@ public class GetInfo {
         return invites;
     }
 
-    public static List<ChannelOllTv> getOllTvChanels(String url) throws Exception {
+    static List<ChannelOllTv> getOllTvChanels(String url) throws Exception {
         Utilits.networkLog("Получение каналов олл тв");
         Document doc = Jsoup.connect(url).get();
 
@@ -212,7 +212,7 @@ public class GetInfo {
         return new ChannelDivanDetails(image, name, description, listAvailableIn, listAvailableOn);
     }
 
-    public static List<ChannelDivan> getDivanChanels(String url) throws Exception {
+    static List<ChannelDivan> getDivanChanels(String url) throws Exception {
         String subscription = URLDecoder.decode(url, "UTF-8");
         log("Запрос каналов в подписке: " + subscription.substring(subscription.indexOf("name=") + 5));
         Document doc = Jsoup.connect(url).get();
@@ -233,7 +233,7 @@ public class GetInfo {
         return channels;
     }
 
-    public static List<ChannelMegogo> getMegogoChannels(String url) throws Exception {
+    static List<ChannelMegogo> getMegogoChannels(String url) throws Exception {
         org.jsoup.nodes.Document doc = Jsoup.connect(url).get();
         Elements divs = doc.body().getElementsByClass("videos-inner");
         List<ChannelMegogo> channelMegogos = new ArrayList<>();
@@ -242,7 +242,6 @@ public class GetInfo {
                     .getElementsByTag("ul").first();
             Elements listOfLi = ul.getElementsByTag("li");
             for (Element li : listOfLi) {
-                Element li2 = li;
                 String description = li.attr("data-description");
                 String iconUrl = li.getElementsByClass("voi__poster").first().attr("style");
                 channelMegogos.add(new ChannelMegogo(description, iconUrl));
@@ -258,7 +257,7 @@ public class GetInfo {
         return s;
     }
 
-    public static List<MegogoPts> getMegogoPts() throws Exception {
+    static List<MegogoPts> getMegogoPts() throws Exception {
         Utilits.networkLog("Запрос подписок мегого");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/megogo");
         List<MegogoPts> pts = new ArrayList<>();
@@ -279,7 +278,7 @@ public class GetInfo {
         return pts;
     }
 
-    public static List<DrWebSubscribe> getDrWebServices() throws Exception {
+    static List<DrWebSubscribe> getDrWebServices() throws Exception {
         Utilits.networkLog("Запрос сервисов DrWeb");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services/dr_web");
         s = s.substring(1, s.length() - 1);
@@ -292,18 +291,17 @@ public class GetInfo {
         return subscribes;
     }
 
-    public static Boolean[] getInternetSwitches() throws Exception {
+    static Boolean[] getInternetSwitches() throws Exception {
         Utilits.networkLog("Запрос состояние вкл/выкл инета");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/internet/status");
         JSONObject jsonObject = new JSONObject(s);
-        Boolean[] status = new Boolean[]{
+        return new Boolean[]{
                 jsonObject.getBoolean("all"),
                 jsonObject.getBoolean("world")
         };
-        return status;
     }
 
-    public static String getGarantedServiceStatus() throws Exception {
+    static String getGarantedServiceStatus() throws Exception {
         Utilits.networkLog("Запрос состояние гарантированного сервиса");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/guaranteed_service");
         if (s.contains("e_date")) return s.substring(s.indexOf("e_date") + 9, s.lastIndexOf(" "));
@@ -314,7 +312,7 @@ public class GetInfo {
         return "disabled";
     }
 
-    public static String getCreditStatus() throws Exception {
+    static String getCreditStatus() throws Exception {
         Utilits.networkLog("Запрос состояния кредита доверия");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/check_credit");
         JSONObject json = new JSONObject(s);
@@ -325,7 +323,7 @@ public class GetInfo {
         return json.getString("active");
     }
 
-    public static List<String> getTurboDayStatistics() throws Exception {
+    static List<String> getTurboDayStatistics() throws Exception {
         Utilits.networkLog("Запрос статистики по турбо дню");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
         List<String> statistics = new ArrayList<>();
@@ -345,7 +343,7 @@ public class GetInfo {
         return statistics;
     }
 
-    public static List<String> getFreeDayStatistics() throws Exception {
+    static List<String> getFreeDayStatistics() throws Exception {
         Utilits.networkLog("Запрос статистики по свободному дню");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/turbo_history");
         List<String> statistics = new ArrayList<>();
@@ -367,7 +365,7 @@ public class GetInfo {
         return statistics;
     }
 
-    public static HashMap<String, Integer> getFreeDayInfo() throws Exception {
+    static HashMap<String, Integer> getFreeDayInfo() throws Exception {
         Utilits.networkLog("Запрос доступных дней по фридею");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/free_days");
         HashMap<String, Integer> map = new HashMap<>();
@@ -390,7 +388,7 @@ public class GetInfo {
         return availableTarifList;
     }
 
-    public static List<Servise> getServises() throws Exception {
+    static List<Servise> getServises() throws Exception {
         Utilits.networkLog("Запрос подключенных сервисов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/services");
         s = s.substring(1, s.length() - 1);
@@ -403,7 +401,7 @@ public class GetInfo {
         return servises;
     }
 
-    public static List<Operation> getWildrowsByFewMonth(int count) throws Exception {
+    static List<Operation> getWildrowsByFewMonth(int count) throws Exception {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -419,7 +417,7 @@ public class GetInfo {
         return operationOneMonth;
     }
 
-    public static List<Operation> getWildraws(String date) throws Exception {
+    private static List<Operation> getWildraws(String date) throws Exception {
         Utilits.networkLog("Запрос платежей и списаний");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/balance/" + date);
         s = s.replaceAll("\"Повторная активация услуги \"Кредит доверия\"\"",
@@ -438,19 +436,19 @@ public class GetInfo {
         return operations;
     }
 
-    public static Person getPersonInfo() throws Exception {
+    static Person getPersonInfo() throws Exception {
         Utilits.networkLog("Запрос информации о пользователе");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/persons");
         return new Person(json);
     }
 
-    public static String getMountlyFeefromLK() throws Exception {
+    static String getMountlyFeefromLK() throws Exception {
         Utilits.networkLog("Запрос абонентской платы");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/monthly_fee");
         return new JSONObject(json).getString("total");
     }
 
-    public static List<Ip> getIP() throws Exception {
+    static List<Ip> getIP() throws Exception {
         Utilits.networkLog("Запрос айпишек");
         String json = Web.getJsonFromUrl("https://my.o3.ua/ajax/network_settings");
         JSONObject jobject = new JSONObject(json.trim());
@@ -463,6 +461,4 @@ public class GetInfo {
         }
         return ips;
     }
-
-
 }

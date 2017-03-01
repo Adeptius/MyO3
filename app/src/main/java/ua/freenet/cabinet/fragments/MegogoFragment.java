@@ -131,10 +131,9 @@ public class MegogoFragment extends BaseFragment {
             TextView nameField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_name);
             nameField.setText("Підключена послуга");
             TextView listField = (TextView) mainLayoutMegogo.findViewById(R.id.megogo_list);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Якщо ви ще не зареєструвались на MEGOGO - зробіть це.");
-            sb.append("Також можете встановити додаток на свій пристрій");
-            listField.setText(sb.toString());
+            String sb = "Якщо ви ще не зареєструвались на MEGOGO - зробіть це." +
+                    "Також можете встановити додаток на свій пристрій";
+            listField.setText(sb);
             Button activateButton = (Button) mainLayoutMegogo.findViewById(R.id.megogo_activate_button);
             activateButton.setText("Реєстрація");
             activateButton.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +164,6 @@ public class MegogoFragment extends BaseFragment {
             if (megogoPt.getName().equals("Телевидение MEGOGO.NET (оптимальный за 0грн БАНДЛ) - 0 грн."))
                 continue;
 
-            String id = megogoPt.getId();
             final String name = megogoPt.getName();
             String cost = megogoPt.getMonth();
             String description = megogoPt.getDescription();
@@ -293,7 +291,7 @@ public class MegogoFragment extends BaseFragment {
             container.addView(coment);
         }
 
-        int column = Utilits.calculateColums(this);
+        int column = 4;
         LinearLayout layout = null;
 
         for (final ChannelMegogo channelMegogo : chanels) {
@@ -320,7 +318,6 @@ public class MegogoFragment extends BaseFragment {
                     .fitCenter()
                     .override(dim, dim)
                     .into(imageView);
-
         }
     }
 
@@ -430,7 +427,7 @@ public class MegogoFragment extends BaseFragment {
         builder.setCustomTitle(titleView);
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        String textMessage = "";
+        String textMessage;
         if (!"".equals(activeSubscribe) && !megogoPt.getName().contains("пакет")) {
             textMessage = "У вас вже активовано: " + activeSubscribe + "\nПослугу буде змінено на " + megogoPt.getName();
         } else {

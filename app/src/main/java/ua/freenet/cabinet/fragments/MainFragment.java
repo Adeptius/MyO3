@@ -31,6 +31,8 @@ import ua.freenet.cabinet.model.Mailing;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.model.Phone;
 
+import static ua.freenet.cabinet.utils.Utilits.log;
+
 
 public class MainFragment extends BaseFragment {
 
@@ -161,16 +163,13 @@ public class MainFragment extends BaseFragment {
                                 builder.setCustomTitle(titleView);
                                 View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
                                 TextView text = (TextView) textLayout.findViewById(R.id.text);
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("Шановний абонент!\n");
-                                sb.append("Нагадуємо, що першу оплату необхідно внести у повному обсязі ");
-                                sb.append("незалежно від стану вашого балансу.\n");
-                                sb.append("Будь ласка, поповніть рахунок на ").append(Integer.parseInt(mountlyFee)+1).append(" грн. ");
-                                sb.append("(1 грн за підключення плюс ваш тариф "+mountlyFee+" грн)");
-//                                int willLeft = (Integer.parseInt(mountlyFee)+1 - ((int) person.getCurrent()));
-//                                sb.append("Залишок, ").append("");
+                                String sb = "Шановний абонент!\n" +
+                                        "Нагадуємо, що першу оплату необхідно внести у повному обсязі " +
+                                        "незалежно від стану вашого балансу.\n" +
+                                        "Будь ласка, поповніть рахунок на " + (Integer.parseInt(mountlyFee) + 1) + " грн. " +
+                                        "(1 грн за підключення плюс ваш тариф " + mountlyFee + " грн)";
 
-                                text.setText(sb.toString());
+                                text.setText(sb);
                                 builder.setView(textLayout);
                                 builder.setPositiveButton("Гаразд", new DialogInterface.OnClickListener() {
                                     @Override
@@ -196,8 +195,6 @@ public class MainFragment extends BaseFragment {
             public void run() {
                 if (person.getStopsum() > person.getCurrent()) {
                     try {
-//                        boolean creditEnabled = DbCache.getCreditStatus().startsWith("20");
-//                        if (!creditEnabled) {
                         HANDLER.post(new Runnable() {
                             @Override
                             public void run() {
@@ -231,7 +228,7 @@ public class MainFragment extends BaseFragment {
                                         } catch (java.lang.InstantiationException e) {
                                             e.printStackTrace();
                                         } catch (IllegalAccessException e) {
-                                            e.printStackTrace();
+                                            log(e.getLocalizedMessage());
                                         }
                                     }
                                 });

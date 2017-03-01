@@ -59,22 +59,6 @@ public class Zayavleniya {
                 "Вкажіть дату зміни"
         ));
 
-//        list.add(new Zayava(
-//                "Доступ до SMTP серверу",
-//                MailType.SMTP,
-//                "Отримання доступу до нашого серверу вихідної пошти, якщо у вашої пошти свого немає. Працює тільки у нашій мережі. Послуга доступна тільки абонентам з реальними IP. На всякий випадок: google, ukr.net, mail.ru, i.ua мають свої сервери",
-//                0,
-//                "Безкоштовно",
-//                "Замовити"
-//        ));
-//        list.add(new Zayava(
-//                "Компенсація абонентської плати",
-//                MailType.COMPENSATION,
-//                "Повернення коштів на ваш рахунок по причині відсутності інтернету, або некористування, якщо ви забули завчасно призупинити послуги. Будь-ласка, не пишіть по одній заяві кожного разу, по можливості, почекайте і відправте заяву за декілька днів. Дякуємо.",
-//                0,
-//                "Безкоштовно",
-//                "Відправити"
-//        ));
         list.add(new Zayava(
                 "Зміна тарифного пакету",
                 MailType.CHANGE_TARIF,
@@ -119,175 +103,150 @@ public class Zayavleniya {
      * Задание шапки
      */
     public static String getHeader(Person person, String passSer, String passNum, String phoneNum, String email) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Директору ТОВ «Фрінет»");
-        sb.append("\n").append("Фролову В.І.").append("\n");
-        sb.append("\n").append("Абонента ").append(person.getLastname())
-                .append(" ").append(person.getName())
-                .append(" ").append(person.getSurname());
-        sb.append("\n").append("паспорт: серія ").append(passSer).append(" № ").append(passNum);
-        sb.append("\n").append("номер договору ").append(person.getCard());
-        sb.append("\n").append("телефон: ").append(phoneNum);
-        sb.append("\n").append("e-mail: ").append(email);
-        sb.append("\n");
-        sb.append("\n                         ЗАЯВА");
-        return sb.toString();
+        return "Директору ТОВ «Фрінет»" +
+                "\n" + "Фролову В.І." + "\n" +
+                "\n" + "Абонента " + person.getLastname() +
+                " " + person.getName() +
+                " " + person.getSurname() +
+                "\n" + "паспорт: серія " + passSer + " № " + passNum +
+                "\n" + "номер договору " + person.getCard() +
+                "\n" + "телефон: " + phoneNum +
+                "\n" + "e-mail: " + email +
+                "\n" +
+                "\n                         ЗАЯВА";
     }
 
     public static String getFooter() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("\n").append(Utilits.getUkrDateNow());
-        sb.append("\n").append("_____________________________________________________");
-        sb.append("\n");
-        sb.append("\n").append("Заповнюється співробітником компанії:");
-        sb.append("\n");
-        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
-        sb.append("\n").append("\n").append("Послугу активовано");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "\n" + Utilits.getUkrDateNow() +
+                "\n" + "_____________________________________________________" +
+                "\n" +
+                "\n" + "Заповнюється співробітником компанії:" +
+                "\n" +
+                "\n" + "Заяву прийняв_________________" + "             «___»____________201__р." +
+                "\n" + "\n" + "Послугу активовано";
     }
 
     public static String realIP(String startDate, Zayava zayava) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(startDate).append(" надати мені реальну IP адресу.");
-        sb.append("\n");
-        sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + startDate + " надати мені реальну IP адресу." +
+                "\n" +
+                "\n" + "З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).";
     }
 
 
     public static String dopIP(String startDate, Zayava zayava) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(startDate).append(" надати мені додаткову IP адресу.");
-        sb.append("\n");
-        sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + startDate + " надати мені додаткову IP адресу." +
+                "\n" +
+                "\n" + "З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).";
     }
 
-    public static String realIPOff(String startDate, Zayava zayava) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(startDate).append(" відключити  мені реальну IP адресу.");
-        sb.append("\n");
-        return sb.toString();
+    public static String realIPOff(String startDate) {
+        return  "\n" +
+                "\n" + "Прошу з " + startDate + " відключити  мені реальну IP адресу." +
+                "\n";
     }
 
     public static String changeIP(String startDate, Zayava zayava) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(startDate).append(" змінити мою IP адресу.");
-        sb.append("\n");
-        sb.append("\n").append("З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + startDate + " змінити мою IP адресу." +
+                "\n" +
+                "\n" + "З вартістю послуги в " + zayava.getPrice() + "грн/" + zayava.getPriceType() + " ознайомлений(на).";
     }
 
 
     public static String createEmail(String login, String password) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(Utilits.getUkrDateNow()).append(" надати електронну поштову скриньку");
-        sb.append("\n");
-        sb.append("\n").append("Логін " + login + "@freenet.com.ua пароль " + password);
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + Utilits.getUkrDateNow() + " надати електронну поштову скриньку" +
+                "\n" +
+                "\n" + "Логін " + login + "@freenet.com.ua пароль " + password;
 
     }
 
     public static String changeTarif(String startDate, String currentTarif, String newTarif) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(startDate).append(" змінити тарифний пакет ");
-        sb.append("\nЗ ").append(currentTarif);
-        sb.append("\nНа ").append(newTarif);
-        sb.append("\n");
-        sb.append("\n");
-        sb.append("\nЗ умовами надання послуги «Зміна тарифного пакету» ознайомлений/на.");
-        sb.append("\n");
-        sb.append("\n" + Utilits.getUkrDateNow());
-        sb.append("\n");
-        sb.append("\n").append("_____________________________________________________");
-        sb.append("\n");
-        sb.append("\n").append("Заповнюється співробітником компанії:");
-        sb.append("\n");
-        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
-        sb.append("\n");
-        sb.append("\n").append("Пакет змінено");
-        sb.append("\n");
-        sb.append("\n").append("Виставлено в чергу на зміну пакету");
-
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + startDate + " змінити тарифний пакет " +
+                "\nЗ " + currentTarif +
+                "\nНа " + newTarif +
+                "\n" +
+                "\n" +
+                "\nЗ умовами надання послуги «Зміна тарифного пакету» ознайомлений/на." +
+                "\n" +
+                "\n" + Utilits.getUkrDateNow() +
+                "\n" +
+                "\n" + "_____________________________________________________" +
+                "\n" +
+                "\n" + "Заповнюється співробітником компанії:" +
+                "\n" +
+                "\n" + "Заяву прийняв_________________" + "             «___»____________201__р." +
+                "\n" +
+                "\n" + "Пакет змінено" +
+                "\n" +
+                "\n" + "Виставлено в чергу на зміну пакету";
     }
 
 
     public static String changeDial(String date, String dogovor, String newAdress, String newDogovor, int age) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу з ").append(date).append(" переоформити договір № ").append(dogovor);
-        sb.append(" в зв’язку з переїздом на іншу адресу:\n");
-        sb.append(newAdress);
-        sb.append("\n");
-        sb.append("\nПозитивний залишок на рахунку перенести на договір ").append(newDogovor);
-        sb.append("\n");
-        sb.append("\nЗберегти історію користування послугами ООО “Фрінет” за ").append(age).append(" місяців");
-        sb.append("\n");
-        sb.append("\n");
-        sb.append("\n" + Utilits.getUkrDateNow());
-        sb.append("\n");
-        sb.append("\n").append("_____________________________________________________");
-        sb.append("\n");
-        sb.append("\n").append("Заповнюється співробітником компанії:");
-        sb.append("\n");
-        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
-        sb.append("\n");
-        sb.append("\n").append("Договір закрито");
-        sb.append("\n");
-        sb.append("\n").append("Залишок перенесено");
-
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу з " + date + " переоформити договір № " + dogovor +
+                " в зв’язку з переїздом на іншу адресу:\n" +
+                newAdress +
+                "\n" +
+                "\nПозитивний залишок на рахунку перенести на договір " + newDogovor +
+                "\n" +
+                "\nЗберегти історію користування послугами ООО “Фрінет” за " + age + " місяців" +
+                "\n" +
+                "\n" +
+                "\n" + Utilits.getUkrDateNow() +
+                "\n" +
+                "\n" + "_____________________________________________________" +
+                "\n" +
+                "\n" + "Заповнюється співробітником компанії:" +
+                "\n" +
+                "\n" + "Заяву прийняв_________________" + "             «___»____________201__р." +
+                "\n" +
+                "\n" + "Договір закрито" +
+                "\n" +
+                "\n" + "Залишок перенесено";
     }
 
-
     public static String wrongPay(String date, String wrongPayedSum, String wrongDogovor) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Я помилково сплатив(ла) ").append(date);
-        sb.append("\nсуму ").append(wrongPayedSum).append(" грн на договір № ").append(wrongDogovor);
-        sb.append("\n");
-        sb.append("\nПрошу перенести цю сплату на мій договір.");
-        sb.append("\n");
-        sb.append("\nКопія квитанції додається.");
-        sb.append("\n");
-        sb.append("\n");
-        sb.append("\n" + Utilits.getUkrDateNow());
-        sb.append("\n");
-        sb.append("\n").append("_____________________________________________________");
-        sb.append("\n");
-        sb.append("\n").append("Заповнюється співробітником компанії:");
-        sb.append("\n");
-        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Я помилково сплатив(ла) " + date +
+                "\nсуму " + wrongPayedSum + " грн на договір № " + wrongDogovor +
+                "\n" +
+                "\nПрошу перенести цю сплату на мій договір." +
+                "\n" +
+                "\nКопія квитанції додається." +
+                "\n" +
+                "\n" +
+                "\n" + Utilits.getUkrDateNow() +
+                "\n" +
+                "\n" + "_____________________________________________________" +
+                "\n" +
+                "\n" + "Заповнюється співробітником компанії:" +
+                "\n" +
+                "\n" + "Заяву прийняв_________________" + "             «___»____________201__р.";
     }
 
     public static String stopInternet(String startDate, String endDate, String dog) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n");
-        sb.append("\n").append("Прошу призупинити надання послуг доступу до Інтернету за договором ").append(dog);
-        sb.append("\nЗ ").append(startDate).append(" по ").append(endDate);
-        sb.append("\n");
-        sb.append("\n");
-        sb.append("\n");
-        sb.append("\n" + Utilits.getUkrDateNow());
-        sb.append("\n");
-        sb.append("\n").append("_____________________________________________________");
-        sb.append("\n");
-        sb.append("\n").append("Заповнюється співробітником компанії:");
-        sb.append("\n");
-        sb.append("\n").append("Заяву прийняв_________________").append("             «___»____________201__р.");
-        sb.append("\nВ черзі на призупинення");
-        sb.append("\nПризупинено");
-        sb.append("\nВ черзі на активацію");
-        sb.append("\nПодовження Призупинення послуги");
-        return sb.toString();
+        return  "\n" +
+                "\n" + "Прошу призупинити надання послуг доступу до Інтернету за договором " + dog +
+                "\nЗ " + startDate + " по " + endDate +
+                "\n" +
+                "\n" +
+                "\n" +
+                "\n" + Utilits.getUkrDateNow() +
+                "\n" +
+                "\n" + "_____________________________________________________" +
+                "\n" +
+                "\n" + "Заповнюється співробітником компанії:" +
+                "\n" +
+                "\n" + "Заяву прийняв_________________" + "             «___»____________201__р." +
+                "\nВ черзі на призупинення" +
+                "\nПризупинено" +
+                "\nВ черзі на активацію" +
+                "\nПодовження Призупинення послуги";
     }
 }

@@ -26,7 +26,11 @@ public class Web {
     public static String sessionId;
     private static long sessionCreatedTime;
 
-    public static String getSessionId() throws Exception {
+    public static void markSessionIsOld() {
+        sessionId = null;
+    }
+
+    private static String getSessionId() throws Exception {
         if (sessionId == null) {
             setSessionId(getPhpSession());
             return getSessionId();
@@ -71,7 +75,7 @@ public class Web {
 //        }
 //    }
 
-    public static String getPhpSession() throws Exception {
+    private static String getPhpSession() throws Exception {
         URL obj = new URL("https://my.o3.ua/login_check");
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
@@ -117,7 +121,7 @@ public class Web {
         }
     }
 
-    public static String getJsonFromUrl(String url) throws Exception {
+    static String getJsonFromUrl(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla");
@@ -126,15 +130,13 @@ public class Web {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
-        result = result.replaceAll("\"\"\",\"", "\",\"");
-        result = result.replaceAll("\"\"\"", "\"\"");
-//        result = result.replaceAll("\\[добавлен как частный дом\\]\"", "[добавлен как частный дом]");
+        result = fixJson(result);
         Utilits.networkLog("Получен Json: " + result);
         in.close();
         return result;
     }
 
-    public static String sendPost(String url, HashMap<String, String> jSonQuery, boolean itsJson) throws Exception {
+    static String sendPost(String url, HashMap<String, String> jSonQuery, boolean itsJson) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
@@ -165,5 +167,15 @@ public class Web {
         Utilits.networkLog("Ответ: " + result);
         in.close();
         return result;
+    }
+
+    private static String fixJson(String json){
+        // 00015018 0756594  "hNote":""","cscSegId":2    "hNote":"","cscSegId":2
+        json = json.replaceAll(":\"\"\",", ":\"\",");
+
+        // 561200788 5126383 "hNote":"[добавлен как частный дом]""","cscSegId": 117,
+        json = json.replaceAll("\"\"\",", "\",");
+
+        return json;
     }
 }

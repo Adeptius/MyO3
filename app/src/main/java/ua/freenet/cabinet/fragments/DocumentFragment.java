@@ -52,7 +52,6 @@ public class DocumentFragment extends BaseFragment {
     private Person person;
     private String header;
     private String footer;
-    private static final int CAMERA_REQUEST = 1888;
     private String wrongPayMessage = "";
 
     @Override
@@ -431,7 +430,7 @@ public class DocumentFragment extends BaseFragment {
         if (type == REAL_IP) {
             sendEmail(type, Zayavleniya.realIP(date, zayava), true, null);
         } else if (type == DISABLE_REAL_IP) {
-            sendEmail(type, Zayavleniya.realIPOff(date, zayava), true, null);
+            sendEmail(type, Zayavleniya.realIPOff(date), true, null);
         } else if (type == DOP_IP) {
             sendEmail(type, Zayavleniya.dopIP(date, zayava), true, null);
         } else if (type == CHANGE_DEAL) {
@@ -602,7 +601,7 @@ public class DocumentFragment extends BaseFragment {
                                     public void onClick(View v) {
                                         sendEmail(type, Zayavleniya.changeTarif(date,
                                                 textOldTarif.getText().toString(),
-                                                availableTarif.getName().toString()),
+                                                availableTarif.getName()),
                                                 false, null);
                                         dialog.dismiss();
                                     }
@@ -661,12 +660,11 @@ public class DocumentFragment extends BaseFragment {
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(new StringBuilder()
-                .append("Зараз у вас відкриється ваша поштова програма. ")
-                .append("\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". ")
-                .append("\nМи намагаємось відповідати якомога швидше. ")
-                .append("\nВи обов'язково отримаєте відповідь протягом дня.")
-                .append("\nДякуємо за розуміння!").toString());
+        text.setText("Зараз у вас відкриється ваша поштова програма. " +
+                "\nМожете ознайомитись з текстом заяви, та потім просто натисніть \"Відправити\". " +
+                "\nМи намагаємось відповідати якомога швидше. " +
+                "\nВи обов'язково отримаєте відповідь протягом дня." +
+                "\nДякуємо за розуміння!");
         builder.setView(textLayout);
 
         builder.setPositiveButton("Далі", new DialogInterface.OnClickListener() {

@@ -12,7 +12,7 @@ public class Address {
     private String hName;
     private String cityNameUa;
 
-    public Address(String json) {
+    Address(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             addressFlatName = allInfo.getString("addressFlatName");

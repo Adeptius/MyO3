@@ -63,11 +63,6 @@ public class DbCache {
         return ips;
     }
 
-    public static void markIpOld() {
-        ipsCreatedTime = FUTURE_TIME;
-    }
-
-
     private static String mountlyFee;
     private static long mountlyFeeCreatedTime;
 
@@ -118,11 +113,6 @@ public class DbCache {
         }
         return wildraws;
     }
-
-    public static void markWildrawsOld() {
-        wildrawsCreatedTime = FUTURE_TIME;
-    }
-
 
     private static List<Servise> services;
     private static long servicesCreatedTime;

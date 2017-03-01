@@ -24,7 +24,6 @@ import ua.freenet.cabinet.model.ChannelOllTv;
 import ua.freenet.cabinet.utils.Utilits;
 
 
-//TODO як замовити послугу
 public class OllTvFragment  extends BaseFragment {
 
     private Button buttonStart;
@@ -78,8 +77,6 @@ public class OllTvFragment  extends BaseFragment {
 
     private void draw() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_olltv_perevagy, null);
-//        final ImageView image = (ImageView) perevagyLayout.findViewById(R.id.image_view_for_perevagy);
-//        addImageToViewFromResources(image, R.drawable.oll_tv_perevagy);
         mainLayout.addView(perevagyLayout);
 
         final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
@@ -153,7 +150,7 @@ public class OllTvFragment  extends BaseFragment {
             container.addView(coment);
         }
 
-        int column = Utilits.calculateColums(this);
+        int column = 4;
         LinearLayout layout = null;
 
         for (final ChannelOllTv channel : ollTvList) {
@@ -177,33 +174,15 @@ public class OllTvFragment  extends BaseFragment {
         }
     }
 
-    private void addImageToViewFromResources(ImageView view, int image) {
-        final Bitmap loadedBitMap = BitmapFactory
-                .decodeResource(getResources(), image);
 
-        double y = loadedBitMap.getHeight();
-        double x = loadedBitMap.getWidth();
-
-        int currentX = (int) (mainLayout.getWidth() * 0.95);
-        double ratio = y / x;
-        int needY = (int) (currentX * ratio);
-
-        view.getLayoutParams().height = needY;
-        view.setImageBitmap(loadedBitMap);
-        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-    }
 
     private void hideAndShowHardware(View hardware, Button hideButton) {
         LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
-        LinearLayout site = (LinearLayout) hardware.findViewById(R.id.site);
-        LinearLayout smart = (LinearLayout) hardware.findViewById(R.id.smart);
-        LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
-        LinearLayout mobile = (LinearLayout) hardware.findViewById(R.id.mobile);
         Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String appPackageName = "tv.oll.app"; // getPackageName() from Context or Activity object
+                final String appPackageName = "tv.oll.app";
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                 } catch (android.content.ActivityNotFoundException anfe) {

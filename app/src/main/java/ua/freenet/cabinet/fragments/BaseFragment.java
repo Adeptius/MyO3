@@ -31,6 +31,8 @@ import ua.freenet.cabinet.activities.MainActivity;
 import ua.freenet.cabinet.model.ChannelOllTv;
 import ua.freenet.cabinet.utils.Utilits;
 
+import static ua.freenet.cabinet.utils.Utilits.log;
+
 public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
     protected Handler HANDLER = Utilits.HANDLER;
@@ -51,10 +53,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     public static final ViewGroup.LayoutParams MATCH_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
             , ViewGroup.LayoutParams.WRAP_CONTENT);
-    public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT1 = new LinearLayout
-            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-    public static final LinearLayout.LayoutParams WRAP_WRAP_WEIGHT036 = new LinearLayout
-            .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 0.36);
     public static final LinearLayout.LayoutParams MATCH_WRAP_WEIGHT150 = new LinearLayout
             .LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, (float) 1.5);
     public static final LinearLayout.LayoutParams MATCH_WRAP_WEIGHT1 = new LinearLayout
@@ -110,16 +108,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    protected void addViewToMainLayout(final View view) {
-        HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                view.setVisibility(View.GONE);
-                mainLayout.addView(view);
-            }
-        });
-    }
-
     protected void addViewToMainLayout(final List<View> viewsToAdd) {
         HANDLER.post(new Runnable() {
             @Override
@@ -146,8 +134,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
             fm.beginTransaction().replace(R.id.content_frame, this.getClass().newInstance()).commit();
         } catch (java.lang.InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log(e.getLocalizedMessage());
         }
     }
 

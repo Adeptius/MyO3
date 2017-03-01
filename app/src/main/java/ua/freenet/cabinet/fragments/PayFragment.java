@@ -24,7 +24,6 @@ import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.utils.Utilits;
 
-//TODO добавить карту терминалов
 public class PayFragment extends BaseFragment {
 
     private Person person;
@@ -169,9 +168,8 @@ public class PayFragment extends BaseFragment {
 
             int currentX = (int) (mainLayout.getWidth() * 0.93);
             double ratio = y / x;
-            int needY = (int) (currentX * ratio);
 
-            view.getLayoutParams().height = needY;
+        view.getLayoutParams().height = (int) (currentX * ratio);
             view.setImageBitmap(loadedBitMap);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }

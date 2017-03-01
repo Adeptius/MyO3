@@ -23,6 +23,7 @@ public class Person {
     private Address address;
     private boolean yur;
     private boolean vip;
+    String inputJson;
 
     public Person(String json) {
         try {
@@ -33,6 +34,7 @@ public class Person {
             json = json.replaceAll("\"1\":","").replaceAll("\"2\":","").replaceAll("\"3\":","");
             json = json.replaceAll("\"4\":","").replaceAll("\"5\":","").replaceAll("\"6\":","");
 
+            inputJson = json;
             // Parse basic info
             JSONObject allInfo = new JSONObject(json.trim());
             id = Integer.parseInt(allInfo.get("id").toString());
@@ -100,7 +102,7 @@ public class Person {
         return surname;
     }
 
-    public void setCurrent(double current) {
+    void setCurrent(double current) {
         this.current = current;
     }
 

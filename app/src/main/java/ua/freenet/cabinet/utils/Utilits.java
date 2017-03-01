@@ -1,16 +1,18 @@
 package ua.freenet.cabinet.utils;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,9 +30,12 @@ public class Utilits {
 
     private static boolean networkLogEnable = true;
     private static boolean miscLogEnable = true;
+    private static boolean logToFileEnable = false;
+
 
     public static void networkLog(String message){
         if (networkLogEnable) Log.d("---O3 Logger---", message);
+        if (logToFileEnable) writeToFile(message);
     }
 
     public static int calculateDaysCostLeft(int costOfFullMonth){
@@ -42,6 +47,27 @@ public class Utilits {
 
     public static void log(String message){
         if (miscLogEnable) Log.d("---O3 Logger---", message);
+        if (logToFileEnable) writeToFile(message);
+    }
+
+    private static void writeToFile(String message){
+        GregorianCalendar calendar = new GregorianCalendar();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = format1.format(calendar.getTime());
+
+        String filePath = "/storage/emulated/0/log.txt";
+        String text = time + ": " + message + "\n";
+
+        try {
+            FileWriter writer = new FileWriter(filePath, true);
+            BufferedWriter bufferWriter = new BufferedWriter(writer);
+            bufferWriter.write(text);
+            bufferWriter.close();
+        }
+        catch (IOException e) {
+//            System.out.println(e);
+            System.out.println("Ошибка записи в файл");
+        }
     }
 
     public static String parseUkrTime(int year, int month, int day) {
@@ -62,7 +88,7 @@ public class Utilits {
         return month[a].toLowerCase();
     }
 
-    public static String getStrMonth(int a){
+    private static String getStrMonth(int a){
         String[] month = new String[]{"Січня","Лютого","Березня","Квітня","Травня","Червня","Липня",
                 "Серпня","Вересня","Жовтня","Листопада","Грудня"};
         return month[a].toLowerCase();
@@ -122,8 +148,7 @@ public class Utilits {
     public static float dpToPixel(float dp, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static String doTwoSymb(int i) {
@@ -163,24 +188,6 @@ public class Utilits {
         String m = mouth < 10 ? "0" + mouth : mouth + "";
         return "" + year + "-" + m;
     }
-
-    public static int calculateColums(Fragment fragment){
-        DisplayMetrics metrics = fragment.getResources().getDisplayMetrics();
-        int dpi = metrics.densityDpi;
-
-        int column = 3;
-        if (dpi > 600) {
-            column = 3;
-        } else if (dpi > 450) {
-            column = 4;
-        } else if (dpi > 300) {
-            column = 5;
-        } else if (dpi > 150) {
-            column = 6;
-        }
-        return 4;
-    }
-
 
     public static void check() {
         try {

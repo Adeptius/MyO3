@@ -29,7 +29,6 @@ import ua.freenet.cabinet.model.ChannelDivanDetails;
 import ua.freenet.cabinet.utils.Utilits;
 
 
-//TODO як замовити послугу
 public class DivanTvFragment extends BaseFragment {
 
     private Button buttonStart;
@@ -174,7 +173,7 @@ public class DivanTvFragment extends BaseFragment {
 
 
     private void drawIcons(final LinearLayout container, List<ChannelDivan> divanList) {
-        int column = Utilits.calculateColums(this);
+        int column = 4;
 
         LinearLayout layout = null;
 

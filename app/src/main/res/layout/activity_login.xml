@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="100dp"
                 android:layout_weight="0.01"
                 android:gravity="center"
                 android:text="FREENET"

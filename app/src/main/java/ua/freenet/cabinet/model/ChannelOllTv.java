@@ -1,7 +1,6 @@
 package ua.freenet.cabinet.model;
 
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 

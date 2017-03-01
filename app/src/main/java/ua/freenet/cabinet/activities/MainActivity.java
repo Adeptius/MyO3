@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -50,7 +51,6 @@ import ua.freenet.cabinet.utils.Settings;
 import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
 
 
-// TODO подключить аналитику
 // TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_news) {
@@ -262,8 +262,7 @@ public class MainActivity extends AppCompatActivity
 
         View textLayout = LayoutInflater.from(this).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Ви впевнені, що хочете вийти з облікового запису?\n"
-                + "\nПри наступному вході в додаток вам доведеться знову вводити логін та пароль.");
+        text.setText("Ви впевнені, що хочете вийти з облікового запису?\n\nПри наступному вході в додаток вам доведеться знову вводити логін та пароль.");
         builder.setView(textLayout);
         builder.setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
             @Override

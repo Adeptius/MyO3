@@ -163,14 +163,13 @@ public class TurboDayFragment extends BaseFragment {
         final String startDate = startYear + "-" + doTwoSymb(startMonth) + "-" + doTwoSymb(startDay);
         final String endDate = endYear + "-" + doTwoSymb(endMonth) + "-" + doTwoSymb(endDay);
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Послуга замовляється на період\n");
-        sb.append("з: ").append(startDate);
-        sb.append("\nпо: ").append(endDate);
+        String sb = "Послуга замовляється на період\n" +
+                "з: " + startDate +
+                "\nпо: " + endDate;
 
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb.toString());
+        text.setText(sb);
         builder.setView(textLayout);
 
         builder.setCustomTitle(titleView);

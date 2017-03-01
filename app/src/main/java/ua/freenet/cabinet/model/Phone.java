@@ -16,7 +16,7 @@ public class Phone {
     private String modifyDate;
     private int smsInform;
 
-    public Phone(String json) {
+    Phone(String json) {
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             id = allInfo.getInt("id");
@@ -42,7 +42,7 @@ public class Phone {
         return pId;
     }
 
-    public String getPhone() {
+    String getPhone() {
         return phone;
     }
 

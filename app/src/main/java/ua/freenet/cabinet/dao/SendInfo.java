@@ -284,8 +284,7 @@ public class SendInfo {
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
         String response = Web.sendPost("https://my.o3.ua/ajax/email/save", map, true);
-        if (response.contains("Email успішно збережений!")) return true;
-        return false;
+        return response.contains("Email успішно збережений!");
     }
 
     public static boolean changePassword(String newPassword) throws Exception{
@@ -295,8 +294,7 @@ public class SendInfo {
         map.put("new_password", newPassword);
         map.put("confirm_password", newPassword);
         String response = Web.sendPost("https://my.o3.ua/ajax/password/save", map, true);
-        if (response.contains("\"success\":true")) return true;
-        return false;
+        return response.contains("\"success\":true");
     }
 
     public static boolean changeSmsNumber(String number, Phone phone) throws Exception{
@@ -318,8 +316,7 @@ public class SendInfo {
             map.put("valid",     ""+phone.getValid());
         }
         String response = Web.sendPost("https://my.o3.ua/ajax/phone/save", map, true);
-        if (response.contains("Номер успішно збережений!")) return true;
-        return false;
+        return response.contains("Номер успішно збережений!");
     }
 
 

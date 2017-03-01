@@ -8,7 +8,6 @@ public class CombinedOperation {
 
     private String date;
     private double money;
-    private String note;
     private double saldo;
     private List<Operation> operations = new ArrayList<>();
 
@@ -40,18 +39,6 @@ public class CombinedOperation {
 
     public void setMoney(double money) {
         this.money = money;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public double getSaldo() {
-        return saldo;
     }
 
     public void setSaldo(double saldo) {
@@ -95,7 +82,6 @@ public class CombinedOperation {
         return "CombinedOperation{" +
                 "date='" + date + '\'' +
                 ", money=" + money +
-                ", note='" + note + '\'' +
                 ", saldo=" + saldo +
                 ", operations=" + operations +
                 '}';

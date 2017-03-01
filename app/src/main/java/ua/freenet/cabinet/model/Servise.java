@@ -137,9 +137,7 @@ public class Servise {
             regexMatcher.find();
             String s = regexMatcher.group();
             name = name.replaceAll(s,"");
-        }catch (Exception e){
-
-        }
+        }catch (Exception ignored){}
 
 
         name = name.replaceAll("Мбит", "Мбіт");

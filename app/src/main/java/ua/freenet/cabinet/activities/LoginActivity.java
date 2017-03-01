@@ -6,22 +6,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,20 +39,13 @@ import static ua.freenet.cabinet.utils.Utilits.HANDLER;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ImageView logoImageView;
     private LinearLayout loginLayout;
     private EditText textLogin;
     private EditText textPassword;
-    private Button buttonLogin;
-    private TextView rememberPassButton;
     private LinearLayout splashLayout;
-
     private TextView statusTextView;
     private TextView titleText;
-//    private TextView comentText;
     private ProgressBar progressBar;
-
-    private TextView enterText;
 
 
     @Override
@@ -68,20 +56,22 @@ public class LoginActivity extends AppCompatActivity {
         if (!isMyServiceRunning(BackgroundService.class))
             startService(new Intent(LoginActivity.this, BackgroundService.class));
 
-        logoImageView = (ImageView) findViewById(R.id.logoView);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         textLogin = (EditText) findViewById(R.id.input_login);
         textPassword = (EditText) findViewById(R.id.input_password);
-        buttonLogin = (Button) findViewById(R.id.button_login);
-        rememberPassButton = (TextView) findViewById(R.id.remember_password);
+        Button buttonLogin = (Button) findViewById(R.id.button_login);
+        TextView rememberPassButton = (TextView) findViewById(R.id.remember_password);
         loginLayout = (LinearLayout) findViewById(R.id.login_layout);
         loginLayout.setVisibility(View.GONE);
 
         splashLayout = (LinearLayout) findViewById(R.id.splash_layout);
         statusTextView = (TextView) findViewById(R.id.status_text_view);
         titleText = (TextView) findViewById(R.id.text_title);
-//        comentText = (TextView) findViewById(R.id.text_coment);
         progressBar = (ProgressBar) findViewById(R.id.progressBarInSplashScreen);
         progressBar.setVisibility(View.INVISIBLE);
+
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +86,14 @@ public class LoginActivity extends AppCompatActivity {
                 rememberPassword();
             }
         });
-        enterText = (TextView) findViewById(R.id.enter_text);
+        TextView enterText = (TextView) findViewById(R.id.enter_text);
         enterText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (textPassword.getText().toString().equals("4593")){
                     showChoise();
+                }else if (textPassword.getText().toString().equals("3954")){
+                    Testing.testAllUserEnter();
                 }
             }
         });
