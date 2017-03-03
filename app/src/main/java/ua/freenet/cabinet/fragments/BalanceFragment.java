@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -137,9 +139,13 @@ public class BalanceFragment extends BaseFragment {
         for (CombinedOperation operation : combo) {
             operation.setSaldo(current);
             if (operation.getMoney() > 0) {
-                current = current - operation.getMoney();
+                double opMoney = operation.getMoney();
+                current = current - opMoney;
             } else {
                 current = current + Math.abs(operation.getMoney());
+            }
+            if (String.valueOf(current).contains("E-")){
+                current = 0;
             }
         }
     }

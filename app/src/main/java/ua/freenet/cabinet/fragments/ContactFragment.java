@@ -239,7 +239,7 @@ public class ContactFragment extends BaseFragment {
             }
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             TextView titleView = new TextView(context);
-            titleView.setText("Виберіть номер");
+            titleView.setText("Оберіть номер");
             titleView.setGravity(Gravity.CENTER);
             titleView.setTextSize(24);
             titleView.setTypeface(null, Typeface.BOLD);

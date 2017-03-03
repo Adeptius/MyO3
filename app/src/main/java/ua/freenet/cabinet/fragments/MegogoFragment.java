@@ -19,9 +19,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -44,7 +48,6 @@ public class MegogoFragment extends BaseFragment {
     private String activeSubscribe = "";
     private String activationLink = "";
     private List<MegogoPts> megogoPts;
-    private boolean hardwareIsHidden = true;
 
     @Override
     void setAllSettings() {
@@ -113,17 +116,7 @@ public class MegogoFragment extends BaseFragment {
         perevagyLayout.setVisibility(View.GONE);
         mainLayout.addView(perevagyLayout);
 
-        final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
-        final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
-        hideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAndShowHardware(hardware, hideButton);
-            }
-        });
-
-        hardware.setVisibility(View.GONE);
-        mainLayout.addView(hardware);
+        addHardWareRequirementsToMainScreenFor("megogo");
 
         if (!"".equals(activeSubscribe)) {
             View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
@@ -217,30 +210,20 @@ public class MegogoFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (channelList.getChildCount() > 0) {
-                        channelList.removeAllViews();
-                        if (name.equals("Пакет легкий")) {
+                        removeAllViewsAndCollapse(channelList);
+//                        channelList.removeAllViews();
                             showButton.setText("Канали");
-                        } else if (name.equals("Пакет оптимальний")) {
-                            showButton.setText("Канали");
-                        } else if (name.equals("Пакет максимальний")) {
-                            showButton.setText("Канали");
-                        } else if (name.equals("Додатковий пакет FilmBox")) {
-                            showButton.setText("Канали");
-                        } else if (name.equals("Додатковий пакет Viasat Premium")) {
-                            showButton.setText("Канали");
-                        }
                     } else {
-                        showButton.setText("Сховати");
                         if (name.equals("Пакет легкий")) {
-                            showChannels(channelList, light);
+                            showChannels(channelList, light, showButton);
                         } else if (name.equals("Пакет оптимальний")) {
-                            showChannels(channelList, optimal);
+                            showChannels(channelList, optimal,showButton);
                         } else if (name.equals("Пакет максимальний")) {
-                            showChannels(channelList, maximum);
+                            showChannels(channelList, maximum,showButton);
                         } else if (name.equals("Додатковий пакет FilmBox")) {
-                            showChannels(channelList, filmBox);
+                            showChannels(channelList, filmBox,showButton);
                         } else if (name.equals("Додатковий пакет Viasat Premium")) {
-                            showChannels(channelList, viasat);
+                            showChannels(channelList, viasat,showButton);
                         }
                     }
                 }
@@ -250,39 +233,16 @@ public class MegogoFragment extends BaseFragment {
         addAdditionalText();
     }
 
-    private void hideAndShowHardware(View hardware, Button hideButton) {
-        LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
-        LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
-        Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String appPackageName = "com.megogo.application"; // getPackageName() from Context or Activity object
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                }
-            }
-        });
-        stb.setVisibility(View.GONE);
+    private HashMap<LinearLayout, Integer> imagesLoaded = new HashMap<>(); // счетчик загруженных картинок по каждому контейнеру
 
-        if (hardwareIsHidden){
-            hideLayout.setVisibility(View.VISIBLE);
-            hideButton.setText("Сховати");
-            hardwareIsHidden = false;
-        }else {
-            hardwareIsHidden = true;
-            hideButton.setText("Показати необхідне обладнання");
-            hideLayout.setVisibility(View.GONE);
-        }
-    }
+    private void showChannels(final LinearLayout container, final List<ChannelMegogo> chanels, final Button button) {
+        container.setVisibility(View.GONE); // Скрываем контейнер
 
-    private void showChannels(LinearLayout container, List<ChannelMegogo> chanels) {
-        TextView coment = new TextView(context);
+        final TextView coment = new TextView(context);
         coment.setTextColor(COLOR_GREEN);
         coment.setTextSize(16);
         coment.setTypeface(null, Typeface.BOLD);
+        coment.setVisibility(View.GONE);
         if (chanels.equals(optimal)){
             coment.setText("Всі канали з пакету \"Легкий\" та плюс наступні:");
             container.addView(coment);
@@ -290,6 +250,8 @@ public class MegogoFragment extends BaseFragment {
             coment.setText("Всі канали з пакету \"Оптимальний\" та плюс наступні:");
             container.addView(coment);
         }
+
+        imagesLoaded.put(container,0);
 
         int column = 4;
         LinearLayout layout = null;
@@ -314,11 +276,48 @@ public class MegogoFragment extends BaseFragment {
 
             Glide.with(this)
                     .load(channelMegogo.getIconUrl())
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            return false;// Увеличиваем счетчик обработанных картинок при ошибке
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            return false;// Увеличиваем счетчик обработанных картинок при успехе
+                        }
+                    })
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .fitCenter()
                     .override(dim, dim)
                     .into(imageView);
         }
+
+        button.setText("Завантаження...");
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int inSleep = 0;
+                    while (imagesLoaded.get(container)<chanels.size()){
+                        Thread.sleep(100);
+                        inSleep = inSleep + 100;
+                    } // в цикле ждём когда загрузятся все картинки
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        expand(container); // всё загружено! показываем анимацию
+                        coment.setVisibility(View.VISIBLE);
+                        button.setText("Сховати");
+                    }
+                });
+            }
+        });
     }
 
     private void showMessageGoToMegogoSite() {

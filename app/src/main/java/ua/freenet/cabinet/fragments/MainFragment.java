@@ -219,6 +219,12 @@ public class MainFragment extends BaseFragment {
                                 sb.append("Перейти до перегляду історії проплат?");
                                 text.setText(sb.toString());
                                 builder.setView(textLayout);
+                                builder.setNegativeButton("Ні", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(final DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
                                 builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(final DialogInterface dialog, int which) {
@@ -232,7 +238,15 @@ public class MainFragment extends BaseFragment {
                                         }
                                     }
                                 });
-                                android.app.AlertDialog dialog = builder.create();
+                                final android.app.AlertDialog dialog = builder.create();
+                                dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+                                                              @Override
+                                                              public void onShow(DialogInterface arg0) {
+                                                                  dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(COLOR_BLUE);
+                                                                  dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(COLOR_BLUE);
+                                                              }
+                                                          });
+                                dialog.setCanceledOnTouchOutside(true);
                                 dialog.show();
                             }
                         });

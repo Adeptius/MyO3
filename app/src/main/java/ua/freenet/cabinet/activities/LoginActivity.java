@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView titleText;
     private ProgressBar progressBar;
 
+    private boolean fastLogin = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,12 +105,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+                    if (!fastLogin)
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 startAnimation();
                 try {
+                    if (!fastLogin)
                     Thread.sleep(1000);
                     checkAll();
                 } catch (InterruptedException e) {
@@ -124,33 +127,39 @@ public class LoginActivity extends AppCompatActivity {
         startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
         Utilits.check();
+        if (!fastLogin)
         Thread.sleep(400);
         if (!isInternetOk()) {
             setStatusTextView("Інтернет відсутній");
             stopProgressBar();
         } else {
             setStatusTextView("Авторизація");
+            if (!fastLogin)
             Thread.sleep(400);
             if (isItFirstEnter()) {
                 setStatusTextView("Будь-ласка увійдіть");
                 stopProgressBar();
+                if (!fastLogin)
                 Thread.sleep(2000);
                 showLogin();
             } else {
                 try {
                     if (Web.checkLoginAndSaveSessionIfTrue()) {
                         setStatusTextView("Завантаження данних..");
+                        if (!fastLogin)
                         Thread.sleep(400);
                         DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
                         stopProgressBar();
                         setStatusTextView("Вхід виконано");
+                        if (!fastLogin)
                         Thread.sleep(1000);
                         goToMain();
                     } else {
                         setStatusTextView("Будь-ласка увійдіть");
                         stopProgressBar();
+                        if (!fastLogin)
                         Thread.sleep(2000);
                         showLogin();
                     }

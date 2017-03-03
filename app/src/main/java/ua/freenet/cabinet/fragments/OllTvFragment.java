@@ -15,7 +15,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
+import java.util.HashMap;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -35,7 +39,7 @@ public class OllTvFragment  extends BaseFragment {
     private List<ChannelOllTv> start;
     private List<ChannelOllTv> optimal;
     private List<ChannelOllTv> premium;
-    private boolean hardwareIsHidden = true;
+
 
     @Override
     void setAllSettings() {
@@ -79,15 +83,7 @@ public class OllTvFragment  extends BaseFragment {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_olltv_perevagy, null);
         mainLayout.addView(perevagyLayout);
 
-        final View hardware = LayoutInflater.from(context).inflate(R.layout.item_hardware, null);
-        final Button hideButton = (Button) hardware.findViewById(R.id.button_hide);
-        hideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideAndShowHardware(hardware, hideButton);
-            }
-        });
-        mainLayout.addView(hardware);
+        addHardWareRequirementsToMainScreenFor("oll");
 
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_olltv_tarif, null);
         mainLayout.addView(allChanels);
@@ -112,36 +108,38 @@ public class OllTvFragment  extends BaseFragment {
     public void onClick(View v) {
         if (v.equals(buttonStart)) {
             if (listStart.getChildCount() > 0) {
-                listStart.removeAllViews();
+                removeAllViewsAndCollapse(listStart);
                 buttonStart.setText("Список каналів");
             } else {
-                drawIcons(listStart, start);
-                buttonStart.setText("Сховати");
+                drawIcons(listStart, start, buttonStart);
             }
         } else if (v.equals(buttonOptimal)) {
             if (listOptimal.getChildCount() > 0) {
-                listOptimal.removeAllViews();
+                removeAllViewsAndCollapse(listOptimal);
                 buttonOptimal.setText("Список каналів");
             } else {
-                drawIcons(listOptimal, optimal);
-                buttonOptimal.setText("Сховати");
+                drawIcons(listOptimal, optimal, buttonOptimal);
             }
         } else if (v.equals(buttonPremium)) {
             if (listPremium.getChildCount() > 0) {
-                listPremium.removeAllViews();
+                removeAllViewsAndCollapse(listPremium);
                 buttonPremium.setText("Список каналів");
             } else {
-                drawIcons(listPremium, premium);
-                buttonPremium.setText("Сховати");
+                drawIcons(listPremium, premium, buttonPremium);
             }
         }
     }
 
-    private void drawIcons(final LinearLayout container, List<ChannelOllTv> ollTvList) {
-        TextView coment = new TextView(context);
+    private HashMap<LinearLayout, Integer> imagesLoaded = new HashMap<>(); // счетчик загруженных картинок по каждому контейнеру
+
+    private void drawIcons(final LinearLayout container, final List<ChannelOllTv> ollTvList, final Button button) {
+        container.setVisibility(View.GONE); // Скрываем контейнер
+
+        final TextView coment = new TextView(context);
         coment.setTextColor(COLOR_GREEN);
         coment.setTextSize(16);
         coment.setTypeface(null, Typeface.BOLD);
+        coment.setVisibility(View.GONE);
         if (container.equals(listOptimal)){
             coment.setText("Всі канали з пакету \"Стартовий\" та плюс наступні:");
             container.addView(coment);
@@ -150,9 +148,12 @@ public class OllTvFragment  extends BaseFragment {
             container.addView(coment);
         }
 
+        imagesLoaded.put(container,0);
+
         int column = 4;
         LinearLayout layout = null;
 
+        button.setText("Завантаження...");
         for (final ChannelOllTv channel : ollTvList) {
             if (layout == null || layout.getChildCount() == column) {
                 layout = new LinearLayout(context);
@@ -167,38 +168,48 @@ public class OllTvFragment  extends BaseFragment {
 
             Glide.with(this)
                     .load(channel.getIconUrl())
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            return false;// Увеличиваем счетчик обработанных картинок при ошибке
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            return false;// Увеличиваем счетчик обработанных картинок при успехе
+                        }
+                    })
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .fitCenter()
                     .override(dim, dim)
                     .into(imageView);
         }
-    }
 
-
-
-    private void hideAndShowHardware(View hardware, Button hideButton) {
-        LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
-        Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
+        EXECUTOR.submit(new Runnable() {
             @Override
-            public void onClick(View v) {
-                final String appPackageName = "tv.oll.app";
+            public void run() {
                 try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                    int inSleep = 0;
+                    while (imagesLoaded.get(container)<ollTvList.size()){
+                        Thread.sleep(100);
+                        inSleep = inSleep + 100;
+                    } // в цикле ждём когда загрузятся все картинки
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        coment.setVisibility(View.VISIBLE);
+                        expand(container); // всё загружено! показываем анимацию
+                        button.setText("Сховати");
+                    }
+                });
             }
         });
 
-        if (hardwareIsHidden){
-            hideLayout.setVisibility(View.VISIBLE);
-            hideButton.setText("Сховати");
-            hardwareIsHidden = false;
-        }else {
-            hardwareIsHidden = true;
-            hideButton.setText("Показати необхідне обладнання");
-            hideLayout.setVisibility(View.GONE);
-        }
+
     }
 }

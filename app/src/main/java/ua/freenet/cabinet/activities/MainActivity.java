@@ -14,15 +14,20 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
@@ -51,7 +56,6 @@ import ua.freenet.cabinet.utils.Settings;
 import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
 
 
-// TODO добавить обработку ошибок в констукторы
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,6 +79,17 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        try { // увеличение поля захвата закрытой панели
+            Field mDragger = drawer.getClass().getDeclaredField("mLeftDragger");//mRightDragger for right obviously
+            mDragger.setAccessible(true);
+            ViewDragHelper draggerObj = (ViewDragHelper) mDragger.get(drawer);
+            Field mEdgeSize = draggerObj.getClass().getDeclaredField("mEdgeSize");
+            mEdgeSize.setAccessible(true);
+            int edge = mEdgeSize.getInt(draggerObj);
+            mEdgeSize.setInt(draggerObj, edge * 5); //optimal value as for me, you may set any constant in dp
+        }catch (Exception ignored){}
 
         disableNavigationViewScrollbars(navigationView);
 
@@ -110,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
-        goTo(new MainFragment());
+        goTo(new MegogoFragment());
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {

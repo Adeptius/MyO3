@@ -12,7 +12,8 @@
         android:background="@drawable/roundrect"
         android:elevation="@dimen/shadow_elevation"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
 
         <TextView

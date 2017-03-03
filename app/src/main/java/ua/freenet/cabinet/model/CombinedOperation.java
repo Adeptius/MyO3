@@ -81,7 +81,7 @@ public class CombinedOperation {
     public String toString() {
         return "CombinedOperation{" +
                 "date='" + date + '\'' +
-                ", money=" + money +
+                ", money=" + getMoney() +
                 ", saldo=" + saldo +
                 ", operations=" + operations +
                 '}';
