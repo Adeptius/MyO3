@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
-        goTo(new MegogoFragment());
+        goTo(new MainFragment());
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {

@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView titleText;
     private ProgressBar progressBar;
 
-    private boolean fastLogin = true;
+    private boolean fastLogin = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

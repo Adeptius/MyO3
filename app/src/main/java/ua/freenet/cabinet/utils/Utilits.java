@@ -88,7 +88,7 @@ public class Utilits {
         return month[a].toLowerCase();
     }
 
-    private static String getStrMonth(int a){
+    public static String getStrMonth(int a){
         String[] month = new String[]{"Січня","Лютого","Березня","Квітня","Травня","Червня","Липня",
                 "Серпня","Вересня","Жовтня","Листопада","Грудня"};
         return month[a].toLowerCase();

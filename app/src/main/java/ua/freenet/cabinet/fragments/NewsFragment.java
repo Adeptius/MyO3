@@ -1,14 +1,20 @@
 package ua.freenet.cabinet.fragments;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -27,6 +33,7 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.News;
+import ua.freenet.cabinet.utils.TestImageGetter;
 
 public class NewsFragment extends BaseFragment {
 
@@ -58,7 +65,6 @@ public class NewsFragment extends BaseFragment {
         prepareNews(newses);
     }
 
-
     @Override
     void processIfOk() {
     }
@@ -67,23 +73,62 @@ public class NewsFragment extends BaseFragment {
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
 
-            final View itemView = LayoutInflater.from(context).inflate(R.layout.item_piece_of_news, null);
 
+            final View itemView = LayoutInflater.from(context).inflate(R.layout.item_piece_of_news, null);
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
             TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
-            TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
+            final LinearLayout hideLayout = (LinearLayout) itemView.findViewById(R.id.hide_lay);
+            final TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
+            final TextView dateText = (TextView) itemView.findViewById(R.id.textView_date);
+            Button toSiteButton = (Button) itemView.findViewById(R.id.to_site_button);
+            Button closeButton = (Button) itemView.findViewById(R.id.close);
+            Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
 
+            hideLayout.setVisibility(View.GONE);
+            if (news.getYouTube().equals("")){
+                youTubeButton.setVisibility(View.GONE);
+            }
             loadImageForNews(news, imageView);
             newsTitle.setText(news.getTitle());
             comentText.setText(news.getComment());
+            comentText.setMovementMethod(LinkMovementMethod.getInstance());
+            dateText.setText(news.getStringedDate());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            youTubeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    watchYoutubeVideo(news.getYouTube());
+                }
+            });
+
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    collapse(hideLayout);
+                }
+            });
+
+            toSiteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     String url = news.getUrl();
                     i.setData(Uri.parse(url));
                     startActivity(i);
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (hideLayout.getVisibility()==View.VISIBLE){
+                        collapse(hideLayout);
+                    }else {
+                        TestImageGetter imageGetter = new TestImageGetter(comentText,context);
+                        Spanned htmlSpan = Html.fromHtml(news.getHtml(), imageGetter, null);
+                        comentText.setText(htmlSpan);
+                        expand(hideLayout);
+                    }
                 }
             });
 
@@ -100,14 +145,44 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
+    public void watchYoutubeVideo(String id){
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://www.youtube.com/watch?v=" + id));
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            startActivity(webIntent);
+        }
+    }
+
     private void loadImageForNews(News news, ImageView imageView) {
         try {
-            String url = getHiResImg(news.getUrl());
-            if (url == null) {
-                url = news.getImgUrl();
-            } // если по ссылке не найден hi-res image - берём low-res
-            url = url.replaceAll("http:","https:");
-            URL newurl = new URL(url);
+            String url = "";
+            Document doc2 = Jsoup.connect(news.getUrl()).get();
+            Elements images = doc2.getElementsByTag("img");
+            for (Element image : images) {
+                if (image.toString().contains("/content/images/") ) {
+                    try{
+                        int widht = Integer.parseInt(image.attr("width"));
+                        if (widht<200) continue;
+                    }catch (Exception ignored) {}
+                    url = image.attributes().get("src");
+                    news.setImgUrl("https://o3.ua" + url);
+//                    System.out.println(news.getImgUrl());
+                    break;
+                }
+            }
+//            if (url.equals("")) {
+//                url = news.getImgUrl();
+//            } // если по ссылке не найден hi-res image - берём low-res
+//            url = url.replaceAll("http:","https:");
+//            news.setImgUrl("https://o3.ua"+url);
+
+//            "http://o3.ua"+
+//            System.out.println(url);
+
+            URL newurl = new URL(news.getImgUrl());
 
             InputStream stream = newurl.openConnection().getInputStream();
             final Bitmap loadedBitMap = BitmapFactory.decodeStream(stream);
@@ -124,7 +199,7 @@ public class NewsFragment extends BaseFragment {
             imageView.setImageBitmap(loadedBitMap);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Ошибка загрузки картинки по урл " + news.getImgUrl());
         }
     }
 
@@ -134,75 +209,48 @@ public class NewsFragment extends BaseFragment {
 
     }
 
-    private String getHiResImg(String url) throws Exception {
-        Document doc2 = Jsoup.connect(url).get();
-        Elements images = doc2.getElementsByTag("img");
-        for (Element image : images) {
-            if (image.toString().contains("/content/images/") ) {
-                return "http://o3.ua" + image.attributes().get("src");
-            }
-        }
-        return null;
-    }
-
     private List<News> getAllNews(String urlAccii, String urlnews) throws Exception {
         Document doc = Jsoup.connect(urlAccii).get();
         Elements post = doc.body().getElementsByClass("post");
 
         List<News> newses = new ArrayList<>();
         for (Element element : post) {
-            String href = element.getElementsByTag("figure").first()
-                    .getElementsByTag("a").first()
-                    .attributes().get("href");
-            String imageUrl = element.getElementsByTag("figure").first()
-                    .getElementsByTag("a").first()
-                    .getElementsByTag("img").first()
-                    .attributes().get("src");
-            String date = element.getElementsByTag("div").first()
-                    .getElementsByTag("time").first().html();
-            String title2 = element.getElementsByTag("div").first()
-                    .getElementsByTag("h3").first()
-                    .getElementsByTag("a").first().html();
-            String text;
-            try {
-                text = element.getElementsByTag("div").first()
-                        .getElementsByTag("p").first().html();
-            } catch (NullPointerException e) {
-                text = "";
-            }
-
-            News news = new News(title2,text,href,imageUrl,convertDateToNumbers(date));
-            newses.add(news);
+            newses.add(convertElementToNews(element));
         }
 
         doc = Jsoup.connect(urlnews).get();
         post = doc.body().getElementsByClass("post");
-
         for (Element element : post) {
-            String href = element.getElementsByTag("figure").first()
-                    .getElementsByTag("a").first()
-                    .attributes().get("href");
-            String imageUrl = element.getElementsByTag("figure").first()
-                    .getElementsByTag("a").first()
-                    .getElementsByTag("img").first()
-                    .attributes().get("src");
-            String date = element.getElementsByTag("div").first()
-                    .getElementsByTag("time").first().html();
-            String title2 = element.getElementsByTag("div").first()
-                    .getElementsByTag("h3").first()
-                    .getElementsByTag("a").first().html();
-            String text;
-            try {
-                text = element.getElementsByTag("div").first()
-                        .getElementsByTag("p").first().html();
-            } catch (NullPointerException e) {
-                text = "";
-            }
-
-            News news = new News(title2, text, href, imageUrl, convertDateToNumbers(date));
-            newses.add(news);
+            newses.add(convertElementToNews(element));
         }
         return newses;
+    }
+
+    private News convertElementToNews(Element element){
+        String href = element.getElementsByTag("figure").first()
+                .getElementsByTag("a").first()
+                .attributes().get("href");
+        String imageUrl = element.getElementsByTag("figure").first()
+                .getElementsByTag("a").first()
+                .getElementsByTag("img").first()
+                .attributes().get("src");
+        String date = element.getElementsByTag("div").first()
+                .getElementsByTag("time").first().html();
+        String title2 = element.getElementsByTag("div").first()
+                .getElementsByTag("h3").first()
+                .getElementsByTag("a").first().html();
+        String text;
+        try {
+            text = element.getElementsByTag("div").first()
+                    .getElementsByTag("p").first().html();
+        } catch (NullPointerException e) {
+            text = "";
+        }
+
+
+
+
+        return new News(title2, text, href, imageUrl, convertDateToNumbers(date));
     }
 
     private List<News> subList(List<News> newses, int i) {
@@ -258,5 +306,8 @@ public class NewsFragment extends BaseFragment {
         if (date.contains("декабря")) month = "12";
         return year + month + day;
     }
+
+
+
 }
 

@@ -38,6 +38,7 @@ android {
 //    }
     productFlavors {
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -52,6 +53,8 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.android.support:support-v4:24.2.1'
+//    compile 'org.apache.httpcomponents:httpclient:4.5.2'
+//    compile 'org.apache.httpcomponents:httpclient:4.5'
     testCompile 'junit:junit:4.12'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile 'com.google.code.gson:gson:2.8.0'
