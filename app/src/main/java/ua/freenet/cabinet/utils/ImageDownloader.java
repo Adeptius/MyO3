@@ -10,16 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,15 +22,13 @@ import java.net.URL;
 
 import ua.freenet.cabinet.R;
 
-import static android.content.ContentValues.TAG;
-
-public class TestImageGetter implements Html.ImageGetter {
+public class ImageDownloader implements Html.ImageGetter {
 
     private TextView textView;
     private Context context;
 
 
-    public TestImageGetter(TextView textView, Context context) {
+    public ImageDownloader(TextView textView, Context context) {
         this.textView = textView;
         this.context = context;
     }

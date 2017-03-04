@@ -22,7 +22,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.News;
-import ua.freenet.cabinet.utils.TestImageGetter;
+import ua.freenet.cabinet.utils.ImageDownloader;
 
 public class NewsFragment extends BaseFragment {
 
@@ -85,7 +84,7 @@ public class NewsFragment extends BaseFragment {
             Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
 
             hideLayout.setVisibility(View.GONE);
-            if (news.getYouTube().equals("")){
+            if (news.getYouTube().equals("")) {
                 youTubeButton.setVisibility(View.GONE);
             }
             loadImageForNews(news, imageView);
@@ -121,10 +120,10 @@ public class NewsFragment extends BaseFragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (hideLayout.getVisibility()==View.VISIBLE){
+                    if (hideLayout.getVisibility() == View.VISIBLE) {
                         collapse(hideLayout);
-                    }else {
-                        TestImageGetter imageGetter = new TestImageGetter(comentText,context);
+                    } else {
+                        ImageDownloader imageGetter = new ImageDownloader(comentText, context);
                         Spanned htmlSpan = Html.fromHtml(news.getHtml(), imageGetter, null);
                         comentText.setText(htmlSpan);
                         expand(hideLayout);
@@ -145,7 +144,7 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
-    public void watchYoutubeVideo(String id){
+    public void watchYoutubeVideo(String id) {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
                 Uri.parse("http://www.youtube.com/watch?v=" + id));
@@ -162,26 +161,17 @@ public class NewsFragment extends BaseFragment {
             Document doc2 = Jsoup.connect(news.getUrl()).get();
             Elements images = doc2.getElementsByTag("img");
             for (Element image : images) {
-                if (image.toString().contains("/content/images/") ) {
-                    try{
+                if (image.toString().contains("/content/images/")) {
+                    try {
                         int widht = Integer.parseInt(image.attr("width"));
-                        if (widht<200) continue;
-                    }catch (Exception ignored) {}
+                        if (widht < 200) continue;
+                    } catch (Exception ignored) {
+                    }
                     url = image.attributes().get("src");
                     news.setImgUrl("https://o3.ua" + url);
-//                    System.out.println(news.getImgUrl());
                     break;
                 }
             }
-//            if (url.equals("")) {
-//                url = news.getImgUrl();
-//            } // если по ссылке не найден hi-res image - берём low-res
-//            url = url.replaceAll("http:","https:");
-//            news.setImgUrl("https://o3.ua"+url);
-
-//            "http://o3.ua"+
-//            System.out.println(url);
-
             URL newurl = new URL(news.getImgUrl());
 
             InputStream stream = newurl.openConnection().getInputStream();
@@ -226,7 +216,7 @@ public class NewsFragment extends BaseFragment {
         return newses;
     }
 
-    private News convertElementToNews(Element element){
+    private News convertElementToNews(Element element) {
         String href = element.getElementsByTag("figure").first()
                 .getElementsByTag("a").first()
                 .attributes().get("href");
@@ -246,8 +236,6 @@ public class NewsFragment extends BaseFragment {
         } catch (NullPointerException e) {
             text = "";
         }
-
-
 
 
         return new News(title2, text, href, imageUrl, convertDateToNumbers(date));
@@ -306,7 +294,6 @@ public class NewsFragment extends BaseFragment {
         if (date.contains("декабря")) month = "12";
         return year + month + day;
     }
-
 
 
 }

@@ -77,11 +77,11 @@ public class BonusFragment extends BaseFragment {
                 public void onClick(View v) {
                     if (layIsHidden) {
                         hideButton.setText("Сховати");
-                        hideLayout.setVisibility(View.VISIBLE);
+                        expand(hideLayout);
                         layIsHidden = false;
                     } else {
                         hideButton.setText("Як нараховуються бонуси?");
-                        hideLayout.setVisibility(View.GONE);
+                        collapse(hideLayout);
                         layIsHidden = true;
                     }
                 }
