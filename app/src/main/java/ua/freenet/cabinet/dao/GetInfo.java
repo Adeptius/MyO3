@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ua.freenet.cabinet.model.AvailableTarif;
 import ua.freenet.cabinet.model.BonusServiceSpending;
 import ua.freenet.cabinet.model.ChannelDivan;
 import ua.freenet.cabinet.model.ChannelDivanDetails;
 import ua.freenet.cabinet.model.ChannelMegogo;
 import ua.freenet.cabinet.model.ChannelOllTv;
 import ua.freenet.cabinet.model.City;
+import ua.freenet.cabinet.model.DrWebSubscribe;
 import ua.freenet.cabinet.model.FriendInvite;
 import ua.freenet.cabinet.model.Ip;
-import ua.freenet.cabinet.model.AvailableTarif;
-import ua.freenet.cabinet.model.DrWebSubscribe;
 import ua.freenet.cabinet.model.MegogoPts;
 import ua.freenet.cabinet.model.Operation;
 import ua.freenet.cabinet.model.Person;
@@ -376,7 +376,7 @@ public class GetInfo {
     }
 
     public static List<AvailableTarif> getAvailableTarifs(String serviceId) throws Exception {
-        Utilits.networkLog("Запрос доступных тарифов мегого");
+        Utilits.networkLog("Запрос доступных тарифов");
         String s = Web.getJsonFromUrl("https://my.o3.ua/ajax/new_pt?service_id=" + serviceId);
         s = s.substring(1, s.length() - 1);
         List<AvailableTarif> availableTarifList = new ArrayList<>();

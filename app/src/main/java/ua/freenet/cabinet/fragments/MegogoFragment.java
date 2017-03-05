@@ -1,15 +1,11 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +30,7 @@ import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.ChannelMegogo;
 import ua.freenet.cabinet.model.MegogoPts;
-import ua.freenet.cabinet.utils.Utilits;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 
 public class MegogoFragment extends BaseFragment {
@@ -148,7 +144,7 @@ public class MegogoFragment extends BaseFragment {
                     }
                 }
             });
-            mainLayoutMegogo.setPadding(0,0,0,50);
+            mainLayoutMegogo.setPadding(0, 0, 0, 50);
 
             mainLayout.addView(mainLayoutMegogo);
         }
@@ -205,25 +201,23 @@ public class MegogoFragment extends BaseFragment {
                 });
             }
 
-
             showButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (channelList.getChildCount() > 0) {
                         removeAllViewsAndCollapse(channelList);
-//                        channelList.removeAllViews();
-                            showButton.setText("Канали");
+                        showButton.setText("Канали");
                     } else {
                         if (name.equals("Пакет легкий")) {
                             showChannels(channelList, light, showButton);
                         } else if (name.equals("Пакет оптимальний")) {
-                            showChannels(channelList, optimal,showButton);
+                            showChannels(channelList, optimal, showButton);
                         } else if (name.equals("Пакет максимальний")) {
-                            showChannels(channelList, maximum,showButton);
+                            showChannels(channelList, maximum, showButton);
                         } else if (name.equals("Додатковий пакет FilmBox")) {
-                            showChannels(channelList, filmBox,showButton);
+                            showChannels(channelList, filmBox, showButton);
                         } else if (name.equals("Додатковий пакет Viasat Premium")) {
-                            showChannels(channelList, viasat,showButton);
+                            showChannels(channelList, viasat, showButton);
                         }
                     }
                 }
@@ -243,15 +237,15 @@ public class MegogoFragment extends BaseFragment {
         coment.setTextSize(16);
         coment.setTypeface(null, Typeface.BOLD);
         coment.setVisibility(View.GONE);
-        if (chanels.equals(optimal)){
+        if (chanels.equals(optimal)) {
             coment.setText("Всі канали з пакету \"Легкий\" та плюс наступні:");
             container.addView(coment);
-        }else if (chanels.equals(maximum)){
+        } else if (chanels.equals(maximum)) {
             coment.setText("Всі канали з пакету \"Оптимальний\" та плюс наступні:");
             container.addView(coment);
         }
 
-        imagesLoaded.put(container,0);
+        imagesLoaded.put(container, 0);
 
         int column = 4;
         LinearLayout layout = null;
@@ -279,13 +273,13 @@ public class MegogoFragment extends BaseFragment {
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            imagesLoaded.put(container, imagesLoaded.get(container) + 1);
                             return false;// Увеличиваем счетчик обработанных картинок при ошибке
                         }
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            imagesLoaded.put(container, imagesLoaded.get(container) + 1);
                             return false;// Увеличиваем счетчик обработанных картинок при успехе
                         }
                     })
@@ -301,7 +295,7 @@ public class MegogoFragment extends BaseFragment {
             public void run() {
                 try {
                     int inSleep = 0;
-                    while (imagesLoaded.get(container)<chanels.size()){
+                    while (imagesLoaded.get(container) < chanels.size()) {
                         Thread.sleep(100);
                         inSleep = inSleep + 100;
                     } // в цикле ждём когда загрузятся все картинки
@@ -321,50 +315,25 @@ public class MegogoFragment extends BaseFragment {
     }
 
     private void showMessageGoToMegogoSite() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Реєстрація");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Зараз ви перейдете на сайт MEGOGO. Натисніть там \"Регистрация нового аккаунта\" " +
-                "та створіть собі обліковий запис");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Перейти", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(activationLink));
-                startActivity(i);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        String message = "Зараз ви перейдете на сайт MEGOGO. Натисніть там \"Регистрация нового аккаунта\" " +
+                "та створіть собі обліковий запис";
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Реєстрація")
+                .setMessage(message)
+                .setPositiveButtonWithRunnableForHandler("Перейти", new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(activationLink));
+                        startActivity(i);
+                    }
+                }).createAndShow();
     }
 
-
-
-
     private void moreInfo(final ChannelMegogo channelMegogo) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView textView = new TextView(context);
-        textView.setText(channelMegogo.getTitle());
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(24);
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setTextColor(COLOR_BLUE);
-        textView.setBackgroundColor(Color.WHITE);
-
         final View layout = LayoutInflater.from(context).inflate(R.layout.item_megogo_details, null);
         final ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
         final TextView description = (TextView) layout.findViewById(R.id.text_description);
-
         description.setText(channelMegogo.getDescription());
         EXECUTOR.submit(new Runnable() {
             @Override
@@ -379,8 +348,7 @@ public class MegogoFragment extends BaseFragment {
                     double x = loadedBitMap.getWidth();
 
                     Thread.sleep(200);
-            int currentX = ((LinearLayout) imageView.getParent()).getWidth();
-//                    int currentX = 500;
+                    int currentX = ((LinearLayout) imageView.getParent()).getWidth();
                     double ratio = y / x;
                     final int needY = (int) (currentX * ratio);
                     HANDLER.post(new Runnable() {
@@ -391,18 +359,17 @@ public class MegogoFragment extends BaseFragment {
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         }
                     });
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
 
+        new MyAlertDialogBuilder(context)
+                .setTitleText(channelMegogo.getTitle())
+                .setView(layout)
+                .createAndShow();
 
-
-        builder.setCustomTitle(textView);
-        builder.setView(layout);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     private void addAdditionalText() {
@@ -415,98 +382,66 @@ public class MegogoFragment extends BaseFragment {
 
 
     private void askActivate(final MegogoPts megogoPt) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Активувати?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
         String textMessage;
         if (!"".equals(activeSubscribe) && !megogoPt.getName().contains("пакет")) {
             textMessage = "У вас вже активовано: " + activeSubscribe + "\nПослугу буде змінено на " + megogoPt.getName();
         } else {
             textMessage = megogoPt.getName() + " буде активовано. \nВартість: " + megogoPt.getMonth() + "грн/міс";
         }
-        text.setText(textMessage);
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                activate(megogoPt);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Активувати?")
+                .setMessage(textMessage)
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                    @Override
+                    public void run() {
+                        activate(megogoPt);
+                    }
+                }).createAndShow();
     }
 
     private void activate(final MegogoPts megogoPt) {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                progressDialogShow();
-                if (SendInfo.activateMegogo(megogoPt.getId())) {
-                    DbCache.markMegogoPtsOld();
-                    DbCache.markServicesOld();
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                    progressDialogStopAndShowMessage("10 хвилин активація..", mainLayout);
-                    goTo(new TarifFragment());
-                } else {
-                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
-                }
+        progressDialogShow();
+        if (SendInfo.activateMegogo(megogoPt.getId())) {
+            DbCache.markMegogoPtsOld();
+            DbCache.markServicesOld();
+            try {
+                Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);
+            } catch (InterruptedException ignored) {
             }
-        });
+            progressDialogStopAndShowMessage("10 хвилин активація..", mainLayout);
+            goTo(new TarifFragment());
+        } else {
+            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
+        }
     }
 
     private void askDeActivate(final MegogoPts megogoPt) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Відключити?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(megogoPt.getName() + " буде відключено.");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                deActivate(megogoPt);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Відключити?")
+                .setMessage(megogoPt.getName() + " буде відключено.")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                    @Override
+                    public void run() {
+                        deActivate(megogoPt);
+                    }
+                }).createAndShow();
     }
 
     private void deActivate(final MegogoPts megogoPt) {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                progressDialogShow();
-                if (SendInfo.deActivateMegogo(megogoPt.getId())) {
-                    DbCache.markMountlyFeeOld();
-                    DbCache.markMegogoPtsOld();
-                    DbCache.markServicesOld();
-                    try {Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);} catch (InterruptedException ignored) {}
-                    progressDialogStopAndShowMessage("Відключення..", mainLayout);
-                    goTo(new TarifFragment());
-                } else {
-                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
-                }
+        progressDialogShow();
+        if (SendInfo.deActivateMegogo(megogoPt.getId())) {
+            DbCache.markMountlyFeeOld();
+            DbCache.markMegogoPtsOld();
+            DbCache.markServicesOld();
+            try {
+                Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);
+            } catch (InterruptedException ignored) {
             }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-
+            progressDialogStopAndShowMessage("Відключення..", mainLayout);
+            goTo(new TarifFragment());
+        } else {
+            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
+        }
     }
 }

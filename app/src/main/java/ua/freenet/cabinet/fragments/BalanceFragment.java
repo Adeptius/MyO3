@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,11 +56,6 @@ public class BalanceFragment extends BaseFragment {
     void processIfOk() {
         hideAllViewsInMainScreen();
         animateScreen();
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     private void prepareAllOperations(List<CombinedOperation> operations) {

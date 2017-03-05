@@ -1,13 +1,12 @@
 package ua.freenet.cabinet.dao;
 
 
-
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.model.Phone;
+import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
 public class SendInfo {

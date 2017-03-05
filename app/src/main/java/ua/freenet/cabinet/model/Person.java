@@ -3,6 +3,7 @@ package ua.freenet.cabinet.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import ua.freenet.cabinet.utils.Utilits;
@@ -50,6 +51,7 @@ public class Person {
             }else {
                 current = Double.parseDouble(money);
             }
+//            current = -10;
             email = allInfo.get("email").toString();
             if (email==null) email = "";
             age = Integer.parseInt(allInfo.get("age").toString());

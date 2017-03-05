@@ -1,9 +1,6 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +15,8 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
+import ua.freenet.cabinet.model.Person;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
@@ -25,6 +24,7 @@ public class TurboDayFragment extends BaseFragment {
 
 
     private List<String> statistics;
+    private Person person;
 
     @Override
     void setAllSettings() {
@@ -44,6 +44,7 @@ public class TurboDayFragment extends BaseFragment {
     @Override
     void doInBackground() throws Exception {
         statistics = DbCache.getTurboDayStatistics();
+        person = DbCache.getPerson();
     }
 
     @Override
@@ -63,14 +64,18 @@ public class TurboDayFragment extends BaseFragment {
 
         firstText.setText("Послуга діє з 09:00 до 17:00 години обраного дня та коштує 2,4 грн за день.");
 
-        activateButton.setText("Обрати дату активації");
-
-        activateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                askStartDate();
-            }
-        });
+        if (person.getCurrent() < 2.5){
+            activateButton.setText("Недостатньо коштів");
+            activateButton.setClickable(false);
+        }else {
+            activateButton.setText("Обрати дату активації");
+            activateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    askStartDate();
+                }
+            });
+        }
 
         Collections.reverse(statistics);
 
@@ -86,73 +91,35 @@ public class TurboDayFragment extends BaseFragment {
         activateButton.setVisibility(View.VISIBLE);
     }
 
-
     private void askStartDate() {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
-
-        TextView titleText = new TextView(context);
-        titleText.setText("Дата початку:");
-        titleText.setGravity(Gravity.CENTER);
-        titleText.setTextSize(24);
-        titleText.setTypeface(null, Typeface.BOLD);
-        titleText.setTextColor(COLOR_BLUE);
-
-        builder.setCustomTitle(titleText);
-        builder.setView(datePicker);
-        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                askEndDate(datePicker);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Дата початку:")
+                .setView(datePicker)
+                .setPositiveButtonWithRunnableForHandler("Вибрано", new Runnable() {
+                    @Override
+                    public void run() {
+                        askEndDate(datePicker);
+                    }
+                }).createAndShow();
     }
 
     private void askEndDate(final DatePicker start) {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
-
-        TextView textView = new TextView(context);
-        textView.setText("Дата закінчення:");
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(24);
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setTextColor(COLOR_BLUE);
-
-        builder.setCustomTitle(textView);
-        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                confirmDate(start, datePicker);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Дата закінчення:")
+                .setView(datePicker)
+                .setPositiveButtonWithRunnableForHandler("Вибрано", new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmDate(start, datePicker);
+                    }
+                }).createAndShow();
     }
 
-
     private void confirmDate(final DatePicker start, final DatePicker end) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Все вірно?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-
         int startYear = start.getYear();
         int startMonth = start.getMonth() + 1;
         int startDay = start.getDayOfMonth();
@@ -163,20 +130,10 @@ public class TurboDayFragment extends BaseFragment {
         final String startDate = startYear + "-" + doTwoSymb(startMonth) + "-" + doTwoSymb(startDay);
         final String endDate = endYear + "-" + doTwoSymb(endMonth) + "-" + doTwoSymb(endDay);
 
-        String sb = "Послуга замовляється на період\n" +
-                "з: " + startDate +
-                "\nпо: " + endDate;
-
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb);
-        builder.setView(textLayout);
-
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Все вірно?")
+                .setMessage("Послуга замовляється на період\nз: " + startDate + "\nпо: " + endDate)
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -187,15 +144,6 @@ public class TurboDayFragment extends BaseFragment {
                             progressDialogStopAndShowMessage("Неправильний термін", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    @Override
-    public void onClick(View v) {
-
+                }).createAndShow();
     }
 }

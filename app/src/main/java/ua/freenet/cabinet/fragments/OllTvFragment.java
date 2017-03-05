@@ -1,11 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,10 +21,9 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.ChannelOllTv;
-import ua.freenet.cabinet.utils.Utilits;
 
 
-public class OllTvFragment  extends BaseFragment {
+public class OllTvFragment  extends BaseFragment implements View.OnClickListener {
 
     private Button buttonStart;
     private Button buttonOptimal;

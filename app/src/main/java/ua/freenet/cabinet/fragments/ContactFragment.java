@@ -1,6 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -19,6 +20,7 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.City;
 import ua.freenet.cabinet.model.Person;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 public class ContactFragment extends BaseFragment {
 
@@ -237,49 +239,45 @@ public class ContactFragment extends BaseFragment {
             for (int i = 0; i < cloneForPhones.length; i++) {
                 cloneForPhones[i] = phones.get(i).trim();
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            TextView titleView = new TextView(context);
-            titleView.setText("Оберіть номер");
-            titleView.setGravity(Gravity.CENTER);
-            titleView.setTextSize(24);
-            titleView.setTypeface(null, Typeface.BOLD);
-            titleView.setTextColor(COLOR_BLUE);
-            builder.setCustomTitle(titleView);
-            builder.setItems(cloneForPhones, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int item) {
-                    String number = phones.get(item);
-                    number = number.replaceAll("\\(","");
-                    number = number.replaceAll("\\)","");
-                    number = number.replaceAll(" ","");
-                    number = number.replaceAll("-","");
-                    Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + number));
-                    startActivity(intent1);
-                    dialog.dismiss();
-                }
-            });
-            builder.setCancelable(true);
-            builder.show();
+
+            new MyAlertDialogBuilder(context)
+                    .setTitleText("Оберіть номер")
+                    .setItems(cloneForPhones, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String number = phones.get(which);
+                            number = number.replaceAll("\\(","");
+                            number = number.replaceAll("\\)","");
+                            number = number.replaceAll(" ","");
+                            number = number.replaceAll("-","");
+                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + number));
+                            startActivity(intent1);
+                            dialog.dismiss();
+                        }
+                    }).createAndShow();
         }
     }
 
     private void sendEmail(String recipient){
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                 "mailto",recipient, null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Угода " + person.getCard());
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Договір " + person.getCard());
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
     private void showCoordinatesOnMap(String coordinates){
+        try{
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("geo:0,0?q=" + coordinates));
         startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View v) {
-
+        }catch (ActivityNotFoundException e){
+            new MyAlertDialogBuilder(context)
+                    .setTitleText("Помилка")
+                    .setMessage("На пристрої не знайдено встановлених мап")
+                    .setPositiveButtonForClose("ОК")
+                    .createAndShow();
+        }
     }
 }
 

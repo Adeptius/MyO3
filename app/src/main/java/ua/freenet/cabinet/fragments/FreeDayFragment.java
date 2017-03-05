@@ -1,11 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -23,6 +19,7 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.Servise;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
@@ -95,12 +92,13 @@ public class FreeDayFragment extends BaseFragment {
 
         StringBuilder leftMessage = new StringBuilder();
         if (availableFreeDays == 0) {
-            if (!(numberOfFreeDays == 0)){
+            if (!(numberOfFreeDays == 0)) {
                 leftMessage.append("Ви вже використали всі вільні дні у цьому місяці.");
             }
-        }else{
+        } else {
             activateButton.setVisibility(View.VISIBLE);
-        } if (availableFreeDays == 1) {
+        }
+        if (availableFreeDays == 1) {
             leftMessage.append("Вам доступен ще один вільний день.");
         } else if (availableFreeDays == 2) {
             leftMessage.append("Вам доступно ще два вільних дні.");
@@ -114,8 +112,8 @@ public class FreeDayFragment extends BaseFragment {
 
         boolean stopped = false;
         for (Servise service : services) {
-            if (service.getType() == 5){
-               stopped = service.isStopped();
+            if (service.getType() == 5) {
+                stopped = service.isStopped();
             }
         }
 
@@ -131,7 +129,7 @@ public class FreeDayFragment extends BaseFragment {
 
         Collections.reverse(statistics);
 
-        if (!statistics.isEmpty()){
+        if (!statistics.isEmpty()) {
             textStatisticsTitle.setVisibility(View.VISIBLE);
             for (String statistic : statistics) {
                 TextView textView = new TextView(context);
@@ -140,82 +138,70 @@ public class FreeDayFragment extends BaseFragment {
                 layout.addView(textView, MATCH_WRAP);
             }
         }
-        if (statistics.size()>0){
+        if (statistics.size() > 0) {
             String statistic = statistics.get(0);
-            statistic = statistic.substring(statistic.indexOf("до ")+3);
-            if (isFreeDayIsActive(statistic)){
+            statistic = statistic.substring(statistic.indexOf("до ") + 3);
+            if (isFreeDayIsActive(statistic)) {
                 activateButton.setClickable(false);
                 activateButton.setText("Послуга вже активована");
-                try{
+                try {
                     Date date = getDate(statistic + ":00");
                     long timeEnable = date.getTime();
                     long timeCurrent = new Date().getTime();
-                    int hoursLeft = (int) (timeEnable-timeCurrent)/1000/60/60;
+                    int hoursLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60;
                     activeText.setText("Залишилось " + hoursLeft + " годин");
                     activeText.setVisibility(View.VISIBLE);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-        if (stopped){
+        if (stopped) {
             activateButton.setText("Інтернет призупинений");
             activateButton.setClickable(false);
         }
     }
 
-    public static Date getDate(String date){
+    public static Date getDate(String date) {
         // string in format dd-mm-yyyy hh-mm-ss
-        int year = Integer.parseInt(date.substring(6,10));
-        int month = Integer.parseInt(date.substring(3,5));
-        int day = Integer.parseInt(date.substring(0,2));
-        int hour = Integer.parseInt(date.substring(11,13));
-        int minute = Integer.parseInt(date.substring(14,16));
-        int seconds = Integer.parseInt(date.substring(17,19));
+        int year = Integer.parseInt(date.substring(6, 10));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int hour = Integer.parseInt(date.substring(11, 13));
+        int minute = Integer.parseInt(date.substring(14, 16));
+        int seconds = Integer.parseInt(date.substring(17, 19));
         @SuppressWarnings("deprecation")
-        Date date2 = new Date(year-1900,month-1,day,hour,minute,seconds);
+        Date date2 = new Date(year - 1900, month - 1, day, hour, minute, seconds);
         return date2;
     }
 
-    public boolean isFreeDayIsActive(String date){
+    public boolean isFreeDayIsActive(String date) {
         System.out.println(date);
-        int year = Integer.parseInt(date.substring(6,10));
-        int month = Integer.parseInt(date.substring(3,5));
-        int day = Integer.parseInt(date.substring(0,2));
-        int hour = Integer.parseInt(date.substring(11,13));
-        int minute = Integer.parseInt(date.substring(14,16));
+        int year = Integer.parseInt(date.substring(6, 10));
+        int month = Integer.parseInt(date.substring(3, 5));
+        int day = Integer.parseInt(date.substring(0, 2));
+        int hour = Integer.parseInt(date.substring(11, 13));
+        int minute = Integer.parseInt(date.substring(14, 16));
         @SuppressWarnings("deprecation")
-        Date date2 = new Date(year-1900,month-1,day,hour,minute);
+        Date date2 = new Date(year - 1900, month - 1, day, hour, minute);
         long timeActive = date2.getTime();
         long timeNow = new Date().getTime();
         return timeNow < timeActive;
     }
 
-    public void activating(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Активувати?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Послуга активується до 10 хвилин.");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                activateNow();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    public void activating() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Активувати?")
+                .setMessage("Послуга активується до 10 хвилин.")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                    @Override
+                    public void run() {
+                        activateNow();
+                    }
+                }).createAndShow();
     }
 
-    public void activateNow(){
+    public void activateNow() {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -232,24 +218,13 @@ public class FreeDayFragment extends BaseFragment {
         final HashMap<String, String> map = new HashMap<>();
         map.put("date", date);
         map.put("days", "1");
-
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                progressDialogShow();
-                if (SendInfo.activateFreeDay(map)) {
-                    DbCache.markFreeDayInfoOld();
-                    DbCache.markFreeDayStatisticsOld();
-                    progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
-                } else {
-                    progressDialogStopAndShowMessage("Послуга вже активна.", mainLayout);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-
+        progressDialogShow();
+        if (SendInfo.activateFreeDay(map)) {
+            DbCache.markFreeDayInfoOld();
+            DbCache.markFreeDayStatisticsOld();
+            progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
+        } else {
+            progressDialogStopAndShowMessage("Послуга вже активна.", mainLayout);
+        }
     }
 }

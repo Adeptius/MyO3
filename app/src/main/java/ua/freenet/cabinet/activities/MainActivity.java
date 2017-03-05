@@ -18,12 +18,10 @@ import android.support.v4.widget.ViewDragHelper;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,6 +32,7 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.fragments.BalanceFragment;
 import ua.freenet.cabinet.fragments.BaseFragment;
 import ua.freenet.cabinet.fragments.BonusFragment;
+import ua.freenet.cabinet.fragments.ContactFragment;
 import ua.freenet.cabinet.fragments.CreditFragment;
 import ua.freenet.cabinet.fragments.DivanTvFragment;
 import ua.freenet.cabinet.fragments.DocumentFragment;
@@ -47,7 +46,6 @@ import ua.freenet.cabinet.fragments.NewsFragment;
 import ua.freenet.cabinet.fragments.OllTvFragment;
 import ua.freenet.cabinet.fragments.OnOffInternet;
 import ua.freenet.cabinet.fragments.PayFragment;
-import ua.freenet.cabinet.fragments.ContactFragment;
 import ua.freenet.cabinet.fragments.TarifFragment;
 import ua.freenet.cabinet.fragments.TurboDayFragment;
 import ua.freenet.cabinet.model.Person;
@@ -215,7 +213,7 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
+                fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
         });
     }
@@ -288,6 +286,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
 }

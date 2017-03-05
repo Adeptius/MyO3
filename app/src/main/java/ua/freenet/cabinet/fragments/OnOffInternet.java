@@ -92,9 +92,4 @@ public class OnOffInternet extends BaseFragment {
             }
         });
     }
-
-    @Override
-    public void onClick(View v) {
-
-    }
 }

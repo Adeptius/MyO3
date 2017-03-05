@@ -240,7 +240,6 @@ public class DbCache {
         megogoPtsCreatedTime = FUTURE_TIME;
     }
 
-
     private static List<FriendInvite> friendInvites;
     private static long friendInvitesCreatedTime;
 

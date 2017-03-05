@@ -21,6 +21,7 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.BonusServiceSpending;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Utilits;
 
 public class BonusFragment extends BaseFragment {
@@ -52,7 +53,7 @@ public class BonusFragment extends BaseFragment {
         boolean[] boo = DbCache.getBonusesStatus();
         signedPublicCard = boo[0];
         confirmedBonus = boo[1];
-        if (signedPublicCard && confirmedBonus){
+        if (signedPublicCard && confirmedBonus) {
             bonuses = DbCache.getCountOfBonuses();
             serviceSpendings = DbCache.getBonusesSpending();
         }
@@ -66,7 +67,7 @@ public class BonusFragment extends BaseFragment {
     }
 
     private void draw() {
-        if (signedPublicCard && confirmedBonus){ // если всё подписано
+        if (signedPublicCard && confirmedBonus) { // если всё подписано
             View layout = LayoutInflater.from(context).inflate(R.layout.item_bonus_main, null);
             mainLayout.addView(layout);
 
@@ -122,7 +123,7 @@ public class BonusFragment extends BaseFragment {
 
                 TextView coment = (TextView) spendingLayout.findViewById(R.id.coment);
                 coment.setText("Вже сплачено бонусами: " + serviceSpending.getBonus() + " грн");
-                if (serviceSpending.getBonus() == 0){
+                if (serviceSpending.getBonus() == 0) {
                     coment.setVisibility(View.GONE);
                 }
 
@@ -140,7 +141,7 @@ public class BonusFragment extends BaseFragment {
                 if (bonuses == 0) payButton.setVisibility(View.GONE);
                 mainLayout.addView(spendingLayout);
             }
-        }else if (signedPublicCard) { // если подписано, но бонусы не подключены
+        } else if (signedPublicCard) { // если подписано, но бонусы не подключены
             View activateLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_activate, null);
 
             Button activateButton = (Button) activateLayout.findViewById(R.id.button_activate);
@@ -164,7 +165,7 @@ public class BonusFragment extends BaseFragment {
             mainLayout.addView(activateLayout);
 
 
-        }else if (!confirmedBonus){ // если договор не подписан.
+        } else if (!confirmedBonus) { // если договор не подписан.
             View iditeVCoaLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_idite_v_coa, null);
 
             Button button = (Button) iditeVCoaLayout.findViewById(R.id.button_show_dial);
@@ -182,28 +183,10 @@ public class BonusFragment extends BaseFragment {
     }
 
     private void askActivate() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Активація");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Ви погоджуєтесь з правилами?");
-        builder.setView(textLayout);
-
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Активація")
+                .setMessage("Ви погоджуєтесь з правилами?")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -214,16 +197,7 @@ public class BonusFragment extends BaseFragment {
                             progressDialogWaitStopShowMessageReload("Трапилась помилка", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    @Override
-    public void onClick(View v) {
-
+                }).createAndShow();
     }
 
     public void askHowMuch(final int canPay, final String id) {
@@ -261,18 +235,11 @@ public class BonusFragment extends BaseFragment {
         hlayout.addView(after);
         vlayout.addView(hlayout);
 
-        final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(context)
-                .setView(vlayout)
-                .setPositiveButton("Сплатити", null) //Set to null. We override the onclick
-                .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(final DialogInterface dialog) {
-                Button button = ((android.app.AlertDialog) dialog).getButton(android.app.AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
+        final MyAlertDialogBuilder dialog = new MyAlertDialogBuilder(context);
+        dialog.setView(vlayout)
+                .createShowAndSetPositiveForExecutor("Сплатити", new Runnable() {
                     @Override
-                    public void onClick(View view) {
+                    public void run() {
                         int shoosenPay = Integer.parseInt(text.getText().toString());
                         if (shoosenPay > canPay || shoosenPay < 1) {
                             makeSimpleSnackBar("Ця сумма неправильна", vlayout);
@@ -281,37 +248,19 @@ public class BonusFragment extends BaseFragment {
                             map.put("bonus", String.valueOf(shoosenPay));
                             map.put("s_id", id);
                             map.put("p_id", "");
-
-                            EXECUTOR.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressDialogShow();
-                                    if (SendInfo.spendBonuses(map)){ // отправляю запрос
-                                        DbCache.markCountOfBonusesOld();
-                                        DbCache.markBonusesSpendingOld();
-                                        progressDialogWaitStopShowMessageReload("Сплачено!", vlayout);
-                                        HANDLER.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                    }else { // если вернулась неудача
-                                        HANDLER.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
-                                    }
-                                }
-                            });
+                            progressDialogShow();
+                            if (SendInfo.spendBonuses(map)) { // отправляю запрос
+                                DbCache.markPersonOld();
+                                DbCache.markCountOfBonusesOld();
+                                DbCache.markBonusesSpendingOld();
+                                progressDialogWaitStopShowMessageReload("Сплачено!", vlayout);
+                                dialog.closeWithHandler();
+                            } else { // если вернулась неудача
+                                dialog.closeWithHandler();
+                                progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
+                            }
                         }
                     }
                 });
-            }
-        });
-        dialog.show();
     }
 }

@@ -2,11 +2,12 @@ package ua.freenet.cabinet.model;
 
 
 import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.Integer.*;
+import static java.lang.Integer.parseInt;
 
 public class Servise {
 

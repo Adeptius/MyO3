@@ -2,13 +2,11 @@ package ua.freenet.cabinet.fragments;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +18,9 @@ import android.widget.TextView;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
-import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.model.Person;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
+import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
 public class PayFragment extends BaseFragment {
@@ -39,8 +38,6 @@ public class PayFragment extends BaseFragment {
 
     @Override
     void init() {
-
-
     }
 
     @Override
@@ -175,7 +172,6 @@ public class PayFragment extends BaseFragment {
     }
 
     public void askHowMuch(final String system) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -200,62 +196,54 @@ public class PayFragment extends BaseFragment {
         layout.addView(after);
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        builder.setCancelable(true);
-        builder.setView(layout);
-        builder.setPositiveButton("Поповнити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                String url, key1,key2,value1,value2;
-                if("iPayView".equals(system)){
-                    url = "https://paygate.freenet.ua/iPay/sign.php";
-                    key1 = "card";
-                    key2 = "add";
-                    value1 = Settings.getCurrentLogin();
-                    value2 = text.getText().toString();
-                }else if("eCommerceConnect".equals(system)){
-                    url = "https://paygate.freenet.ua/ecommerce/sign.php";
-                    key1 = "id2";
-                    key2 = "add";
-                    value1 = String.valueOf(person.getId());
-                    value2 = text.getText().toString();
-                }else if("payMaster".equals(system)){
-                    url = "https://paygate.freenet.ua/webmoney/init.php";
-                    key1 = "pid";
-                    key2 = "add";
-                    value1 = String.valueOf(person.getId());
-                    value2 = text.getText().toString();
-                }else {
-                    url = "https://paygate.freenet.ua/platon/init.php";
-                    key1 = "account";
-                    key2 = "p_id";
-                    String key3 = "amount";
-                    value1 = Settings.getCurrentLogin();
-                    value2 = String.valueOf(person.getId());
-                    String value3 = text.getText().toString();
 
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/platon" +
-                            ".html?url=%s&%s=%s&%s=%s&%s=%s", url, key1, value1, key2, value2, key3, value3);
-                    System.out.println(formedUrl);
-                    i.setData(Uri.parse(formedUrl));
-                    startActivity(i);
-                }
+        new MyAlertDialogBuilder(context)
+                .setView(layout)
+                .setPositiveButtonWithRunnableForExecutor("Поповнити", new Runnable() {
+                    @Override
+                    public void run() {
+                        imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                        String url, key1,key2,value1,value2;
+                        if("iPayView".equals(system)){
+                            url = "https://paygate.freenet.ua/iPay/sign.php";
+                            key1 = "card";
+                            key2 = "add";
+                            value1 = Settings.getCurrentLogin();
+                            value2 = text.getText().toString();
+                        }else if("eCommerceConnect".equals(system)){
+                            url = "https://paygate.freenet.ua/ecommerce/sign.php";
+                            key1 = "id2";
+                            key2 = "add";
+                            value1 = String.valueOf(person.getId());
+                            value2 = text.getText().toString();
+                        }else if("payMaster".equals(system)){
+                            url = "https://paygate.freenet.ua/webmoney/init.php";
+                            key1 = "pid";
+                            key2 = "add";
+                            value1 = String.valueOf(person.getId());
+                            value2 = text.getText().toString();
+                        }else {
+                            url = "https://paygate.freenet.ua/platon/init.php";
+                            key1 = "account";
+                            key2 = "p_id";
+                            String key3 = "amount";
+                            value1 = Settings.getCurrentLogin();
+                            value2 = String.valueOf(person.getId());
+                            String value3 = text.getText().toString();
 
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/redirectToPost" +
-                                      ".html?url=%s&%s=%s&%s=%s", url, key1, value1, key2, value2);
-                i.setData(Uri.parse(formedUrl));
-                startActivity(i);
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/platon" +
+                                    ".html?url=%s&%s=%s&%s=%s&%s=%s", url, key1, value1, key2, value2, key3, value3);
+                            i.setData(Uri.parse(formedUrl));
+                            startActivity(i);
+                        }
 
-    @Override
-    public void onClick(View v) {
-
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/redirectToPost" +
+                                ".html?url=%s&%s=%s&%s=%s", url, key1, value1, key2, value2);
+                        i.setData(Uri.parse(formedUrl));
+                        startActivity(i);
+                    }
+                }).createAndShow();
     }
 }

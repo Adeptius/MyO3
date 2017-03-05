@@ -17,7 +17,7 @@ import ua.freenet.cabinet.model.Servise;
 import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
-import static ua.freenet.cabinet.utils.Utilits.*;
+import static ua.freenet.cabinet.utils.Utilits.log;
 
 class Checker extends Thread {
 

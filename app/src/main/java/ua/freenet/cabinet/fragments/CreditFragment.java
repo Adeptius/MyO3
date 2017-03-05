@@ -1,10 +1,6 @@
 package ua.freenet.cabinet.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +10,7 @@ import java.util.Date;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Utilits;
 
 
@@ -50,7 +47,7 @@ public class CreditFragment extends BaseFragment {
         if (garantServiceEnabled) {
             creditDays = 10;
         }
-        descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на "+creditDays+" діб при заборгованості";
+        descriptionText = "Безкоштовна послуга, яка вмикає інтернет строком на " + creditDays + " діб при заборгованості";
         updateTitle();
         draw();
         animateScreen();
@@ -59,7 +56,7 @@ public class CreditFragment extends BaseFragment {
     private void draw() {
         TextView textView = getTextView(R.id.text_title);
         StringBuilder sb = new StringBuilder();
-        sb.append("Будь-ласка, погасіть заборгованість у строк ");
+        sb.append("Після активації, будь-ласка, погасіть заборгованість у строк ");
         if (garantServiceEnabled) {
             sb.append("десяти");
         } else {
@@ -87,11 +84,11 @@ public class CreditFragment extends BaseFragment {
                 int daysLeft = (int) (timeEnable - timeCurrent) / 1000 / 60 / 60 / 24;
                 activeText.setText("Залишилось " + daysLeft + " дні, " + hoursLeft + " годин");
                 activeText.setVisibility(View.VISIBLE);
-                if (garantServiceEnabled){
-                    if (daysLeft==9 && hoursLeft > 22)
+                if (garantServiceEnabled) {
+                    if (daysLeft == 9 && hoursLeft > 22)
                         ifCreditLoss.setText("Якщо доступ не з'явився через 10 хвилин - перезавантажте роутер");
-                }else {
-                    if (daysLeft==4 && hoursLeft > 22)
+                } else {
+                    if (daysLeft == 4 && hoursLeft > 22)
                         ifCreditLoss.setText("Якщо доступ не з'явився через 10 хвилин - перезавантажте роутер");
                 }
             } catch (Exception e) {
@@ -113,6 +110,9 @@ public class CreditFragment extends BaseFragment {
                     showReActivateMessage();
                 }
             });
+        } else if ("enabling".equals(creditStatus)) {
+            activateButton.setText("Триває активація...");
+            activateButton.setClickable(false);
         } else {
             activateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,87 +123,47 @@ public class CreditFragment extends BaseFragment {
         }
     }
 
-
     private void showReActivateMessage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Відновити?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Вартість відновлення кредиту довіри - 30 грн. Кошти мають бути на рахунку.");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                reActivateNow();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Відновити?")
+                .setMessage("Вартість відновлення кредиту довіри - 30 грн. Кошти мають бути на рахунку.")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                    @Override
+                    public void run() {
+                        reActivateNow();
+                    }
+                }).createAndShow();
     }
 
     private void activate() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Активувати?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Послуга активується до 10 хвилин.");
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                activateNow();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Активувати?")
+                .setMessage("Послуга активується до 10 хвилин.")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                    @Override
+                    public void run() {
+                        activateNow();
+                    }
+                }).createAndShow();
     }
 
     private void reActivateNow() {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                progressDialogShow();
-                if (SendInfo.reActivateCredit()) {
-                    DbCache.markCreditStatusOld();
-                    progressDialogWaitStopShowMessageReload("Зачекайте, послуга відновлюється", mainLayout);
-                } else {
-                    progressDialogStopAndShowMessage("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
-                }
-            }
-        });
+        progressDialogShow();
+        if (SendInfo.reActivateCredit()) {
+            DbCache.markCreditStatusOld();
+            progressDialogWaitStopShowMessageReload("Зачекайте, послуга відновлюється", mainLayout);
+        } else {
+            progressDialogStopAndShowMessage("Трапилась помилка. Можливо недостатньо коштів", mainLayout);
+        }
     }
 
     private void activateNow() {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                progressDialogShow();
-                if (SendInfo.activateCredit()) {
-                    DbCache.markCreditStatusOld();
-                    progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
-                } else {
-                    progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-
+        progressDialogShow();
+        if (SendInfo.activateCredit()) {
+            DbCache.markCreditStatusOld();
+            progressDialogWaitStopShowMessageReload("10 хвилин активація..", mainLayout);
+        } else {
+            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
+        }
     }
 }

@@ -21,8 +21,9 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.FriendInvite;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
-public class FriendFragment  extends BaseFragment  {
+public class FriendFragment extends BaseFragment {
 
     Button newFriendButton;
     List<FriendInvite> invites;
@@ -48,14 +49,18 @@ public class FriendFragment  extends BaseFragment  {
         hideAllViewsInMainScreen();
     }
 
-    private void showNewFriendForm() {
-        TextView titleView = new TextView(context);
-        titleView.setText("Хто ваш друг?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
+    @Override
+    void doInBackground() throws Exception {
+        invites = DbCache.getFriendInvites();
+    }
 
+    @Override
+    void processIfOk() {
+        draw();
+        animateScreen();
+    }
+
+    private void showNewFriendForm() {
         final View layout = LayoutInflater.from(context).inflate(R.layout.alert_friend_new, null);
         final EditText editSurname = (EditText) layout.findViewById(R.id.friend_familia);
         final EditText editName = (EditText) layout.findViewById(R.id.friend_name);
@@ -65,9 +70,9 @@ public class FriendFragment  extends BaseFragment  {
         editSurname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editSurname.getText().toString().equals("Прізвище")){
+                if (hasFocus && editSurname.getText().toString().equals("Прізвище")) {
                     editSurname.setText("");
-                }else if (!hasFocus &&  editSurname.getText().toString().equals("")){
+                } else if (!hasFocus && editSurname.getText().toString().equals("")) {
                     editSurname.setText("Прізвище");
                 }
             }
@@ -75,9 +80,9 @@ public class FriendFragment  extends BaseFragment  {
         editFatherName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editFatherName.getText().toString().equals("По-батькові")){
+                if (hasFocus && editFatherName.getText().toString().equals("По-батькові")) {
                     editFatherName.setText("");
-                }else if (!hasFocus &&  editFatherName.getText().toString().equals("")){
+                } else if (!hasFocus && editFatherName.getText().toString().equals("")) {
                     editFatherName.setText("По-батькові");
                 }
             }
@@ -85,9 +90,9 @@ public class FriendFragment  extends BaseFragment  {
         editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editName.getText().toString().equals("Ім'я")){
+                if (hasFocus && editName.getText().toString().equals("Ім'я")) {
                     editName.setText("");
-                }else if (!hasFocus &&  editName.getText().toString().equals("")){
+                } else if (!hasFocus && editName.getText().toString().equals("")) {
                     editName.setText("Ім'я");
                 }
             }
@@ -95,9 +100,9 @@ public class FriendFragment  extends BaseFragment  {
         editPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editPhone.getText().toString().equals("Телефон")){
+                if (hasFocus && editPhone.getText().toString().equals("Телефон")) {
                     editPhone.setText("");
-                }else if (!hasFocus &&  editPhone.getText().toString().equals("")){
+                } else if (!hasFocus && editPhone.getText().toString().equals("")) {
                     editPhone.setText("Телефон");
                 }
             }
@@ -105,107 +110,78 @@ public class FriendFragment  extends BaseFragment  {
         editAdress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editAdress.getText().toString().equals("Адреса")){
+                if (hasFocus && editAdress.getText().toString().equals("Адреса")) {
                     editAdress.setText("");
-                }else if (!hasFocus &&  editAdress.getText().toString().equals("")){
+                } else if (!hasFocus && editAdress.getText().toString().equals("")) {
                     editAdress.setText("Адреса");
                 }
             }
         });
 
-        final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setCustomTitle(titleView)
+        final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
+        builder.setTitleText("Хто ваш друг?")
                 .setView(layout)
-                .setPositiveButton("Привести", null) //Set to null. We override the onclick
-                .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(final DialogInterface dialog) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
+                .createShowAndSetPositiveForExecutor("Привести", new Runnable() {
                     @Override
-                    public void onClick(View view) {
+                    public void run() {
                         String surname = editSurname.getText().toString();
                         String name = editName.getText().toString();
                         String fatherName = editFatherName.getText().toString();
                         String phone = editPhone.getText().toString();
                         String adress = editAdress.getText().toString();
 
-                        if (phone.length() == 10){
-                            phone = "+38"+phone;
-                        }else if (phone.length() == 11){
-                            phone = "+3"+phone;
-                        }else if (phone.length() == 12){
-                            phone = "+"+phone;
+                        if (phone.length() == 10) {
+                            phone = "+38" + phone;
+                        } else if (phone.length() == 11) {
+                            phone = "+3" + phone;
+                        } else if (phone.length() == 12) {
+                            phone = "+" + phone;
                         }
 
                         if ("".equals(surname) || "Прізвище".equals(surname) ||
                                 "".equals(name) || "Ім'я".equals(name) ||
                                 "".equals(fatherName) || "По-батькові".equals(fatherName) ||
                                 "".equals(phone) || "Телефон".equals(phone) ||
-                                "".equals(adress)  || "Адреса".equals(adress)){
+                                "".equals(adress) || "Адреса".equals(adress)) {
                             makeSimpleSnackBar("Необхідно заповнити всі поля", layout);
-                        }else if (phone.length() != 13){
+                        } else if (phone.length() != 13) {
                             makeSimpleSnackBar("Неправильний номер телефону", layout);
-                        }else {
-
-                            try{
+                        } else {
+                            try {
                                 surname = URLEncoder.encode(surname, "UTF-8");
                                 name = URLEncoder.encode(name, "UTF-8");
                                 fatherName = URLEncoder.encode(fatherName, "UTF-8");
                                 adress = URLEncoder.encode(adress, "UTF-8");
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 
                             final HashMap<String, String> map = new HashMap<>();
                             map.put("surname", surname);
                             map.put("name", name);
-                            map.put("fathername",fatherName);
+                            map.put("fathername", fatherName);
                             map.put("phone", phone);
                             map.put("address", adress);
                             map.put("email", "");
 
                             progressDialogShow();
-                            EXECUTOR.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String result = SendInfo.bringNewFriend(map);
-                                    if ("Заявка створена!".equals(result)) {
-                                        DbCache.markFriendInvitesOld();
-                                        HANDLER.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        progressDialogWaitStopShowMessageReload("Заявка створена!", mainLayout);
-                                    }else if ("Заявка по цьому номеру вже існує.".equals(result)){
-                                        HANDLER.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                        progressDialogStopAndShowMessage("Заявка по цьому номеру вже існує", layout);
-                                    }else {
-                                        progressDialogStopAndShowMessage(result, layout);
-                                    }
-                                }
-                            });
+
+                            String result = SendInfo.bringNewFriend(map);
+                            if ("Заявка створена!".equals(result)) {
+                                DbCache.markFriendInvitesOld();
+                                builder.closeWithHandler();
+                                progressDialogWaitStopShowMessageReload("Заявка створена!", mainLayout);
+                            } else if ("Заявка по цьому номеру вже існує.".equals(result)) {
+                                builder.closeWithHandler();
+                                progressDialogStopAndShowMessage("Заявка по цьому номеру вже існує", layout);
+                            } else {
+                                progressDialogStopAndShowMessage(result, layout);
+                            }
                         }
                     }
                 });
-            }
-        });
-        dialog.show();
     }
 
-    @Override
-    void doInBackground() throws Exception {
-        invites = DbCache.getFriendInvites();
-    }
 
     private void draw() {
         LinearLayout layout_for_invites = getLayout(R.id.layout_for_invites);
@@ -219,9 +195,9 @@ public class FriendFragment  extends BaseFragment  {
             TextView phone = (TextView) layout.findViewById(R.id.text_phone);
 
             int color = Color.parseColor("#2E7D32");
-            if ("У розгляді".equals(invite.getStatus())){
+            if ("У розгляді".equals(invite.getStatus())) {
                 color = Color.parseColor("#0277BD");
-            }else if ("Cкасовано".equals(invite.getStatus())){
+            } else if ("Cкасовано".equals(invite.getStatus())) {
                 color = Color.parseColor("#9E9E9E");
             }
             date.setText(invite.getDate());
@@ -236,22 +212,8 @@ public class FriendFragment  extends BaseFragment  {
             phone.setTextColor(color);
             layout_for_invites.addView(layout);
         }
-        if (invites.size()==0){
+        if (invites.size() == 0) {
             layout_for_invites.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    void processIfOk() {
-        draw();
-        animateScreen();
-    }
-
-    @Override
-    public void onClick(View v) {
-
-
-    }
-
-
 }

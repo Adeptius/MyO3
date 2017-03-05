@@ -193,12 +193,6 @@ public class NewsFragment extends BaseFragment {
         }
     }
 
-
-    @Override
-    public void onClick(View view) {
-
-    }
-
     private List<News> getAllNews(String urlAccii, String urlnews) throws Exception {
         Document doc = Jsoup.connect(urlAccii).get();
         Elements post = doc.body().getElementsByClass("post");

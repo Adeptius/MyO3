@@ -1,6 +1,5 @@
 package ua.freenet.cabinet.fragments;
 
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -31,24 +30,22 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import ua.freenet.cabinet.R;
-import ua.freenet.cabinet.activities.LoginActivity;
 import ua.freenet.cabinet.activities.MainActivity;
 import ua.freenet.cabinet.model.ChannelOllTv;
 import ua.freenet.cabinet.utils.Utilits;
 
-import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
 import static ua.freenet.cabinet.utils.Utilits.log;
 
-public abstract class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment extends Fragment{
 
     protected Handler HANDLER = Utilits.HANDLER;
     protected ExecutorService EXECUTOR = Utilits.EXECUTOR;
     protected View baseView;
     protected Context context;
     protected LinearLayout mainLayout;
-    protected final int COLOR_BLUE = Color.parseColor("#1976D2");
-    protected final int COLOR_GREEN = Color.parseColor("#388E3C");
-    protected final int COLOR_RED = Color.RED;
+    public static final int COLOR_BLUE = Color.parseColor("#1976D2");
+    public static final int COLOR_GREEN = Color.parseColor("#388E3C");
+    public static final int COLOR_RED = Color.RED;
     protected ProgressBar progressBar;
     protected ProgressDialog progressDialog;
     protected boolean hardwareIsHidden = true;
@@ -204,7 +201,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected void goTo(BaseFragment fragment) {
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, fragment).addToBackStack("tag").commit();
+        fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
     abstract void doInBackground() throws Exception;
@@ -295,18 +292,18 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                 progressDialog.dismiss();
             }
         });
-        if (!message.equals("")){
-            makeSimpleSnackBar(message,view);
+        if (!message.equals("")) {
+            makeSimpleSnackBar(message, view);
         }
     }
 
     protected void progressDialogWaitStopShowMessageReload(String message, View view) {
+        makeSimpleSnackBar(message, view);
         try {
             Thread.sleep(TIME_TO_WAIT_BEFORE_UPDATE);
         } catch (InterruptedException ignored) {
         }
         hideProgressDialog();
-        makeSimpleSnackBar(message, view);
         reloadFragment();
     }
 
@@ -352,6 +349,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     v.requestLayout();
                 }
             }
+
             @Override
             public boolean willChangeBounds() {
                 return true;
@@ -359,14 +357,14 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         };
 
         // 3dp/ms
-        int duration = initialHeight/3;
+        int duration = initialHeight / 3;
         a.setDuration(duration);
 
         v.startAnimation(a);
         return duration;
     }
 
-    protected void removeAllViewsAndCollapse(final View view){
+    protected void removeAllViewsAndCollapse(final View view) {
         final int timeAnimation = collapse(view);
         EXECUTOR.submit(new Runnable() {
             @Override
@@ -389,7 +387,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
     }
 
 
-    protected void addHardWareRequirementsToMainScreenFor(final String tvType){
+    protected void addHardWareRequirementsToMainScreenFor(final String tvType) {
         final String ollTvPackageName = "tv.oll.app";
         final String megogoPackageName = "com.megogo.application";
         final String divanTvPackageName = "divan.tv.DivanTV";
@@ -399,7 +397,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         final LinearLayout hideLayout = (LinearLayout) hardware.findViewById(R.id.lay_hide);
         final Button downloadButton = (Button) hardware.findViewById(R.id.button_download);
 
-        if (tvType.equals("megogo")){
+        if (tvType.equals("megogo")) {
             LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
             hideLayout.removeView(stb);
         }
@@ -413,11 +411,11 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
                         String currentPackage = "";
-                        if (tvType.equals("oll")){
+                        if (tvType.equals("oll")) {
                             currentPackage = ollTvPackageName;
-                        }else if (tvType.equals("megogo")){
+                        } else if (tvType.equals("megogo")) {
                             currentPackage = megogoPackageName;
-                        }else if (tvType.equals("divan")){
+                        } else if (tvType.equals("divan")) {
                             currentPackage = divanTvPackageName;
                         }
 
@@ -429,7 +427,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                     }
                 });
 
-                if (hardwareIsHidden){
+                if (hardwareIsHidden) {
                     hideButton.setText("Сховати");
                     hardwareIsHidden = false;
                     EXECUTOR.submit(new Runnable() {
@@ -450,6 +448,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                                                     : (int) (targetHeight * interpolatedTime);
                                             hideLayout.requestLayout();
                                         }
+
                                         @Override
                                         public boolean willChangeBounds() {
                                             return true;
@@ -466,7 +465,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
                                         @Override
                                         public void onAnimationEnd(Animation animation) {
-                                            Animation anim = AnimationUtils.loadAnimation(context,R.anim.splash_screen_alpha);
+                                            Animation anim = AnimationUtils.loadAnimation(context, R.anim.splash_screen_alpha);
                                             hideLayout.startAnimation(anim);
                                         }
 
@@ -480,10 +479,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
                             });
                         }
                     });
-                }else {
+                } else {
                     hardwareIsHidden = true;
                     hideButton.setText("Показати необхідне обладнання");
-                    Animation anim = AnimationUtils.loadAnimation(context,R.anim.splash_screen_alpha_gone);
+                    Animation anim = AnimationUtils.loadAnimation(context, R.anim.splash_screen_alpha_gone);
                     hideLayout.startAnimation(anim);
                     collapse(hideLayout);
                 }

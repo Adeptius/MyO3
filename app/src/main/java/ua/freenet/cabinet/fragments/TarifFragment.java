@@ -1,9 +1,6 @@
 package ua.freenet.cabinet.fragments;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +22,7 @@ import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.AvailableTarif;
 import ua.freenet.cabinet.model.Servise;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
@@ -163,7 +161,7 @@ public class TarifFragment extends BaseFragment {
             if (service.isHaveDiscount() && service.getDiscount() != 0) {
                 discountView.setVisibility(View.VISIBLE);
                 discountView.setText(
-                                "Знижка "
+                        "Знижка "
                                 + service.getDiscount()
                                 + "% ("
                                 + service.getCostForCustomer()
@@ -197,29 +195,18 @@ public class TarifFragment extends BaseFragment {
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(context);
-                            TextView titleView = new TextView(context);
-                            titleView.setText("Оберіть тариф:");
-                            titleView.setGravity(Gravity.CENTER);
-                            titleView.setTextSize(24);
-                            titleView.setTypeface(null, Typeface.BOLD);
-                            titleView.setTextColor(COLOR_BLUE);
-                            builder.setCustomTitle(titleView);
-                            builder.setItems(tarifs, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int item) {
-                                    proceedShoosenTarif(availableTarifs.get(item).getId(),
-                                            availableTarifs.get(item).getName(),
-                                            servise);
-                                    dialog.dismiss();
-                                }
-                            });
-                            builder.setCancelable(true);
-                            builder.show();
+                            new MyAlertDialogBuilder(context)
+                                    .setTitleText("Оберіть тариф:")
+                                    .setItems(tarifs, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int item) {
+                                            proceedShoosenTarif(availableTarifs.get(item).getId(),
+                                                    availableTarifs.get(item).getName(), servise);
+                                            dialog.dismiss();
+                                        }
+                                    }).createAndShow();
                         }
                     });
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -230,19 +217,17 @@ public class TarifFragment extends BaseFragment {
     }
 
     private void proceedShoosenTarif(final String id, String name, final Servise servise) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-
         String willcost = "";
         try {
-            Matcher regexMatcher = Pattern.compile("\\d{1,4}[ ]грн").matcher(servise.getPay_type_name());
+//            Matcher regexMatcher = Pattern.compile("\\d{1,4}[ ]грн").matcher(servise.getPay_type_name());
+//            regexMatcher.find();
+//            String s = regexMatcher.group();
+//            int currentMoney = Integer.parseInt(s.substring(0, s.indexOf(" ")));
+            int currentMoney = servise.getServiceCost();
+
+            Matcher regexMatcher = Pattern.compile("\\d{1,4}[ ]грн").matcher(name);
             regexMatcher.find();
             String s = regexMatcher.group();
-            int currentMoney = Integer.parseInt(s.substring(0, s.indexOf(" ")));
-
-            regexMatcher = Pattern.compile("\\d{1,4}[ ]грн").matcher(name);
-            regexMatcher.find();
-            s = regexMatcher.group();
             int willBeMoney = Integer.parseInt(s.substring(0, s.indexOf(" ")));
 
             if (currentMoney > willBeMoney) {
@@ -252,17 +237,9 @@ public class TarifFragment extends BaseFragment {
                 willcost = "Ви бажаєте перейти на більш дорогий тариф. " +
                         "Вам буде надана знижка 20% на 2 місяці.";
             }
-            willcost += "\n Новий тариф буде активовано з першого числа наступного місяця";
+            willcost += "\nНовий тариф буде активовано з першого числа наступного місяця";
         } catch (Exception ignored) {
         }
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Ви обрали:");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
 
         StringBuilder sb = new StringBuilder();
         sb.append(name).append("\n");
@@ -271,19 +248,13 @@ public class TarifFragment extends BaseFragment {
             sb.append(willcost);
         }
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb.toString());
-        builder.setView(textLayout);
-
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Згоден", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Ви обрали:")
+                .setMessage(sb.toString())
+                .setPositiveButtonWithRunnableForExecutor("Згоден", new Runnable() {
                     @Override
                     public void run() {
-                        HashMap<String, String> map = new HashMap<String, String>();
+                        HashMap<String, String> map = new HashMap<>();
                         map.put("pt_new", id);
                         map.put("service_id", String.valueOf(servise.getId()));
                         progressDialogShow();
@@ -295,131 +266,68 @@ public class TarifFragment extends BaseFragment {
                             progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }).createAndShow();
     }
 
 
     private void stopTheService() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Умови");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-
         String sb = "1. Поки послуга призупинена - абонентська плата за неї не знімається.\n" +
                 "2. Призупиняти можно 6 разів на рік.\n" +
                 "3. Призупинити можно не раніше ніж з завтра, та на строк від 10 днів до 6 місяців.\n" +
                 "4. Не хвилюйтеся - відновити достроково ви зможете у будь-який момент.\n";
 
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb);
-        builder.setView(textLayout);
-
-        builder.setPositiveButton("Зрозуміло", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                askStartDate();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Умови")
+                .setMessage(sb)
+                .setPositiveButtonWithRunnableForHandler("Зрозуміло", new Runnable() {
+                    @Override
+                    public void run() {
+                        askStartDate();
+                    }
+                }).createAndShow();
     }
 
 
     private void askStartDate() {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
 
-        TextView titleText = new TextView(context);
-        titleText.setText("Призупинити з:");
-        titleText.setGravity(Gravity.CENTER);
-        titleText.setTextSize(24);
-        titleText.setTypeface(null, Typeface.BOLD);
-        titleText.setTextColor(COLOR_BLUE);
-
-        builder.setCustomTitle(titleText);
-        builder.setView(datePicker);
-        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                if (!isShoosenFutureDay(datePicker)) {
-                    makeSimpleSnackBar("Сьогодні або вчора вибрати не можливо", mainLayout);
-                } else {
-                    askEndDate(getStringedDate(datePicker));
-                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
+        builder.setTitleText("Призупинити з:")
+                .setView(datePicker)
+                .createShowAndSetPositiveForHandler("Вибрано", new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isShoosenFutureDay(datePicker)) {
+                            makeSimpleSnackBar("Сьогодні або вчора вибрати не можливо", datePicker);
+                        } else {
+                            askEndDate(getStringedDate(datePicker));
+                            builder.close();
+                        }
+                    }
+                });
     }
 
     private void askEndDate(final String startDate) {
         final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
 
-        TextView textView = new TextView(context);
-        textView.setText("Призупинити до:");
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(24);
-        textView.setTypeface(null, Typeface.BOLD);
-        textView.setTextColor(COLOR_BLUE);
-
-        builder.setCustomTitle(textView);
-        builder.setPositiveButton("Вибрано", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                confirmDate(startDate, getStringedDate(datePicker));
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Призупинити до:")
+                .setView(datePicker)
+                .setPositiveButtonWithRunnableForHandler("Вибрано", new Runnable() {
+                    @Override
+                    public void run() {
+                        confirmDate(startDate, getStringedDate(datePicker));
+                    }
+                }).createAndShow();
     }
 
     private void confirmDate(final String startDate, final String endDate) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Все вірно?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Послуга призупиняється\n");
-        sb.append("з: ").append(startDate);
-        sb.append("\nпо: ").append(endDate);
-
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText(sb.toString());
-        builder.setView(textLayout);
-
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Все вірно?")
+                .setMessage("Послуга призупиняється\nз: " + startDate + "\nпо: " + endDate)
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -427,100 +335,61 @@ public class TarifFragment extends BaseFragment {
                             DbCache.markServicesOld();
                             progressDialogWaitStopShowMessageReload("Успішно", mainLayout);
                         } else {
-                            progressDialogStopAndShowMessage("Невдало", mainLayout);
+                            progressDialogStopAndShowMessage("Невдало. Можливо ви вказали строк менше 10 днів, або зник інтернет.", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }).createAndShow();
     }
 
     private void changePasswordForEmail(final String id) {
-        final View datepickerLayout = LayoutInflater.from(context).inflate(R.layout.item_datepicker, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        final DatePicker datePicker = (DatePicker) datepickerLayout.findViewById(R.id.datePicker);
-        builder.setCancelable(true);
-        builder.setView(datePicker);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Зміна паролю");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-
-
         View textLayout = LayoutInflater.from(context).inflate(R.layout.item_change_mail, null);
         final EditText text = (EditText) textLayout.findViewById(R.id.text_new_password);
-        builder.setView(textLayout);
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Готово", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+
+        new MyAlertDialogBuilder(context)
+                .setView(textLayout)
+                .setTitleText("Зміна паролю")
+                .setPositiveButtonWithRunnableForExecutor("Готово", new Runnable() {
                     @Override
                     public void run() {
                         String result = SendInfo.changeEmailPassword(text.getText().toString(), id);
                         makeSimpleSnackBar(result, mainLayout);
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }).createAndShow();
     }
 
     private void startTheService() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-
-        TextView titleView = new TextView(context);
-        titleView.setText("Відновити зараз?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Це займе від пари хвилин до години.");
-        builder.setView(textLayout);
-
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                Calendar calendar = new GregorianCalendar();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH) + 1;
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                int minute = calendar.get(Calendar.MINUTE) + 3;
-                if (minute > 59) {
-                    hour++;
-                    minute = minute - 60;
-                }
-                final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day)
-                        + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
-                progressDialogShow();
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Відновити зараз?")
+                .setMessage("Це займе від пари хвилин до години.")
+                .setPositiveButtonWithRunnableForHandler("Так", new Runnable() {
                     @Override
                     public void run() {
-                        if (SendInfo.startService(query)) {
-                            DbCache.markServicesOld();
-                            progressDialogWaitStopShowMessageReload("Послуга відновлена. Зачекайте.", mainLayout);
-                        } else {
-                            progressDialogStopAndShowMessage("Невдалось. Спробуйте ще раз.", mainLayout);
+                        Calendar calendar = new GregorianCalendar();
+                        int year = calendar.get(Calendar.YEAR);
+                        int month = calendar.get(Calendar.MONTH) + 1;
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int minute = calendar.get(Calendar.MINUTE) + 3;
+                        if (minute > 59) {
+                            hour++;
+                            minute = minute - 60;
                         }
+                        final String query = year + "-" + doTwoSymb(month) + "-" + doTwoSymb(day)
+                                + " " + doTwoSymb(hour) + ":" + doTwoSymb(minute);
+                        progressDialogShow();
+                        EXECUTOR.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (SendInfo.startService(query)) {
+                                    DbCache.markServicesOld();
+                                    progressDialogWaitStopShowMessageReload("Послуга відновлена. Зачекайте.", mainLayout);
+                                } else {
+                                    progressDialogStopAndShowMessage("Невдалось. Спробуйте ще раз.", mainLayout);
+                                }
+                            }
+                        });
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }).createAndShow();
     }
 
 
@@ -547,7 +416,7 @@ public class TarifFragment extends BaseFragment {
         int day = datePicker.getDayOfMonth();
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH)-1;
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH) - 1;
 
         boolean y = currentYear >= year;
         boolean m = currentMonth >= month;
@@ -563,10 +432,5 @@ public class TarifFragment extends BaseFragment {
         month = month.length() == 1 ? "0" + month : month;
         day = day.length() == 1 ? "0" + day : day;
         return year + "-" + month + "-" + day;
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

@@ -1,12 +1,8 @@
 package ua.freenet.cabinet.fragments;
 
-import android.app.FragmentManager;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -25,16 +21,15 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
-import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.model.Ip;
 import ua.freenet.cabinet.model.Mailing;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.model.Phone;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
+import ua.freenet.cabinet.utils.Settings;
 
-import static ua.freenet.cabinet.utils.Utilits.log;
 
-
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     private TextView pib, contractNumber, city, street, house, room, age, money, smsInfo,
             email, password, fee;
@@ -116,7 +111,7 @@ public class MainFragment extends BaseFragment {
         if (cont && len >= pos) {
             many = many.substring(0, many.indexOf(".") + 2);
         }
-//        many = many.length() > 4 ? many.substring(0, 4) : many;
+
         if (person.getCurrent() > 0) {
             money.setTextColor(COLOR_GREEN);
         } else if (person.getCurrent() < person.getStopsum()) {
@@ -137,162 +132,99 @@ public class MainFragment extends BaseFragment {
                 akciiCheckBox.setChecked(mailing.isSubscribe());
         }
         showIps(ips);
-        showWarningIfNewAbon();
-        showWarningIfInternetInactive();
-        showMessageOfTheDay();
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                showWarningIfNewAbon();
+                showWarningIfInternetInactive();
+                showMessageOfTheDay();
+            }
+        });
     }
 
 
     private void showWarningIfNewAbon() {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                if (person.getAge() < 1 && person.getStopsum() < 10) {
-                    try {
-                        HANDLER.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                                builder.setCancelable(true);
-                                TextView titleView = new TextView(context);
-                                titleView.setText("Перша сплата");
-                                titleView.setGravity(Gravity.CENTER);
-                                titleView.setTextSize(24);
-                                titleView.setTypeface(null, Typeface.BOLD);
-                                titleView.setTextColor(COLOR_BLUE);
-                                builder.setCustomTitle(titleView);
-                                View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-                                TextView text = (TextView) textLayout.findViewById(R.id.text);
-                                String sb = "Шановний абонент!\n" +
-                                        "Нагадуємо, що першу оплату необхідно внести у повному обсязі " +
-                                        "незалежно від стану вашого балансу.\n" +
-                                        "Будь ласка, поповніть рахунок на " + (Integer.parseInt(mountlyFee) + 1) + " грн. " +
-                                        "(1 грн за підключення плюс ваш тариф " + mountlyFee + " грн)";
+        if (person.getAge() < 1 && person.getStopsum() < 10) {
+            HANDLER.post(new Runnable() {
+                @Override
+                public void run() {
+                    String message = "Шановний абонент!\n" +
+                            "Нагадуємо, що першу оплату необхідно внести у повному обсязі " +
+                            "незалежно від стану вашого балансу.\n" +
+                            "Будь ласка, поповніть рахунок на " + (Integer.parseInt(mountlyFee) + 1) + " грн. " +
+                            "(1 грн за підключення плюс ваш тариф " + mountlyFee + " грн)";
 
-                                text.setText(sb);
-                                builder.setView(textLayout);
-                                builder.setPositiveButton("Гаразд", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(final DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                android.app.AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    new MyAlertDialogBuilder(context)
+                            .setTitleText("Перша сплата")
+                            .setMessageText(message)
+                            .setPositiveButtonForClose("Гаразд")
+                            .createAndShow();
                 }
-            }
-        });
+            });
+        }
     }
 
+
     private void showWarningIfInternetInactive() {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                if (person.getStopsum() > person.getCurrent()) {
-                    try {
-                        HANDLER.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-                                builder.setCancelable(true);
-                                TextView titleView = new TextView(context);
-                                titleView.setText("Інтернет не активний");
-                                titleView.setGravity(Gravity.CENTER);
-                                titleView.setTextSize(24);
-                                titleView.setTypeface(null, Typeface.BOLD);
-                                titleView.setTextColor(COLOR_BLUE);
-                                builder.setCustomTitle(titleView);
-                                View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-                                TextView text = (TextView) textLayout.findViewById(R.id.text);
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("На вашому рахунку недостатньо коштів.\n");
-                                sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
-                                String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
-                                if (notAnoth.contains("."))
-                                    notAnoth = notAnoth.substring(0, notAnoth.indexOf(".") + 2);
-                                sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
-                                sb.append("Перейти до перегляду історії проплат?");
-                                text.setText(sb.toString());
-                                builder.setView(textLayout);
-                                builder.setNegativeButton("Ні", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(final DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(final DialogInterface dialog, int which) {
-                                        FragmentManager fm = getFragmentManager();
-                                        try {
-                                            fm.beginTransaction().replace(R.id.content_frame, BalanceFragment.class.newInstance()).commit();
-                                        } catch (java.lang.InstantiationException e) {
-                                            e.printStackTrace();
-                                        } catch (IllegalAccessException e) {
-                                            log(e.getLocalizedMessage());
+        if (person.getStopsum() > person.getCurrent()) {
+            HANDLER.post(new Runnable() {
+                @Override
+                public void run() {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("На вашому рахунку недостатньо коштів.\n");
+                    sb.append("Ваша абонплата: ").append(mountlyFee).append(" грн.\n");
+                    String notAnoth = String.valueOf(Math.abs(person.getCurrent()));
+                    if (notAnoth.contains("."))
+                        notAnoth = notAnoth.substring(0, notAnoth.indexOf(".") + 2);
+                    sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
+                    sb.append("Перейти до перегляду історії проплат?");
+
+                    new MyAlertDialogBuilder(context)
+                            .setTitleText("Інтернет не активний")
+                            .setMessageText(sb.toString())
+                            .setNegativeButtonForClose("Ні")
+                            .setPositiveButtonWithRunnableForExecutor("Так",
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            goTo(new BalanceFragment());
                                         }
                                     }
-                                });
-                                final android.app.AlertDialog dialog = builder.create();
-                                dialog.setOnShowListener( new DialogInterface.OnShowListener() {
-                                                              @Override
-                                                              public void onShow(DialogInterface arg0) {
-                                                                  dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(COLOR_BLUE);
-                                                                  dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(COLOR_BLUE);
-                                                              }
-                                                          });
-                                dialog.setCanceledOnTouchOutside(true);
-                                dialog.show();
-                            }
-                        });
-//                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            ).createAndShow();
                 }
-            }
-        });
+            });
+        }
     }
 
     private void showMessageOfTheDay() {
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(DocumentFragment.URL);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.connect();
-                    InputStream stream = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-                    String s;
-                    final StringBuilder stringBuilder = new StringBuilder();
-                    while ((s = reader.readLine()) != null) {
-                        s = s.replace("\\n","\n");
-                        stringBuilder.append(s);
-                    }
-
-                    if (!"".equals(stringBuilder.toString())) {
-                        HANDLER.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setMessage(stringBuilder.toString());
-                                builder.setCancelable(false);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        try {
+            URL url = new URL(DocumentFragment.URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream stream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String s;
+            final StringBuilder stringBuilder = new StringBuilder();
+            while ((s = reader.readLine()) != null) {
+                s = s.replace("\\n", "\n");
+                stringBuilder.append(s);
             }
-        });
+
+            if (!"".equals(stringBuilder.toString())) {
+                HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setMessage(stringBuilder.toString());
+                        builder.setCancelable(false);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -304,11 +236,11 @@ public class MainFragment extends BaseFragment {
         } else if (view.equals(akciiCheckBox)) {
             tumblerMailing(6);
         } else if (view.equals(editPass)) {
-            changePassword(view);
+            changePassword();
         } else if (view.equals(editSms)) {
-            changeSmsNumber(view);
+            changeSmsNumber();
         } else if (view.equals(editEmail)) {
-            changeEmail(view);
+            changeEmail();
         } else if (view.equals(password)) {
             password.setText(Settings.getCurrentPassword());
         } else if (view.equals(money)) {
@@ -414,29 +346,25 @@ public class MainFragment extends BaseFragment {
         dns2Layout.addView(dns2Value, MATCH_WRAP_WEIGHT1);
     }
 
-    private void changeSmsNumber(final View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+    private void changeSmsNumber() {
+        final LinearLayout messageLayout = new LinearLayout(context);
+        messageLayout.setOrientation(LinearLayout.HORIZONTAL);
         TextView textView = new TextView(context);
         textView.setText("  +380");
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextSize(18);
         final EditText text = new EditText(context);
-        linearLayout.addView(textView, WRAP_WRAP);
-        linearLayout.addView(text, MATCH_WRAP);
+        messageLayout.addView(textView, WRAP_WRAP);
+        messageLayout.addView(text, MATCH_WRAP);
         text.setCursorVisible(true);
         text.hasFocus();
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        builder.setCancelable(true);
-        builder.setView(linearLayout);
-        builder.setMessage("Введіть новий номер телефону:");
-        builder.setPositiveButton("Змінити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                EXECUTOR.submit(new Runnable() {
+
+        final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
+        builder.setTitleText("Новий номер")
+                .setView(messageLayout)
+                .createShowAndSetPositiveForExecutor("Зберегти", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -447,74 +375,61 @@ public class MainFragment extends BaseFragment {
                             }
                             if (SendInfo.changeSmsNumber(text.getText().toString().trim(), phone)) {
                                 DbCache.markPersonOld();
-                                progressDialogWaitStopShowMessageReload("Номер змінено", view);
+                                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                                progressDialogWaitStopShowMessageReload("Номер змінено", messageLayout);
+                                builder.close();
                             } else
-                                progressDialogStopAndShowMessage("Помилка. Номер невірний.", view);
+                                progressDialogStopAndShowMessage("Помилка. Номер невірний.", messageLayout);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", messageLayout);
                         }
-                        dialog.dismiss();
                     }
                 });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
-    private void changeEmail(final View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    private void changeEmail() {
         final EditText text = new EditText(context);
         text.setCursorVisible(true);
         text.hasFocus();
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        builder.setCancelable(true);
-        builder.setView(text);
-        builder.setMessage("Введіть новий email:");
-        builder.setPositiveButton("Змінити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                EXECUTOR.submit(new Runnable() {
+
+        final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
+        builder.setTitleText("Новий email")
+                .setView(text)
+                .createShowAndSetPositiveForExecutor("Зберегти", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
                         try {
                             if (SendInfo.changeEmail(text.getText().toString().trim())) {
                                 DbCache.markPersonOld();
-                                progressDialogWaitStopShowMessageReload("Email змінено", view);
+                                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                                progressDialogWaitStopShowMessageReload("Email змінено", text);
+                                builder.close();
                             } else
-                                progressDialogStopAndShowMessage("Помилка. Email невірний.", view);
+                                progressDialogStopAndShowMessage("Помилка. Email невірний.", text);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", text);
                         }
-                        dialog.dismiss();
                     }
                 });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
-    private void changePassword(final View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    private void changePassword() {
         final EditText text = new EditText(context);
         text.setCursorVisible(true);
         text.hasFocus();
         final InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        builder.setCancelable(true);
-        builder.setView(text);
-        builder.setMessage("Введіть новий пароль (мінімум 6 символів та одна буква з цифрою):");
-        builder.setPositiveButton("Змінити", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                EXECUTOR.submit(new Runnable() {
+
+        final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
+        builder.setView(text)
+                .setTitleText("Новий пароль")
+                .setMessage("Пароль має містити мінімум 6 символів та одну букву з цифрою.")
+                .createShowAndSetPositiveForExecutor("Зберегти", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -522,19 +437,16 @@ public class MainFragment extends BaseFragment {
                             if (SendInfo.changePassword(text.getText().toString().trim())) {
                                 DbCache.markPersonOld();
                                 Settings.setCurrentPassword(text.getText().toString().trim());
-                                progressDialogWaitStopShowMessageReload("Пароль змінено", view);
+                                imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
+                                progressDialogWaitStopShowMessageReload("Пароль змінено", text);
+                                builder.close();
                             } else
-                                progressDialogStopAndShowMessage("Помилка. Пароль невірний.", view);
+                                progressDialogStopAndShowMessage("Помилка. Пароль невірний.", text);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", view);
+                            progressDialogStopAndShowMessage("Помилка. Нема з'єднання.", text);
                         }
-                        dialog.dismiss();
                     }
                 });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 }

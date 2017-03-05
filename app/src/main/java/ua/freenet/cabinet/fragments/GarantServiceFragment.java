@@ -1,11 +1,6 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +8,7 @@ import android.widget.TextView;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.R.id.activate_garant_button;
 import static ua.freenet.cabinet.R.id.text_title;
@@ -22,6 +18,7 @@ public class GarantServiceFragment extends BaseFragment {
 
     private String serviseStatus;
     private boolean privatHouse;
+    private double money;
 
     @Override
     void setAllSettings() {
@@ -32,7 +29,6 @@ public class GarantServiceFragment extends BaseFragment {
         layoutId = R.id.main_content_garant_service;
     }
 
-
     @Override
     void init() {
         hideAllViewsInMainScreen();
@@ -42,6 +38,7 @@ public class GarantServiceFragment extends BaseFragment {
     void doInBackground() throws Exception {
         serviseStatus = DbCache.garantedServiceStatus();
         privatHouse = DbCache.getPerson().getAddress().isPrivat();
+        money = DbCache.getPerson().getCurrent();
         prepareScreen();
     }
 
@@ -70,13 +67,18 @@ public class GarantServiceFragment extends BaseFragment {
                 }
             });
         }else if ("disabled".equals(serviseStatus)){
-            activateButton.setText("Підключити послугу");
-            activateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    activateService();
-                }
-            });
+            if (privatHouse&&money<30 || !privatHouse&&money<10){
+                activateButton.setText("Недостатньо коштів");
+                activateButton.setClickable(false);
+            }else {
+                activateButton.setText("Підключити послугу");
+                activateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        activateService();
+                    }
+                });
+            }
         }else if ("enabling".equals(serviseStatus)){
             activateButton.setClickable(false);
             activateButton.setText("Послуга підключається");
@@ -99,22 +101,10 @@ public class GarantServiceFragment extends BaseFragment {
             descriptionText = "Послуга вартістю 10 грн/міс, яка гарантує вам якісний та дешевий сервіс";
         }
         updateTitle();
-
         animateScreen();
     }
 
     private void deActivateService() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Відключити послугу?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        View textLayout = LayoutInflater.from(context).inflate(R.layout.item_alert_message, null);
-        TextView text = (TextView) textLayout.findViewById(R.id.text);
         StringBuilder sb = new StringBuilder();
         sb.append("Увага! Якщо ви забажаєте підключити послугу повторно, менш ніж як через 12 ");
         sb.append("місяців - то така активація буде коштувати ");
@@ -123,12 +113,11 @@ public class GarantServiceFragment extends BaseFragment {
         }else {
             sb.append("50 грн разово");
         }
-        text.setText(sb.toString());
-        builder.setView(textLayout);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Відключити послугу?")
+                .setMessage(sb.toString())
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -140,27 +129,13 @@ public class GarantServiceFragment extends BaseFragment {
                             progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }).createAndShow();
     }
 
     private void activateService(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
-        TextView titleView = new TextView(context);
-        titleView.setText("Підключити послугу?");
-        titleView.setGravity(Gravity.CENTER);
-        titleView.setTextSize(24);
-        titleView.setTypeface(null, Typeface.BOLD);
-        titleView.setTextColor(COLOR_BLUE);
-        builder.setCustomTitle(titleView);
-        builder.setPositiveButton("Так", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialog, int which) {
-                EXECUTOR.submit(new Runnable() {
+        new MyAlertDialogBuilder(context)
+                .setTitleText("Підключити послугу?")
+                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
                     @Override
                     public void run() {
                         progressDialogShow();
@@ -172,15 +147,6 @@ public class GarantServiceFragment extends BaseFragment {
                             progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
                         }
                     }
-                });
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    @Override
-    public void onClick(View v) {
-
+                }).createAndShow();
     }
 }
