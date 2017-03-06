@@ -51,7 +51,7 @@ import static ua.freenet.cabinet.model.MailType.STOP_TARIF;
 import static ua.freenet.cabinet.model.MailType.WRONG_PAY;
 
 
-public class DocumentFragment extends BaseFragment {
+public class DocumentFragment extends HelperFragment {
 
     private Person person;
     private String header;

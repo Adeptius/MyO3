@@ -34,7 +34,7 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.News;
 import ua.freenet.cabinet.utils.ImageDownloader;
 
-public class NewsFragment extends BaseFragment {
+public class NewsFragment extends HelperFragment {
 
     @Override
     void setAllSettings() {

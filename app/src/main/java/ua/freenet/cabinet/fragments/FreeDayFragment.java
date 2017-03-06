@@ -23,7 +23,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
-public class FreeDayFragment extends BaseFragment {
+public class FreeDayFragment extends HelperFragment {
 
     private int numberOfFreeDays;
     private int availableFreeDays;

@@ -14,7 +14,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Utilits;
 
 
-public class CreditFragment extends BaseFragment {
+public class CreditFragment extends HelperFragment {
 
     private String creditStatus;
     Button activateButton;

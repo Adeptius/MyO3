@@ -8,7 +8,7 @@ import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.SendInfo;
 
-public class OnOffInternet extends BaseFragment {
+public class OnOffInternet extends HelperFragment {
 
     private boolean internetIsActive;
     private boolean worldIsActive;

@@ -17,7 +17,7 @@ import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.DrWebSubscribe;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
-public class DrWebFragment extends BaseFragment {
+public class DrWebFragment extends HelperFragment {
 
     List<DrWebSubscribe> subscribes;
 

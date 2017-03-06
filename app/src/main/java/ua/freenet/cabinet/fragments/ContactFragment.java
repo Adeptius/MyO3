@@ -22,7 +22,7 @@ import ua.freenet.cabinet.model.City;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
-public class ContactFragment extends BaseFragment {
+public class ContactFragment extends HelperFragment {
 
     private Person person;
     private City city;

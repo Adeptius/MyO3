@@ -17,7 +17,7 @@ import ua.freenet.cabinet.model.Operation;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.utils.Utilits;
 
-public class BalanceFragment extends BaseFragment {
+public class BalanceFragment extends HelperFragment {
 
 //    private List<Operation> operations;
 

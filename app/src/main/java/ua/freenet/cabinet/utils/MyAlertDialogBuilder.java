@@ -3,6 +3,7 @@ package ua.freenet.cabinet.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -96,13 +97,25 @@ public class MyAlertDialogBuilder extends AlertDialog.Builder {
         return this;
     }
 
-    public MyAlertDialogBuilder setTitleText(String title ) {
+    public MyAlertDialogBuilder setTitleText(String title) {
         TextView titleView = new TextView(context);
         titleView.setText(title);
         titleView.setGravity(Gravity.CENTER);
         titleView.setTextSize(24);
         titleView.setTypeface(null, Typeface.BOLD);
         titleView.setTextColor(COLOR_BLUE);
+        super.setCustomTitle(titleView);
+        return this;
+    }
+
+    public MyAlertDialogBuilder setTitleTextWithWhiteBackground(String title) {
+        TextView titleView = new TextView(context);
+        titleView.setText(title);
+        titleView.setGravity(Gravity.CENTER);
+        titleView.setTextSize(24);
+        titleView.setTypeface(null, Typeface.BOLD);
+        titleView.setTextColor(COLOR_BLUE);
+        titleView.setBackgroundColor(Color.WHITE);
         super.setCustomTitle(titleView);
         return this;
     }

@@ -24,7 +24,7 @@ import ua.freenet.cabinet.model.BonusServiceSpending;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Utilits;
 
-public class BonusFragment extends BaseFragment {
+public class BonusFragment extends HelperFragment {
 
     private int bonuses;
     private boolean layIsHidden = true;

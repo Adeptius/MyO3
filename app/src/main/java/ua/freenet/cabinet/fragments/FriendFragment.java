@@ -23,7 +23,7 @@ import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.FriendInvite;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
-public class FriendFragment extends BaseFragment {
+public class FriendFragment extends HelperFragment {
 
     Button newFriendButton;
     List<FriendInvite> invites;

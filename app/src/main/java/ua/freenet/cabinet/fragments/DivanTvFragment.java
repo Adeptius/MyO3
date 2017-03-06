@@ -1,6 +1,5 @@
 package ua.freenet.cabinet.fragments;
 
-import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -25,9 +24,10 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.model.ChannelDivan;
 import ua.freenet.cabinet.model.ChannelDivanDetails;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 
-public class DivanTvFragment extends BaseFragment implements View.OnClickListener {
+public class DivanTvFragment extends HelperFragment implements View.OnClickListener {
 
     private Button buttonStart;
     private Button buttonOptimal;
@@ -77,6 +77,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
 
     private void draw() {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_divantv_news, null);
+        LinearLayout forHardware = (LinearLayout) itemView.findViewById(R.id.layForHardware);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
         TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
         TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
@@ -136,9 +137,9 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
         allChanels.setVisibility(View.INVISIBLE);
         allPackets.setVisibility(View.INVISIBLE);
         mainLayout.addView(itemView);
-        addHardWareRequirementsToMainScreenFor("divan");
         mainLayout.addView(allChanels);
         mainLayout.addView(allPackets);
+        addHardWareRequirementsToLayout(forHardware,"divan");
     }
 
     private void loadImageForNews(ImageView imageView, int drawableId) {
@@ -169,7 +170,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
         int column = 4;
 
         LinearLayout layout = null;
-        imagesLoaded.put(container,0);
+        imagesLoaded.put(container, 0);
 
         for (final ChannelDivan channel : divanList) {
             if (layout == null || layout.getChildCount() == column) {
@@ -194,13 +195,13 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            imagesLoaded.put(container, imagesLoaded.get(container) + 1);
                             return false;// Увеличиваем счетчик обработанных картинок при ошибке
                         }
 
                         @Override
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            imagesLoaded.put(container,imagesLoaded.get(container)+1);
+                            imagesLoaded.put(container, imagesLoaded.get(container) + 1);
                             return false;// Увеличиваем счетчик обработанных картинок при успехе
                         }
                     })
@@ -215,7 +216,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
             public void run() {
                 try {
                     int inSleep = 0;
-                    while (imagesLoaded.get(container)<divanList.size()){
+                    while (imagesLoaded.get(container) < divanList.size()) {
                         System.out.println("imagesLoaded.get(container) " + imagesLoaded.get(container));
                         System.out.println("divanList.size() " + divanList.size());
                         Thread.sleep(100);
@@ -236,8 +237,6 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void showInfoAboutChanel(final ChannelDivan channelDivan) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(true);
 
         final View layout = LayoutInflater.from(context).inflate(R.layout.item_divan_chanel_detail, null);
         final ImageView imageView = (ImageView) layout.findViewById(R.id.imageView);
@@ -248,10 +247,10 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
         final LinearLayout lin = (LinearLayout) layout.findViewById(R.id.lin);
         final LinearLayout loading = (LinearLayout) layout.findViewById(R.id.loading_layout);
 
-        builder.setView(layout);
+        new MyAlertDialogBuilder(context)
+                .setView(layout)
+                .createAndShow();
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -322,7 +321,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
-                            drawIcons(layout, divanList,button);
+                            drawIcons(layout, divanList, button);
                         }
                     });
                 } catch (Exception e) {
@@ -330,7 +329,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void run() {
                             button.setText("Список каналів");
-                            makeSimpleSnackBar("Помилка завантаження",button);
+                            makeSimpleSnackBar("Помилка завантаження", button);
                         }
                     });
                 }
@@ -338,7 +337,7 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    protected void removeAllViewsAndCollapseDivan(View view, Button button){
+    protected void removeAllViewsAndCollapseDivan(View view, Button button) {
         removeAllViewsAndCollapse(view);
         button.setText("Список каналів");
     }
@@ -349,61 +348,61 @@ public class DivanTvFragment extends BaseFragment implements View.OnClickListene
             if (listStart.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listStart, buttonStart);
             } else {
-                showList(listStart,buttonStart, "https://divan.tv/tariffs/channels/?tariff_id=37&devices=all&tariff_name=%D0%A1%D1%82%D0%B0%D1%80%D1%82%D0%BE%D0%B2%D1%8B%D0%B9");
+                showList(listStart, buttonStart, "https://divan.tv/tariffs/channels/?tariff_id=37&devices=all&tariff_name=%D0%A1%D1%82%D0%B0%D1%80%D1%82%D0%BE%D0%B2%D1%8B%D0%B9");
             }
         } else if (v.equals(buttonOptimal)) {
             if (listOptimal.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listOptimal, buttonOptimal);
             } else {
-                showList(listOptimal,buttonOptimal, "https://divan.tv/tariffs/channels/?tariff_id=130&devices=all&tariff_name=%D0%9E%D0%BF%D1%82%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9");
+                showList(listOptimal, buttonOptimal, "https://divan.tv/tariffs/channels/?tariff_id=130&devices=all&tariff_name=%D0%9E%D0%BF%D1%82%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9");
             }
         } else if (v.equals(buttonPrestige)) {
             if (listPrestige.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listPrestige, buttonPrestige);
             } else {
-                showList(listPrestige,buttonPrestige, "https://divan.tv/tariffs/channels/?tariff_id=13&devices=all&tariff_name=%D0%9F%D1%80%D0%B5%D1%81%D1%82%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9");
+                showList(listPrestige, buttonPrestige, "https://divan.tv/tariffs/channels/?tariff_id=13&devices=all&tariff_name=%D0%9F%D1%80%D0%B5%D1%81%D1%82%D0%B8%D0%B6%D0%BD%D1%8B%D0%B9");
             }
         } else if (v.equals(buttonVip)) {
             if (listVip.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listVip, buttonVip);
             } else {
-                showList(listVip,buttonVip, "https://divan.tv/tariffs/channels/?tariff_id=99&devices=all&tariff_name=VIP");
+                showList(listVip, buttonVip, "https://divan.tv/tariffs/channels/?tariff_id=99&devices=all&tariff_name=VIP");
             }
         } else if (v.equals(buttonFilm)) {
             if (listFilm.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listFilm, buttonFilm);
             } else {
-                showList(listFilm,buttonFilm, "https://divan.tv/tariffs/channels/?tariff_id=38&devices=all&tariff_name=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2%D1%8B%D0%B9");
+                showList(listFilm, buttonFilm, "https://divan.tv/tariffs/channels/?tariff_id=38&devices=all&tariff_name=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B2%D1%8B%D0%B9");
             }
         } else if (v.equals(buttonEnglish)) {
             if (listEnglish.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listEnglish, buttonEnglish);
             } else {
-                showList(listEnglish,buttonEnglish, "https://divan.tv/tariffs/channels/?tariff_id=12&devices=all&tariff_name=In+English");
+                showList(listEnglish, buttonEnglish, "https://divan.tv/tariffs/channels/?tariff_id=12&devices=all&tariff_name=In+English");
             }
         } else if (v.equals(buttonKid)) {
             if (listKid.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listKid, buttonKid);
             } else {
-                showList(listKid,buttonKid, "https://divan.tv/tariffs/channels/?tariff_id=23&devices=all&tariff_name=%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9");
+                showList(listKid, buttonKid, "https://divan.tv/tariffs/channels/?tariff_id=23&devices=all&tariff_name=%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9");
             }
         } else if (v.equals(buttonTv1000)) {
             if (listTv1000.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listTv1000, buttonTv1000);
             } else {
-                showList(listTv1000,buttonTv1000, "https://divan.tv/tariffs/channels/?tariff_id=206&devices=all&tariff_name=TV1000+%D0%9F%D0%BB%D1%8E%D1%81");
+                showList(listTv1000, buttonTv1000, "https://divan.tv/tariffs/channels/?tariff_id=206&devices=all&tariff_name=TV1000+%D0%9F%D0%BB%D1%8E%D1%81");
             }
         } else if (v.equals(buttonNight)) {
             if (listNight.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listNight, buttonNight);
             } else {
-                showList(listNight,buttonNight, "https://divan.tv/tariffs/channels/?tariff_id=320&devices=all&tariff_name=%D0%9D%D0%BE%D1%87%D0%BD%D0%BE%D0%B9");
+                showList(listNight, buttonNight, "https://divan.tv/tariffs/channels/?tariff_id=320&devices=all&tariff_name=%D0%9D%D0%BE%D1%87%D0%BD%D0%BE%D0%B9");
             }
         } else if (v.equals(buttonViasat)) {
             if (listViasat.getChildCount() > 0) {
                 removeAllViewsAndCollapseDivan(listViasat, buttonViasat);
             } else {
-                showList(listViasat,buttonViasat, "https://divan.tv/tariffs/channels/?tariff_id=198&devices=all&tariff_name=VIASAT+Premium");
+                showList(listViasat, buttonViasat, "https://divan.tv/tariffs/channels/?tariff_id=198&devices=all&tariff_name=VIASAT+Premium");
             }
         }
     }

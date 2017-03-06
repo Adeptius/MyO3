@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -29,7 +31,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Settings;
 
 
-public class MainFragment extends BaseFragment implements View.OnClickListener {
+public class MainFragment extends HelperFragment implements View.OnClickListener {
 
     private TextView pib, contractNumber, city, street, house, room, age, money, smsInfo,
             email, password, fee;
@@ -179,12 +181,17 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                     sb.append("На рахунку не вистачило: ").append(notAnoth).append(" грн для оплати цього місяця.\n");
                     sb.append("Перейти до перегляду історії проплат?");
 
-                    new MyAlertDialogBuilder(context)
-                            .setTitleText("Інтернет не активний")
+                    String titleText;
+                    if(new GregorianCalendar().get(Calendar.DAY_OF_MONTH)<4){
+                        titleText = "Швидкість обмежена";
+                    }else{
+                        titleText = "Інтернет не активний";
+                    }
+                        new MyAlertDialogBuilder(context)
+                            .setTitleText(titleText)
                             .setMessageText(sb.toString())
                             .setNegativeButtonForClose("Ні")
-                            .setPositiveButtonWithRunnableForExecutor("Так",
-                                    new Runnable() {
+                            .setPositiveButtonWithRunnableForExecutor("Так",new Runnable() {
                                         @Override
                                         public void run() {
                                             goTo(new BalanceFragment());

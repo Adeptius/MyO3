@@ -20,7 +20,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
-public class TurboDayFragment extends BaseFragment {
+public class TurboDayFragment extends HelperFragment {
 
 
     private List<String> statistics;

@@ -14,7 +14,7 @@ import static ua.freenet.cabinet.R.id.activate_garant_button;
 import static ua.freenet.cabinet.R.id.text_title;
 import static ua.freenet.cabinet.R.id.text_view_for_details;
 
-public class GarantServiceFragment extends BaseFragment {
+public class GarantServiceFragment extends HelperFragment {
 
     private String serviseStatus;
     private boolean privatHouse;

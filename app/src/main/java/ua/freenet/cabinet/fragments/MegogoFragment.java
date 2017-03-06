@@ -33,7 +33,7 @@ import ua.freenet.cabinet.model.MegogoPts;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 
-public class MegogoFragment extends BaseFragment {
+public class MegogoFragment extends HelperFragment {
 
     private List<ChannelMegogo> allChannelMegogos = new ArrayList<>();
     private List<ChannelMegogo> light = new ArrayList<>();
@@ -109,10 +109,11 @@ public class MegogoFragment extends BaseFragment {
 
     private void draw() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_megogo_perevagy, null);
+        LinearLayout forHardware = (LinearLayout) perevagyLayout.findViewById(R.id.layToAddHardware);
+        addHardWareRequirementsToLayout(forHardware, "megogo");
         perevagyLayout.setVisibility(View.GONE);
         mainLayout.addView(perevagyLayout);
 
-        addHardWareRequirementsToMainScreenFor("megogo");
 
         if (!"".equals(activeSubscribe)) {
             View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
@@ -366,7 +367,7 @@ public class MegogoFragment extends BaseFragment {
         });
 
         new MyAlertDialogBuilder(context)
-                .setTitleText(channelMegogo.getTitle())
+                .setTitleTextWithWhiteBackground(channelMegogo.getTitle())
                 .setView(layout)
                 .createAndShow();
 

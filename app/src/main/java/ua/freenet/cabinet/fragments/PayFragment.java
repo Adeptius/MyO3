@@ -23,7 +23,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
-public class PayFragment extends BaseFragment {
+public class PayFragment extends HelperFragment {
 
     private Person person;
 

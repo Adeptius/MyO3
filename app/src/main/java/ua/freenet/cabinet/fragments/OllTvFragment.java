@@ -23,7 +23,7 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.ChannelOllTv;
 
 
-public class OllTvFragment  extends BaseFragment implements View.OnClickListener {
+public class OllTvFragment  extends HelperFragment implements View.OnClickListener {
 
     private Button buttonStart;
     private Button buttonOptimal;
@@ -76,9 +76,10 @@ public class OllTvFragment  extends BaseFragment implements View.OnClickListener
 
     private void draw() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_olltv_perevagy, null);
+        LinearLayout forHardware = (LinearLayout) perevagyLayout.findViewById(R.id.layForHardware);
         mainLayout.addView(perevagyLayout);
 
-        addHardWareRequirementsToMainScreenFor("oll");
+        addHardWareRequirementsToLayout(forHardware,"oll");
 
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_olltv_tarif, null);
         mainLayout.addView(allChanels);

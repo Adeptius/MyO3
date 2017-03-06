@@ -27,7 +27,7 @@ import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
 
-public class TarifFragment extends BaseFragment {
+public class TarifFragment extends HelperFragment {
 
     private List<Servise> services;
 
