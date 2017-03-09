@@ -53,7 +53,7 @@ public class ImageDownloader implements Html.ImageGetter {
         return d;
     }
 
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
+    private class LoadImage extends AsyncTask<Object, Void, Bitmap> {
         private LevelListDrawable mDrawable;
         @Override
         protected Bitmap doInBackground(Object... params) {

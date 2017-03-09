@@ -2,11 +2,9 @@ package ua.freenet.cabinet.fragments;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,16 +41,15 @@ public class PayFragment extends HelperFragment {
     @Override
     void doInBackground() throws Exception {
         person = DbCache.getPerson();
-        prepareAll();
+        prepareViews();
     }
 
     @Override
     void processIfOk() {
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void prepareAll() {
+    private void prepareViews() {
         final View iPayViewContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView iPayView = (ImageView) iPayViewContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(iPayView, R.drawable.i_pay);
@@ -62,6 +59,8 @@ public class PayFragment extends HelperFragment {
                 askHowMuch("iPayView");
             }
         });
+        preparedViews.add(iPayViewContainer);
+
 
         final View eCommerceConnectContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView eCommerceConnect = (ImageView) eCommerceConnectContainer.findViewById(R.id.pay_image_view);
@@ -72,103 +71,94 @@ public class PayFragment extends HelperFragment {
                 askHowMuch("eCommerceConnect");
             }
         });
+        preparedViews.add(eCommerceConnectContainer);
+
 
         final View payMasterContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView payMaster = (ImageView) payMasterContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(payMaster,  R.drawable.pay_master3);
+        addImageToViewFromResources(payMaster, R.drawable.pay_master3);
         payMaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("payMaster");
             }
         });
+        preparedViews.add(payMasterContainer);
+
 
         final View platonContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView platon = (ImageView) platonContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(platon,  R.drawable.platon);
+        addImageToViewFromResources(platon, R.drawable.platon);
         platon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 askHowMuch("platon");
             }
         });
+        preparedViews.add(platonContainer);
+
 
         final View iBoxContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView iBox = (ImageView) iBoxContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(iBox,  R.drawable.ibox);
+        addImageToViewFromResources(iBox, R.drawable.ibox);
         iBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://www.ibox.ua/?section=maps"));
-                startActivity(i);
+                openInBrowser("https://www.ibox.ua/?section=maps");
             }
         });
+        preparedViews.add(iBoxContainer);
+
 
         final View easyPayContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView easyPay = (ImageView) easyPayContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(easyPay,  R.drawable.easy_pay);
+        addImageToViewFromResources(easyPay, R.drawable.easy_pay);
         easyPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://map.easypay.ua:8465/"));
-                startActivity(i);
+                openInBrowser("https://map.easypay.ua:8465/");
             }
         });
+        preparedViews.add(easyPayContainer);
+
 
         final View tymeContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView tyme = (ImageView) tymeContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(tyme,  R.drawable.tyme);
+        addImageToViewFromResources(tyme, R.drawable.tyme);
         tyme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://tyme.ua/ru/clients/where/"));
-                startActivity(i);
+                openInBrowser("https://tyme.ua/ru/clients/where/");
             }
         });
+        preparedViews.add(tymeContainer);
+
 
         final View privatBankContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView privatBank = (ImageView) privatBankContainer.findViewById(R.id.pay_image_view);
-        addImageToViewFromResources(privatBank,  R.drawable.privat);
+        addImageToViewFromResources(privatBank, R.drawable.privat);
         privatBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://secure.privatbank.ua/freenet"));
-                startActivity(i);
+                openInBrowser("https://secure.privatbank.ua/freenet");
             }
         });
-
-        HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                mainLayout.addView(iPayViewContainer);
-                mainLayout.addView(eCommerceConnectContainer);
-                mainLayout.addView(payMasterContainer);
-                mainLayout.addView(platonContainer);
-                mainLayout.addView(iBoxContainer);
-                mainLayout.addView(easyPayContainer);
-                mainLayout.addView(tymeContainer);
-                mainLayout.addView(privatBankContainer);
-            }
-        });
+        preparedViews.add(privatBankContainer);
     }
 
     private void addImageToViewFromResources(ImageView view, int image) {
-            final Bitmap loadedBitMap = BitmapFactory
-                    .decodeResource(getResources(), image);
+        final Bitmap loadedBitMap = BitmapFactory
+                .decodeResource(getResources(), image);
 
-            double y = loadedBitMap.getHeight();
-            double x = loadedBitMap.getWidth();
+        double y = loadedBitMap.getHeight();
+        double x = loadedBitMap.getWidth();
 
-            int currentX = (int) (mainLayout.getWidth() * 0.93);
-            double ratio = y / x;
+        int currentX = (int) (mainLayout.getWidth() * 0.93);
+        double ratio = y / x;
 
         view.getLayoutParams().height = (int) (currentX * ratio);
-            view.setImageBitmap(loadedBitMap);
-            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        view.setImageBitmap(loadedBitMap);
+        view.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
     public void askHowMuch(final String system) {
@@ -176,20 +166,20 @@ public class PayFragment extends HelperFragment {
         layout.setOrientation(LinearLayout.HORIZONTAL);
 
         TextView before = new TextView(context);
-        before.setText("Поповнити рахунок на");
+        before.setText(" Поповнити рахунок на");
         before.setTypeface(null, Typeface.BOLD);
         before.setTextSize(18);
+
+        final EditText text = new EditText(context);
+        text.setWidth((int) Utilits.dpToPixel(50, context));
+        text.setCursorVisible(true);
+        text.hasFocus();
+        text.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         TextView after = new TextView(context);
         after.setText("грн");
         after.setTypeface(null, Typeface.BOLD);
         after.setTextSize(18);
-
-        final EditText text = new EditText(context);
-        text.setWidth((int) Utilits.dpToPixel(50,context));
-        text.setCursorVisible(true);
-        text.hasFocus();
-        text.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         layout.addView(before);
         layout.addView(text);
@@ -203,46 +193,29 @@ public class PayFragment extends HelperFragment {
                     @Override
                     public void run() {
                         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                        String url, key1,key2,value1,value2;
-                        if("iPayView".equals(system)){
-                            url = "https://paygate.freenet.ua/iPay/sign.php";
-                            key1 = "card";
-                            key2 = "add";
-                            value1 = Settings.getCurrentLogin();
-                            value2 = text.getText().toString();
-                        }else if("eCommerceConnect".equals(system)){
-                            url = "https://paygate.freenet.ua/ecommerce/sign.php";
-                            key1 = "id2";
-                            key2 = "add";
-                            value1 = String.valueOf(person.getId());
-                            value2 = text.getText().toString();
-                        }else if("payMaster".equals(system)){
-                            url = "https://paygate.freenet.ua/webmoney/init.php";
-                            key1 = "pid";
-                            key2 = "add";
-                            value1 = String.valueOf(person.getId());
-                            value2 = text.getText().toString();
-                        }else {
-                            url = "https://paygate.freenet.ua/platon/init.php";
-                            key1 = "account";
-                            key2 = "p_id";
-                            String key3 = "amount";
-                            value1 = Settings.getCurrentLogin();
-                            value2 = String.valueOf(person.getId());
-                            String value3 = text.getText().toString();
+                        String add = text.getText().toString();
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("https://o3.ua/content/files/redirecttopost(1).html?url=");
 
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/platon" +
-                                    ".html?url=%s&%s=%s&%s=%s&%s=%s", url, key1, value1, key2, value2, key3, value3);
-                            i.setData(Uri.parse(formedUrl));
-                            startActivity(i);
+                        if ("iPayView".equals(system)) {
+                            sb.append("https://paygate.freenet.ua/iPay/sign.php");
+                            sb.append("&card=").append(Settings.getCurrentLogin());
+                            sb.append("&add=").append(add);
+                        } else if ("eCommerceConnect".equals(system)) {
+                            sb.append("https://paygate.freenet.ua/ecommerce/sign.php");
+                            sb.append("&id2=").append(String.valueOf(person.getId()));
+                            sb.append("&add=").append(add);
+                        } else if ("payMaster".equals(system)) {
+                            sb.append("https://paygate.freenet.ua/webmoney/init.php");
+                            sb.append("&pid=").append(String.valueOf(person.getId()));
+                            sb.append("&add=").append(add);
+                        } else {
+                            sb.append("https://paygate.freenet.ua/platon/init.php");
+                            sb.append("&account=").append(Settings.getCurrentLogin());
+                            sb.append("&p_id=").append(String.valueOf(person.getId()));
+                            sb.append("&amount=").append(add);
                         }
-
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        String formedUrl = String.format("http://e404.ho.ua/myo3/redirect/redirectToPost" +
-                                ".html?url=%s&%s=%s&%s=%s", url, key1, value1, key2, value2);
-                        i.setData(Uri.parse(formedUrl));
-                        startActivity(i);
+                        openInBrowser(sb.toString());
                     }
                 }).createAndShow();
     }

@@ -4,14 +4,10 @@ package ua.freenet.cabinet.fragments;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,7 +35,6 @@ public class ContactFragment extends HelperFragment {
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -48,20 +43,17 @@ public class ContactFragment extends HelperFragment {
         sityNameUa = person.getAddress().getCityNameUa();
         String url = DbCache.getUrlOfCityPhones(sityNameUa);
         city = DbCache.getCityPhones(url);
+        prepareViews();
+
     }
 
     @Override
     void processIfOk() {
-        draw();
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
 
-    private void draw() {
-//        LinearLayout layForContacts = getLayout(R.id.layout_for_contacts);
-        LinearLayout layForContacts = mainLayout;
-
+    private void prepareViews() {
         if (sityNameUa.equals("Київ")){
             // Добавляем контакт Киевского колл центра
             View layoutCallCentre = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
@@ -88,7 +80,7 @@ public class ContactFragment extends HelperFragment {
                     sendEmail("sales@o3.ua");
                 }
             });
-            layForContacts.addView(layoutCallCentre);
+            preparedViews.add(layoutCallCentre);
 
             // Добавляем контакт Киевского абон отдела
             View layoutAbon = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
@@ -115,7 +107,8 @@ public class ContactFragment extends HelperFragment {
                     sendEmail("abon_otdel@o3.ua");
                 }
             });
-            layForContacts.addView(layoutAbon);
+            preparedViews.add(layoutAbon);
+
         }else { // Добавляем контакт НЕ Киевского колл центра
             View layoutCallAndAbon = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
             TextView callAndAbonName = (TextView) layoutCallAndAbon.findViewById(R.id.centre_name);
@@ -141,9 +134,8 @@ public class ContactFragment extends HelperFragment {
                     sendEmail("abon_otdel@o3.ua");
                 }
             });
-            layForContacts.addView(layoutCallAndAbon);
+            preparedViews.add(layoutCallAndAbon);
         }
-
 
         // добавляем саппорт
         View layoutSupport = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
@@ -170,7 +162,7 @@ public class ContactFragment extends HelperFragment {
                 sendEmail("support@o3.ua");
             }
         });
-        layForContacts.addView(layoutSupport);
+        preparedViews.add(layoutSupport);
 
         if (sityNameUa.equals("Київ")){// добавляем Киевские ЦОА
             // Закревского
@@ -189,7 +181,7 @@ public class ContactFragment extends HelperFragment {
                     showCoordinatesOnMap("50.505783 30.618057");
                 }
             });
-            layForContacts.addView(layoutZakrevskogo);
+            preparedViews.add(layoutZakrevskogo);
 
             // Драгоманова
             View layoutDragomanova = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
@@ -207,8 +199,7 @@ public class ContactFragment extends HelperFragment {
                     showCoordinatesOnMap("50.4090463 30.6394796");
                 }
             });
-            layForContacts.addView(layoutDragomanova);
-
+            preparedViews.add(layoutDragomanova);
 
         }else {// добавляем НЕ Киевские ЦОА
             View layoutRegionCoa = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
@@ -226,7 +217,7 @@ public class ContactFragment extends HelperFragment {
                     showCoordinatesOnMap(city.getCoordinates());
                 }
             });
-            layForContacts.addView(layoutRegionCoa);
+            preparedViews.add(layoutRegionCoa);
         }
     }
 

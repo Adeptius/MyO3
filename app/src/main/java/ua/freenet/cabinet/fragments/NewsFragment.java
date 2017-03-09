@@ -52,13 +52,12 @@ public class NewsFragment extends HelperFragment {
 
     @Override
     void doInBackground() throws Exception {
-
         String city = DbCache.getPerson().getAddress().getCityNameUa();
 
         String newsUrl = DbCache.getUrlOfCityNews(city);
-        String acciiurl = DbCache.getUrlOfCityAccii(city);
+        String acciiUrl = DbCache.getUrlOfCityAccii(city);
 
-        List<News> newses = getAllNews(acciiurl, newsUrl);
+        List<News> newses = getAllNews(acciiUrl, newsUrl);
         sortByDate(newses);
         newses = subList(newses, 10);
         prepareNews(newses);
@@ -72,7 +71,6 @@ public class NewsFragment extends HelperFragment {
         for (int i = 0; i < newses.size(); i++) {
             final News news = newses.get(i);
 
-
             final View itemView = LayoutInflater.from(context).inflate(R.layout.item_piece_of_news, null);
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
             TextView newsTitle = (TextView) itemView.findViewById(R.id.text_news_title);
@@ -81,12 +79,10 @@ public class NewsFragment extends HelperFragment {
             final TextView dateText = (TextView) itemView.findViewById(R.id.textView_date);
             Button toSiteButton = (Button) itemView.findViewById(R.id.to_site_button);
             Button closeButton = (Button) itemView.findViewById(R.id.close);
-            Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
+            final Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
 
             hideLayout.setVisibility(View.GONE);
-            if (news.getYouTube().equals("")) {
-                youTubeButton.setVisibility(View.GONE);
-            }
+
             loadImageForNews(news, imageView);
             newsTitle.setText(news.getTitle());
             comentText.setText(news.getComment());
@@ -110,10 +106,7 @@ public class NewsFragment extends HelperFragment {
             toSiteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    String url = news.getUrl();
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                    openInBrowser(news.getUrl());
                 }
             });
 
@@ -126,6 +119,9 @@ public class NewsFragment extends HelperFragment {
                         ImageDownloader imageGetter = new ImageDownloader(comentText, context);
                         Spanned htmlSpan = Html.fromHtml(news.getHtml(), imageGetter, null);
                         comentText.setText(htmlSpan);
+                        if (news.getYouTube().equals("")) {
+                            youTubeButton.setVisibility(View.GONE);
+                        }
                         expand(hideLayout);
                     }
                 }
@@ -146,8 +142,7 @@ public class NewsFragment extends HelperFragment {
 
     public void watchYoutubeVideo(String id) {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + id));
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + id));
         try {
             startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {
@@ -230,7 +225,6 @@ public class NewsFragment extends HelperFragment {
         } catch (NullPointerException e) {
             text = "";
         }
-
 
         return new News(title2, text, href, imageUrl, convertDateToNumbers(date));
     }

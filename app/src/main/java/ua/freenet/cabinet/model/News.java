@@ -21,7 +21,7 @@ public class News {
     private String html = "";
     private String youTube = "";
 
-    public News(String title, String comment, final String url, final String imgUrl, String numberedDate) {
+    public News(final String title, String comment, final String url, final String imgUrl, String numberedDate) {
         this.title = title;
         this.comment = comment;
         this.url = url;
@@ -34,14 +34,22 @@ public class News {
                 try {
                     Document document = Jsoup.connect(url).get();
                     Element element = document.body().getElementsByClass("post").first();
-                    try {element.getElementsByTag("time").remove();
-                    } catch (NullPointerException ignored) {}
-                    try {element.getElementsByTag("h2").remove();
-                    } catch (NullPointerException ignored) {}
-                    try {element.getElementsByClass("back-link").remove();
-                    } catch (NullPointerException ignored) {}
-                    try {element.getElementsByTag("img").first().remove();
-                    } catch (NullPointerException ignored) {}
+                    try {
+                        element.getElementsByTag("time").remove();
+                    } catch (NullPointerException ignored) {
+                    }
+                    try {
+                        element.getElementsByTag("h2").remove();
+                    } catch (NullPointerException ignored) {
+                    }
+                    try {
+                        element.getElementsByClass("back-link").remove();
+                    } catch (NullPointerException ignored) {
+                    }
+                    try {
+                        element.getElementsByTag("img").first().remove();
+                    } catch (NullPointerException ignored) {
+                    }
 
                     try {
                         Elements elements = element.getElementsByAttribute("img");
@@ -50,23 +58,27 @@ public class News {
                                 if (Integer.parseInt(el.attr("width")) < 200) {
                                     el.remove();
                                 }
-                            }catch (Exception ignored){}
+                            } catch (Exception ignored) {
+                            }
                         }
                         element.getElementsByTag("img").first().remove();
-                    } catch (NullPointerException ignored) {}
-
-
-
+                    } catch (NullPointerException ignored) {
+                    }
 
                     String html = element.html();
                     html = html.replaceAll("/content/", "https://o3.ua/content/");
                     html = html.replaceAll("href=\"", "href=\"https://o3.ua");
                     html = html.replaceAll("https://o3.uahttps:", "https:");
                     if (html.contains("https://www.youtube.com")) {
-                        try {
-                            youTube = element.getElementsByTag("iframe").first().attr("src");
-                            youTube = youTube.substring(youTube.lastIndexOf("/") + 1);
-                        } catch (NullPointerException ignored) {}
+                        String temp = html.substring(html.indexOf("https://www.youtube.com"));
+                        temp = temp.substring(0, temp.indexOf("\""));
+                        temp = temp.substring(temp.lastIndexOf("/") + 1);
+                        News.this.youTube = temp;
+                    } else if (html.contains("https://youtu.be")) {
+                        String temp = html.substring(html.indexOf("https://youtu.be"));
+                        temp = temp.substring(0, temp.indexOf("\""));
+                        temp = temp.substring(temp.lastIndexOf("/") + 1);
+                        News.this.youTube = temp;
                     }
                     News.this.html = html;
                 } catch (IOException e) {
@@ -79,6 +91,7 @@ public class News {
     public String getNumberedDate() {
         return numberedDate;
     }
+
     public String getStringedDate() {
         String numbered = numberedDate;
         String result = "";
@@ -86,7 +99,8 @@ public class News {
             int month = Integer.parseInt(numbered.substring(4, 6));
             int day = Integer.parseInt(numbered.substring(6, 8));
             result = day + " " + Utilits.getStrMonth(month);
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         return result;
     }
 

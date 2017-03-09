@@ -1,19 +1,12 @@
 package ua.freenet.cabinet.fragments;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -69,23 +62,21 @@ public class DocumentFragment extends HelperFragment {
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
         person = DbCache.getPerson();
         footer = Zayavleniya.getFooter();
+        prepareViews();
     }
 
     @Override
     void processIfOk() {
-        draw();
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void draw() {
+    private void prepareViews() {
         List<Zayava> list = Zayavleniya.getAllZayava();
         for (final Zayava zayava : list) {
             View zayavaLayout = LayoutInflater.from(context).inflate(R.layout.item_document_zayava, null);
@@ -112,7 +103,7 @@ public class DocumentFragment extends HelperFragment {
                     buttonWasClicked(zayava);
                 }
             });
-            mainLayout.addView(zayavaLayout);
+            preparedViews.add(zayavaLayout);
         }
     }
 

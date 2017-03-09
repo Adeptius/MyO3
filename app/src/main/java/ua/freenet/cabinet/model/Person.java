@@ -29,7 +29,6 @@ public class Person {
     public Person(String json) {
         try {
             //Preparing json because it shit
-
             json = json.replaceAll("\"mailings\":\\{", "\"mailings\":[");
             json = json.replaceAll("\\},\"phones\"", "],\"phones\"");
             json = json.replaceAll("\"1\":","").replaceAll("\"2\":","").replaceAll("\"3\":","");

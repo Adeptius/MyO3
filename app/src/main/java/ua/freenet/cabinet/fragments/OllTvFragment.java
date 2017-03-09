@@ -47,7 +47,6 @@ public class OllTvFragment  extends HelperFragment implements View.OnClickListen
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -57,6 +56,7 @@ public class OllTvFragment  extends HelperFragment implements View.OnClickListen
         premium = DbCache.getOllTvPremiumChannels();
         deleteSecondFromFirst(premium, optimal);
         deleteSecondFromFirst(optimal, start);
+        prepareViews();
     }
 
     private void deleteSecondFromFirst(List<ChannelOllTv> second, List<ChannelOllTv> first) {
@@ -69,23 +69,21 @@ public class OllTvFragment  extends HelperFragment implements View.OnClickListen
 
     @Override
     void processIfOk() {
-        draw();
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void draw() {
+    private void prepareViews() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_olltv_perevagy, null);
         LinearLayout forHardware = (LinearLayout) perevagyLayout.findViewById(R.id.layForHardware);
-        mainLayout.addView(perevagyLayout);
+        preparedViews.add(perevagyLayout);
 
-        addHardWareRequirementsToLayout(forHardware,"oll");
+        insertHardWareRequirementsToLayout(forHardware,"oll");
 
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_olltv_tarif, null);
-        mainLayout.addView(allChanels);
+        preparedViews.add(allChanels);
 
         View allPackets = LayoutInflater.from(context).inflate(R.layout.item_olltv_packets, null);
-        mainLayout.addView(allPackets);
+        preparedViews.add(allPackets);
 
         buttonStart = (Button) allChanels.findViewById(R.id.olltv_button_start);
         buttonOptimal = (Button) allChanels.findViewById(R.id.olltv_button_optimal);
@@ -205,7 +203,5 @@ public class OllTvFragment  extends HelperFragment implements View.OnClickListen
                 });
             }
         });
-
-
     }
 }

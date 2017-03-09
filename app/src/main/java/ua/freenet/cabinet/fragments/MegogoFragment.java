@@ -56,7 +56,6 @@ public class MegogoFragment extends HelperFragment {
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -87,12 +86,12 @@ public class MegogoFragment extends HelperFragment {
             activationLink = GetInfo.getMegogoActivationLink();
         }
         sortChannels();
+        prepareViews();
     }
 
     @Override
     void processIfOk() {
-        draw();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
     private void sortChannels() {
@@ -107,13 +106,12 @@ public class MegogoFragment extends HelperFragment {
         }
     }
 
-    private void draw() {
+    private void prepareViews() {
         View perevagyLayout = LayoutInflater.from(context).inflate(R.layout.item_megogo_perevagy, null);
         LinearLayout forHardware = (LinearLayout) perevagyLayout.findViewById(R.id.layToAddHardware);
-        addHardWareRequirementsToLayout(forHardware, "megogo");
+        insertHardWareRequirementsToLayout(forHardware, "megogo");
         perevagyLayout.setVisibility(View.GONE);
-        mainLayout.addView(perevagyLayout);
-
+        preparedViews.add(perevagyLayout);
 
         if (!"".equals(activeSubscribe)) {
             View mainLayoutMegogo = LayoutInflater.from(context).inflate(R.layout.item_megogo_main, null);
@@ -141,13 +139,13 @@ public class MegogoFragment extends HelperFragment {
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                     } catch (android.content.ActivityNotFoundException anfe) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        openInBrowser("https://play.google.com/store/apps/details?id=" + appPackageName);
                     }
                 }
             });
             mainLayoutMegogo.setPadding(0, 0, 0, 50);
 
-            mainLayout.addView(mainLayoutMegogo);
+            preparedViews.add(mainLayoutMegogo);
         }
 
         for (final MegogoPts megogoPt : megogoPts) {
@@ -223,9 +221,13 @@ public class MegogoFragment extends HelperFragment {
                     }
                 }
             });
-            mainLayout.addView(mainLayoutMegogo);
+            preparedViews.add(mainLayoutMegogo);
         }
-        addAdditionalText();
+        TextView textView = new TextView(context);
+        textView.setText(R.string.megogo_additional);
+        textView.setPadding(40, 30, 40, 40);
+        textView.setVisibility(View.GONE);
+        preparedViews.add(textView);
     }
 
     private HashMap<LinearLayout, Integer> imagesLoaded = new HashMap<>(); // счетчик загруженных картинок по каждому контейнеру
@@ -370,15 +372,6 @@ public class MegogoFragment extends HelperFragment {
                 .setTitleTextWithWhiteBackground(channelMegogo.getTitle())
                 .setView(layout)
                 .createAndShow();
-
-    }
-
-    private void addAdditionalText() {
-        TextView textView = new TextView(context);
-        textView.setText(R.string.megogo_additional);
-        textView.setPadding(40, 30, 40, 40);
-        textView.setVisibility(View.GONE);
-        mainLayout.addView(textView);
     }
 
 

@@ -1,12 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +28,6 @@ public class BonusFragment extends HelperFragment {
 
     private List<BonusServiceSpending> serviceSpendings;
 
-
     @Override
     void setAllSettings() {
         titleText = "Бонуси";
@@ -45,7 +39,6 @@ public class BonusFragment extends HelperFragment {
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
@@ -57,19 +50,18 @@ public class BonusFragment extends HelperFragment {
             bonuses = DbCache.getCountOfBonuses();
             serviceSpendings = DbCache.getBonusesSpending();
         }
+        prepareViews();
     }
 
     @Override
     void processIfOk() {
-        draw();
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void draw() {
+    private void prepareViews() {
         if (signedPublicCard && confirmedBonus) { // если всё подписано
             View layout = LayoutInflater.from(context).inflate(R.layout.item_bonus_main, null);
-            mainLayout.addView(layout);
+            preparedViews.add(layout);
 
             final Button hideButton = (Button) layout.findViewById(R.id.button_hide);
             final LinearLayout hideLayout = (LinearLayout) layout.findViewById(R.id.hide_layout);
@@ -109,6 +101,9 @@ public class BonusFragment extends HelperFragment {
             textHowTo.setText(sb);
 
             for (final BonusServiceSpending serviceSpending : serviceSpendings) {
+                if (serviceSpending.getNote().startsWith("!-Приостановлен")){
+                    continue;
+                }
                 View spendingLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_service, null);
                 spendingLayout.setVisibility(View.GONE);
                 Button payButton = (Button) spendingLayout.findViewById(R.id.button_pay);
@@ -120,6 +115,7 @@ public class BonusFragment extends HelperFragment {
 
                 TextView name = (TextView) spendingLayout.findViewById(R.id.name);
                 name.setText(serviceSpending.getNote());
+
 
                 TextView coment = (TextView) spendingLayout.findViewById(R.id.coment);
                 coment.setText("Вже сплачено бонусами: " + serviceSpending.getBonus() + " грн");
@@ -139,7 +135,7 @@ public class BonusFragment extends HelperFragment {
                     }
                 });
                 if (bonuses == 0) payButton.setVisibility(View.GONE);
-                mainLayout.addView(spendingLayout);
+                preparedViews.add(spendingLayout);
             }
         } else if (signedPublicCard) { // если подписано, но бонусы не подключены
             View activateLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_activate, null);
@@ -156,14 +152,10 @@ public class BonusFragment extends HelperFragment {
             fullRules.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    String url = "http://o3.ua/content/files/pravila_bonusnoi_sistemi.pdf";
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                    openInBrowser("http://o3.ua/content/files/pravila_bonusnoi_sistemi.pdf");
                 }
             });
-            mainLayout.addView(activateLayout);
-
+            preparedViews.add(activateLayout);
 
         } else if (!confirmedBonus) { // если договор не подписан.
             View iditeVCoaLayout = LayoutInflater.from(context).inflate(R.layout.item_bonus_idite_v_coa, null);
@@ -172,13 +164,10 @@ public class BonusFragment extends HelperFragment {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    String url = "http://o3.ua/content/files/publichnyj__dogovir.pdf";
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                    openInBrowser("http://o3.ua/content/files/publichnyj__dogovir.pdf");
                 }
             });
-            mainLayout.addView(iditeVCoaLayout);
+            preparedViews.add(iditeVCoaLayout);
         }
     }
 

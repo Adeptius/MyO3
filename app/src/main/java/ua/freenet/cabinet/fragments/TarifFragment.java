@@ -29,8 +29,6 @@ import static ua.freenet.cabinet.utils.Utilits.doTwoSymb;
 
 public class TarifFragment extends HelperFragment {
 
-    private List<Servise> services;
-
     @Override
     void setAllSettings() {
         titleText = "Підключені послуги";
@@ -42,25 +40,22 @@ public class TarifFragment extends HelperFragment {
 
     @Override
     void init() {
-
     }
 
     @Override
     void doInBackground() throws Exception {
-        services = DbCache.getServises();
+        prepareServises(DbCache.getServises());
     }
 
     @Override
     void processIfOk() {
-        prepareServises(services);
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
     private void prepareServises(List<Servise> services) {
         for (final Servise service : services) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_tarif, null);
-            mainLayout.addView(itemView);
+            preparedViews.add(itemView);
 
             TextView serviceTypeName = (TextView) itemView.findViewById(R.id.service_type);
             serviceTypeName.setText(service.getMyTypeName());

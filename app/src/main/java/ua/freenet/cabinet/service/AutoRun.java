@@ -9,8 +9,6 @@ import static ua.freenet.cabinet.utils.Utilits.log;
 public class AutoRun extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
-//        log("BroadcastReceiver получил intent " + intent);
-
         if (intent.toString().contains("BOOT_COMPLETED")){
             log("Девайс загрузился. Запуск сервиса");
             context.startService(new Intent(context, BackgroundService.class));

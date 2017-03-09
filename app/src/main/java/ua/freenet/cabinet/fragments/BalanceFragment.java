@@ -19,8 +19,6 @@ import ua.freenet.cabinet.utils.Utilits;
 
 public class BalanceFragment extends HelperFragment {
 
-//    private List<Operation> operations;
-
     @Override
     void setAllSettings() {
         titleText = "Баланс";
@@ -48,18 +46,16 @@ public class BalanceFragment extends HelperFragment {
         titleText = "Баланс: " + balance + " грн";
         descriptionText = "Кожного першого числа місяця знімається сумма у розмірі однієї абонентської плати (" + mountlyFee + " грн)";
         updateTitle();
-        prepareAllOperations(comboList);
+        prepareViews(comboList);
     }
 
 
     @Override
     void processIfOk() {
-        hideAllViewsInMainScreen();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void prepareAllOperations(List<CombinedOperation> operations) {
-        final List<View> viewsToAdd = new ArrayList<>();
+    private void prepareViews(List<CombinedOperation> operations) {
         for (CombinedOperation operation : operations) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.item_balance_operation, null);
             TextView textOperationDate = (TextView) itemView.findViewById(R.id.operation_date);
@@ -111,10 +107,9 @@ public class BalanceFragment extends HelperFragment {
             textOperationSaldo.setText(saldo);
 
             if (!note.equals("Нема проплат та списань")) {
-                viewsToAdd.add(itemView);
+                preparedViews.add(itemView);
             }
         }
-        addViewToMainLayout(viewsToAdd);
     }
 
 

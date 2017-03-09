@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -56,6 +57,7 @@ public abstract class BaseFragment extends Fragment{
     protected int layoutId;
     protected int SCREEN_WIDTH;
     protected final int TIME_TO_WAIT_BEFORE_UPDATE = 4000;
+    protected ArrayList<View> preparedViews = new ArrayList<>();
 
     public static final ViewGroup.LayoutParams WRAP_WRAP = new ViewGroup
             .LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
@@ -110,7 +112,12 @@ public abstract class BaseFragment extends Fragment{
         }
     }
 
-    protected void addViewToMainLayout(final List<View> viewsToAdd) {
+    protected void addViewToMainLayoutCurrentThread(View view){
+        view.setVisibility(View.INVISIBLE);
+        mainLayout.addView(view);
+    }
+
+    protected void addViewsToMainLayout(final List<View> viewsToAdd) {
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
@@ -120,6 +127,19 @@ public abstract class BaseFragment extends Fragment{
                 }
             }
         });
+    }
+
+    protected void showAndAnimatePreparedViews() {
+//        HANDLER.post(new Runnable() {
+//            @Override
+//            public void run() {
+                for (View view : preparedViews) {
+                    view.setVisibility(View.GONE);
+                    mainLayout.addView(view);
+                }
+                animateScreen();
+//            }
+//        });
     }
 
     protected void showImageInTop() {

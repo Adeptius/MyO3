@@ -29,7 +29,6 @@ public class Servise {
     private String discountTo;
 
     public Servise(String json) {
-//        Gson allGSon = new Gson();
         try {
             JSONObject allInfo = new JSONObject(json.trim());
             id = allInfo.getInt("id");
@@ -141,26 +140,24 @@ public class Servise {
         }catch (Exception ignored){}
 
 
-        name = name.replaceAll("Мбит", "Мбіт");
-        name = name.replaceAll("Безлимитный", "Безліміт");
-        name = name.replaceAll("Реальный", "Реальний");
-        name = name.replaceAll("Телевидение MEGOGO.NET \\(", "Тариф ");
-        name = name.replaceAll("оптимальный\\)", "оптимальний");
-        name = name.replaceAll("Оптимальный\\)", "оптимальний");
-        name = name.replaceAll("\\(Промо 1-аренда stb\\)", "Медіаплеєр MAG");
-        name = name.replaceAll("Детский\\)", "Дитячий");
-        name = name.replaceAll("звезды", "зірки");
-        name = name.replaceAll("Гарантированный сервис", "Гарантований сервіс");
-        name = name.replaceAll("MEGOGO Легкая", "Підписка легка");
-        name = name.replaceAll("MEGOGO Оптимальная", "Підписка оптимальна");
-        name = name.replaceAll("MEGOGO Максимальная", "Підписка максимальна");
-        name = name.replaceAll("MEGOGO Viasat Premium", "Пакет Viasat Premium");
-        name = name.replaceAll("MEGOGO FilmBox", "Пакет FilmBox");
-        name = name.replaceAll("бесплатный", "безкоштовний");
-        name = name.replaceAll("Почтовый ящик 30Мб", "Обсяг 30мб");
-
-        name = name.trim();
-
+        name = name.replaceAll("Мбит", "Мбіт")
+                .replaceAll("Безлимитный", "Безліміт")
+                .replaceAll("Реальный", "Реальний")
+                .replaceAll("Телевидение MEGOGO.NET \\(", "Тариф ")
+                .replaceAll("оптимальный\\)", "оптимальний")
+                .replaceAll("Оптимальный\\)", "оптимальний")
+                .replaceAll("\\(Промо 1-аренда stb\\)", "Медіаплеєр MAG")
+                .replaceAll("Детский\\)", "Дитячий")
+                .replaceAll("звезды", "зірки")
+                .replaceAll("Гарантированный сервис", "Гарантований сервіс")
+                .replaceAll("MEGOGO Легкая", "Підписка легка")
+                .replaceAll("MEGOGO Оптимальная", "Підписка оптимальна")
+                .replaceAll("MEGOGO Максимальная", "Підписка максимальна")
+                .replaceAll("MEGOGO Viasat Premium", "Пакет Viasat Premium")
+                .replaceAll("MEGOGO FilmBox", "Пакет FilmBox")
+                .replaceAll("бесплатный", "безкоштовний")
+                .replaceAll("Почтовый ящик 30Мб", "Обсяг 30мб")
+                .trim();
         return name;
     }
 

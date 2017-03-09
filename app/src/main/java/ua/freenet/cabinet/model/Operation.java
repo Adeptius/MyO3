@@ -23,47 +23,6 @@ public class Operation {
         }
     }
 
-//    public String getTextSaldo() {
-//        String result = String.valueOf(saldo);
-//        if (result.contains(".")) {
-//            int dot = result.indexOf(".");
-//            result = result.substring(0, dot + 2);
-//        }
-//        return result;
-//    }
-//
-//    public String getTextMoney() {
-//        String result = String.valueOf(money);
-//        try{
-//            int dot = result.indexOf(".");
-//            if(result.length()>(dot+2)){
-//                result = result.substring(0, dot+3);
-//            }
-//        }catch (Exception ignored){}
-//
-//        if (result.contains(".0")) {
-//            result = result.substring(0, result.indexOf(".0"));
-//        }
-//        if (result.contains(".")){
-//            int a = result.indexOf(".");
-//            if (result.length()>a+2){
-//                result = result.substring(0, a+2);
-//            }
-//        }
-//        if (result.equals("-0")){
-//            result = "0";
-//        }
-//        return result;
-//    }
-//
-//    public String getMyNote() {
-//        String note = getNote();
-//        if (note.startsWith("20")){
-//            note = note.substring(note.indexOf(" ")+1);
-//        }
-//        return note;
-//    }
-
     public String getNote() {
         note = note.replaceAll("\\(Промо 1-аренда stb\\)","Оренда приставки");
         note = note.replaceAll(" - тариф аренды","");

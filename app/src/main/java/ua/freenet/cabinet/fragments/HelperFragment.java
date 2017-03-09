@@ -39,6 +39,11 @@ public abstract class HelperFragment extends BaseFragment {
         return (Button) baseView.findViewById(id);
     }
 
+    protected void openInBrowser(String url){
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
 
     public static int expand(final View v) {
         v.setVisibility(View.VISIBLE);
@@ -119,7 +124,7 @@ public abstract class HelperFragment extends BaseFragment {
     }
 
 
-    protected void addHardWareRequirementsToLayout(LinearLayout pasteInLay, final String tvType) {
+    protected void insertHardWareRequirementsToLayout(LinearLayout pasteInLay, final String tvType) {
         final String ollTvPackageName = "tv.oll.app";
         final String megogoPackageName = "com.megogo.application";
         final String divanTvPackageName = "divan.tv.DivanTV";

@@ -61,21 +61,19 @@ public class DivanTvFragment extends HelperFragment implements View.OnClickListe
 
     @Override
     void init() {
-        hideAllViewsInMainScreen();
     }
 
     @Override
     void doInBackground() throws Exception {
-
+        prepareViews();
     }
 
     @Override
     void processIfOk() {
-        draw();
-        animateScreen();
+        showAndAnimatePreparedViews();
     }
 
-    private void draw() {
+    private void prepareViews() {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_divantv_news, null);
         LinearLayout forHardware = (LinearLayout) itemView.findViewById(R.id.layForHardware);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView_news);
@@ -133,13 +131,11 @@ public class DivanTvFragment extends HelperFragment implements View.OnClickListe
         buttonNight.setOnClickListener(this);
         buttonViasat.setOnClickListener(this);
 
-        itemView.setVisibility(View.INVISIBLE);
-        allChanels.setVisibility(View.INVISIBLE);
-        allPackets.setVisibility(View.INVISIBLE);
-        mainLayout.addView(itemView);
-        mainLayout.addView(allChanels);
-        mainLayout.addView(allPackets);
-        addHardWareRequirementsToLayout(forHardware,"divan");
+        insertHardWareRequirementsToLayout(forHardware,"divan");
+
+        preparedViews.add(itemView);
+        preparedViews.add(allChanels);
+        preparedViews.add(allPackets);
     }
 
     private void loadImageForNews(ImageView imageView, int drawableId) {
