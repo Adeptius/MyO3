@@ -4,6 +4,7 @@ package ua.freenet.cabinet.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class Utilits {
 
-    public static final Handler HANDLER = new Handler();
+    public static final Handler HANDLER = new Handler(Looper.getMainLooper());
     public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 
     private static boolean networkLogEnable = true;

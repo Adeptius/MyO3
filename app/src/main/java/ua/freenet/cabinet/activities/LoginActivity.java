@@ -26,11 +26,13 @@ import java.util.List;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
+import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.dao.Web;
 import ua.freenet.cabinet.model.Testing;
 import ua.freenet.cabinet.model.TestingUser;
 import ua.freenet.cabinet.service.BackgroundService;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
@@ -106,14 +108,14 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if (!fastLogin)
-                    Thread.sleep(500);
+                    Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 startAnimation();
                 try {
                     if (!fastLogin)
-                    Thread.sleep(1000);
+                    Thread.sleep(800);
                     checkAll();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -128,33 +130,33 @@ public class LoginActivity extends AppCompatActivity {
         setStatusTextView("Перевірка наявності інтернету");
         Utilits.check();
         if (!fastLogin)
-        Thread.sleep(400);
+        Thread.sleep(300);
         if (!isInternetOk()) {
             setStatusTextView("Інтернет відсутній");
             stopProgressBar();
         } else {
             setStatusTextView("Авторизація");
             if (!fastLogin)
-            Thread.sleep(400);
+            Thread.sleep(300);
             if (isItFirstEnter()) {
                 setStatusTextView("Будь-ласка увійдіть");
                 stopProgressBar();
                 if (!fastLogin)
-                Thread.sleep(2000);
+                Thread.sleep(1800);
                 showLogin();
             } else {
                 try {
-                    if (Web.checkLoginAndSaveSessionIfTrue()) {
+                    if (GetInfo.checkLoginAndSaveSessionIfTrue()) {
                         setStatusTextView("Завантаження данних..");
                         if (!fastLogin)
-                        Thread.sleep(400);
+                        Thread.sleep(300);
                         DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
                         stopProgressBar();
                         setStatusTextView("Вхід виконано");
                         if (!fastLogin)
-                        Thread.sleep(1000);
+                        Thread.sleep(800);
                         goToMain();
                     } else {
                         setStatusTextView("Будь-ласка увійдіть");
@@ -190,7 +192,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void rememberPassword() {
         if (textLogin.getText().toString().equals("")) {
-            showSnackBar("Будь-ласка, введіть логін (номер договору)");
+            new MyAlertDialogBuilder(this)
+                    .setMessage("Будь-ласка, введіть логін (номер договору)")
+                    .setNegativeButtonForClose("Ок")
+                    .createAndShow();
         } else {
             final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                     R.style.AppTheme_Dark_Dialog);
@@ -200,12 +205,18 @@ public class LoginActivity extends AppCompatActivity {
             EXECUTOR.submit(new Runnable() {
                 @Override
                 public void run() {
-                    String result = SendInfo.rememberPassword(textLogin.getText().toString());
-                    showSnackBar(result);
+                    final String result = SendInfo.rememberPassword(textLogin.getText().toString());
                     HANDLER.post(new Runnable() {
                         @Override
                         public void run() {
                             progressDialog.dismiss();
+                            final InputMethodManager imm = (InputMethodManager) LoginActivity.this
+                                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(textPassword.getWindowToken(), 0);
+                            new MyAlertDialogBuilder(LoginActivity.this)
+                                    .setMessage(result)
+                                    .setNegativeButtonForClose("Ок")
+                                    .createAndShow();
                         }
                     });
                 }
@@ -213,16 +224,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void showSnackBar(final String message) {
-        HANDLER.post(new Runnable() {
-            @Override
-            public void run() {
-                Snackbar.make(loginLayout,
-                        message,
-                        Snackbar.LENGTH_LONG).show();
-            }
-        });
-    }
 
     private void startAnimation() {
         try {
@@ -260,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    if (Web.checkLoginAndSaveSessionIfTrue()) {
+                    if (GetInfo.checkLoginAndSaveSessionIfTrue()) {
                         DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();

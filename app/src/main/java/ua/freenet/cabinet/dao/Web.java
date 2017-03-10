@@ -10,17 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
-
-import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
-
-//import org.jsoup.Jsoup;
-//import org.jsoup.nodes.Element;
-//import org.jsoup.select.Elements;
-//import java.util.ArrayList;
-//import java.util.Map;
-//import ua.adeptius.myo3.model.ChannelMegogo;
 
 public class Web {
 
@@ -33,14 +23,14 @@ public class Web {
 
     private static String getSessionId() throws Exception {
         if (sessionId == null) {
-            setSessionId(getPhpSession());
+            setSessionId(GetInfo.getPhpSession());
             return getSessionId();
         } else {
             long currentTime = new GregorianCalendar().getTimeInMillis();
             long sessionTime = currentTime - sessionCreatedTime;
             int minutes = (int) sessionTime / 1000 / 60;
             if (minutes > 30) {
-                setSessionId(getPhpSession());
+                setSessionId(GetInfo.getPhpSession());
                 return getSessionId();
             } else {
                 return sessionId;
@@ -48,78 +38,9 @@ public class Web {
         }
     }
 
-    private static void setSessionId(String sessionID) {
+    static void setSessionId(String sessionID) {
         sessionId = sessionID;
         sessionCreatedTime = new GregorianCalendar().getTimeInMillis();
-    }
-
-//    private static String getPhpSession() throws Exception {
-//        MechanizeAgent agent = new MechanizeAgent();
-//        Document page = agent.get("https://my.o3.ua/login");
-////        Form form = page.form("/login_check");
-//        Forms forms = page.forms();
-//
-//        Form form = forms.get(0);
-//        form.get("_username").set(Settings.getCurrentLogin());
-//        form.get("_password").set(Settings.getCurrentPassword());
-//        Resource response = form.submit();
-//        if ("Redirecting to https://my.o3.ua/".equals(response.getTitle()) ||
-//                "Особистий кабінет".equals(response.getTitle())) {
-//            String session = agent.cookies().getAll().get(0).getValue();
-//            agent = null;
-//            page = null;
-//            response = null;
-//            form = null;
-//            return session;
-//        } else {
-//            throw new Exception();
-//        }
-//    }
-
-    private static String getPhpSession() throws Exception {
-        URL obj = new URL("https://my.o3.ua/login_check");
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-        String urlParameters = "_target_path=%2F&_username=" + Settings.getCurrentLogin()
-                + "&_password=" + Settings.getCurrentPassword();
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
-        List<String> list = con.getHeaderFields().get("Set-Cookie");
-        String result = list.get(0);
-        result = result.substring(result.indexOf("PHPSESSID=") + 10, result.indexOf(";"));
-        return result;
-    }
-
-    public static boolean checkLoginAndSaveSessionIfTrue() throws Exception {
-        URL obj = new URL("https://my.o3.ua/login_check");
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-        String urlParameters = "_target_path=%2F&_username=" + Settings.getCurrentLogin()
-                + "&_password=" + Settings.getCurrentPassword();
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
-        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String answer = br.readLine();
-        answer = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(answer);
-        if (answer.contains("success")) {
-            List<String> list = con.getHeaderFields().get("Set-Cookie");
-            String result = list.get(0);
-            result = result.substring(result.indexOf("PHPSESSID=") + 10, result.indexOf(";"));
-            setSessionId(result);
-            return true;
-        } else if (answer.contains("Невірний логін")) {
-            return false;
-        } else {
-            throw new Exception("Ошибка проверки логина");
-        }
     }
 
     static String getJsonFromUrl(String url) throws Exception {

@@ -1,7 +1,6 @@
 package ua.freenet.cabinet.activities;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -208,12 +207,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 try {
-                    Thread.sleep(60);
+                    Thread.sleep(70);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
             }
         });
     }

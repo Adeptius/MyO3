@@ -39,6 +39,9 @@ public class BalanceFragment extends HelperFragment {
         String mountlyFee = DbCache.getMountlyFeefromLK();
         List<Operation> operations = DbCache.getWildraws();
         sortByDate(operations);
+//        for (Operation operation : operations) {
+//            System.out.println(operation);
+//        }
         List<CombinedOperation> comboList = convertToComboList(operations);
         configureSaldo(person, comboList);
         String balance = String.valueOf(person.getCurrent());
@@ -147,7 +150,7 @@ public class BalanceFragment extends HelperFragment {
             CombinedOperation combinedOperation = null;
 
             for (CombinedOperation combi : comboList) { // тут ищем существующий комбо по дате операции
-                if (combi.getDate().equals(operation.getDate())) {
+                if (combi.getDate().equals(operation.getDate()) && operation.getDate().endsWith("00:00:00")) {
                     combinedOperation = combi;// и если найден - сохраняем в переменную
                 }
             }
