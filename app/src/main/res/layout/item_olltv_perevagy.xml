@@ -124,7 +124,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:text="Тематичні программи"
+                    android:text="Тематичні програми"
                     android:textAlignment="viewStart"
                     android:textSize="18sp" />
             </TableRow>
@@ -200,11 +200,12 @@
                     app:srcCompat="@drawable/oll_tv_icon_melody" />
 
                 <TextView
+                    android:id="@+id/textView20"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="20dp"
                     android:gravity="center_vertical"
-                    android:text="Музыкальні кліпи"
+                    android:text="Музичні кліпи"
                     android:textAlignment="viewStart"
                     android:textSize="18sp" />
             </TableRow>

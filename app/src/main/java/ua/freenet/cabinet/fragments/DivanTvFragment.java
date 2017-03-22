@@ -92,8 +92,8 @@ public class DivanTvFragment extends HelperFragment implements View.OnClickListe
         TextView newsTitle3 = (TextView) itemView.findViewById(R.id.text_news_title3);
         TextView comentText3 = (TextView) itemView.findViewById(R.id.text_news_comment3);
         loadImageForNews(imageView3, R.drawable.divan_tv_news3);
-        newsTitle3.setText("Шоу не роспочнеться без вас!");
-        comentText3.setText("Ви самі обираєте що і коли дивитися.");
+        newsTitle3.setText("Шоу не розпочнеться без вас!");
+        comentText3.setText("Ви самі обираєте, що і коли дивитися.");
 
 
         View allChanels = LayoutInflater.from(context).inflate(R.layout.item_divantv_tarifs, null);

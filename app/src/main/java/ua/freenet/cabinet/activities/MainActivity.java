@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -86,7 +85,8 @@ public class MainActivity extends AppCompatActivity
             mEdgeSize.setAccessible(true);
             int edge = mEdgeSize.getInt(draggerObj);
             mEdgeSize.setInt(draggerObj, edge * 5); //optimal value as for me, you may set any constant in dp
-        }catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
 
         disableNavigationViewScrollbars(navigationView);
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
                 menu.findItem(R.id.nav_oll_tv).setVisible(false);
                 menu.findItem(R.id.nav_oll_tv).setVisible(false);
             }
-            if (person.isYur()){
+            if (person.isYur()) {
                 menu.findItem(R.id.nav_add_balance).setVisible(false);
             }
         } catch (Exception ignored) {
@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
 
-
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
             int scrollRange = -1;
@@ -202,20 +201,9 @@ public class MainActivity extends AppCompatActivity
 
     private void goTo(final BaseFragment fragment) {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-        EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(70);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-            }
-        });
+        appBarLayout.setExpanded(true, false);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -265,7 +253,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     private void exit() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

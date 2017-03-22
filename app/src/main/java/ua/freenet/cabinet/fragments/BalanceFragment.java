@@ -44,9 +44,7 @@ public class BalanceFragment extends HelperFragment {
 //        }
         List<CombinedOperation> comboList = convertToComboList(operations);
         configureSaldo(person, comboList);
-        String balance = String.valueOf(person.getCurrent());
-        balance = balance.substring(0, balance.indexOf("."));
-        titleText = "Баланс: " + balance + " грн";
+        titleText = "Баланс: " + person.getMoneyText() + " грн";
         descriptionText = "Кожного першого числа місяця знімається сумма у розмірі однієї абонентської плати (" + mountlyFee + " грн)";
         updateTitle();
         prepareViews(comboList);

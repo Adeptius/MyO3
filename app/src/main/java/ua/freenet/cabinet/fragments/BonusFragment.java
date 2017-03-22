@@ -1,6 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
+import ua.freenet.cabinet.activities.MainActivity;
+import ua.freenet.cabinet.activities.PdfActivity;
 import ua.freenet.cabinet.dao.DbCache;
+import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.BonusServiceSpending;
+import ua.freenet.cabinet.model.PdfDocument;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Utilits;
+
+import static ua.freenet.cabinet.model.PdfDocument.*;
 
 public class BonusFragment extends HelperFragment {
 
@@ -47,8 +54,8 @@ public class BonusFragment extends HelperFragment {
         signedPublicCard = boo[0];
         confirmedBonus = boo[1];
         if (signedPublicCard && confirmedBonus) {
-            bonuses = DbCache.getCountOfBonuses();
-            serviceSpendings = DbCache.getBonusesSpending();
+            bonuses = GetInfo.getCountOfBonuses();
+            serviceSpendings = GetInfo.getBonusesSpending();
         }
         prepareViews();
     }
@@ -68,6 +75,8 @@ public class BonusFragment extends HelperFragment {
             hideButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    Intent intent = new Intent(context, PdfActivity.class);
+//                    startActivity(intent);
                     if (layIsHidden) {
                         hideButton.setText("Сховати");
                         expand(hideLayout);
@@ -131,7 +140,7 @@ public class BonusFragment extends HelperFragment {
                 payButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        askHowMuch(finalCanPay, serviceSpending.getS_id());
+                        askHowMuch(finalCanPay, serviceSpending);
                     }
                 });
                 if (bonuses == 0) payButton.setVisibility(View.GONE);
@@ -153,6 +162,8 @@ public class BonusFragment extends HelperFragment {
                 @Override
                 public void onClick(View v) {
                     openInBrowser("http://o3.ua/content/files/pravila_bonusnoi_sistemi.pdf");
+//                    Intent intent = new Intent(context, PdfActivity.class);
+//                    startActivity(intent);
                 }
             });
             preparedViews.add(activateLayout);
@@ -189,7 +200,7 @@ public class BonusFragment extends HelperFragment {
                 }).createAndShow();
     }
 
-    public void askHowMuch(final int canPay, final String id) {
+    public void askHowMuch(final int canPay, final BonusServiceSpending spending) {
         final LinearLayout vlayout = new LinearLayout(context);
         vlayout.setOrientation(LinearLayout.VERTICAL);
         vlayout.setPadding(5, 5, 5, 5);
@@ -235,8 +246,12 @@ public class BonusFragment extends HelperFragment {
                         } else { // если сумма правильна
                             final HashMap<String, String> map = new HashMap<>();
                             map.put("bonus", String.valueOf(shoosenPay));
-                            map.put("s_id", id);
-                            map.put("p_id", "");
+
+                            if (!spending.getP_id().equals("")){
+                                map.put("p_id", spending.getP_id());
+                            }else{
+                                map.put("s_id", spending.getS_id());
+                            }
                             progressDialogShow();
                             if (SendInfo.spendBonuses(map)) { // отправляю запрос
                                 DbCache.markPersonOld();

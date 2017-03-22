@@ -19,6 +19,7 @@ import java.util.List;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
+import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.model.FriendInvite;
 import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
@@ -51,7 +52,7 @@ public class FriendFragment extends HelperFragment {
 
     @Override
     void doInBackground() throws Exception {
-        invites = DbCache.getFriendInvites();
+        invites = GetInfo.getFriendInvites();
     }
 
     @Override
@@ -67,56 +68,56 @@ public class FriendFragment extends HelperFragment {
         final EditText editFatherName = (EditText) layout.findViewById(R.id.friend_surname);
         final EditText editPhone = (EditText) layout.findViewById(R.id.friend_phone);
         final EditText editAdress = (EditText) layout.findViewById(R.id.friend_adress);
-        editSurname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editSurname.getText().toString().equals("Прізвище")) {
-                    editSurname.setText("");
-                } else if (!hasFocus && editSurname.getText().toString().equals("")) {
-                    editSurname.setText("Прізвище");
-                }
-            }
-        });
-        editFatherName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editFatherName.getText().toString().equals("По-батькові")) {
-                    editFatherName.setText("");
-                } else if (!hasFocus && editFatherName.getText().toString().equals("")) {
-                    editFatherName.setText("По-батькові");
-                }
-            }
-        });
-        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editName.getText().toString().equals("Ім'я")) {
-                    editName.setText("");
-                } else if (!hasFocus && editName.getText().toString().equals("")) {
-                    editName.setText("Ім'я");
-                }
-            }
-        });
-        editPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editPhone.getText().toString().equals("Телефон")) {
-                    editPhone.setText("");
-                } else if (!hasFocus && editPhone.getText().toString().equals("")) {
-                    editPhone.setText("Телефон");
-                }
-            }
-        });
-        editAdress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && editAdress.getText().toString().equals("Адреса")) {
-                    editAdress.setText("");
-                } else if (!hasFocus && editAdress.getText().toString().equals("")) {
-                    editAdress.setText("Адреса");
-                }
-            }
-        });
+//        editSurname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus && editSurname.getText().toString().equals("Прізвище")) {
+//                    editSurname.setText("");
+//                } else if (!hasFocus && editSurname.getText().toString().equals("")) {
+//                    editSurname.setText("Прізвище");
+//                }
+//            }
+//        });
+//        editFatherName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus && editFatherName.getText().toString().equals("По-батькові")) {
+//                    editFatherName.setText("");
+//                } else if (!hasFocus && editFatherName.getText().toString().equals("")) {
+//                    editFatherName.setText("По-батькові");
+//                }
+//            }
+//        });
+//        editName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus && editName.getText().toString().equals("Ім'я")) {
+//                    editName.setText("");
+//                } else if (!hasFocus && editName.getText().toString().equals("")) {
+//                    editName.setText("Ім'я");
+//                }
+//            }
+//        });
+//        editPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus && editPhone.getText().toString().equals("Телефон")) {
+//                    editPhone.setText("");
+//                } else if (!hasFocus && editPhone.getText().toString().equals("")) {
+//                    editPhone.setText("Телефон");
+//                }
+//            }
+//        });
+//        editAdress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus && editAdress.getText().toString().equals("Адреса")) {
+//                    editAdress.setText("");
+//                } else if (!hasFocus && editAdress.getText().toString().equals("")) {
+//                    editAdress.setText("Адреса");
+//                }
+//            }
+//        });
 
         final MyAlertDialogBuilder builder = new MyAlertDialogBuilder(context);
         builder.setTitleText("Хто ваш друг?")
@@ -138,11 +139,8 @@ public class FriendFragment extends HelperFragment {
                             phone = "+" + phone;
                         }
 
-                        if ("".equals(surname) || "Прізвище".equals(surname) ||
-                                "".equals(name) || "Ім'я".equals(name) ||
-                                "".equals(fatherName) || "По-батькові".equals(fatherName) ||
-                                "".equals(phone) || "Телефон".equals(phone) ||
-                                "".equals(adress) || "Адреса".equals(adress)) {
+                        if ("".equals(surname) ||  "".equals(name) || "".equals(fatherName) ||
+                                "".equals(phone) || "".equals(adress) ) {
                             makeSimpleSnackBar("Необхідно заповнити всі поля", layout);
                         } else if (phone.length() != 13) {
                             makeSimpleSnackBar("Неправильний номер телефону", layout);
@@ -170,9 +168,9 @@ public class FriendFragment extends HelperFragment {
                             if ("Заявка створена!".equals(result)) {
                                 DbCache.markFriendInvitesOld();
                                 builder.closeWithHandler();
-                                progressDialogWaitStopShowMessageReload("Заявка створена!", mainLayout);
+                                showSuccessMessage();
                             } else if ("Заявка по цьому номеру вже існує.".equals(result)) {
-                                builder.closeWithHandler();
+//                                builder.closeWithHandler();
                                 progressDialogStopAndShowMessage("Заявка по цьому номеру вже існує", layout);
                             } else {
                                 progressDialogStopAndShowMessage(result, layout);
@@ -180,6 +178,25 @@ public class FriendFragment extends HelperFragment {
                         }
                     }
                 });
+    }
+
+    void showSuccessMessage(){
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                new MyAlertDialogBuilder(context)
+                        .setTitleText("Заявка створена")
+                        .setMessageText("Дякуємо за участь в акції.")
+                        .setPositiveButtonWithRunnableForHandler("Добре", new Runnable() {
+                            @Override
+                            public void run() {
+                                hideProgressDialog();
+                                reloadFragment();
+                            }
+                        })
+                        .createAndShow();
+            }
+        });
     }
 
 

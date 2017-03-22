@@ -45,7 +45,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
     @Override
     void setAllSettings() {
         titleText = "Головна";
-        descriptionText = "Тут відображається основна інформація по вашій угоді";
+        descriptionText = "Тут відображається основна інформація по вашому договору";
         fragmentId = R.layout.fragment_main;
         titleImage = R.drawable.background_main1;
         layoutId = R.id.scroll_view_main;
@@ -96,7 +96,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
     }
 
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
-        descriptionText = person.getUkrName() + ", тут відображається основна інформація по вашій угоді";
+        descriptionText = person.getUkrName() + ", тут відображається основна інформація по вашому договору";
         updateTitle();
         pib.setText(person.getLastname() + " " + person.getName() + " " + person.getSurname());
         contractNumber.setText(person.getCard());
@@ -105,21 +105,14 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
         house.setText(person.getAddress().gethName());
         room.setText(person.getAddress().getAddressFlatName());
         age.setText(person.getAge() + " місяців");
-        String many = String.valueOf(person.getCurrent());
-        int pos = many.indexOf(".") + 2;
-        boolean cont = many.contains(".");
-        int len = many.length();
 
-        if (cont && len >= pos) {
-            many = many.substring(0, many.indexOf(".") + 2);
-        }
 
         if (person.getCurrent() > 0) {
             money.setTextColor(COLOR_GREEN);
         } else if (person.getCurrent() < person.getStopsum()) {
             money.setTextColor(COLOR_RED);
         }
-        money.setText(many + " грн");
+        money.setText(person.getMoneyText() + " грн");
         money.setOnClickListener(this);
         fee.setText(mountlyFee + " грн");
         smsInfo.setText(person.getPhoneWithSms());
@@ -146,7 +139,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
 
 
     private void showWarningIfNewAbon() {
-        if (person.getAge() < 1 && person.getStopsum() < 10) {
+        if (person.getAge() < 1 && person.getStopsum() < 10 && !person.getAddress().isPrivat()) {
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {

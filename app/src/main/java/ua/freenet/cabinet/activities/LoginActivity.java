@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
             if (!fastLogin)
             Thread.sleep(300);
             if (isItFirstEnter()) {
-                setStatusTextView("Будь-ласка увійдіть");
+                setStatusTextView("Будь-ласка, увійдіть");
                 stopProgressBar();
                 if (!fastLogin)
                 Thread.sleep(1800);

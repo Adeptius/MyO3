@@ -13,6 +13,7 @@ public class BonusServiceSpending {
     private int money;
     private String note;
     private String s_id;
+    private String p_id;
 
     public BonusServiceSpending(String json) {
         try{
@@ -21,7 +22,16 @@ public class BonusServiceSpending {
             date = j.getString("date");
             money = j.getInt("money");
             note = j.getString("note");
-            s_id = j.getString("s_id");
+            try{
+                s_id = j.getString("s_id");
+            }catch (Exception e){
+                s_id = "";
+            }
+            try{
+                p_id = j.getString("p_id");
+            }catch (Exception e){
+                p_id = "";
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -94,4 +104,10 @@ public class BonusServiceSpending {
     public String getS_id() {
         return s_id;
     }
+
+    public String getP_id() {
+        return p_id;
+    }
+
+
 }

@@ -98,6 +98,9 @@ public class Web {
         // 561200788 5126383 "hNote":"[добавлен как частный дом]""","cscSegId": 117,
         json = json.replaceAll("\"\"\",", "\",");
 
+        // "month":85,"bundle":2822},null]
+        json = json.replaceAll(",null", "");
+
         return json;
     }
 }

@@ -74,7 +74,7 @@ public class FreeDayFragment extends HelperFragment {
         StringBuilder mainMessage = new StringBuilder();
         mainMessage.append("Ви з нами ");
         if (numberOfFreeDays == 0) {
-            mainMessage.append("менше року, нажаль, поки що, послуга вам не доступна. Залишайтесь з нами та отримуйте більше бонусів.");
+            mainMessage.append("менше року. На жаль, поки що, послуга вам не доступна. Залишайтесь з нами та отримуйте більше бонусів.");
         } else if (numberOfFreeDays == 1) {
             mainMessage.append("один рік. Вам надається один день у місяць без обмежень швидкості.");
         } else if (numberOfFreeDays == 2) {

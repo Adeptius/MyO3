@@ -8,7 +8,7 @@ public enum MailType {
     DOP_IP("Видача додаткової IP адреси.", "support@o3.ua"),
     CREATE_EMAIL("Створення поштової скриньки.", "support@o3.ua"),
     CHANGE_IP("Зміна IP адреси.", "support@o3.ua"),
-    CHANGE_DEAL("Переоформлення угоди.", "abon_otdel@o3.ua"),
+    CHANGE_DEAL("Переоформлення договору.", "abon_otdel@o3.ua"),
     WRONG_PAY("Помилкова проплата.", "abon_otdel@o3.ua"),
     STOP_TARIF("Призупинення послуг.", "abon_otdel@o3.ua"),
     CHANGE_TARIF("Зміна тарифу.", "abon_otdel@o3.ua");

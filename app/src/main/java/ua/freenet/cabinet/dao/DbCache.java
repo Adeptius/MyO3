@@ -49,6 +49,7 @@ public class DbCache {
 
     public static void markPersonOld() {
         personCreatedTime = FUTURE_TIME;
+        person = null;
     }
 
 
@@ -84,6 +85,7 @@ public class DbCache {
 
     public static void markMountlyFeeOld() {
         mountlyFeeCreatedTime = FUTURE_TIME;
+        mountlyFee = null;
     }
 
 
@@ -100,6 +102,7 @@ public class DbCache {
 
     public static void markCreditStatusOld() {
         creditStatusCreatedTime = FUTURE_TIME;
+        creditStatus = null;
     }
 
 
@@ -127,6 +130,7 @@ public class DbCache {
 
     public static void markServicesOld() {
         servicesCreatedTime = FUTURE_TIME;
+        services = null;
     }
 
 
@@ -143,6 +147,7 @@ public class DbCache {
 
     public static void markFreeDayInfoOld() {
         freeDayInfoCreatedTime = FUTURE_TIME;
+        freeDayInfo = null;
     }
 
 
@@ -159,6 +164,7 @@ public class DbCache {
 
     public static void markFreeDayStatisticsOld() {
         freeDayStatisticsCreatedTime = FUTURE_TIME;
+        freeDayStatistics = null;
     }
 
 
@@ -175,6 +181,7 @@ public class DbCache {
 
     public static void markTurboDayStatisticsOld() {
         turboDayStatisticsCreatedTime = FUTURE_TIME;
+        turboDayStatistics = null;
     }
 
 
@@ -191,6 +198,7 @@ public class DbCache {
 
     public static void markGarantedServiceStatusOld() {
         garantedServiceStatusCreatedTime = FUTURE_TIME;
+        garantedServiceStatus = null;
     }
 
     private static Boolean[] internetSwitches;
@@ -206,6 +214,7 @@ public class DbCache {
 
     public static void markInternetSwitchesOld() {
         internetSwitchesCreatedTime = FUTURE_TIME;
+        internetSwitches = null;
     }
 
 
@@ -222,6 +231,7 @@ public class DbCache {
 
     public static void markDrWebServicesOld() {
         drWebServicesCreatedTime = FUTURE_TIME;
+        drWebServices = null;
     }
 
 
@@ -238,6 +248,7 @@ public class DbCache {
 
     public static void markMegogoPtsOld() {
         megogoPtsCreatedTime = FUTURE_TIME;
+        megogoPts = null;
     }
 
     private static List<FriendInvite> friendInvites;
@@ -253,6 +264,7 @@ public class DbCache {
 
     public static void markFriendInvitesOld() {
         friendInvitesCreatedTime = FUTURE_TIME;
+        friendInvites = null;
     }
 
     private static boolean[] bonusesStatus;
@@ -268,6 +280,7 @@ public class DbCache {
 
     public static void markBonusesStatusOld() {
         bonusesStatusCreatedTime = FUTURE_TIME;
+        bonusesStatus = null;
     }
 
 
@@ -284,6 +297,7 @@ public class DbCache {
 
     public static void markCountOfBonusesOld() {
         countOfBonusesCreatedTime = FUTURE_TIME;
+        countOfBonuses = null;
     }
 
 
@@ -300,6 +314,7 @@ public class DbCache {
 
     public static void markBonusesSpendingOld() {
         bonusesSpendingCreatedTime = FUTURE_TIME;
+        bonusesSpending = null;
     }
 
 

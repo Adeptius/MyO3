@@ -574,7 +574,7 @@ public class DocumentFragment extends HelperFragment {
                     public void run() {
                         Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto", type.getEmail(), null));
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, type.getSubject() + " Угода " + person.getCard());
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, type.getSubject() + " Договір " + person.getCard());
                         String message2;
                         if (useStandartFooter) {
                             message2 = header + message + footer;

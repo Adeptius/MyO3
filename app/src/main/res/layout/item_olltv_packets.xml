@@ -246,7 +246,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
-                                android:text="Ви можете підключити до трьох пристроїв к пакету" />
+                                android:text="Ви можете підключити до трьох пристроїв до пакету" />
 
                         </LinearLayout>
 

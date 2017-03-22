@@ -63,7 +63,7 @@ public class MegogoPts {
         } else if (name.equals("MEGOGO FilmBox")) {
             name = "Додатковий пакет FilmBox";
             description = "Кіно та серіали, мода, музика, бойові мистецтва та " +
-                    "познавальні передачі (3 канали в HD якості).";
+                    "пізнавальні передачі (3 канали в HD якості).";
         }
         this.name = name;
     }

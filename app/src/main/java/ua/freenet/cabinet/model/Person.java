@@ -31,8 +31,8 @@ public class Person {
             //Preparing json because it shit
             json = json.replaceAll("\"mailings\":\\{", "\"mailings\":[");
             json = json.replaceAll("\\},\"phones\"", "],\"phones\"");
-            json = json.replaceAll("\"1\":","").replaceAll("\"2\":","").replaceAll("\"3\":","");
-            json = json.replaceAll("\"4\":","").replaceAll("\"5\":","").replaceAll("\"6\":","");
+            json = json.replaceAll("\"1\":", "").replaceAll("\"2\":", "").replaceAll("\"3\":", "");
+            json = json.replaceAll("\"4\":", "").replaceAll("\"5\":", "").replaceAll("\"6\":", "");
 
             inputJson = json;
             // Parse basic info
@@ -43,21 +43,22 @@ public class Person {
             lastname = allInfo.get("lastname").toString();
             card = allInfo.get("card").toString();
             String money = allInfo.getString("current");
-            if (money.contains("E-")){
+            if (money.contains("E-")) {
                 current = 0;
-            }else if (money.length() > 7){
-                current = Double.parseDouble(money.substring(0,7));
-            }else {
+            } else if (money.length() > 7) {
+//                current = Double.parseDouble(money.substring(0,7));
+                current = Double.parseDouble(money.substring(0, 7));
+            } else {
                 current = Double.parseDouble(money);
             }
 //            current = -10;
             email = allInfo.get("email").toString();
-            if (email==null) email = "";
+            if (email == null) email = "";
             age = Integer.parseInt(allInfo.get("age").toString());
 
             //Phones
             String phonesJson = allInfo.get("phones").toString();
-            phonesJson = phonesJson.substring(1, phonesJson.length()-1);
+            phonesJson = phonesJson.substring(1, phonesJson.length() - 1);
             String[] splitted = Utilits.splitJson(phonesJson);
             for (String s : splitted) {
                 if (!s.equals("")) {
@@ -71,7 +72,7 @@ public class Person {
 
             // Mailing
             String mailingsJson = allInfo.get("mailings").toString();
-            mailingsJson = mailingsJson.substring(1, mailingsJson.length()-1);
+            mailingsJson = mailingsJson.substring(1, mailingsJson.length() - 1);
             splitted = Utilits.splitJson(mailingsJson);
             for (String s : splitted) {
                 mailing.add(new Mailing(s));
@@ -85,6 +86,21 @@ public class Person {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public String getMoneyText() {
+        String many = String.valueOf(getCurrent());
+        int pos = many.indexOf(".") + 3;
+        boolean cont = many.contains(".");
+        int len = many.length();
+
+        if (cont && len >= pos) {
+            many = many.substring(0, many.indexOf(".") + 3);
+        } else if (cont && len >= pos - 1) {
+            many = many + "0";
+        }
+        return many;
     }
 
     public boolean isVip() {
@@ -113,13 +129,13 @@ public class Person {
 
     public String getUkrName() {
         String ukrName = name;
-        if (ukrName == null){
+        if (ukrName == null) {
             ukrName = "Абонент";
         }
-        ukrName = ukrName.replace("Владимир","Володимир");
-        ukrName = ukrName.replace("Игорь","Ігор");
-        ukrName = ukrName.replace("Андрей","Андрій");
-
+        ukrName = ukrName.replace("Владимир", "Володимир")
+                .replace("Игорь", "Ігор")
+                .replace("Сергей", "Сергій")
+                .replace("Андрей", "Андрій");
         return ukrName;
     }
 
@@ -136,7 +152,7 @@ public class Person {
     }
 
     public String getEmail() {
-        if ("null".equals(email)){
+        if ("null".equals(email)) {
             return "";
         }
         return email;

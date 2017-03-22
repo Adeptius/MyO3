@@ -140,8 +140,7 @@ public abstract class HelperFragment extends BaseFragment {
             LinearLayout stb = (LinearLayout) hardware.findViewById(R.id.stb);
             hideLayout.removeView(stb);
         }
-//        hardware.setVisibility(View.GONE);
-//        mainLayout.addView(hardware);
+
         hideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

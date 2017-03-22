@@ -276,7 +276,7 @@
                     <ImageView
                         android:id="@+id/imageView_edit_password"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/punkt_menu"
+                        android:layout_height="25dp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_edit" />
                 </LinearLayout>
@@ -342,7 +342,7 @@
                     <ImageView
                         android:id="@+id/imageView_edit_email"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/punkt_menu"
+                        android:layout_height="25dp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_edit" />
 
@@ -381,7 +381,7 @@
                     <ImageView
                         android:id="@+id/imageView_edit_sms"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/punkt_menu"
+                        android:layout_height="25dp"
                         android:layout_weight="1"
                         app:srcCompat="@drawable/ic_edit" />
 

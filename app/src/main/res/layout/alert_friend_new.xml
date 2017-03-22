@@ -4,7 +4,6 @@
     android:layout_height="match_parent">
 
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,26 +30,50 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint=""
-            android:inputType="textPersonName"
-            android:text="Прізвище" />
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:paddingLeft="5dp"
+            android:text="Прізвище"
+            android:textColor="@color/blue" />
 
         <EditText
             android:id="@+id/friend_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint=""
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:paddingLeft="5dp"
             android:text="Ім'я"
-            android:hint=""/>
+            android:textColor="@color/blue" />
 
         <EditText
             android:id="@+id/friend_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint=""
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:paddingLeft="5dp"
             android:text="По-батькові"
-            android:hint=""/>
+            android:textColor="@color/blue" />
 
         <EditText
             android:id="@+id/friend_phone"
@@ -58,18 +81,34 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint=""
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:paddingLeft="5dp"
             android:text="Телефон"
-            android:hint=""/>
+            android:textColor="@color/blue" />
 
         <EditText
             android:id="@+id/friend_adress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint=""
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-10dp"
+            android:paddingLeft="5dp"
             android:text="Адреса"
-            android:hint=""/>
+            android:textColor="@color/blue" />
 
     </LinearLayout>
 

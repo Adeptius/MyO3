@@ -60,7 +60,7 @@ public class ContactFragment extends HelperFragment {
             TextView callCentreName = (TextView) layoutCallCentre.findViewById(R.id.centre_name);
             callCentreName.setText("Відділ підключень");
             TextView callCentreDesc = (TextView) layoutCallCentre.findViewById(R.id.centre_desc);
-            callCentreDesc.setText("Телефонуйте, якщо бажаєте оформити підключення, або дізнатись про діючи акції");
+            callCentreDesc.setText("Телефонуйте, якщо бажаєте оформити підключення, або дізнатись про діючі акції");
             TextView callCentreWork = (TextView) layoutCallCentre.findViewById(R.id.text_work_time);
             callCentreWork.setText("З 09 до 20 щоденно");
             Button callCentreButton = (Button) layoutCallCentre.findViewById(R.id.button);
@@ -85,7 +85,7 @@ public class ContactFragment extends HelperFragment {
             // Добавляем контакт Киевского абон отдела
             View layoutAbon = LayoutInflater.from(context).inflate(R.layout.item_support_contact, null);
             TextView abonName = (TextView) layoutAbon.findViewById(R.id.centre_name);
-            abonName.setText("Відділ по розрахунку з абонентами");
+            abonName.setText("Відділ розрахунків з абонентами");
             TextView abonDesc = (TextView) layoutAbon.findViewById(R.id.centre_desc);
             abonDesc.setText("Питання підключення послуг, та фінансового характеру вирішуються тут");
             TextView abonWork = (TextView) layoutAbon.findViewById(R.id.text_work_time);
@@ -170,7 +170,7 @@ public class ContactFragment extends HelperFragment {
             TextView zakrevskogoName = (TextView) layoutZakrevskogo.findViewById(R.id.centre_name);
             zakrevskogoName.setText("Центр обслуговування абонентів");
             TextView zakrevskogoDesc = (TextView) layoutZakrevskogo.findViewById(R.id.centre_desc);
-            zakrevskogoDesc.setText("Закревського 22\nОбробка вхідних дзвінків а також прийом абонентів у ЦОА");
+            zakrevskogoDesc.setText("Закревського 22\nОбробка вхідних дзвінків, а також прийом абонентів у ЦОА");
             TextView zakrevskogoWork = (TextView) layoutZakrevskogo.findViewById(R.id.text_work_time);
             zakrevskogoWork.setText("Пн-Пт з 09 до 20, Сб з 10 до 18");
             Button zakrevskogoButton = (Button) layoutZakrevskogo.findViewById(R.id.button);
@@ -188,7 +188,7 @@ public class ContactFragment extends HelperFragment {
             TextView dragomanovaName = (TextView) layoutDragomanova.findViewById(R.id.centre_name);
             dragomanovaName.setText("Центр обслуговування абонентів");
             TextView dragomanovaDesc = (TextView) layoutDragomanova.findViewById(R.id.centre_desc);
-            dragomanovaDesc.setText("Драгоманова 17\nОбробка вхідних дзвінків а також прийом абонентів у ЦОА");
+            dragomanovaDesc.setText("Драгоманова 17\nОбробка вхідних дзвінків, а також прийом абонентів у ЦОА");
             TextView dragomanovaWork = (TextView) layoutDragomanova.findViewById(R.id.text_work_time);
             dragomanovaWork.setText("Пн-Пт з 09 до 20, Сб з 10 до 18");
             Button dragomanovaButton = (Button) layoutDragomanova.findViewById(R.id.button);
