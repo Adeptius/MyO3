@@ -54,8 +54,8 @@ public class BonusFragment extends HelperFragment {
         signedPublicCard = boo[0];
         confirmedBonus = boo[1];
         if (signedPublicCard && confirmedBonus) {
-            bonuses = GetInfo.getCountOfBonuses();
-            serviceSpendings = GetInfo.getBonusesSpending();
+            bonuses = DbCache.getCountOfBonuses();
+            serviceSpendings = DbCache.getBonusesSpending();
         }
         prepareViews();
     }

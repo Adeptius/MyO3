@@ -27,6 +27,8 @@ public class DbCache {
         return new GregorianCalendar().getTimeInMillis();
     }
 
+    private static boolean cacheDisabled = false;
+
     private static int getPastMinutes(long createdTime) {
         long currentTime = getCurrentTime();
         long sessionTime = currentTime - createdTime;
@@ -40,7 +42,7 @@ public class DbCache {
     private static long personCreatedTime;
 
     public static Person getPerson() throws Exception {
-        if (person == null || getPastMinutes(personCreatedTime) > 5) {
+        if (cacheDisabled || person == null || getPastMinutes(personCreatedTime) > 5) {
             person = GetInfo.getPersonInfo();
             personCreatedTime = getCurrentTime();
         }
@@ -57,7 +59,7 @@ public class DbCache {
     private static long ipsCreatedTime;
 
     public static List<Ip> getIps() throws Exception {
-        if (ips == null || getPastMinutes(ipsCreatedTime) > 10) {
+        if (cacheDisabled || ips == null || getPastMinutes(ipsCreatedTime) > 5) {
             ips = GetInfo.getIP();
             ipsCreatedTime = getCurrentTime();
         }
@@ -76,7 +78,7 @@ public class DbCache {
 //        }
 //        mountlyFee = tempFee + "";
 
-        if (mountlyFee == null || getPastMinutes(mountlyFeeCreatedTime) > 30) {
+        if (cacheDisabled || mountlyFee == null || getPastMinutes(mountlyFeeCreatedTime) > 3) {
             mountlyFee = GetInfo.getMountlyFeefromLK();
             mountlyFeeCreatedTime = getCurrentTime();
         }
@@ -93,7 +95,7 @@ public class DbCache {
     private static long creditStatusCreatedTime;
 
     public static String getCreditStatus() throws Exception {
-        if (creditStatus == null || getPastMinutes(creditStatusCreatedTime) > 15) {
+        if (cacheDisabled || creditStatus == null || getPastMinutes(creditStatusCreatedTime) > 3) {
             creditStatus = GetInfo.getCreditStatus();
             creditStatusCreatedTime = getCurrentTime();
         }
@@ -110,7 +112,7 @@ public class DbCache {
     private static long wildrawsCreatedTime;
 
     public static List<Operation> getWildraws() throws Exception {
-        if (wildraws == null || getPastMinutes(wildrawsCreatedTime) > 10) {
+        if (cacheDisabled || wildraws == null || getPastMinutes(wildrawsCreatedTime) > 5) {
             wildraws = GetInfo.getWildrowsByFewMonth(2);
             wildrawsCreatedTime = getCurrentTime();
         }
@@ -121,7 +123,7 @@ public class DbCache {
     private static long servicesCreatedTime;
 
     public static List<Servise> getServises() throws Exception {
-        if (services == null || getPastMinutes(servicesCreatedTime) > 15) {
+        if (cacheDisabled || services == null || getPastMinutes(servicesCreatedTime) > 5) {
             services = GetInfo.getServises();
             servicesCreatedTime = getCurrentTime();
         }
@@ -138,7 +140,7 @@ public class DbCache {
     private static long freeDayInfoCreatedTime;
 
     public static Map<String, Integer> getFreeDayInfo() throws Exception {
-        if (freeDayInfo == null || getPastMinutes(freeDayInfoCreatedTime) > 15) {
+        if (cacheDisabled || freeDayInfo == null || getPastMinutes(freeDayInfoCreatedTime) > 5) {
             freeDayInfo = GetInfo.getFreeDayInfo();
             freeDayInfoCreatedTime = getCurrentTime();
         }
@@ -155,7 +157,7 @@ public class DbCache {
     private static long freeDayStatisticsCreatedTime;
 
     public static List<String> getFreeDayStatistics() throws Exception {
-        if (freeDayStatistics == null || getPastMinutes(freeDayStatisticsCreatedTime) > 15) {
+        if (cacheDisabled || freeDayStatistics == null || getPastMinutes(freeDayStatisticsCreatedTime) > 5) {
             freeDayStatistics = GetInfo.getFreeDayStatistics();
             freeDayStatisticsCreatedTime = getCurrentTime();
         }
@@ -172,7 +174,7 @@ public class DbCache {
     private static long turboDayStatisticsCreatedTime;
 
     public static List<String> getTurboDayStatistics() throws Exception {
-        if (turboDayStatistics == null || getPastMinutes(turboDayStatisticsCreatedTime) > 60) {
+        if (cacheDisabled || turboDayStatistics == null || getPastMinutes(turboDayStatisticsCreatedTime) > 5) {
             turboDayStatistics = GetInfo.getTurboDayStatistics();
             turboDayStatisticsCreatedTime = getCurrentTime();
         }
@@ -189,7 +191,7 @@ public class DbCache {
     private static long garantedServiceStatusCreatedTime;
 
     public static String garantedServiceStatus() throws Exception {
-        if (garantedServiceStatus == null || getPastMinutes(garantedServiceStatusCreatedTime) > 15) {
+        if (cacheDisabled || garantedServiceStatus == null || getPastMinutes(garantedServiceStatusCreatedTime) > 5) {
             garantedServiceStatus = GetInfo.getGarantedServiceStatus();
             garantedServiceStatusCreatedTime = getCurrentTime();
         }
@@ -205,7 +207,7 @@ public class DbCache {
     private static long internetSwitchesCreatedTime;
 
     public static Boolean[] getInternetSwitches() throws Exception {
-        if (internetSwitches == null || getPastMinutes(internetSwitchesCreatedTime) > 15) {
+        if (cacheDisabled || internetSwitches == null || getPastMinutes(internetSwitchesCreatedTime) > 5) {
             internetSwitches = GetInfo.getInternetSwitches();
             internetSwitchesCreatedTime = getCurrentTime();
         }
@@ -222,7 +224,7 @@ public class DbCache {
     private static long drWebServicesCreatedTime;
 
     public static List<DrWebSubscribe> getDrWebServices() throws Exception {
-        if (drWebServices == null || getPastMinutes(drWebServicesCreatedTime) > 15) {
+        if (cacheDisabled || drWebServices == null || getPastMinutes(drWebServicesCreatedTime) > 5) {
             drWebServices = GetInfo.getDrWebServices();
             drWebServicesCreatedTime = getCurrentTime();
         }
@@ -239,7 +241,7 @@ public class DbCache {
     private static long megogoPtsCreatedTime;
 
     public static List<MegogoPts> getMegogoPts() throws Exception {
-        if (megogoPts == null || getPastMinutes(megogoPtsCreatedTime) > 15) {
+        if (cacheDisabled || megogoPts == null || getPastMinutes(megogoPtsCreatedTime) > 5) {
             megogoPts = GetInfo.getMegogoPts();
             megogoPtsCreatedTime = getCurrentTime();
         }
@@ -255,7 +257,7 @@ public class DbCache {
     private static long friendInvitesCreatedTime;
 
     public static List<FriendInvite> getFriendInvites() throws Exception {
-        if (friendInvites == null || getPastMinutes(friendInvitesCreatedTime) > 60) {
+        if (cacheDisabled || friendInvites == null || getPastMinutes(friendInvitesCreatedTime) > 5) {
             friendInvites = GetInfo.getFriendInvites();
             friendInvitesCreatedTime = getCurrentTime();
         }
@@ -271,7 +273,7 @@ public class DbCache {
     private static long bonusesStatusCreatedTime;
 
     public static boolean[] getBonusesStatus() throws Exception {
-        if (bonusesStatus == null || getPastMinutes(bonusesStatusCreatedTime) > 30) {
+        if (cacheDisabled || bonusesStatus == null || getPastMinutes(bonusesStatusCreatedTime) > 5) {
             bonusesStatus = GetInfo.getBonusesStatus();
             bonusesStatusCreatedTime = getCurrentTime();
         }
@@ -288,7 +290,7 @@ public class DbCache {
     private static long countOfBonusesCreatedTime;
 
     public static int getCountOfBonuses() throws Exception {
-        if (countOfBonuses == null || getPastMinutes(countOfBonusesCreatedTime) > 5) {
+        if (cacheDisabled || countOfBonuses == null || getPastMinutes(countOfBonusesCreatedTime) > -1) {
             countOfBonuses = GetInfo.getCountOfBonuses();
             countOfBonusesCreatedTime = getCurrentTime();
         }
@@ -305,7 +307,7 @@ public class DbCache {
     private static long bonusesSpendingCreatedTime;
 
     public static List<BonusServiceSpending> getBonusesSpending() throws Exception {
-        if (bonusesSpending == null || getPastMinutes(bonusesSpendingCreatedTime) > 15) {
+        if (cacheDisabled || bonusesSpending == null || getPastMinutes(bonusesSpendingCreatedTime) > -1) {
             bonusesSpending = GetInfo.getBonusesSpending();
             bonusesSpendingCreatedTime = getCurrentTime();
         }

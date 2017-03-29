@@ -141,7 +141,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_weight="1"
                                 android:gravity="center_horizontal"
-                                android:text="За допомогою мультимедіа приставки, яку ви можете арендувати у компанії Фрінет всього за 29 грн/міс"
+                                android:text="За допомогою мультимедіа приставки, яку ви можете арендувати у компанії ФРІНЕТ всього за 39 грн/міс"
                                 android:textAlignment="textStart" />
 
                         </LinearLayout>

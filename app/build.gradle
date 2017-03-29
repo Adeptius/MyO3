@@ -7,10 +7,11 @@ android {
         applicationId "ua.freenet.cabinet"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 39
-        versionName "1.39a"
+        versionCode 40
+        versionName "1.40a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false

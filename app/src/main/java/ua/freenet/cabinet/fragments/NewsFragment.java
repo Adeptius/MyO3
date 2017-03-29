@@ -9,12 +9,16 @@ import android.net.Uri;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -58,8 +62,8 @@ public class NewsFragment extends HelperFragment {
         String acciiUrl = DbCache.getUrlOfCityAccii(city);
 
         List<News> newses = getAllNews(acciiUrl, newsUrl);
-        sortByDate(newses);
-        newses = subList(newses, 10);
+
+
         prepareNews(newses);
     }
 
@@ -77,9 +81,16 @@ public class NewsFragment extends HelperFragment {
             final LinearLayout hideLayout = (LinearLayout) itemView.findViewById(R.id.hide_lay);
             final TextView comentText = (TextView) itemView.findViewById(R.id.text_news_comment);
             final TextView dateText = (TextView) itemView.findViewById(R.id.textView_date);
+            final TextView needSite = (TextView) itemView.findViewById(R.id.textView_needSite);
             Button toSiteButton = (Button) itemView.findViewById(R.id.to_site_button);
             Button closeButton = (Button) itemView.findViewById(R.id.close);
             final Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
+
+            if (news.isHaveTables()){
+                needSite.setVisibility(View.VISIBLE);
+            }else {
+                needSite.setVisibility(View.GONE);
+            }
 
             hideLayout.setVisibility(View.GONE);
 
@@ -139,6 +150,7 @@ public class NewsFragment extends HelperFragment {
             });
         }
     }
+
 
     public void watchYoutubeVideo(String id) {
         Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
@@ -201,6 +213,12 @@ public class NewsFragment extends HelperFragment {
         post = doc.body().getElementsByClass("post");
         for (Element element : post) {
             newses.add(convertElementToNews(element));
+        }
+
+        sortByDate(newses);
+        newses = subList(newses, 10);
+        for (News newse : newses) {
+            newse.runBackgroundLoad();
         }
         return newses;
     }

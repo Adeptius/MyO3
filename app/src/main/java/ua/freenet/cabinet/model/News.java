@@ -20,6 +20,7 @@ public class News {
     private String numberedDate;
     private String html = "";
     private String youTube = "";
+    private Elements tables;
 
     public News(final String title, String comment, final String url, final String imgUrl, String numberedDate) {
         this.title = title;
@@ -28,6 +29,11 @@ public class News {
         this.imgUrl = "https://o3.ua" + imgUrl;
         this.numberedDate = numberedDate;
 
+
+    }
+
+
+    public void runBackgroundLoad(){
         EXECUTOR.submit(new Runnable() {
             @Override
             public void run() {
@@ -65,6 +71,11 @@ public class News {
                     } catch (NullPointerException ignored) {
                     }
 
+                    try{
+                        tables =  element.getElementsByTag("table");
+                        tables.remove();
+                    }catch (NullPointerException ignored){}
+
                     String html = element.html();
                     html = html.replaceAll("/content/", "https://o3.ua/content/");
                     html = html.replaceAll("href=\"", "href=\"https://o3.ua");
@@ -80,12 +91,21 @@ public class News {
                         temp = temp.substring(temp.lastIndexOf("/") + 1);
                         News.this.youTube = temp;
                     }
+
+
+
                     News.this.html = html;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+
+    public boolean isHaveTables() {
+        if (tables == null) return false;
+        return tables.size()>0;
     }
 
     public String getNumberedDate() {

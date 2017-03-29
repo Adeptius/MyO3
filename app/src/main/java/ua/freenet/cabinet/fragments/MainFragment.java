@@ -353,6 +353,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
         textView.setText("  +380");
         textView.setTypeface(null, Typeface.BOLD);
         textView.setTextSize(18);
+        textView.setTextColor(COLOR_BLUE);
         final EditText text = new EditText(context);
         messageLayout.addView(textView, WRAP_WRAP);
         messageLayout.addView(text, MATCH_WRAP);

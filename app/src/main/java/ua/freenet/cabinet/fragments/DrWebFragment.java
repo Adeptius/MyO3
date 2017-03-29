@@ -143,7 +143,7 @@ public class DrWebFragment extends HelperFragment {
         ImageView mobile = (ImageView) layout.findViewById(R.id.activate_mobile);
 
         final MyAlertDialogBuilder dialog = new MyAlertDialogBuilder(context)
-                .setTitleText("Оберіть підписку:")
+                .setTitleTextWithWhiteBackground("Оберіть підписку:")
                 .setView(layout)
                 .createAndShow();
 
