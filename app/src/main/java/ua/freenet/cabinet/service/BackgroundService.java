@@ -3,6 +3,7 @@ package ua.freenet.cabinet.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 import ua.freenet.cabinet.utils.Settings;
@@ -15,11 +16,16 @@ public class BackgroundService extends Service {
         return null;
     }
 
+    public static SharedPreferences preferences;
+
     @Override
     public void onCreate() {
         super.onCreate();
         log("Сервис запущен");
-        Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
+        if (preferences == null){
+            preferences = getSharedPreferences("settings", MODE_PRIVATE);
+        }
+        Settings.setsPref(preferences);
         new MyAlarmManager().setUpAlarm(this);
     }
 }

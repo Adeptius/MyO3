@@ -163,4 +163,18 @@ public class Settings {
             return Integer.valueOf(s);
         }
     }
+
+    //Login
+    public static void setLastTimeSendReport(long time) {
+        settingsEditor.putString("lastTimeSendReport", "" + time);
+        settingsEditor.commit();
+    }
+
+    public static long getLastTimeSendReport(){
+        try {
+            return Long.parseLong(sPref.getString("lastTimeSendReport", ""));
+        }catch (Exception e){
+            return 0;
+        }
+    }
 }

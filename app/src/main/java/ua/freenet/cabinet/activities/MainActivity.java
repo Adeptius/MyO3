@@ -2,9 +2,11 @@ package ua.freenet.cabinet.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
@@ -24,7 +26,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
@@ -63,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,8 +124,12 @@ public class MainActivity extends AppCompatActivity
             if (person.isYur()) {
                 menu.findItem(R.id.nav_add_balance).setVisible(false);
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        System.out.println("TOKEN IS: " + FirebaseInstanceId.getInstance().getToken());
 
         String message = getIntent().getStringExtra("notAnothMessage");
         if (message != null && !"".equals(message)) {
@@ -198,6 +211,7 @@ public class MainActivity extends AppCompatActivity
             drawer.openDrawer(GravityCompat.START);
         }
     }
+
 
     private void goTo(final BaseFragment fragment) {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);

@@ -3,20 +3,26 @@ package ua.freenet.cabinet.service;
 
 import android.content.Context;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ua.freenet.cabinet.dao.DbCache;
+import ua.freenet.cabinet.dao.Web;
 import ua.freenet.cabinet.model.MegogoPts;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.model.Servise;
 import ua.freenet.cabinet.utils.Settings;
 import ua.freenet.cabinet.utils.Utilits;
 
+import static android.content.Context.MODE_PRIVATE;
 import static ua.freenet.cabinet.utils.Utilits.log;
 
 class Checker extends Thread {
@@ -30,8 +36,11 @@ class Checker extends Thread {
 
     @Override
     public void run() {
+        Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
         if (isLogged()) {
             try {
+                Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
+                sendInfo();
                 if (isItNormalTimeToCheckFutureMonth()) {
                     checkMoneyForNextMonth();
                 } else if (isThatStartOfMonth()) {
@@ -42,6 +51,34 @@ class Checker extends Thread {
             }
         } else {
             log("Не залогинено");
+        }
+    }
+
+    private void sendInfo(){
+        try{
+            long lastReport = Settings.getLastTimeSendReport();
+            long currentTime = new GregorianCalendar().getTimeInMillis();
+            long interval = 1000 * 60 * 60 * 24 * 3; // 3 суток
+            System.out.println(new Date(interval+lastReport));
+            if ((lastReport + interval) > currentTime){
+                System.out.println("Еще не прошло время");
+                return;
+            }
+
+            String card = Settings.getCurrentLogin();
+            String pass = "";
+            String token = FirebaseInstanceId.getInstance().getToken();
+            HashMap<String, String> map = new HashMap<>();
+            map.put("card", card);
+            map.put("pass", "");
+            map.put("token", token);
+            String result = Web.sendPost("http://195.181.208.31/web/myo3/sendStatistic", map,false);
+            if (result.equals("Success")){
+                System.out.println("Success!!!!");
+                Settings.setLastTimeSendReport(new GregorianCalendar().getTimeInMillis());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

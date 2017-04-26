@@ -27,6 +27,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,7 @@ import java.util.List;
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.model.News;
+import ua.freenet.cabinet.model.Operation;
 import ua.freenet.cabinet.utils.ImageDownloader;
 
 public class NewsFragment extends HelperFragment {
@@ -86,9 +88,9 @@ public class NewsFragment extends HelperFragment {
             Button closeButton = (Button) itemView.findViewById(R.id.close);
             final Button youTubeButton = (Button) itemView.findViewById(R.id.youtube_button);
 
-            if (news.isHaveTables()){
+            if (news.isHaveTables()) {
                 needSite.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 needSite.setVisibility(View.GONE);
             }
 
@@ -162,6 +164,7 @@ public class NewsFragment extends HelperFragment {
         }
     }
 
+
     private void loadImageForNews(News news, ImageView imageView) {
         try {
             String url = "";
@@ -206,13 +209,21 @@ public class NewsFragment extends HelperFragment {
 
         List<News> newses = new ArrayList<>();
         for (Element element : post) {
-            newses.add(convertElementToNews(element));
+            try {
+                newses.add(convertElementToNews(element));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         doc = Jsoup.connect(urlnews).get();
         post = doc.body().getElementsByClass("post");
         for (Element element : post) {
-            newses.add(convertElementToNews(element));
+            try {
+                newses.add(convertElementToNews(element));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         sortByDate(newses);

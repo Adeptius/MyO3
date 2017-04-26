@@ -118,7 +118,7 @@ public class News {
         try {
             int month = Integer.parseInt(numbered.substring(4, 6));
             int day = Integer.parseInt(numbered.substring(6, 8));
-            result = day + " " + Utilits.getStrMonth(month);
+            result = day + " " + Utilits.getStrMonth(month - 1);
         } catch (Exception ignored) {
         }
         return result;

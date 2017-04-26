@@ -86,6 +86,18 @@ public class PayFragment extends HelperFragment {
         preparedViews.add(payMasterContainer);
 
 
+        final View tachCardContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
+        ImageView tachCard = (ImageView) tachCardContainer.findViewById(R.id.pay_image_view);
+        addImageToViewFromResources(tachCard, R.drawable.tachcard);
+        tachCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askHowMuch("tachCard");
+            }
+        });
+        preparedViews.add(tachCardContainer);
+
+
         final View platonContainer = LayoutInflater.from(context).inflate(R.layout.item_pay, null);
         ImageView platon = (ImageView) platonContainer.findViewById(R.id.pay_image_view);
         addImageToViewFromResources(platon, R.drawable.platon);
@@ -209,7 +221,10 @@ public class PayFragment extends HelperFragment {
                             sb.append("https://paygate.freenet.ua/webmoney/init.php");
                             sb.append("&pid=").append(String.valueOf(person.getId()));
                             sb.append("&add=").append(add);
-                        } else {
+                        } else if ("tachCard".equals(system)){
+                            openInBrowser("https://user.tachcard.com/en/pay-freenet?account="+person.getCard()+"&amount=" + add);
+                            return;
+                        }else {
                             sb.append("https://paygate.freenet.ua/platon/init.php");
                             sb.append("&account=").append(Settings.getCurrentLogin());
                             sb.append("&p_id=").append(String.valueOf(person.getId()));

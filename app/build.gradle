@@ -7,8 +7,8 @@ android {
         applicationId "ua.freenet.cabinet"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 40
-        versionName "1.40a"
+        versionCode 45
+        versionName "1.45a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -47,7 +47,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.code.gson:gson:2.8.0'
-//    compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
-//    compile 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
     testCompile 'junit:junit:4.12'
 }
+
+
+
+apply plugin: 'com.google.gms.google-services'

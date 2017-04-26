@@ -190,14 +190,14 @@ public class Utilits {
         return "" + year + "-" + m;
     }
 
-    public static void check() {
-        try {
-            URL url = new URL("http://e404.ho.ua/o3on");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            connection.getInputStream();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
+//    public static void check() {
+//        try {
+//            URL url = new URL("http://e404.ho.ua/o3on");
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.connect();
+//            connection.getInputStream();
+//        } catch (IOException e) {
+//            throw new RuntimeException();
+//        }
+//    }
 }

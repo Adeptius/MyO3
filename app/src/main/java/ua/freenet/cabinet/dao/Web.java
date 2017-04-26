@@ -58,7 +58,7 @@ public class Web {
         return result;
     }
 
-    static String sendPost(String url, HashMap<String, String> jSonQuery, boolean itsJson) throws Exception {
+    public static String sendPost(String url, HashMap<String, String> jSonQuery, boolean itsJson) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");

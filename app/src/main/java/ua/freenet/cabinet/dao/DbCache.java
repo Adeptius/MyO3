@@ -95,7 +95,7 @@ public class DbCache {
     private static long creditStatusCreatedTime;
 
     public static String getCreditStatus() throws Exception {
-        if (cacheDisabled || creditStatus == null || getPastMinutes(creditStatusCreatedTime) > 3) {
+        if (cacheDisabled || creditStatus == null || getPastMinutes(creditStatusCreatedTime) > 0) {
             creditStatus = GetInfo.getCreditStatus();
             creditStatusCreatedTime = getCurrentTime();
         }
@@ -112,7 +112,7 @@ public class DbCache {
     private static long wildrawsCreatedTime;
 
     public static List<Operation> getWildraws() throws Exception {
-        if (cacheDisabled || wildraws == null || getPastMinutes(wildrawsCreatedTime) > 5) {
+        if (cacheDisabled || wildraws == null || getPastMinutes(wildrawsCreatedTime) > 1) {
             wildraws = GetInfo.getWildrowsByFewMonth(2);
             wildrawsCreatedTime = getCurrentTime();
         }
@@ -140,7 +140,7 @@ public class DbCache {
     private static long freeDayInfoCreatedTime;
 
     public static Map<String, Integer> getFreeDayInfo() throws Exception {
-        if (cacheDisabled || freeDayInfo == null || getPastMinutes(freeDayInfoCreatedTime) > 5) {
+        if (cacheDisabled || freeDayInfo == null || getPastMinutes(freeDayInfoCreatedTime) > 0) {
             freeDayInfo = GetInfo.getFreeDayInfo();
             freeDayInfoCreatedTime = getCurrentTime();
         }
@@ -207,7 +207,7 @@ public class DbCache {
     private static long internetSwitchesCreatedTime;
 
     public static Boolean[] getInternetSwitches() throws Exception {
-        if (cacheDisabled || internetSwitches == null || getPastMinutes(internetSwitchesCreatedTime) > 5) {
+        if (cacheDisabled || internetSwitches == null || getPastMinutes(internetSwitchesCreatedTime) > -1) {
             internetSwitches = GetInfo.getInternetSwitches();
             internetSwitchesCreatedTime = getCurrentTime();
         }

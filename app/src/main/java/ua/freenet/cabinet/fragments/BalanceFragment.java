@@ -22,7 +22,7 @@ public class BalanceFragment extends HelperFragment {
     @Override
     void setAllSettings() {
         titleText = "Баланс";
-        descriptionText = "Кожного першого числа місяця знімається сумма у розмірі однієї абонентської плати";
+        descriptionText = "Кожного місяця, першого числа знімається сумма у розмірі однієї абонентської плати";
         fragmentId = R.layout.fragment_base_scrolling;
         layoutId = R.id.base_scroll_view;
         titleImage = R.drawable.background_balance2;

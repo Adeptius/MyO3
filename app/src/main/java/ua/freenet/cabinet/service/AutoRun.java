@@ -17,6 +17,7 @@ public class AutoRun extends BroadcastReceiver {
             log("Сработал таймер. Вызываю проверку и задаю новый");
             new Checker(context);
             new MyAlarmManager().setUpAlarm(context);
+
         }
     }
 }

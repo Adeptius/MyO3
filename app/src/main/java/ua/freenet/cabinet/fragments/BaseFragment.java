@@ -82,6 +82,14 @@ public abstract class BaseFragment extends Fragment{
         context = getActivity();
         SCREEN_WIDTH = getResources().getDisplayMetrics().widthPixels;
 
+        if (getActivity() == null){
+            try{
+                Thread.sleep(1000); // Костыль Lenovo
+            }catch (Exception ignored){
+
+            }
+        }
+
         updateTitle();
         showImageInTop();
         init();
@@ -230,17 +238,21 @@ public abstract class BaseFragment extends Fragment{
         HANDLER.post(new Runnable() {
             @Override
             public void run() {
-                TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
-                titleTextView.setText(titleText);
+                try {
+                    TextView titleTextView = (TextView) getActivity().findViewById(R.id.title_text_view);
+                    titleTextView.setText(titleText);
 
-                TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
-                MainActivity.title = titleText;
-                if ("".equals(descriptionText)) {
-                    descriptionTextView.setVisibility(View.GONE);
-                } else {
-                    descriptionTextView.setVisibility(View.VISIBLE);
+                    TextView descriptionTextView = (TextView) getActivity().findViewById(R.id.description_text_view);
+                    MainActivity.title = titleText;
+                    if ("".equals(descriptionText)) {
+                        descriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                    }
+                    descriptionTextView.setText(descriptionText);
+                }catch (Exception ignored){
+                    // Костыль Lenovo
                 }
-                descriptionTextView.setText(descriptionText);
             }
         });
     }

@@ -33,7 +33,7 @@ class NotificationsHelper {
                 .setAutoCancel(true) // чтобы уведомление закрылось после тапа по нему
                 .setOnlyAlertOnce(true) // уведомить однократно
                 .setWhen(System.currentTimeMillis()) // время создания уведомления, будет отображено в стандартном уведомлении справа
-                .setContentTitle("ФРИНЕТ") //заголовок
+                .setContentTitle("Мій ФРІНЕТ") //заголовок
                 .setDefaults(Notification.DEFAULT_ALL) // alarm при выводе уведомления: звук, вибратор и диод-индикатор - по умолчанию
                 .setContentText(notAnothMessage) // сообщение, которое будет отображаться в самом уведомлении
                 .setTicker(notAnothMessage) //сообщение, которое будет показано в статус-баре при создании уведомления, ставлю тот же
