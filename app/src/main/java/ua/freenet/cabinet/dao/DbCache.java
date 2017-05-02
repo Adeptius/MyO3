@@ -382,9 +382,9 @@ public class DbCache {
     private static List<ChannelMegogo> megogoMainChannels;
 
     public static List<ChannelMegogo> getMegogoMainChannels() throws Exception {
-        if (megogoMainChannels == null) {
+//        if (megogoMainChannels == null) {
             megogoMainChannels = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/8701-light-tv-online");
-        }
+//        }
         return megogoMainChannels;
     }
 
@@ -392,9 +392,9 @@ public class DbCache {
     private static List<ChannelMegogo> megogoFilmBoxChannels;
 
     public static List<ChannelMegogo> getMegogoFilmBoxChannels() throws Exception {
-        if (megogoFilmBoxChannels == null) {
+//        if (megogoFilmBoxChannels == null) {
             megogoFilmBoxChannels = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2691-filmbox-tv-online");
-        }
+//        }
         return megogoFilmBoxChannels;
     }
 
@@ -402,9 +402,9 @@ public class DbCache {
     private static List<ChannelMegogo> megogoviasatChannels;
 
     public static List<ChannelMegogo> getMegogoViasatChannels() throws Exception {
-        if (megogoviasatChannels == null) {
+//        if (megogoviasatChannels == null) {
             megogoviasatChannels = GetInfo.getMegogoChannels("http://megogo.net/ru/tv/channels/2701-tv1000premium-tv-online");
-        }
+//        }
         return megogoviasatChannels;
     }
 
@@ -412,9 +412,9 @@ public class DbCache {
     private static List<ChannelOllTv> ollTvStartChannels;
 
     public static List<ChannelOllTv> getOllTvStartChannels() throws Exception {
-        if (ollTvStartChannels == null) {
+//        if (ollTvStartChannels == null) {
             ollTvStartChannels = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/1095");
-        }
+//        }
         return ollTvStartChannels;
     }
 
@@ -422,9 +422,9 @@ public class DbCache {
     private static List<ChannelOllTv> ollTvOptimalChannels;
 
     public static List<ChannelOllTv> getOllTvOptimalChannels() throws Exception {
-        if (ollTvOptimalChannels == null) {
+//        if (ollTvOptimalChannels == null) {
             ollTvOptimalChannels = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/1097");
-        }
+//        }
         return ollTvOptimalChannels;
     }
 
@@ -432,9 +432,9 @@ public class DbCache {
     private static List<ChannelOllTv> ollTvPremiumChannels;
 
     public static List<ChannelOllTv> getOllTvPremiumChannels() throws Exception {
-        if (ollTvPremiumChannels == null) {
+//        if (ollTvPremiumChannels == null) {
             ollTvPremiumChannels = GetInfo.getOllTvChanels("http://oll.tv/partners/pack/2062");
-        }
+//        }
         return ollTvPremiumChannels;
     }
 

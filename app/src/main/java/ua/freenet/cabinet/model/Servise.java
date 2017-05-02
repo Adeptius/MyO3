@@ -157,6 +157,11 @@ public class Servise {
                 .replaceAll("MEGOGO FilmBox", "Пакет FilmBox")
                 .replaceAll("бесплатный", "безкоштовний")
                 .replaceAll("Почтовый ящик 30Мб", "Обсяг 30мб")
+                .replaceAll("Тариф 1-аренда stb", "ТБ приставка")
+                .replaceAll("Телевидение", "Телебачення")
+                .replaceAll("телевидение", "телебачення")
+                .replaceAll("Оптимальный", "Оптимальний")
+                .replaceAll("оптимальный", "оптимальний")
                 .trim();
         return name;
     }
@@ -166,7 +171,7 @@ public class Servise {
         if (getType() == 7 && getMyServiceName().contains("Гарантований")) return "Сервісні послуги";
         if (getType() == 7) return "Надання адреси";
         if (getType() == 15) return "Телебачення MEGOGO";
-        if (getType() == 13 && pay_type_name.contains("аренды")) return "Оренда обладнання";
+        if (getType() == 13 && (pay_type_name.contains("аренды") || pay_type_name.contains("аренда"))) return "Оренда обладнання";
         if (getType() == 13) return "Телебачення OLL.TV";
         if (getType() == 14) return "Телебачення Divan.TV";
         if (getType() == 9) return "Антивірус";
@@ -174,8 +179,18 @@ public class Servise {
         return "";
     }
 
+    public String getNewName() {
+        return newName.replaceAll("Телевидение", "Телебачення")
+                .replaceAll("телевидение", "телебачення")
+                .replaceAll("Оптимальный", "Оптимальний")
+                .replaceAll("оптимальный", "оптимальний");
+    }
+
+
     public String getComent() {
         String coment = "";
+
+        String newName = getNewName();
 
         String newNameWithOutDate = "";
         if (newName.startsWith("20")) {
@@ -251,9 +266,6 @@ public class Servise {
         return costForCustomer;
     }
 
-    public String getNewName() {
-        return newName;
-    }
 
     public String getDateWillChange() {
         return dateWillChange;
