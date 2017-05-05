@@ -135,14 +135,14 @@ public class LoginActivity extends AppCompatActivity {
         setStatusTextView("Перевірка наявності інтернету");
 //        Utilits.check();
         if (!fastLogin)
-        Thread.sleep(300);
+        Thread.sleep(200);
         if (!isInternetOk()) {
             setStatusTextView("Інтернет відсутній");
             stopProgressBar();
         } else {
             setStatusTextView("Авторизація");
             if (!fastLogin)
-            Thread.sleep(300);
+            Thread.sleep(200);
             if (isItFirstEnter()) {
                 setStatusTextView("Будь-ласка, увійдіть");
                 stopProgressBar();
@@ -154,14 +154,14 @@ public class LoginActivity extends AppCompatActivity {
                     if (GetInfo.checkLoginAndSaveSessionIfTrue()) {
                         setStatusTextView("Завантаження данних..");
                         if (!fastLogin)
-                        Thread.sleep(300);
+                        Thread.sleep(200);
                         DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
                         stopProgressBar();
                         setStatusTextView("Вхід виконано");
                         if (!fastLogin)
-                        Thread.sleep(800);
+                        Thread.sleep(500);
                         goToMain();
                     } else {
                         setStatusTextView("Будь-ласка увійдіть");

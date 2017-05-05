@@ -144,7 +144,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
 
 
     private void showWarningIfNewAbon() {
-        if (person.getAge() < 1 && person.getStopsum() < 10 && !person.getAddress().isPrivat()) {
+        if (person.getAge() < 1 && person.getStopsum() < -10 && !person.getAddress().isPrivat()) {
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {

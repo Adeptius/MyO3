@@ -12,8 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -216,6 +218,23 @@ public abstract class BaseFragment extends Fragment{
     protected void goTo(BaseFragment fragment) {
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+        try{
+            NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+            Menu menu = navigationView.getMenu();
+            if (fragment instanceof DrWebFragment){
+                menu.findItem(R.id.nav_dr_web).setChecked(true);
+            }else if (fragment instanceof MegogoFragment){
+                menu.findItem(R.id.nav_megogo).setChecked(true);
+            }else if (fragment instanceof PayFragment){
+                menu.findItem(R.id.nav_balance).setChecked(true);
+            }else if (fragment instanceof TarifFragment){
+                menu.findItem(R.id.nav_tarif_plans).setChecked(true);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     abstract void doInBackground() throws Exception;

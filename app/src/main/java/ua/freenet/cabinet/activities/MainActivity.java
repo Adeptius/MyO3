@@ -1,18 +1,19 @@
 package ua.freenet.cabinet.activities;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
@@ -25,13 +26,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
@@ -57,21 +57,18 @@ import ua.freenet.cabinet.fragments.TurboDayFragment;
 import ua.freenet.cabinet.model.Person;
 import ua.freenet.cabinet.utils.Settings;
 
-import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
-
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static String title = "";
+    Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         disableNavigationViewScrollbars(navigationView);
 
-        Menu menu = navigationView.getMenu();
+        menu = navigationView.getMenu();
 
         Settings.setsPref(getSharedPreferences("settings", MODE_PRIVATE));
         menu.findItem(R.id.nav_main_info).setChecked(true);
@@ -202,16 +199,31 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            drawer.openDrawer(GravityCompat.START);
+        Fragment f = getFragmentManager().findFragmentById(R.id.content_frame);
+        if (!(f instanceof MainFragment)){
+            menu.findItem(R.id.nav_main_info).setChecked(true);
+            goTo(new MainFragment());
+        }else {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Snackbar.make(findViewById(R.id.main_progress_bar), "Подвійне натиснення для виходу", Snackbar.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 500);
         }
     }
-
 
     private void goTo(final BaseFragment fragment) {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);

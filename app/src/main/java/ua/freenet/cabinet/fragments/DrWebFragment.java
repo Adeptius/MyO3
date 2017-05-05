@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
@@ -93,10 +94,14 @@ public class DrWebFragment extends HelperFragment {
                     installAndroid.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            String url = subscribe.getAndroid_url();
-                            i.setData(Uri.parse(url));
-                            startActivity(i);
+                            try{
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                String url = subscribe.getAndroid_url();
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                            }catch (Exception e){
+                                makeSimpleSnackBar("Трапилась помилка.", mainLayout);
+                            }
                         }
                     });
                 }
