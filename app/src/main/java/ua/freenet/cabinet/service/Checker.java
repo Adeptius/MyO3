@@ -39,9 +39,9 @@ class Checker extends Thread {
     public void run() {
         Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
         if (isLogged()) {
+            sendInfo(context);
             try {
                 Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
-                sendInfo(context);
                 if (isItNormalTimeToCheckFutureMonth()) {
                     checkMoneyForNextMonth();
                 } else if (isThatStartOfMonth()) {
@@ -81,7 +81,6 @@ class Checker extends Thread {
             map.put("version", verCode+"");
             String result = Web.sendPost("http://195.181.208.31/web/myo3/sendStatistic", map,false);
             if (result.equals("Success")){
-                System.out.println("Success!");
                 Settings.setLastTimeSendReport(new GregorianCalendar().getTimeInMillis());
             }
         }catch (Exception e){

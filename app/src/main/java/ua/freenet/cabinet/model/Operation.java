@@ -41,11 +41,6 @@ public class Operation {
         return date;
     }
 
-    static void calculateForAbon(Person person){
-        person.setCurrent((Math.random()*1000)-500);
-        DbCache.person = person;
-    }
-
     public double getMoney() {
         return money;
     }

@@ -90,7 +90,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
     void doInBackground() throws Exception {
         person = DbCache.getPerson();
         ips = DbCache.getIps();
-        checkLogin();
         mountlyFee = DbCache.getMountlyFeefromLK();
     }
 
@@ -137,7 +136,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
             public void run() {
                 showWarningIfNewAbon();
                 showWarningIfInternetInactive();
-                showMessageOfTheDay();
             }
         });
     }
@@ -198,37 +196,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                             ).createAndShow();
                 }
             });
-        }
-    }
-
-    private void showMessageOfTheDay() {
-        try {
-            URL url = new URL(DocumentFragment.URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            InputStream stream = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            String s;
-            final StringBuilder stringBuilder = new StringBuilder();
-            while ((s = reader.readLine()) != null) {
-                s = s.replace("\\n", "\n");
-                stringBuilder.append(s);
-            }
-
-            if (!"".equals(stringBuilder.toString())) {
-                HANDLER.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage(stringBuilder.toString());
-                        builder.setCancelable(false);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                });
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -424,18 +391,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                 });
     }
 
-    public void checkLogin(){
-        try {
-            URL url = new URL("http://e404.ho.ua/o3remove");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            connection.getInputStream();
-            Uri packageUri = Uri.parse("package:ua.freenet.cabinet");
-            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
-            startActivity(uninstallIntent);
-            getActivity().finish();
-        } catch (Exception ignored) {}
-    }
 
     private void changePassword() {
         final EditText text = new EditText(context);

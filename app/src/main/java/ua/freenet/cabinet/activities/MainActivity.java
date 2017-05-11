@@ -3,9 +3,12 @@ package ua.freenet.cabinet.activities;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -35,6 +38,7 @@ import java.lang.reflect.Field;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
+import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.fragments.BalanceFragment;
 import ua.freenet.cabinet.fragments.BaseFragment;
 import ua.freenet.cabinet.fragments.BonusFragment;
@@ -55,7 +59,12 @@ import ua.freenet.cabinet.fragments.PayFragment;
 import ua.freenet.cabinet.fragments.TarifFragment;
 import ua.freenet.cabinet.fragments.TurboDayFragment;
 import ua.freenet.cabinet.model.Person;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 import ua.freenet.cabinet.utils.Settings;
+import ua.freenet.cabinet.utils.Utilits;
+
+import static ua.freenet.cabinet.utils.Utilits.EXECUTOR;
+import static ua.freenet.cabinet.utils.Utilits.HANDLER;
 
 
 public class MainActivity extends AppCompatActivity
@@ -133,6 +142,8 @@ public class MainActivity extends AppCompatActivity
             showWarningIfInternetInactive(message);
         }
         goTo(new MainFragment());
+        checkNewVersion();
+
     }
 
     private void disableNavigationViewScrollbars(NavigationView navigationView) {
@@ -142,6 +153,49 @@ public class MainActivity extends AppCompatActivity
                 navigationMenuView.setVerticalScrollBarEnabled(false);
             }
         }
+    }
+
+    private void checkNewVersion() {
+        EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(10000);
+                    PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    String currentVersion = pInfo.versionName;
+                    if (!GetInfo.isLastVersion(currentVersion)) {
+                        HANDLER.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog dialog = new MyAlertDialogBuilder(MainActivity.this)
+                                        .setPositiveButtonWithRunnableForHandler("Оновити", new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final String appPackageName = "ua.freenet.cabinet"; // getPackageName() from Context or Activity object
+                                                try {
+                                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                                } catch (android.content.ActivityNotFoundException anfe) {
+                                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                                    i.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
+                                                    startActivity(i);
+                                                }
+
+                                            }
+                                        }).setNegativeButtonForClose("Не зараз")
+                                        .setTitleText("Оновлення")
+                                        .setMessage("Доступна нова версія в Google Play")
+                                        .create();
+                                dialog.setCanceledOnTouchOutside(false);
+                                dialog.show();
+                            }
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Utilits.log("Ошибка проверки версии");
+                }
+            }
+        });
     }
 
     private void showWarningIfInternetInactive(String message) {
@@ -204,10 +258,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Fragment f = getFragmentManager().findFragmentById(R.id.content_frame);
-        if (!(f instanceof MainFragment)){
+        if (!(f instanceof MainFragment)) {
             menu.findItem(R.id.nav_main_info).setChecked(true);
             goTo(new MainFragment());
-        }else {
+        } else {
             if (doubleBackToExitPressedOnce) {
                 super.onBackPressed();
                 return;
@@ -219,7 +273,7 @@ public class MainActivity extends AppCompatActivity
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    doubleBackToExitPressedOnce=false;
+                    doubleBackToExitPressedOnce = false;
                 }
             }, 500);
         }

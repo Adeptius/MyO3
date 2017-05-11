@@ -188,7 +188,6 @@ public abstract class BaseFragment extends Fragment{
             public void run() {
                 try {
                     updateTitle();
-                    ChannelOllTv.drawScreen();
                     doInBackground();
                     HANDLER.post(new Runnable() {
                         @Override

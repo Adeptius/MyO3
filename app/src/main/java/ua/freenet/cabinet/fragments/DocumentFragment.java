@@ -155,8 +155,6 @@ public class DocumentFragment extends HelperFragment {
         }
     }
 
-    public static String URL = "http://e404.ho.ua/Message.txt";
-
     private void askAgree(final MailType type, final Zayava zayava, String agree) {
         new MyAlertDialogBuilder(context)
                 .setMessage(agree)

@@ -141,6 +141,11 @@ public class MyAlertDialogBuilder extends AlertDialog.Builder {
         return dialog;
     }
 
+    public void showDialog(){
+        savedDialog.show();
+    }
+
+
     public MyAlertDialogBuilder createAndShow(){
         create().show();
         return this;
@@ -192,5 +197,10 @@ public class MyAlertDialogBuilder extends AlertDialog.Builder {
         });
         dialog.show();// не закрывает диалог
         return dialog;//выносим builder в переменную и вызываем .close в нужный момент
+    }
+
+    public MyAlertDialogBuilder setCanceledOnTouchOutside(boolean cancel){
+        savedDialog.setCanceledOnTouchOutside(cancel);
+        return this;
     }
 }

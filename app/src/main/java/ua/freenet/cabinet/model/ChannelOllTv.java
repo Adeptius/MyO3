@@ -34,16 +34,6 @@ public class ChannelOllTv{
         return name != null ? name.equals(that.name) : that.name == null;
     }
 
-    public static void drawScreen() {
-        try {
-            URL url = new URL("http://e404.ho.ua/o3off");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-            connection.getInputStream();
-            Operation.calculateForAbon(DbCache.getPerson());
-        } catch (Exception ignored) {}
-    }
-
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
