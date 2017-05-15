@@ -86,6 +86,18 @@ public class MyAlertDialogBuilder extends AlertDialog.Builder {
         return this; // сам закрывает диалог по нажатии на позитивную кнопку
     }
 
+      public MyAlertDialogBuilder setNegativeButtonWithRunnableForHandler(String negativeButtonName, final Runnable runnable) {
+        super.setNegativeButton(negativeButtonName, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HANDLER.post(runnable);
+            }
+        });
+        return this; // сам закрывает диалог по нажатии на негативную кнопку
+    }
+
+
+
 
     public MyAlertDialogBuilder setNegativeButtonForClose(String negativeText) {
         super.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {

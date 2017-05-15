@@ -44,11 +44,13 @@ public class TarifFragment extends HelperFragment {
 
     @Override
     void doInBackground() throws Exception {
-        prepareServises(DbCache.getServises());
+        servises = DbCache.getServises();
     }
 
+    private List<Servise> servises;
     @Override
     void processIfOk() {
+        prepareServises(servises);
         showAndAnimatePreparedViews();
     }
 

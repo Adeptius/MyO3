@@ -96,7 +96,8 @@ public class Servise {
 
             try{
                 if (!allInfo.getString("login").equals("") && type==3){
-                    pay_type_name = allInfo.getString("login") + "@freenet.com.ua";
+                    String domen = allInfo.getString("domen");
+                    pay_type_name = allInfo.getString("login") + "@" + domen;
                 }
 
             }catch (Exception ignored){}

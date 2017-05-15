@@ -39,7 +39,7 @@ class Checker extends Thread {
     public void run() {
         Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
         if (isLogged()) {
-            sendInfo(context);
+//            sendInfo(context);
             try {
                 Settings.setsPref(context.getSharedPreferences("settings", MODE_PRIVATE));
                 if (isItNormalTimeToCheckFutureMonth()) {
@@ -55,38 +55,38 @@ class Checker extends Thread {
         }
     }
 
-    public static void sendInfo(Context context){
-        try{
-            if(!isLogged()){
-                return;
-            }
-            long lastReport = Settings.getLastTimeSendReport();
-            long currentTime = new GregorianCalendar().getTimeInMillis();
-            long interval = 1000 * 60 * 60 * 24 * 3; // 3 суток
-            System.out.println(new Date(interval+lastReport));
-            if ((lastReport + interval) > currentTime){
-                System.out.println("Еще не прошло время");
-                return;
-            }
-
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            int verCode = pInfo.versionCode;
-            String card = Settings.getCurrentLogin();
-            String pass = Settings.getCurrentPassword();
-            String token = FirebaseInstanceId.getInstance().getToken();
-            HashMap<String, String> map = new HashMap<>();
-            map.put("card", card);
-            map.put("pass", pass);
-            map.put("token", token);
-            map.put("version", verCode+"");
-            String result = Web.sendPost("http://195.181.208.31/web/myo3/sendStatistic", map,false);
-            if (result.equals("Success")){
-                Settings.setLastTimeSendReport(new GregorianCalendar().getTimeInMillis());
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+//    public static void sendInfo(Context context){
+//        try{
+//            if(!isLogged()){
+//                return;
+//            }
+//            long lastReport = Settings.getLastTimeSendReport();
+//            long currentTime = new GregorianCalendar().getTimeInMillis();
+//            long interval = 1000 * 60 * 60 * 24 * 3; // 3 суток
+//            System.out.println(new Date(interval+lastReport));
+//            if ((lastReport + interval) > currentTime){
+//                System.out.println("Еще не прошло время");
+//                return;
+//            }
+//
+//            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+//            int verCode = pInfo.versionCode;
+//            String card = Settings.getCurrentLogin();
+//            String pass = Settings.getCurrentPassword();
+//            String token = FirebaseInstanceId.getInstance().getToken();
+//            HashMap<String, String> map = new HashMap<>();
+//            map.put("card", card);
+//            map.put("pass", pass);
+//            map.put("token", token);
+//            map.put("version", verCode+"");
+//            String result = Web.sendPost("http://195.181.208.31/web/myo3/sendStatistic", map,false);
+//            if (result.equals("Success")){
+//                Settings.setLastTimeSendReport(new GregorianCalendar().getTimeInMillis());
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
     private void checkMoneyForCurrentMonth() throws Exception {
         Person person = DbCache.getPerson();

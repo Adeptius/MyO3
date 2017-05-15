@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity
             int edge = mEdgeSize.getInt(draggerObj);
             mEdgeSize.setInt(draggerObj, edge * 5); //optimal value as for me, you may set any constant in dp
         } catch (Exception ignored) {
+
         }
 
         disableNavigationViewScrollbars(navigationView);

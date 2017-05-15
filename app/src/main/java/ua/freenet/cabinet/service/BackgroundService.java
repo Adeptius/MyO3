@@ -27,11 +27,11 @@ public class BackgroundService extends Service {
         }
         Settings.setsPref(preferences);
         new MyAlarmManager().setUpAlarm(this);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Checker.sendInfo(BackgroundService.this);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Checker.sendInfo(BackgroundService.this);
+//            }
+//        }).start();
     }
 }
