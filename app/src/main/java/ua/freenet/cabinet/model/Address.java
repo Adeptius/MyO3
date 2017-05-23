@@ -30,19 +30,31 @@ public class Address {
     }
 
     public String getAddressFlatName() {
+        if (addressFlatName==null){
+            return "";
+        }
         return addressFlatName;
     }
 
     public String getStrNameUa() {
+        if (strNameUa==null){
+            return "";
+        }
         return strNameUa;
     }
 
     public String gethName() {
+        if (hName==null){
+            return "";
+        }
         return hName;
     }
 
     public String getCityNameUa() {
         String cityNameUa = this.cityNameUa;
+        if (cityNameUa==null){
+            return "";
+        }
         cityNameUa = cityNameUa.replaceAll("Дніпропетровськ","Дніпро");
         return cityNameUa;
     }

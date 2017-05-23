@@ -221,9 +221,10 @@ public abstract class BaseFragment extends Fragment{
         try{
             NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
             Menu menu = navigationView.getMenu();
-            if (fragment instanceof DrWebFragment){
-                menu.findItem(R.id.nav_dr_web).setChecked(true);
-            }else if (fragment instanceof MegogoFragment){
+//            if (fragment instanceof DrWebFragment){
+//                menu.findItem(R.id.nav_dr_web).setChecked(true);
+//            }else
+                if (fragment instanceof MegogoFragment){
                 menu.findItem(R.id.nav_megogo).setChecked(true);
             }else if (fragment instanceof PayFragment){
                 menu.findItem(R.id.nav_balance).setChecked(true);

@@ -148,6 +148,9 @@ public class Person {
     }
 
     public String getCard() {
+        if (card==null){
+            return "";
+        }
         return card;
     }
 

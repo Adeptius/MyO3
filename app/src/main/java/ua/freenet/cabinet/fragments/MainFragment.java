@@ -49,7 +49,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
     @Override
     void setAllSettings() {
         titleText = "Головна";
-        descriptionText = "Тут відображається основна інформація по вашому договору";
+        descriptionText = "Тут відображається основна інформація по Вашому договору";
         fragmentId = R.layout.fragment_main;
         titleImage = R.drawable.background_main1;
         layoutId = R.id.scroll_view_main;
@@ -143,6 +143,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
 
     private void showWarningIfNewAbon() {
         if (person.getAge() < 1 && person.getStopsum() < -10 && !person.getAddress().isPrivat()) {
+//        if (true) {
             HANDLER.post(new Runnable() {
                 @Override
                 public void run() {
@@ -152,6 +153,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                             "Будь ласка, поповніть рахунок на " + (Integer.parseInt(mountlyFee) + 1) + " грн. " +
                             "(1 грн за підключення плюс ваш тариф " + mountlyFee + " грн)";
 
+                    // BadTokenException
                     new MyAlertDialogBuilder(context)
                             .setTitleText("Перша сплата")
                             .setMessageText(message)
@@ -161,7 +163,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
             });
         }
     }
-
 
     private void showWarningIfInternetInactive() {
         if (person.getStopsum() > person.getCurrent()) {
@@ -183,6 +184,8 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                     }else{
                         titleText = "Інтернет не активний";
                     }
+
+                    // BadTokenException
                         new MyAlertDialogBuilder(context)
                             .setTitleText(titleText)
                             .setMessageText(sb.toString())

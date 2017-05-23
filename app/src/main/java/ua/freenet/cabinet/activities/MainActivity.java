@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                 menu.findItem(R.id.nav_turbo_day).setVisible(false);
                 menu.findItem(R.id.nav_dovira).setVisible(false);
                 menu.findItem(R.id.nav_garant_service).setVisible(false);
-                menu.findItem(R.id.nav_dr_web).setVisible(false);
+//                menu.findItem(R.id.nav_dr_web).setVisible(false);
                 menu.findItem(R.id.nav_megogo).setVisible(false);
                 menu.findItem(R.id.nav_divan_tv).setVisible(false);
                 menu.findItem(R.id.nav_friend).setVisible(false);
@@ -135,15 +135,19 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-        System.out.println("TOKEN IS: " + FirebaseInstanceId.getInstance().getToken());
+//        FirebaseMessaging.getInstance().subscribeToTopic("news");
+//        System.out.println("TOKEN IS: " + FirebaseInstanceId.getInstance().getToken());
 
         String message = getIntent().getStringExtra("notAnothMessage");
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
         goTo(new MainFragment());
-        checkNewVersion();
+        try{
+            checkNewVersion();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -180,13 +184,13 @@ public class MainActivity extends AppCompatActivity
                                                     i.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName));
                                                     startActivity(i);
                                                 }
-
                                             }
                                         }).setNegativeButtonForClose("Не зараз")
                                         .setTitleText("Оновлення")
                                         .setMessage("Доступна нова версія в Google Play")
                                         .create();
                                 dialog.setCanceledOnTouchOutside(false);
+                                if (!isFinishing())
                                 dialog.show();
                             }
                         });
@@ -211,10 +215,11 @@ public class MainActivity extends AppCompatActivity
         builder.setCustomTitle(titleView);
         View textLayout = LayoutInflater.from(this).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-
         text.setText(message);
         builder.setView(textLayout);
         android.app.AlertDialog dialog = builder.create();
+
+        if (!isFinishing())
         dialog.show();
     }
 
@@ -310,8 +315,8 @@ public class MainActivity extends AppCompatActivity
             goTo(new GarantServiceFragment());
         } else if (id == R.id.nav_vkl_internet) {
             goTo(new OnOffInternet());
-        } else if (id == R.id.nav_dr_web) {
-            goTo(new DrWebFragment());
+//        } else if (id == R.id.nav_dr_web) {
+//            goTo(new DrWebFragment());
         } else if (id == R.id.nav_megogo) {
             goTo(new MegogoFragment());
         } else if (id == R.id.nav_divan_tv) {

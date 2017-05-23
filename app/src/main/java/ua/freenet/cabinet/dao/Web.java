@@ -43,7 +43,7 @@ public class Web {
         sessionCreatedTime = new GregorianCalendar().getTimeInMillis();
     }
 
-    static String getJsonFromUrl(String url) throws Exception {
+    public static String getJsonFromUrl(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestProperty("User-Agent", "Mozilla");
@@ -100,6 +100,9 @@ public class Web {
 
         // "month":85,"bundle":2822},null]
         json = json.replaceAll(",null", "");
+
+        json = json.replaceAll("частный дом]\"\"", "частный дом]\"");
+
 
         return json;
     }

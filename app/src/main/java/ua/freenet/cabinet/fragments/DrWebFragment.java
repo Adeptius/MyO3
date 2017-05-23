@@ -48,13 +48,14 @@ public class DrWebFragment extends HelperFragment {
     }
 
     private void draw() {
-        Button activateButton = getButton(R.id.button_activate_antivirus);
-        activateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showActivateMessage();
-            }
-        });
+//        Button activateButton = getButton(R.id.button_activate_antivirus);
+//        activateButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showActivateMessage();
+//            }
+//        });
+//        activateButton.setVisibility(View.GONE);
 
         if (subscribes != null) {
             for (final DrWebSubscribe subscribe : subscribes) {
@@ -140,70 +141,72 @@ public class DrWebFragment extends HelperFragment {
                 }).createAndShow();
     }
 
-    private void showActivateMessage() {
-        View layout = LayoutInflater.from(context).inflate(R.layout.item_dr_web_choise, null);
-        ImageView classic = (ImageView) layout.findViewById(R.id.activate_classic);
-        ImageView standart = (ImageView) layout.findViewById(R.id.activate_standart);
-        ImageView premium = (ImageView) layout.findViewById(R.id.activate_premium);
-        ImageView mobile = (ImageView) layout.findViewById(R.id.activate_mobile);
+//    private void showActivateMessage() {
+//        View layout = LayoutInflater.from(context).inflate(R.layout.item_dr_web_choise, null);
+//        ImageView classic = (ImageView) layout.findViewById(R.id.activate_classic);
+//        ImageView standart = (ImageView) layout.findViewById(R.id.activate_standart);
+//        ImageView premium = (ImageView) layout.findViewById(R.id.activate_premium);
+//        ImageView mobile = (ImageView) layout.findViewById(R.id.activate_mobile);
+//
+//        final MyAlertDialogBuilder dialog = new MyAlertDialogBuilder(context)
+//                .setTitleTextWithWhiteBackground("Оберіть підписку:")
+//                .setView(layout)
+//                .createAndShow();
+//
+//        classic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activate("classic");
+//                dialog.close();
+//            }
+//        });
+//        standart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activate("standart");
+//                dialog.close();
+//            }
+//        });
+//        premium.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activate("premium");
+//                dialog.close();
+//            }
+//        });
+//        mobile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activate("mobile");
+//                dialog.close();
+//            }
+//        });
+//    }
 
-        final MyAlertDialogBuilder dialog = new MyAlertDialogBuilder(context)
-                .setTitleTextWithWhiteBackground("Оберіть підписку:")
-                .setView(layout)
-                .createAndShow();
-
-        classic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activate("classic");
-                dialog.close();
-            }
-        });
-        standart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activate("standart");
-                dialog.close();
-            }
-        });
-        premium.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activate("premium");
-                dialog.close();
-            }
-        });
-        mobile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activate("mobile");
-                dialog.close();
-            }
-        });
-    }
-
-    private void activate(final String version) {
-        String s = "Підключити версію ";
-        if (version.equals("classic")) s += "класік";
-        else if (version.equals("standart")) s += "стандарт";
-        else if (version.equals("premium")) s += "преміум";
-        else if (version.equals("mobile")) s += "мобільний";
-        s += "?";
-
-        new MyAlertDialogBuilder(context)
-                .setTitleText(s)
-                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialogShow();
-                        if (SendInfo.activateDrWeb(version)) {
-                            DbCache.markMountlyFeeOld();
-                            DbCache.markDrWebServicesOld();
-                            progressDialogWaitStopShowMessageReload("Підключено!", mainLayout);
-                        } else {
-                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
-                        }
-                    }
-                }).createAndShow();
-    }
+//    private void activate(final String version) {
+//
+//    }
+//        String s = "Підключити версію ";
+//        if (version.equals("classic")) s += "класік";
+//        else if (version.equals("standart")) s += "стандарт";
+//        else if (version.equals("premium")) s += "преміум";
+//        else if (version.equals("mobile")) s += "мобільний";
+//        s += "?";
+//
+//        new MyAlertDialogBuilder(context)
+//                .setTitleText(s)
+//                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        progressDialogShow();
+//                        if (SendInfo.activateDrWeb(version)) {
+//                            DbCache.markMountlyFeeOld();
+//                            DbCache.markDrWebServicesOld();
+//                            progressDialogWaitStopShowMessageReload("Підключено!", mainLayout);
+//                        } else {
+//                            progressDialogStopAndShowMessage("Трапилась помилка", mainLayout);
+//                        }
+//                    }
+//                }).createAndShow();
+//    }
 }

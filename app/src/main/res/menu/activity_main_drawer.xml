@@ -45,10 +45,10 @@
             android:id="@+id/nav_vkl_internet"
             android:icon="@drawable/ic_vkl_internet2"
             android:title="Вимикання Інтернету" />
-        <item
-            android:id="@+id/nav_dr_web"
-            android:icon="@drawable/ic_dr_web2"
-            android:title="Антивірус Dr.WEB" />
+        <!--<item-->
+            <!--android:id="@+id/nav_dr_web"-->
+            <!--android:icon="@drawable/ic_dr_web2"-->
+            <!--android:title="Антивірус Dr.WEB" />-->
         <item
             android:id="@+id/nav_megogo"
             android:icon="@drawable/ic_tv2"

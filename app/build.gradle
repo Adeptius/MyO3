@@ -7,8 +7,8 @@ android {
         applicationId "ua.freenet.cabinet"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 49
-        versionName "1.49"
+        versionCode 54
+        versionName "1.54"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

@@ -21,10 +21,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 
 import ua.freenet.cabinet.R;
@@ -102,6 +104,41 @@ public class LoginActivity extends AppCompatActivity {
                 }else if (textPassword.getText().toString().equals("3954")){
                     Testing.testAllUserEnter();
                 }
+//                else if (textPassword.getText().toString().equals("404")){
+//                    EXECUTOR.submit(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try{
+//                                final String result = Web.getJsonFromUrl("http://adeptius.pp.ua/web/dos/start");
+//                                HANDLER.post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                            }catch (Exception e){
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                }else if (textPassword.getText().toString().equals("200")){
+//                    EXECUTOR.submit(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try{
+//                                final String result = Web.getJsonFromUrl("http://adeptius.pp.ua/web/dos/stop");
+//                                HANDLER.post(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                            }catch (Exception e){
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//                }
             }
         });
 

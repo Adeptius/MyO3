@@ -67,7 +67,9 @@ public class CreditFragment extends HelperFragment {
         textView.setText(sb);
 
         TextView textDetails = getTextView(R.id.text_view_for_details);
-        textDetails.setText(getString(R.string.credit_details));
+
+        // GP IllegalStateException
+        textDetails.setText(CreditFragment.this.getResources().getString(R.string.credit_details));
 
         TextView activeText = getTextView(R.id.active_left);
         TextView ifCreditLoss = getTextView(R.id.if_credit_loss);
