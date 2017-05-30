@@ -2,9 +2,13 @@ package ua.freenet.cabinet.fragments;
 
 
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -53,7 +57,6 @@ public class FreeDayFragment extends HelperFragment {
         availableFreeDays = map.get("daysLeft");
         statistics = DbCache.getFreeDayStatistics();
         services = DbCache.getServises();
-
     }
 
     @Override
@@ -64,7 +67,6 @@ public class FreeDayFragment extends HelperFragment {
 
     private void drawScreen() {
         Button activateButton = getButton(R.id.button_activate_free_and_turbo_day);
-
         TextView firstText = getTextView(R.id.first_text);
         TextView activeText = getTextView(R.id.active_text);
         TextView textDaysLeft = getTextView(R.id.days_left);
@@ -176,7 +178,6 @@ public class FreeDayFragment extends HelperFragment {
     }
 
     public boolean isFreeDayIsActive(String date) {
-        System.out.println(date);
         int year = Integer.parseInt(date.substring(6, 10));
         int month = Integer.parseInt(date.substring(3, 5));
         int day = Integer.parseInt(date.substring(0, 2));
@@ -190,24 +191,74 @@ public class FreeDayFragment extends HelperFragment {
     }
 
     public void activating() {
-        new MyAlertDialogBuilder(context)
-                .setTitleText("Активувати?")
-                .setMessage("Послуга активується до 10 хвилин.")
-                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
-                    @Override
-                    public void run() {
-                        activateNow();
+        if (availableFreeDays == 1){
+            new MyAlertDialogBuilder(context)
+                    .setTitleText("Активація?")
+                    .setMessage("Послуга активується до 10 хвилин.")
+                    .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                        @Override
+                        public void run() {
+                            activateNow(1);
+                        }
+                    }).createAndShow();
+        }else {
+            final View layout = LayoutInflater.from(context).inflate(R.layout.alert_item_freedays_choise, null);
+            Spinner spinner = (Spinner) layout.findViewById(R.id.freeday_spinner);
+            final TextView textView = (TextView) layout.findViewById(R.id.text_after_spinner);
+            String[] list = new String[availableFreeDays];
+            for (int i = 1; i <= availableFreeDays; i++) {
+                list[i-1] = ""+i;
+            }
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+            final int[] days = {1};
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selected = adapter.getItem(position);
+                    if ("1".equals(selected)){
+                     textView.setText("вільний день");
+                        days[0] = 1;
+                    }else if ("2".equals(selected)){
+                        textView.setText("вільних дні");
+                        days[0] = 2;
+                    }else if ("3".equals(selected)){
+                        textView.setText("вільних дні");
+                        days[0] = 3;
+                    }else if ("4".equals(selected)){
+                        textView.setText("вільних дні");
+                        days[0] = 4;
+                    }else if ("5".equals(selected)){
+                        textView.setText("вільних днів");
+                        days[0] = 5;
                     }
-                }).createAndShow();
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            new MyAlertDialogBuilder(context)
+                    .setTitleText("Активація")
+                    .setView(layout)
+                    .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                        @Override
+                        public void run() {
+                            activateNow(days[0]);
+                        }
+                    }).createAndShow();
+        }
     }
 
-    public void activateNow() {
+    public void activateNow(int days) {
         Calendar calendar = new GregorianCalendar();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE) + 3;
+        int minute = calendar.get(Calendar.MINUTE) + 2;
         if (minute > 59) {
             hour++;
             minute = minute - 60;
@@ -217,8 +268,9 @@ public class FreeDayFragment extends HelperFragment {
 
         final HashMap<String, String> map = new HashMap<>();
         map.put("date", date);
-        map.put("days", "1");
+        map.put("days",  ""+days);
         progressDialogShow();
+
         if (SendInfo.activateFreeDay(map)) {
             DbCache.markFreeDayInfoOld();
             DbCache.markFreeDayStatisticsOld();

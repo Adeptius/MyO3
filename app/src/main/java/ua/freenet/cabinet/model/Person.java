@@ -4,6 +4,8 @@ package ua.freenet.cabinet.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import ua.freenet.cabinet.utils.Utilits;
@@ -52,6 +54,12 @@ public class Person {
                 current = Double.parseDouble(money);
             }
 //            current = -10;
+//            Округляем дабл
+//            current = roundResult(current,5);
+//            current = new BigDecimal(current).setScale(5, RoundingMode.UP).doubleValue();
+//            current = fixedWidthDoubletoString(current,2,2);
+            current = Math.rint(100.0 * current) / 100.0;
+
             email = allInfo.get("email").toString();
             if (email == null) email = "";
             age = Integer.parseInt(allInfo.get("age").toString());
@@ -191,4 +199,23 @@ public class Person {
     public double getStopsum() {
         return stopsum;
     }
+
+    private static double roundResult (double d, int precise) {
+        precise = 10^precise;
+        d = d*precise;
+        int i = (int) Math.round(d);
+        return (double) i/precise;
+    }
+//    public static double fixedWidthDoubletoString (double x, int w, int d) {
+//        java.text.DecimalFormat fmt = new java.text.DecimalFormat();
+//        fmt.setMaximumFractionDigits(d);
+//        fmt.setMinimumFractionDigits(d);
+//        fmt.setGroupingUsed(false);
+//        String s = fmt.format(x);
+//        while (s.length() < w) {
+//            s = " " + s;
+//        }
+//        return Double.parseDouble(s);
+//    }
+
 }

@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
-        goTo(new MainFragment());
+        goTo(new FreeDayFragment());
         try{
             checkNewVersion();
         }catch (Exception e){
