@@ -16,7 +16,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:paddingTop="35dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/enter_text"

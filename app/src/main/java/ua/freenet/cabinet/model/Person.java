@@ -1,6 +1,8 @@
 package ua.freenet.cabinet.model;
 
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -145,6 +147,15 @@ public class Person {
                 .replace("Сергей", "Сергій")
                 .replace("Андрей", "Андрій");
         return ukrName;
+    }
+
+    @NonNull
+    public String getFIO() {
+        try {
+            return getLastname() + " " + getName() + " " + getSurname();
+        }catch (Exception e){
+            return "";
+        }
     }
 
     public Address getAddress() {

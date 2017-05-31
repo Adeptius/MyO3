@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         if (message != null && !"".equals(message)) {
             showWarningIfInternetInactive(message);
         }
-        goTo(new FreeDayFragment());
+        goTo(new MainFragment());
         try{
             checkNewVersion();
         }catch (Exception e){
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity
 
         View textLayout = LayoutInflater.from(this).inflate(R.layout.item_alert_message, null);
         TextView text = (TextView) textLayout.findViewById(R.id.text);
-        text.setText("Ви впевнені, що хочете вийти з облікового запису?\n\nПри наступному вході в додаток вам доведеться знову вводити логін та пароль.");
+        text.setText("Ви впевнені, що хочете вийти з облікового запису?");
         builder.setView(textLayout);
         builder.setPositiveButton("Вийти", new DialogInterface.OnClickListener() {
             @Override

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -102,7 +103,7 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
     private void setPersonData(Person person, List<Ip> ips, String mountlyFee) {
         descriptionText = person.getUkrName() + ", тут відображається основна інформація по вашому договору";
         updateTitle();
-        pib.setText(person.getLastname() + " " + person.getName() + " " + person.getSurname());
+        pib.setText(person.getFIO());
         contractNumber.setText(person.getCard());
         city.setText(person.getAddress().getCityNameUa());
         street.setText(person.getAddress().getStrNameUa());
@@ -139,7 +140,6 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
             }
         });
     }
-
 
     private void showWarningIfNewAbon() {
         if (person.getAge() < 1 && person.getStopsum() < -10 && !person.getAddress().isPrivat()) {

@@ -4,8 +4,15 @@ package ua.freenet.cabinet.utils;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import ua.freenet.cabinet.model.City;
+import ua.freenet.cabinet.model.PreviouslyPerson;
 
 public class Settings {
 
@@ -127,9 +134,9 @@ public class Settings {
 
     public static int getServiceCheckedDay() {
         String s = sPref.getString("checkedDay", "");
-        if (s.equals("")){
+        if (s.equals("")) {
             return -1;
-        }else {
+        } else {
             return Integer.valueOf(s);
         }
     }
@@ -142,9 +149,9 @@ public class Settings {
 
     public static int getMonthPaydFutureMonth() {
         String s = sPref.getString("monthPaydFutureMonth", "");
-        if (s.equals("")){
+        if (s.equals("")) {
             return -1;
-        }else {
+        } else {
             return Integer.valueOf(s);
         }
     }
@@ -157,9 +164,9 @@ public class Settings {
 
     public static int getMonthPaydCurrentMonth() {
         String s = sPref.getString("monthPaydCurrentMonth", "");
-        if (s.equals("")){
+        if (s.equals("")) {
             return -1;
-        }else {
+        } else {
             return Integer.valueOf(s);
         }
     }
@@ -170,11 +177,37 @@ public class Settings {
         settingsEditor.commit();
     }
 
-    public static long getLastTimeSendReport(){
+    public static long getLastTimeSendReport() {
         try {
             return Long.parseLong(sPref.getString("lastTimeSendReport", ""));
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0;
+        }
+    }
+
+    public static void setPreviouslyPersons(Set<PreviouslyPerson> set) {
+        try {
+            String json = new Gson().toJson(set);
+            settingsEditor.putString("previouslyPersons", json);
+            settingsEditor.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static Set<PreviouslyPerson> getPreviouslyPersons() {
+        String s = sPref.getString("previouslyPersons", "");
+        if (s == null || s.equals("")) {
+            return new HashSet<>();
+        }
+        try {
+            Type listType = new TypeToken<Set<PreviouslyPerson>>() {
+            }.getType();
+            Set<PreviouslyPerson> previouslyLoginAndPasswords = new Gson().fromJson(s, listType);
+            return previouslyLoginAndPasswords;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashSet<>();
         }
     }
 }

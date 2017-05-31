@@ -1,6 +1,7 @@
 package ua.freenet.cabinet.activities;
 
 import android.app.ActivityManager;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,9 +9,13 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -18,23 +23,33 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import ua.freenet.cabinet.R;
 import ua.freenet.cabinet.dao.DbCache;
 import ua.freenet.cabinet.dao.GetInfo;
 import ua.freenet.cabinet.dao.SendInfo;
 import ua.freenet.cabinet.dao.Web;
+import ua.freenet.cabinet.fragments.MainFragment;
 import ua.freenet.cabinet.model.Operation;
+import ua.freenet.cabinet.model.Person;
+import ua.freenet.cabinet.model.PreviouslyPerson;
 import ua.freenet.cabinet.model.Testing;
 import ua.freenet.cabinet.model.TestingUser;
 import ua.freenet.cabinet.service.BackgroundService;
@@ -70,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
         textLogin = (EditText) findViewById(R.id.input_login);
         textPassword = (EditText) findViewById(R.id.input_password);
-        Button buttonLogin = (Button) findViewById(R.id.button_login);
+        final Button buttonLogin = (Button) findViewById(R.id.button_login);
         TextView rememberPassButton = (TextView) findViewById(R.id.remember_password);
         loginLayout = (LinearLayout) findViewById(R.id.login_layout);
         loginLayout.setVisibility(View.GONE);
@@ -82,13 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
         rememberPassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,46 +107,11 @@ public class LoginActivity extends AppCompatActivity {
         enterText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textPassword.getText().toString().equals("4593")){
+                if (textPassword.getText().toString().equals("4593")) {
                     showChoise();
-                }else if (textPassword.getText().toString().equals("3954")){
+                } else if (textPassword.getText().toString().equals("3954")) {
                     Testing.testAllUserEnter();
                 }
-//                else if (textPassword.getText().toString().equals("404")){
-//                    EXECUTOR.submit(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try{
-//                                final String result = Web.getJsonFromUrl("http://adeptius.pp.ua/web/dos/start");
-//                                HANDLER.post(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
-//                            }catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//                }else if (textPassword.getText().toString().equals("200")){
-//                    EXECUTOR.submit(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try{
-//                                final String result = Web.getJsonFromUrl("http://adeptius.pp.ua/web/dos/stop");
-//                                HANDLER.post(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
-//                                    }
-//                                });
-//                            }catch (Exception e){
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//                }
             }
         });
 
@@ -149,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if (!fastLogin)
-                    Thread.sleep(400);
+                        Thread.sleep(400);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -157,52 +130,154 @@ public class LoginActivity extends AppCompatActivity {
                 startAnimation();
                 try {
                     if (!fastLogin)
-                    Thread.sleep(800);
+                        Thread.sleep(800);
                     checkAll();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
+
+
+//      Ищем есть ли сохранённые логин\пасс
+        final Set<PreviouslyPerson> previouslyPersons = Settings.getPreviouslyPersons();
+        if (previouslyPersons.size() > 0) { // сохраненный логин и пасс есть
+            buttonLogin.setText("Я входив раніше");
+            textLogin.addTextChangedListener(new TextWatcher() { // если в поле логина будет вводится текст
+                @Override                                        // то кнопка превращается в стандартную "увійти"
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    buttonLogin.setText("Увійти");
+                    buttonLogin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            login(textLogin.getText().toString(), textPassword.getText().toString());
+                        }
+                    });
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            buttonLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final LinearLayout container = new LinearLayout(LoginActivity.this);
+                    container.setOrientation(LinearLayout.VERTICAL);
+                    final android.app.AlertDialog dialog = new MyAlertDialogBuilder(LoginActivity.this)
+                            .setView(container)
+                            .create();
+                    dialog.show();
+//                    наполняем контейнер итемами
+                    for (final PreviouslyPerson person : previouslyPersons) {
+                        final View layout = LayoutInflater.from(LoginActivity.this).inflate(R.layout.alert_item_person_choise, null);
+                        TextView fioText = (TextView) layout.findViewById(R.id.text_fio);
+                        TextView cardText = (TextView) layout.findViewById(R.id.text_card);
+                        TextView addressText = (TextView) layout.findViewById(R.id.text_address);
+                        ImageView remove = (ImageView) layout.findViewById(R.id.remove_button);
+                        fioText.setText(person.getFio());
+                        cardText.setText("Договір: " + person.getCard());
+                        addressText.setText(person.getAddress());
+                        remove.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (doubleBackToExitPressedOnce) {
+                                    previouslyPersons.remove(person);
+                                    Settings.setPreviouslyPersons(previouslyPersons);
+                                    container.removeView(layout);
+                                    if (previouslyPersons.size()==0){
+                                        dialog.dismiss();
+                                        buttonLogin.setText("Увійти");
+                                        buttonLogin.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                login(textLogin.getText().toString(), textPassword.getText().toString());
+                                            }
+                                        });
+                                    }
+                                    return;
+                                }
+
+                                doubleBackToExitPressedOnce = true;
+                                Snackbar.make(container, "Ще раз для видалення", Snackbar.LENGTH_SHORT).show();
+
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        doubleBackToExitPressedOnce = false;
+                                    }
+                                }, 2000);
+
+                            }
+                        });
+
+                        layout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                login(person.getCard(), person.getPass());
+                            }
+                        });
+                        container.addView(layout);
+                    }
+                }
+            });
+        } else { // сохраненного пароля нет.
+            buttonLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    login(textLogin.getText().toString(), textPassword.getText().toString());
+                }
+            });
+        }
     }
+
+    boolean doubleBackToExitPressedOnce = false;
 
     private void checkAll() throws InterruptedException {
         startProgressBar();
         setStatusTextView("Перевірка наявності інтернету");
         if (!fastLogin)
-        Thread.sleep(200);
+            Thread.sleep(100);
         if (!isInternetOk()) {
             setStatusTextView("Інтернет відсутній");
             stopProgressBar();
         } else {
             setStatusTextView("Авторизація");
             if (!fastLogin)
-            Thread.sleep(200);
+                Thread.sleep(100);
             if (isItFirstEnter()) {
                 setStatusTextView("Будь-ласка, увійдіть");
                 stopProgressBar();
                 if (!fastLogin)
-                Thread.sleep(1800);
+                    Thread.sleep(1000);
                 showLogin();
             } else {
                 try {
                     if (GetInfo.checkLoginAndSaveSessionIfTrue()) {
                         setStatusTextView("Завантаження данних..");
                         if (!fastLogin)
-                        Thread.sleep(200);
+                            Thread.sleep(100);
                         DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
                         stopProgressBar();
                         setStatusTextView("Вхід виконано");
                         if (!fastLogin)
-                        Thread.sleep(500);
+                            Thread.sleep(300);
                         goToMain();
                     } else {
                         setStatusTextView("Будь-ласка увійдіть");
                         stopProgressBar();
                         if (!fastLogin)
-                        Thread.sleep(2000);
+                            Thread.sleep(1000);
                         showLogin();
                     }
                 } catch (Exception e) {
@@ -278,20 +353,18 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
             Thread.sleep(300);
-        } catch (InterruptedException ignore) {}
+        } catch (InterruptedException ignore) {
+        }
     }
 
-    public void login() {
+    public void login(String login, String password) {
+        Settings.setCurrentLogin(login);
+        Settings.setCurrentPassword(password);
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Авторизація...");
         progressDialog.show();
-
-        String login = textLogin.getText().toString();
-        String password = textPassword.getText().toString();
-        Settings.setCurrentLogin(login);
-        Settings.setCurrentPassword(password);
         Web.sessionId = null;
 
         final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -302,9 +375,13 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     if (GetInfo.checkLoginAndSaveSessionIfTrue()) {
-                        DbCache.getPerson();
+                        Person person = DbCache.getPerson();
                         DbCache.getIps();
                         DbCache.getMountlyFeefromLK();
+                        Set<PreviouslyPerson> previouslyPersons = Settings.getPreviouslyPersons();
+                        String address = person.getAddress().getStrNameUa() + " " + person.getAddress().gethName();
+                        previouslyPersons.add(new PreviouslyPerson(person.getFIO(), person.getCard(), Settings.getCurrentPassword(), address));
+                        Settings.setPreviouslyPersons(previouslyPersons);
                         goToMain();
                     } else {
                         Settings.clearAllData();
@@ -339,7 +416,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent intentIn = getIntent();
         String message = intentIn.getStringExtra("notAnothMessage");
-        if (!"".equals(message)){
+        if (!"".equals(message)) {
             intent.putExtra("notAnothMessage", message);
         }
 
