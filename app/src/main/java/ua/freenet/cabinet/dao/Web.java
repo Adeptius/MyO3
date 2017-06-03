@@ -51,6 +51,7 @@ public class Web {
         con.setRequestProperty("Cookie", "PHPSESSID=" + getSessionId());
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
+        result = result.replace("\\u0022","\\\\\"");
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
         result = fixJson(result);
         Utilits.networkLog("Получен Json: " + result);
@@ -85,6 +86,7 @@ public class Web {
         wr.close();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String result = in.readLine();
+        result = result.replace("\\u0022","\\\\\"");
         result = org.apache.commons.lang3.StringEscapeUtils.unescapeJava(result);
         Utilits.networkLog("Ответ: " + result);
         in.close();
@@ -93,15 +95,15 @@ public class Web {
 
     private static String fixJson(String json){
         // 00015018 0756594  "hNote":""","cscSegId":2    "hNote":"","cscSegId":2
-        json = json.replaceAll(":\"\"\",", ":\"\",");
+//        json = json.replaceAll(":\"\"\",", ":\"\",");
 
         // 561200788 5126383 "hNote":"[добавлен как частный дом]""","cscSegId": 117,
-        json = json.replaceAll("\"\"\",", "\",");
+//        json = json.replaceAll("\"\"\",", "\",");
 
         // "month":85,"bundle":2822},null]
         json = json.replaceAll(",null", "");
 
-        json = json.replaceAll("частный дом]\"\"", "частный дом]\"");
+//        json = json.replaceAll("частный дом]\"\"", "частный дом]\"");
 
 
         return json;

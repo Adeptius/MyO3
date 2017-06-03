@@ -69,7 +69,8 @@ public class CreditFragment extends HelperFragment {
         TextView textDetails = getTextView(R.id.text_view_for_details);
 
         // GP IllegalStateException
-        textDetails.setText(CreditFragment.this.getResources().getString(R.string.credit_details));
+        textDetails.setText("*Якщо кредит довіри буде прострочено - ви зможете його відновити оплативши одноразово 30 грн.\n" +
+                "\n*При підключенні послуги \"Гарантований сервіс\" - строк послуги збільшується до 10 днів");
 
         TextView activeText = getTextView(R.id.active_left);
         TextView ifCreditLoss = getTextView(R.id.if_credit_loss);

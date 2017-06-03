@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -153,12 +154,15 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                             "Будь ласка, поповніть рахунок на " + (Integer.parseInt(mountlyFee) + 1) + " грн. " +
                             "(1 грн за підключення плюс ваш тариф " + mountlyFee + " грн)";
 
-                    // BadTokenException
-                    new MyAlertDialogBuilder(context)
-                            .setTitleText("Перша сплата")
-                            .setMessageText(message)
-                            .setPositiveButtonForClose("Гаразд")
-                            .createAndShow();
+                    try {
+                        // BadTokenException
+                        new MyAlertDialogBuilder(context)
+                                .setTitleText("Перша сплата")
+                                .setMessageText(message)
+                                .setPositiveButtonForClose("Гаразд")
+                                .createAndShow();
+                    } catch (WindowManager.BadTokenException ignored) {
+                    }
                 }
             });
         }
@@ -179,24 +183,27 @@ public class MainFragment extends HelperFragment implements View.OnClickListener
                     sb.append("Перейти до перегляду історії проплат?");
 
                     String titleText;
-                    if(new GregorianCalendar().get(Calendar.DAY_OF_MONTH)<4){
+                    if (new GregorianCalendar().get(Calendar.DAY_OF_MONTH) < 4) {
                         titleText = "Швидкість обмежена";
-                    }else{
+                    } else {
                         titleText = "Інтернет не активний";
                     }
 
-                    // BadTokenException
+                    try {
+                        // BadTokenException
                         new MyAlertDialogBuilder(context)
-                            .setTitleText(titleText)
-                            .setMessageText(sb.toString())
-                            .setNegativeButtonForClose("Ні")
-                            .setPositiveButtonWithRunnableForExecutor("Так",new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            goTo(new BalanceFragment());
+                                .setTitleText(titleText)
+                                .setMessageText(sb.toString())
+                                .setNegativeButtonForClose("Ні")
+                                .setPositiveButtonWithRunnableForExecutor("Так", new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                goTo(new BalanceFragment());
+                                            }
                                         }
-                                    }
-                            ).createAndShow();
+                                ).createAndShow();
+                    } catch (WindowManager.BadTokenException ignored) {
+                    }
                 }
             });
         }
