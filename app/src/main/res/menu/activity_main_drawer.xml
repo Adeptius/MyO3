@@ -72,6 +72,10 @@
             android:title="Бонуси" />
 
         <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="Напишіть нам" />
+        <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_support"
             android:title="Контакти" />

@@ -47,6 +47,7 @@ import ua.freenet.cabinet.fragments.CreditFragment;
 import ua.freenet.cabinet.fragments.DivanTvFragment;
 import ua.freenet.cabinet.fragments.DocumentFragment;
 import ua.freenet.cabinet.fragments.DrWebFragment;
+import ua.freenet.cabinet.fragments.FeedBackFragment;
 import ua.freenet.cabinet.fragments.FreeDayFragment;
 import ua.freenet.cabinet.fragments.FriendFragment;
 import ua.freenet.cabinet.fragments.GarantServiceFragment;
@@ -327,6 +328,8 @@ public class MainActivity extends AppCompatActivity
             goTo(new FriendFragment());
         } else if (id == R.id.nav_bonus) {
             goTo(new BonusFragment());
+        }else if (id == R.id.nav_feedback) {
+            goTo(new FeedBackFragment());
         } else if (id == R.id.nav_contact) {
             goTo(new ContactFragment());
         } else if (id == R.id.nav_documents) {

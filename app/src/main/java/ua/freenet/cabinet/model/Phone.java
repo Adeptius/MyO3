@@ -42,7 +42,7 @@ public class Phone {
         return pId;
     }
 
-    String getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -69,5 +69,7 @@ public class Phone {
     public int getSmsInform() {
         return smsInform;
     }
+
+
 
 }

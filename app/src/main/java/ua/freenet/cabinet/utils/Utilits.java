@@ -32,6 +32,7 @@ public class Utilits {
     private static boolean networkLogEnable = true;
     private static boolean miscLogEnable = true;
     private static boolean logToFileEnable = false;
+    public static String savedFeedBackText = "";
 
 
     public static void networkLog(String message){

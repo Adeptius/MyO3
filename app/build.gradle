@@ -7,8 +7,8 @@ android {
         applicationId "ua.freenet.cabinet"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 57
-        versionName "1.57"
+        versionCode 58
+        versionName "1.58"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -49,6 +49,11 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     testCompile 'junit:junit:4.12'
+//    compile 'javax.mail:mail:1.4.7'
+    compile 'com.sun.mail:android-mail:1.5.5'
+    compile 'com.sun.mail:android-activation:1.5.5'
+
+
 }
 
 
