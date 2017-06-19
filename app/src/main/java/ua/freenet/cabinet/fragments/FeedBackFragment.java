@@ -212,12 +212,12 @@ public class FeedBackFragment extends HelperFragment {
             String subject = "Звернення абонента " + abonDogovor;
 
             // Логин и пароль от почты рассылки Gmail
-            String username = "freenet.mobile.app";
-            String password = "freenetO3";
+            String username = "my@o3.ua";
+            String password = "YwPFltknU8ez0m";
 
             Properties props = System.getProperties();
             props.put("mail.smtp.starttls.enable", true);
-            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.host", "mail.o3.ua");
             props.put("mail.smtp.user", username);
             props.put("mail.smtp.password", password);
             props.put("mail.smtp.port", "587");
@@ -245,7 +245,7 @@ public class FeedBackFragment extends HelperFragment {
 
             // Отправка сообщения
             Transport transport = session.getTransport("smtp");
-            transport.connect("smtp.gmail.com", username, password);
+            transport.connect("mail.o3.ua", username, password);
             System.out.println("Transport: " + transport.toString());
             transport.sendMessage(message, message.getAllRecipients());
 
