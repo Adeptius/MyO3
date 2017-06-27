@@ -1,6 +1,7 @@
 package ua.freenet.cabinet.fragments;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import ua.freenet.cabinet.R;
+import ua.freenet.cabinet.utils.MyAlertDialogBuilder;
 
 public abstract class HelperFragment extends BaseFragment {
 
@@ -40,9 +42,17 @@ public abstract class HelperFragment extends BaseFragment {
     }
 
     protected void openInBrowser(String url){
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
+        try{
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }catch (ActivityNotFoundException e){
+            new MyAlertDialogBuilder(context)
+                    .setTitleText("Помилка")
+                    .setMessage("На пристрої не знайдено браузеру")
+                    .setPositiveButtonForClose("ОК")
+                    .createAndShow();
+        }
     }
 
     public static int expand(final View v) {

@@ -14,6 +14,9 @@ import ua.freenet.cabinet.utils.Utilits;
 
 public class Web {
 
+    public static final String LK_URL = "https://my-android.o3.ua";
+//    public static final String LK_URL = "https://my.o3.ua";
+
     public static String sessionId;
     private static long sessionCreatedTime;
 

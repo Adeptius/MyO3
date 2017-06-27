@@ -113,7 +113,7 @@ public class DbCache {
 
     public static List<Operation> getWildraws() throws Exception {
         if (cacheDisabled || wildraws == null || getPastMinutes(wildrawsCreatedTime) > 1) {
-            wildraws = GetInfo.getWildrowsByFewMonth(2);
+            wildraws = GetInfo.getWildrowsByFewMonth(3);
             wildrawsCreatedTime = getCurrentTime();
         }
         return wildraws;
