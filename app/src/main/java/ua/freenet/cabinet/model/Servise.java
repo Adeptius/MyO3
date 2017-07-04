@@ -1,6 +1,8 @@
 package ua.freenet.cabinet.model;
 
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -243,6 +245,7 @@ public class Servise {
         return serviceCost;
     }
 
+    @NonNull
     public String getPay_type_name() {
         return pay_type_name;
     }
