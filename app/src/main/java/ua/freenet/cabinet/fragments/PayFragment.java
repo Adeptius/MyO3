@@ -211,7 +211,7 @@ public class PayFragment extends HelperFragment {
 
                         if ("iPayView".equals(system)) {
                             sb.append("https://paygate.freenet.ua/iPay/sign.php");
-                            sb.append("&card=").append(Settings.getCurrentLogin());
+                            sb.append("&card=").append(person.getCard());
                             sb.append("&add=").append(add);
                         } else if ("eCommerceConnect".equals(system)) {
                             sb.append("https://paygate.freenet.ua/ecommerce/sign.php");
