@@ -94,18 +94,23 @@ public class FeedBackFragment extends HelperFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         final String[] choicedTemathic = {technicalEmail};
+        final String[] subject = {""};
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected = adapter.getItem(position);
                 if (technical.equals(selected)) {
                     choicedTemathic[0] = technicalEmail;
+                    subject[0] = "Технічне звернення абонента";
                 } else if (finance.equals(selected)) {
                     choicedTemathic[0] = financeEmail;
+                    subject[0] = "Фінансове звернення абонента";
                 } else if (callCentre.equals(selected)) {
                     choicedTemathic[0] = callCentreEmail;
+                    subject[0] = "Звернення по підключенню. Абонент";
                 }else if (akciiAndTarifs.equals(selected)) {
                     choicedTemathic[0] = financeEmail;
+                    subject[0] = "Звернення по акціям та тарифам. Абонент";
                 }
                 System.out.println(choicedTemathic[0]);
             }
@@ -115,7 +120,6 @@ public class FeedBackFragment extends HelperFragment {
 
             }
         });
-        System.out.println(choicedTemathic[0]);
 
 
         // Контактный email
@@ -163,10 +167,14 @@ public class FeedBackFragment extends HelperFragment {
             public void onClick(View v) {
                 final String email = emailText.getText().toString();
                 final String choicedPhone = phoneText.getText().toString();
+                final String abonDogovor = person.getCard();
+                final String completeSubject = subject[0] + " " + abonDogovor;
+
                 EXECUTOR.submit(new Runnable() {
                     @Override
                     public void run() {
-                        sendEmail(choicedTemathic[0], person.getCard(), email, choicedPhone, summaryText.getText().toString(), summaryText);
+                        sendEmail(choicedTemathic[0], abonDogovor, email, choicedPhone,
+                                summaryText.getText().toString(), completeSubject, summaryText);
                     }
                 });
             }
@@ -175,7 +183,9 @@ public class FeedBackFragment extends HelperFragment {
         preparedViews.add(feedbackMainView);
     }
 
-    private void sendEmail(@NonNull String recipient, @NonNull String abonDogovor, @NonNull String abonEmail, @NonNull String abonPhone, @NonNull String abonMessage, final EditText summaryText) {
+    private void sendEmail(@NonNull String recipient, @NonNull String abonDogovor,
+                           @NonNull String abonEmail, @NonNull String abonPhone,
+                           @NonNull String abonMessage, @NonNull String subject, final EditText summaryText) {
         //TODO если не введён ни один контакт - то сообщение
         if (abonEmail.equals("") && abonPhone.equals("")) {
             HANDLER.post(new Runnable() {
@@ -209,7 +219,7 @@ public class FeedBackFragment extends HelperFragment {
 
             //Подготовка письма
             //Тема письма
-            String subject = "Звернення абонента " + abonDogovor;
+
 
             // Логин и пароль от почты рассылки Gmail
             String username = "my@o3.ua";
