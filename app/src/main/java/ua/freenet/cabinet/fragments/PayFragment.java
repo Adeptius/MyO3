@@ -206,6 +206,9 @@ public class PayFragment extends HelperFragment {
                     public void run() {
                         imm.hideSoftInputFromWindow(text.getWindowToken(), 0);
                         String add = text.getText().toString();
+                        if (add.equals("")){
+                            add = "0";
+                        }
                         StringBuilder sb = new StringBuilder();
                         sb.append("https://o3.ua/content/files/redirecttopost(1).html?url=");
 
@@ -228,10 +231,28 @@ public class PayFragment extends HelperFragment {
                             sb.append("https://paygate.freenet.ua/platon/init.php");
                             sb.append("&account=").append(Settings.getCurrentLogin());
                             sb.append("&p_id=").append(String.valueOf(person.getId()));
+                            double cost = Double.parseDouble(add);
+                            double commision = (cost * 1.01) / 100;
+                            cost = cost + commision;
+                            add = getMoneyText(cost);
                             sb.append("&amount=").append(add);
                         }
                         openInBrowser(sb.toString());
                     }
                 }).createAndShow();
+    }
+
+    public String getMoneyText(double in) {
+        String many = String.valueOf(in);
+        int pos = many.indexOf(".") + 3;
+        boolean cont = many.contains(".");
+        int len = many.length();
+
+        if (cont && len >= pos) {
+            many = many.substring(0, many.indexOf(".") + 3);
+        } else if (cont && len >= pos - 1) {
+            many = many + "0";
+        }
+        return many;
     }
 }

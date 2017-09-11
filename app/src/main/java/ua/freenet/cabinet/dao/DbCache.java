@@ -27,7 +27,7 @@ public class DbCache {
         return new GregorianCalendar().getTimeInMillis();
     }
 
-    private static boolean cacheDisabled = false;
+    private static boolean cacheDisabled = true;
 
     private static int getPastMinutes(long createdTime) {
         long currentTime = getCurrentTime();
