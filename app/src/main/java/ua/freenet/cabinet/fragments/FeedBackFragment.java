@@ -81,14 +81,13 @@ public class FeedBackFragment extends HelperFragment {
 
         final String technical = "Технічне питання";
         final String finance = "Фінансове питання";
-        final String callCentre = "Питання по підключенню";
         final String akciiAndTarifs = "Акції та тарифи";
 
         final String technicalEmail = "support@o3.ua";
         final String financeEmail = "abon_otdel@o3.ua";
-        final String callCentreEmail = "sales@o3.ua";
 
-        String[] list = new String[]{technical, finance, callCentre, akciiAndTarifs};
+//        String[] list = new String[]{technical, finance, callCentre, akciiAndTarifs};
+        String[] list = new String[]{technical, finance, akciiAndTarifs};
         Spinner spinner = (Spinner) feedbackMainView.findViewById(R.id.feedback_spinner);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -105,9 +104,6 @@ public class FeedBackFragment extends HelperFragment {
                 } else if (finance.equals(selected)) {
                     choicedTemathic[0] = financeEmail;
                     subject[0] = "Фінансове звернення абонента";
-                } else if (callCentre.equals(selected)) {
-                    choicedTemathic[0] = callCentreEmail;
-                    subject[0] = "Звернення по підключенню. Абонент";
                 }else if (akciiAndTarifs.equals(selected)) {
                     choicedTemathic[0] = financeEmail;
                     subject[0] = "Звернення по акціям та тарифам. Абонент";
@@ -220,8 +216,6 @@ public class FeedBackFragment extends HelperFragment {
             //Подготовка письма
             //Тема письма
 
-
-            // Логин и пароль от почты рассылки Gmail
             String username = "my@o3.ua";
             String password = "YwPFltknU8ez0m";
 
